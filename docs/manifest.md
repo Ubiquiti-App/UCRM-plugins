@@ -49,7 +49,7 @@ Contains information describing the plugin.
 - `author` - author of the plugin as displayed on UCRM frontend
 
 ### configuration
-Determines configuration keys of the plugin. Frontend configuration form is generated from this and the values are then saved to [`data/config.json`](file-structure.md#data-config-json) file.
+Determines configuration keys of the plugin. Frontend configuration form is generated from this and the values are then saved to [`data/config.json`](file-structure.md#dataconfigjson) file.
 
 Contains an array of items. Each item is defined as follows:
 - `key` - property key
