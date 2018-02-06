@@ -38,7 +38,7 @@ Example of the `ucrm.json` file:
 This directory is protected in between updates of the plugin. Anything in this directory will not be touched. All other files will be deleted and new files will appear from the plugin archive.
 
 ### data/config.json
-Plugin configuration will be saved to this file. When the UCRM config form is saved, this file will be regenerated. Any manual changes to the keys by the plugin will be deleted, but values will be kept and will be shown as if filled by UCRM.
+Plugin configuration will be saved to this file. When the UCRM plugin config form is saved, this file will be regenerated. Values can be modified by the plugin manually but any manual changes to the keys by the plugin will be discarded during any plugin configuration update.
 
 ### data/plugin.log
 Anything this file contains will be displayed as text on plugin detail page in UCRM.
