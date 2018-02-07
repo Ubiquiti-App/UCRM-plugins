@@ -1,0 +1,16 @@
+{
+  "description": "UCRM plugin for import Fio.cz bank payments",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "FioCz\\": [
+        "src/"
+      ]
+    }
+  },
+  "require": {
+    "php-di/php-di": "^5.4",
+    "katzgrau/klogger": "^1.2",
+    "doctrine/cache": "^1.7"
+  }
+}
