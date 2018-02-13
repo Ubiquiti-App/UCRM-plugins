@@ -1,0 +1,23 @@
+{
+  "version": "1",
+  "information": {
+    "name": "sample_run-logger",
+    "displayName": "Sample logger",
+    "description": "This is simple, but useless plugin.",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
+    "version": "1.0.0",
+    "ucrmVersionCompliancy": {
+      "min": "2.10.0-dev",
+      "max": null
+    },
+    "author": "Ubiquiti Networks, Inc."
+  },
+  "configuration": [
+    {
+      "key": "string",
+      "label": "Log this",
+      "description": "Content of this will be logged",
+      "required": 1
+    }
+  ]
+}
