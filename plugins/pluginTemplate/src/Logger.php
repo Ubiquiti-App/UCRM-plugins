@@ -7,7 +7,6 @@ namespace SampleLogger;
 class Logger
 {
     private const LOG_FILE_PATH = 'data/plugin.log';
-    private const CONFIG_FILE_PATH = 'data/config.json';
 
     public function log(string $message): void
     {
