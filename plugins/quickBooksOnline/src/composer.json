@@ -1,0 +1,17 @@
+{
+  "description": "UCRM plugin for export payments and invoces to QuickBooks",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "QBExport\\": [
+        "src/"
+      ]
+    }
+  },
+  "require": {
+    "quickbooks/v3-php-sdk": "^4.0",
+    "php-di/php-di": "^5.4",
+    "doctrine/cache": "^1.7",
+    "katzgrau/klogger": "^1.2"
+  }
+}

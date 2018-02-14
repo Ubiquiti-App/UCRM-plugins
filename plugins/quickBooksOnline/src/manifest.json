@@ -1,0 +1,41 @@
+{
+  "version": "1",
+  "information": {
+    "name": "quickbooksonline_export",
+    "displayName": "QuickBooks Online export",
+    "description": "This plugin exports payments and invoices to QuickBooks Online",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
+    "version": "1.0.0",
+    "ucrmVersionCompliancy": {
+      "min": "2.10.0-beta1",
+      "max": null
+    },
+    "author": "Ubiquiti Networks, Inc."
+  },
+  "configuration": [
+    {
+      "key": "qbClientId",
+      "label": "Client ID",
+      "description": "Client ID obtained from your Intuit developer account.",
+      "required": 1
+    },
+    {
+      "key": "qbClientSecret",
+      "label": "Client Secret",
+      "description": "Client Secret obtained from your Intuit developer account.",
+      "required": 1
+    },
+    {
+      "key": "qbBaseUrl",
+      "label": "baseUrl: Development/Production",
+      "description": "If you use “Development Keys”, use “Development” here. Otherwise, use “Production”",
+      "required": 1
+    },
+    {
+      "key": "qbRealmID",
+      "label": "RealmID",
+      "description": "Realm ID is obtained after confirmation connection of this plugin and QuickBook App. When is empty, new confirmation URL is generated.",
+      "required": 0
+    }
+  ]
+}
