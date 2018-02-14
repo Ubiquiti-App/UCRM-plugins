@@ -7,7 +7,7 @@
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
     "version": "1.0.0",
     "ucrmVersionCompliancy": {
-      "min": "2.10.0-dev",
+      "min": "2.10.0-beta1",
       "max": null
     },
     "author": "Ubiquiti Networks, Inc."
