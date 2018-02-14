@@ -22,17 +22,4 @@ class Logger
             FILE_APPEND | LOCK_EX
         );
     }
-
-    public function logOption()
-    {
-        if ($filecontent = file_get_contents(self::CONFIG_FILE_PATH)) {
-            $decoded = json_decode($filecontent, true);
-            $this->log(
-                sprintf(
-                    'Plugin parameter: %s',
-                    $decoded['string'] ?? ''
-                )
-            );
-        }
-    }
 }

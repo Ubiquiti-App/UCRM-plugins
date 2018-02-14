@@ -11,13 +11,5 @@
       "max": null
     },
     "author": "Ubiquiti Networks, Inc."
-  },
-  "configuration": [
-    {
-      "key": "string",
-      "label": "Log this",
-      "description": "Content of this will be logged",
-      "required": 1
-    }
-  ]
+  }
 }
