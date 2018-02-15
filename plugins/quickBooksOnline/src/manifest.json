@@ -30,12 +30,6 @@
       "label": "baseUrl: Development/Production",
       "description": "If you use “Development Keys”, use “Development” here. Otherwise, use “Production”",
       "required": 1
-    },
-    {
-      "key": "qbRealmID",
-      "label": "RealmID",
-      "description": "Realm ID is obtained after confirmation connection of this plugin and QuickBook App. When is empty, new confirmation URL is generated.",
-      "required": 0
     }
   ]
 }

@@ -32,7 +32,7 @@ class UcrmApi
      */
     public function command(string $endpoint, string $method, array $data): void
     {
-        $optionsData = $this->optionsManager->loadOptions();
+        $optionsData = $this->optionsManager->load();
 
         $this->curlExecutor->curlCommand(
             sprintf('%sapi/v1.0/%s', $optionsData->ucrmPublicUrl, $endpoint),
@@ -51,7 +51,7 @@ class UcrmApi
      */
     public function query(string $endpoint, array $parameters = [])
     {
-        $optionsData = $this->optionsManager->loadOptions();
+        $optionsData = $this->optionsManager->load();
 
         return $this->curlExecutor->curlQuery(
             sprintf('%sapi/v1.0/%s', $optionsData->ucrmPublicUrl, $endpoint),

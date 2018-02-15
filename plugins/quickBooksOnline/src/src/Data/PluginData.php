@@ -46,5 +46,20 @@ class PluginData extends UcrmData
     /**
      * @var string
      */
+    public $oauthAccessTokenExpiration;
+
+    /**
+     * @var string
+     */
     public $qbStateCSRF;
+
+    /**
+     * @var string
+     */
+    public $qbAuthorizationUrl;
+
+    /**
+     * @var string
+     */
+    public $lastExportedClientID;
 }

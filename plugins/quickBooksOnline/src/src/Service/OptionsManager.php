@@ -21,7 +21,7 @@ class OptionsManager
     /**
      * @throws \ReflectionException
      */
-    public function loadOptions(): PluginData
+    public function load(): PluginData
     {
         if ($this->optionsData) {
             return $this->optionsData;
@@ -45,7 +45,7 @@ class OptionsManager
         return $this->optionsData;
     }
 
-    public function updateOptions(): void
+    public function update(): void
     {
         $newData = (array) $this->optionsData;
 
