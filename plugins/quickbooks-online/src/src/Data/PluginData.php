@@ -62,4 +62,9 @@ class PluginData extends UcrmData
      * @var string
      */
     public $lastExportedClientID;
+
+    /**
+     * @var string
+     */
+    public $lastExportedPaymentID;
 }

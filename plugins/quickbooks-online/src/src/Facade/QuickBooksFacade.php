@@ -12,6 +12,7 @@ use QBExport\Service\OptionsManager;
 use QBExport\Service\UcrmApi;
 use QuickBooksOnline\API\Exception\ServiceException;
 use QuickBooksOnline\API\Facades\Customer;
+use QuickBooksOnline\API\Facades\Payment;
 
 class QuickBooksFacade
 {
@@ -104,6 +105,7 @@ class QuickBooksFacade
             if ($ucrmClient['id'] <= $pluginData->lastExportedClientID) {
                 continue;
             }
+
             $entities = $dataService->Query(
                 sprintf('SELECT * FROM Customer WHERE DisplayName LIKE \'%%UCRMID-%d%%\'', $ucrmClient['id'])
             );
@@ -175,5 +177,51 @@ class QuickBooksFacade
             $this->optionsManager->update();
             $this->logger->notice('Refresh of Token succeeded.');
         }
+    }
+
+    public function exportPayments(): void
+    {
+        $pluginData = $this->optionsManager->load();
+        $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
+
+        foreach ($this->ucrmApi->query('payments') as $ucrmPayment) {
+            if ($ucrmPayment['id'] <= $pluginData->lastExportedPaymentID) {
+                continue;
+            }
+
+            $this->logger->info(sprintf('Payment ID: %s needs to be imported', $ucrmPayment['id']));
+
+            if ($qbClient = $this->getQBClient($dataService, $ucrmPayment['clientId'])) {
+                $theResourceObj = Payment::create([
+                    'CustomerRef' => [
+                        'value' => $qbClient->Id
+                    ],
+                    'TotalAmt' => $ucrmPayment['amount']
+                ]);
+
+                if ($dataService->Add($theResourceObj)) {
+                    $this->logger->info(
+                        sprintf('Payment ID: %s exported successfully.', $ucrmPayment['id'])
+                    );
+                    $pluginData->lastExportedPaymentID = $ucrmPayment['id'];
+                    $this->optionsManager->update();
+                } else {
+                    return;
+                }
+            }
+        }
+    }
+
+    private function getQBClient($dataService, $ucrmClientId)
+    {
+        $customers = $dataService->Query(
+            sprintf('SELECT * FROM Customer WHERE DisplayName LIKE \'%%UCRMID-%d%%\'', $ucrmClientId)
+        );
+
+        if (! $customers) {
+            return null;
+        }
+
+        return current($customers);
     }
 }
