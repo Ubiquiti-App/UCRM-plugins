@@ -114,7 +114,7 @@ class QuickBooksFacade
             );
 
             if (! $entities) {
-                $this->logger->info(sprintf('Client ID: %s needs to be imported', $ucrmClient['id']));
+                $this->logger->info(sprintf('Client ID: %s needs to be exported', $ucrmClient['id']));
                 if ($ucrmClient['clientType'] === 1) {
                     $nameForView = sprintf(
                         '%s %s',
@@ -192,7 +192,7 @@ class QuickBooksFacade
                 continue;
             }
 
-            $this->logger->info(sprintf('Invoice ID: %s needs to be imported', $ucrmInvoice['id']));
+            $this->logger->info(sprintf('Invoice ID: %s needs to be exported', $ucrmInvoice['id']));
 
             if ($qbClient = $this->getQBClient($dataService, $ucrmInvoice['clientId'])) {
 
@@ -245,9 +245,9 @@ class QuickBooksFacade
                 continue;
             }
 
-            $this->logger->info(sprintf('Payment ID: %s needs to be imported', $ucrmPayment['id']));
+            $this->logger->info(sprintf('Payment ID: %s needs to be exported', $ucrmPayment['id']));
 
-            if ($qbClient = $this->getQBClient($dataService, $ucrmPayment['clientId'])) {
+            if ($ucrmPayment['clientId'] && $qbClient = $this->getQBClient($dataService, $ucrmPayment['clientId'])) {
                 $theResourceObj = Payment::create([
                     'CustomerRef' => [
                         'value' => $qbClient->Id
@@ -283,14 +283,12 @@ class QuickBooksFacade
 
     private function createQBLineFromItem(DataService $dataService, array $item, int $qbIncomeAccountNumber)
     {
-        $item = Item::create([
+        return $dataService->Add(Item::create([
             'Name' => sprintf('%s (UCRMID-%s)', $item['label'], $item['id']) ,
             'Type' => 'Service',
             'IncomeAccountRef' => [
                 'value' => $qbIncomeAccountNumber
             ],
-        ]);
-
-        return $dataService->Add($item);
+        ]));
     }
 }
