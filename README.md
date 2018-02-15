@@ -2,6 +2,8 @@
 
 Plugins are open-source programs that extend the functionality of [UCRM](https://ucrm.ubnt.com/). These plugins will enable your UCRM to import payments, integrate with another accounting software, cooperate with 3rd party HW and tools, etc.
 
+UCRM plugins are compatible with UCRM v. 2.10.0-beta1 and higher.
+
 ## How does it work?
 * [Find the plugin](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins) you need and download its ZIP archive.
 * Upload the ZIP archive in UCRM (System > Plugins).
