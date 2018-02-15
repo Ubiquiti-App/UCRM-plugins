@@ -26,6 +26,11 @@ class PluginData extends UcrmData
     /**
      * @var string
      */
+    public $qbIncomeAccountNumber;
+
+    /**
+     * @var string
+     */
     public $oauthRealmID;
 
     /**
@@ -67,4 +72,9 @@ class PluginData extends UcrmData
      * @var string
      */
     public $lastExportedPaymentID;
+
+    /**
+     * @var string
+     */
+    public $lastExportedInvoiceID;
 }
