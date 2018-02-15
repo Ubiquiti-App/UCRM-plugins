@@ -5,15 +5,15 @@ With this basic plugin you can import your [UCRM](https://ucrm.ubnt.com/) custom
 
 Set up the connection with QuickBooks
 ---
-###1. QuickBook - Create App
+#### QuickBook - Create App
 - At [Intuit Developer](https://developer.intuit.com/) create developer account.
 - After registration process create new app. Choose **Select APIs** and check **Accounting** and **Payments** option.
 
-###2. QuickBook - App setting
+#### QuickBook - App setting
 - At App Dashboard use **Keys** tab and fill **Redirect URI**.
 - At App Dashboard use **Keys** tab and copy **Client ID** and **Client Secret**.
 
-###3. Setting of plugin in plugin configuration page in UCRM
+#### Setting of plugin in plugin configuration page in UCRM
 - Fill obtained **Client ID** and **Client Secret** .
 - Fill **baseUrl** with ``Development`` if you only test and you have testing keys. Otherwise fill ``Production`` 
 - Fill your **Income account number**. 
