@@ -10,8 +10,11 @@ use QBExport\Factory\DataServiceFactory;
 use QBExport\Service\Logger;
 use QBExport\Service\OptionsManager;
 use QBExport\Service\UcrmApi;
+use QuickBooksOnline\API\DataService\DataService;
 use QuickBooksOnline\API\Exception\ServiceException;
 use QuickBooksOnline\API\Facades\Customer;
+use QuickBooksOnline\API\Facades\Invoice;
+use QuickBooksOnline\API\Facades\Item;
 use QuickBooksOnline\API\Facades\Payment;
 
 class QuickBooksFacade
@@ -158,7 +161,7 @@ class QuickBooksFacade
         }
     }
 
-    public function refreshExpiredToken()
+    public function refreshExpiredToken(): void
     {
         $pluginData = $this->optionsManager->load();
         if (new \DateTimeImmutable($pluginData->oauthAccessTokenExpiration, new \DateTimeZone('UTC'))
@@ -176,6 +179,59 @@ class QuickBooksFacade
 
             $this->optionsManager->update();
             $this->logger->notice('Refresh of Token succeeded.');
+        }
+    }
+
+    public function exportInvoices(): void
+    {
+        $pluginData = $this->optionsManager->load();
+        $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
+
+        foreach ($this->ucrmApi->query('invoices') as $ucrmInvoice) {
+            if ($ucrmInvoice['id'] <= $pluginData->lastExportedInvoiceID) {
+                continue;
+            }
+
+            $this->logger->info(sprintf('Invoice ID: %s needs to be imported', $ucrmInvoice['id']));
+
+            if ($qbClient = $this->getQBClient($dataService, $ucrmInvoice['clientId'])) {
+
+                $lines = [];
+                foreach ($ucrmInvoice['items'] as $item) {
+                    $qbItem = $this->createQBLineFromItem($dataService, $item, (int) $pluginData->qbIncomeAccountNumber);
+                    $lines[] = [
+                        'Amount' => $item['quantity'],
+                        'Description' => $item['label'],
+                        'DetailType' => 'SalesItemLineDetail',
+                        'SalesItemLineDetail' => [
+                            'ItemRef' => [
+                                'value' => $qbItem->Id
+                            ]
+                        ]
+                    ];
+                }
+
+                if (
+                    $dataService->Add(
+                        Invoice::create(
+                            [
+                                'Line' => $lines,
+                                'CustomerRef'=> [
+                                    'value'=> $qbClient->Id
+                                ],
+                            ]
+                        )
+                    )
+                ) {
+                    $this->logger->info(
+                        sprintf('Invoice ID: %s exported successfully.', $ucrmInvoice['id'])
+                    );
+                    $pluginData->lastExportedInvoiceID = $ucrmInvoice['id'];
+                    $this->optionsManager->update();
+                } else {
+                    return;
+                }
+            }
         }
     }
 
@@ -212,7 +268,7 @@ class QuickBooksFacade
         }
     }
 
-    private function getQBClient($dataService, $ucrmClientId)
+    private function getQBClient(DataService $dataService, int $ucrmClientId)
     {
         $customers = $dataService->Query(
             sprintf('SELECT * FROM Customer WHERE DisplayName LIKE \'%%UCRMID-%d%%\'', $ucrmClientId)
@@ -223,5 +279,18 @@ class QuickBooksFacade
         }
 
         return current($customers);
+    }
+
+    private function createQBLineFromItem(DataService $dataService, array $item, int $qbIncomeAccountNumber)
+    {
+        $item = Item::create([
+            'Name' => sprintf('%s (UCRMID-%s)', $item['label'], $item['id']) ,
+            'Type' => 'Service',
+            'IncomeAccountRef' => [
+                'value' => $qbIncomeAccountNumber
+            ],
+        ]);
+
+        return $dataService->Add($item);
     }
 }

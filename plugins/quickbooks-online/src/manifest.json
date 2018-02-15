@@ -30,6 +30,12 @@
       "label": "baseUrl: Development/Production",
       "description": "If you use “Development Keys”, use “Development” here. Otherwise, use “Production”",
       "required": 1
+    },
+    {
+      "key": "qbIncomeAccountNumber",
+      "label": "Income account number",
+      "description": "Income Account number from QuickBooks",
+      "required": 1
     }
   ]
 }
