@@ -54,6 +54,7 @@ class Plugin
         } else {
             $this->quickBooksFacade->refreshExpiredToken();
             $this->quickBooksFacade->exportClients();
+            $this->quickBooksFacade->exportPayments();
         }
         $this->logger->info('CLI process ended');
     }
