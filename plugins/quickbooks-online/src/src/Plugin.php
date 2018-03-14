@@ -7,31 +7,42 @@ namespace QBExport;
 
 
 use QBExport\Facade\QuickBooksFacade;
+use QBExport\Service\PluginDataValidator;
 use QBExport\Service\Logger;
 use QBExport\Service\OptionsManager;
 
 class Plugin
 {
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * @var OptionsManager
      */
     private $optionsManager;
+
+    /**
+     * @var PluginDataValidator
+     */
+    private $pluginDataValidator;
 
     /**
      * @var QuickBooksFacade
      */
     private $quickBooksFacade;
 
-    /**
-     * @var Logger
-     */
-    private $logger;
-
-    public function __construct(OptionsManager $optionsManager, QuickBooksFacade $quickBooksFacade, Logger $logger)
-    {
-        $this->optionsManager = $optionsManager;
-        $this->quickBooksFacade = $quickBooksFacade;
+    public function __construct(
+        Logger $logger,
+        OptionsManager $optionsManager,
+        PluginDataValidator $pluginDataValidator,
+        QuickBooksFacade $quickBooksFacade
+    ) {
         $this->logger = $logger;
+        $this->optionsManager = $optionsManager;
+        $this->pluginDataValidator = $pluginDataValidator;
+        $this->quickBooksFacade = $quickBooksFacade;
     }
 
     public function run(): void
@@ -45,19 +56,21 @@ class Plugin
 
     private function processCli(): void
     {
-        $this->logger->info('CLI process started');
-        $pluginData = $this->optionsManager->load();
-        if (! $pluginData->qbAuthorizationUrl) {
-            $this->quickBooksFacade->obtainAuthotizationURL();
-        } elseif (! $pluginData->oauthRefreshToken) {
-            $this->quickBooksFacade->obtainTokens();
-        } else {
-            $this->quickBooksFacade->refreshExpiredToken();
-            $this->quickBooksFacade->exportClients();
-            $this->quickBooksFacade->exportPayments();
-            $this->quickBooksFacade->exportInvoices();
+        if ($this->pluginDataValidator->validate()) {
+            $pluginData = $this->optionsManager->load();
+            $this->logger->info('CLI process started');
+            if (! $pluginData->qbAuthorizationUrl) {
+                $this->quickBooksFacade->obtainAuthotizationURL();
+            } elseif (! $pluginData->oauthRefreshToken) {
+                $this->quickBooksFacade->obtainTokens();
+            } else {
+                $this->quickBooksFacade->refreshExpiredToken();
+                $this->quickBooksFacade->exportClients();
+                $this->quickBooksFacade->exportPayments();
+                $this->quickBooksFacade->exportInvoices();
+            }
+            $this->logger->info('CLI process ended');
         }
-        $this->logger->info('CLI process ended');
     }
 
     private function processHttpRequest(): void

@@ -77,4 +77,9 @@ class PluginData extends UcrmData
      * @var string
      */
     public $lastExportedInvoiceID;
+
+    /**
+     * @var string
+     */
+    public $displayedErrors;
 }
