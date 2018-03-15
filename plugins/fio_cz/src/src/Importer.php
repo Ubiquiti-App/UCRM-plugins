@@ -48,7 +48,7 @@ class Importer
     {
         $optionsData = $this->optionsManager->loadOptions();
 
-        $endDate = new \DateTimeImmutable('yesterday midnight');
+        $endDate = new \DateTimeImmutable('today');
 
         try {
             $startDate = new \DateTimeImmutable((string) $optionsData->startDate);
