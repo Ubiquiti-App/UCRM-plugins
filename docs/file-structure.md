@@ -44,7 +44,7 @@ Plugin configuration will be saved to this file. When the UCRM plugin config for
 Anything this file contains will be displayed as text on plugin detail page in UCRM.
 
 ### .ucrm-plugin-running
-This file is used to prevent multiple plugin execution if the previous instance is still running.
+This file is used to prevent multiple plugin executions if the previous instance is still running. This measure is used only for manual execution (using the "execute manually" button) and for automatic execution (using cron and execution period). The execution triggered by plugin's public URL is not affected, it can be accessed and run simultaneously by users or webhooks without any limitations.
 
 > Please note, that regardless of execution period chosen by the user, the plugin is never executed if the previous instance did not finish. If the script does not finish in an hour, it will be automatically killed.
 
