@@ -10,13 +10,26 @@ Set up the connection with QuickBooks
 - After registration process create new app. Choose **Select APIs** and check **Accounting** and **Payments** option.
 
 #### QuickBook - App setting
-- At App Dashboard use **Keys** tab and fill **Redirect URI**.
+- At App Dashboard use **Keys** tab and fill **Redirect URI** with public URL of your plugin.
+![Intuit redirect URI](docs/images/intuit-redirect-uri.png)
+
 - At App Dashboard use **Keys** tab and copy **Client ID** and **Client Secret**.
+![Intuit keys](docs/images/intuit-developer-keys.png)
 
 #### Setting of plugin in plugin configuration page in UCRM
 - Fill obtained **Client ID** and **Client Secret** .
 - Fill **baseUrl** with ``Development`` if you only test and you have testing keys. Otherwise fill ``Production`` 
-- Fill your **Income account number**. 
+- Fill your **Income account number**.
+![UCRM Plugin config](docs/images/ucrm-plugin-config.png)
+ 
+#### Connect UCRM with your Intuit App
+- On Plugin page is plugin log where will be displayed Authorization URL. 
+![UCRM Authorization URL](docs/images/ucrm-authorization-url.png)
+
+- Open it in your browser to confirm connection.
+![UCRM Authorization APP](docs/images/authorize-APP.png)
+- Than you can see in the plugin log ```Authorization Code obtained.``` and after next execution of plugin ```Exchange Authorization Code for Access Token succeeded.```. After that UCRM an QB are properly connected.
+
 
 About UCRM data integration
 ---
