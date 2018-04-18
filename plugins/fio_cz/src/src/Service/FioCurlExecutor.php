@@ -27,7 +27,7 @@ class FioCurlExecutor extends CurlExecutor
 
         $lastProcessedTimestamp = (int) $options->lastProcessedTimestamp;
         if ($lastProcessedTimestamp + 30 > time()) {
-            throw new CurlException('Skipping due that last request was less than 30 seconds ago.');
+            throw new CurlException('Execution skipped, because last request was less than 30 seconds ago.');
         }
 
         $response = parent::curlQuery($url, $headers, $parameters);
