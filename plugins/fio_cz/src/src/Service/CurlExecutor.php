@@ -92,7 +92,9 @@ class CurlExecutor
         $decodedResult = json_decode($result, true);
 
         if ($decodedResult === null) {
-            throw new CurlException(sprintf('Error for request %s. Failed JSON decoding.', $url));
+            throw new CurlException(
+                sprintf('Error for request %s. Failed JSON decoding. Response: %s', $url, $result)
+            );
         }
 
         return $decodedResult;
