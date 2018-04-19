@@ -104,7 +104,11 @@ class UcrmFacade
 
     private function transformTransactionToUcrmPayment(array $transaction, $clientId, $invoiceId): array
     {
-        $date = new \DateTimeImmutable('@' . $transaction['date'] / 100);
+        try {
+            $date = new \DateTimeImmutable($transaction['date']);
+        } catch (\Exception $e) {
+            $date = new \DateTimeImmutable();
+        }
         $note = '';
         foreach ($transaction['data'] as $key => $value) {
             $note .= $key . ': ' . $value . PHP_EOL;
@@ -135,5 +139,7 @@ class UcrmFacade
             'POST',
             $payment
         );
+
+        $this->logger->info('Payment created');
     }
 }
