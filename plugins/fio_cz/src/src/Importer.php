@@ -48,7 +48,7 @@ class Importer
     {
         $optionsData = $this->optionsManager->loadOptions();
 
-        $endDate = new \DateTimeImmutable('today');
+        $endDate = new \DateTimeImmutable('tomorrow');
 
         try {
             $startDate = new \DateTimeImmutable((string) $optionsData->startDate);
@@ -76,8 +76,5 @@ class Importer
         foreach ($transactions as $transaction) {
             $this->ucrmFacade->import($transaction);
         }
-
-        $optionsData->startDate = $endDate->format('d.m.Y');
-        $this->optionsManager->updateOptions();
     }
 }
