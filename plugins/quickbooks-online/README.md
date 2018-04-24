@@ -18,7 +18,7 @@ Set up the connection with QuickBooks
 
 #### Setting of plugin in plugin configuration page in UCRM
 - Fill obtained **Client ID** and **Client Secret** .
-- Fill **baseUrl** with ``Development`` if you only test and you have testing keys. Otherwise fill ``Production`` 
+- Fill **Account type** with ``Development`` if you only test and you have testing keys. Otherwise fill ``Production`` 
 - Fill your **Income account number**.
 ![UCRM Plugin config](docs/images/ucrm-plugin-config.png)
  
