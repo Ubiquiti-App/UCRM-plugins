@@ -43,10 +43,13 @@ class UcrmFacade
         $this->logger->info(sprintf('Processing transaction %s.', $transaction['id']));
 
         $matched = $this->matchClientFromUcrm($transaction, $optionsData->paymentMatchAttribute);
-        if (\is_array($matched)) {
-            [$clientId, $invoiceId] = $matched;
+        if ($matched || $optionsData->importUnattached) {
+            if ($matched) {
+                [$clientId, $invoiceId] = $matched;
+            }
+
             $this->sendPaymentToUcrm(
-                $this->transformTransactionToUcrmPayment($transaction, $clientId, $invoiceId)
+                $this->transformTransactionToUcrmPayment($transaction, $clientId ?? null, $invoiceId ?? null)
             );
 
             $optionsData->lastProcessedPayment = $transaction['id'];
@@ -96,14 +99,19 @@ class UcrmFacade
 
                 return [$results[0]['id'], null];
             default:
-                $this->logger->warning(sprintf('Multiple matching results found for transaction %s.', $transaction['id']));
+                $this->logger->warning(
+                    sprintf('Multiple matching results found for transaction %s.', $transaction['id'])
+                );
 
                 return null;
         }
     }
 
-    private function transformTransactionToUcrmPayment(array $transaction, $clientId, $invoiceId): array
-    {
+    private function transformTransactionToUcrmPayment(
+        array $transaction,
+        ?int $clientId = null,
+        ?int $invoiceId = null
+    ): array {
         try {
             $date = new \DateTimeImmutable($transaction['date']);
         } catch (\Exception $e) {
