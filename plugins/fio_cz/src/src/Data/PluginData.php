@@ -30,4 +30,9 @@ class PluginData extends UcrmData
      * @var string
      */
     public $lastProcessedTimestamp;
+
+    /**
+     * @var string
+     */
+    public $importUnattached;
 }
