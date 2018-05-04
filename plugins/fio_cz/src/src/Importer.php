@@ -66,15 +66,24 @@ class Importer
             return;
         }
 
-        $transactions = $this->fioCz->getTransactions(
-            $optionsData->token,
-            $startDate,
-            $endDate,
-            $optionsData->lastProcessedPayment === '' ? null : $optionsData->lastProcessedPayment
-        );
-
-        foreach ($transactions as $transaction) {
-            $this->ucrmFacade->import($transaction);
+        try {
+            $transactions = $this->fioCz->getTransactions(
+                $optionsData->token,
+                $startDate,
+                $endDate,
+                $optionsData->lastProcessedPayment === '' ? null : $optionsData->lastProcessedPayment
+            );
+            foreach ($transactions as $transaction) {
+                $this->ucrmFacade->import($transaction);
+            }
+        } catch (Exception\CurlException $exception) {
+            if ($exception->getCode() === 409) {
+                $optionsData->lastProcessedTimestamp = time();
+                $this->optionsManager->updateOptions();
+                $this->logger->notice('HTTP Error 409 returned - wait for 30s');
+            } else {
+                throw $exception;
+            }
         }
     }
 }
