@@ -2,9 +2,9 @@
 
 chdir(__DIR__);
 
-require 'vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
-(function () {
+(function ($debug) {
     $builder = new \DI\ContainerBuilder();
     $builder->setDefinitionCache(new \Doctrine\Common\Cache\ApcuCache());
 
@@ -15,7 +15,10 @@ require 'vendor/autoload.php';
     try {
         $importer->import();
     } catch (Exception $e) {
-        $logger = new \FioCz\Service\Logger();
+        $logger = new \FioCz\Service\Logger($debug);
+        echo $e->getMessage();
         $logger->error($e->getMessage());
     }
-})();
+    echo "\n";
+
+})(($argv[1] ?? '') === '--verbose');
