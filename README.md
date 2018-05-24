@@ -1,6 +1,6 @@
 # UCRM-plugins
 
-Plugins are open-source programs that extend the functionality of [UCRM](https://ucrm.ubnt.com/). These plugins will enable your UCRM to import payments, integrate with another accounting software, cooperate with 3rd party HW and tools, etc.
+Plugins are open-source programs that extend the functionality of [UCRM](https://ucrm.ubnt.com/). These plugins will enable your UCRM to import payments, integrate with another accounting software, cooperate with 3rd party HW and tools, etc. [Read more](https://help.ubnt.com/hc/en-us/articles/360002433113-UCRM-Plugins).
 
 UCRM plugins are compatible with UCRM v. 2.10.0-beta1 and higher.
 
