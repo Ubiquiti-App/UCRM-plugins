@@ -54,6 +54,7 @@ class Importer
             $startDate = new \DateTimeImmutable((string) $optionsData->startDate);
         } catch (\Exception $e) {
             $startDate = new \DateTimeImmutable('midnight first day of this month');
+            $this->logger->notice(sprintf('Payments start date is not valid. As a start date is used %s', $startDate->format('Y-m-d H:i:s')));
         }
 
         if ($endDate <= $startDate) {

@@ -5,6 +5,8 @@ chdir(__DIR__);
 require __DIR__ . '/vendor/autoload.php';
 
 (function ($debug) {
+    $logger = new \FioCz\Service\Logger($debug);
+    $logger->info('CLI process started');
     $builder = new \DI\ContainerBuilder();
     $builder->setDefinitionCache(new \Doctrine\Common\Cache\ApcuCache());
 
@@ -20,5 +22,5 @@ require __DIR__ . '/vendor/autoload.php';
         $logger->error($e->getMessage());
     }
     echo "\n";
-
+    $logger->info('CLI process ended');
 })(($argv[1] ?? '') === '--verbose');
