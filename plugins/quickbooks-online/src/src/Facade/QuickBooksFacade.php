@@ -169,7 +169,12 @@ class QuickBooksFacade
                     $this->throwExceptionOnErrorResponse($dataService);
                 } catch (\Exception $exception) {
                     $this->logger->error(
-                        sprintf('Client %s (ID: %s) export failed with error %s.', $nameForView, $ucrmClient['id'], $exception->getMessage())
+                        sprintf(
+                            'Client %s (ID: %s) export failed with error %s.',
+                            $nameForView,
+                            $ucrmClient['id'],
+                            $exception->getMessage()
+                        )
                     );
                 }
 
@@ -216,7 +221,11 @@ class QuickBooksFacade
 
                 $lines = [];
                 foreach ($ucrmInvoice['items'] as $item) {
-                    $qbItem = $this->createQBLineFromItem($dataService, $item, (int) $pluginData->qbIncomeAccountNumber);
+                    $qbItem = $this->createQBLineFromItem(
+                        $dataService,
+                        $item,
+                        (int) $pluginData->qbIncomeAccountNumber
+                    );
                     if ($qbItem) {
                         $lines[] = [
                             'Amount' => $item['quantity'],
@@ -232,14 +241,16 @@ class QuickBooksFacade
                 }
 
                 try {
-                    $response = $dataService->Add(Invoice::create(
-                        [
-                            'Line' => $lines,
-                            'CustomerRef' => [
-                                'value' => $qbClient->Id,
-                            ],
-                        ]
-                    ));
+                    $response = $dataService->Add(
+                        Invoice::create(
+                            [
+                                'Line' => $lines,
+                                'CustomerRef' => [
+                                    'value' => $qbClient->Id,
+                                ],
+                            ]
+                        )
+                    );
 
                     if ($response instanceof IPPIntuitEntity) {
                         $this->logger->info(
@@ -256,7 +267,11 @@ class QuickBooksFacade
                     $this->throwExceptionOnErrorResponse($dataService);
                 } catch (\Exception $exception) {
                     $this->logger->error(
-                        sprintf(' Invoice ID: %s export failed with error %s.', $ucrmInvoice['id'], $exception->getMessage())
+                        sprintf(
+                            ' Invoice ID: %s export failed with error %s.',
+                            $ucrmInvoice['id'],
+                            $exception->getMessage()
+                        )
                     );
                 }
 
@@ -280,12 +295,14 @@ class QuickBooksFacade
 
             if ($ucrmPayment['clientId'] && $qbClient = $this->getQBClient($dataService, $ucrmPayment['clientId'])) {
                 try {
-                    $theResourceObj = Payment::create([
-                        'CustomerRef' => [
-                            'value' => $qbClient->Id
-                        ],
-                        'TotalAmt' => $ucrmPayment['amount']
-                    ]);
+                    $theResourceObj = Payment::create(
+                        [
+                            'CustomerRef' => [
+                                'value' => $qbClient->Id,
+                            ],
+                            'TotalAmt' => $ucrmPayment['amount'],
+                        ]
+                    );
 
                     $response = $dataService->Add($theResourceObj);
                     if ($response instanceof IPPIntuitEntity) {
@@ -295,7 +312,7 @@ class QuickBooksFacade
                     }
                     if (! $response) {
                         $this->logger->info(
-                            sprintf(' Payment ID: %s export failed.', $ucrmPayment['id'])
+                            sprintf('Payment ID: %s export failed.', $ucrmPayment['id'])
                         );
                     }
                     if ($response instanceof \Exception) {
@@ -305,7 +322,11 @@ class QuickBooksFacade
                     $this->throwExceptionOnErrorResponse($dataService);
                 } catch (\Exception $exception) {
                     $this->logger->error(
-                        sprintf(' Payment ID: %s export failed with error %s.', $ucrmPayment['id'], $exception->getMessage())
+                        sprintf(
+                            'Payment ID: %s export failed with error %s.',
+                            $ucrmPayment['id'],
+                            $exception->getMessage()
+                        )
                     );
                 }
 
@@ -348,7 +369,7 @@ class QuickBooksFacade
             return $response;
         } catch (\Exception $exception) {
             $this->logger->error(
-                sprintf(' Item ID: %s export failed with error %s.', $item['id'], $exception->getMessage())
+                sprintf('Item ID: %s export failed with error %s.', $item['id'], $exception->getMessage())
             );
         }
     }
@@ -357,9 +378,21 @@ class QuickBooksFacade
     {
         /** @var FaultHandler $error */
         if ($error = $dataService->getLastError()) {
-            $xml = new \SimpleXMLElement($error->getResponseBody());
-            $message = $xml->Fault->Error->Detail;
-            throw new \RuntimeException($message->__toString(), $error->getHttpStatusCode());
+            try {
+                $xml = new \SimpleXMLElement($error->getResponseBody());
+                if (isset($xml->Fault->Error->Detail)) {
+                    $message = ($xml->Fault->Error->Detail)->__toString();
+                }
+                throw new \RuntimeException(
+                    $message ?? sprintf('Unexpected XML response: %s', $error->getResponseBody()),
+                    $error->getHttpStatusCode()
+                );
+            } catch (\Exception $e) {
+                throw new \RuntimeException(
+                    sprintf('Is not possible parse QB error: %s', $error->getResponseBody()),
+                    $error->getHttpStatusCode()
+                );
+            }
         }
     }
 }
