@@ -60,11 +60,22 @@ class Importer
         }
 
         if ($endDate <= $startDate) {
-            $this->logger->notice(
+            $this->logger->warning(
                 'Start date is equal or greater than end date',
                 [
                     'startDate' => $startDate->format('Y-m-d H:i:s'),
                     'endDate' => $endDate->format('Y-m-d H:i:s'),
+                ]
+            );
+
+            return;
+        }
+
+        if (! is_numeric($optionsData->lastProcessedPayment)) {
+            $this->logger->warning(
+                'Last processed payment must be number',
+                [
+                    'lastProcessedPayment' => $optionsData->lastProcessedPayment,
                 ]
             );
 
