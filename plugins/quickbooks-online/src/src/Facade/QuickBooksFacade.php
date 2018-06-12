@@ -381,7 +381,7 @@ class QuickBooksFacade
             try {
                 $xml = new \SimpleXMLElement($error->getResponseBody());
                 if (isset($xml->Fault->Error->Detail)) {
-                    $message = ($xml->Fault->Error->Detail)->__toString();
+                    $message = (string) $xml->Fault->Error->Detail;
                 }
                 throw new \RuntimeException(
                     $message ?? sprintf('Unexpected XML response: %s', $error->getResponseBody()),
@@ -389,7 +389,7 @@ class QuickBooksFacade
                 );
             } catch (\Exception $e) {
                 throw new \RuntimeException(
-                    sprintf('Is not possible parse QB error: %s', $error->getResponseBody()),
+                    sprintf('It is not possible to parse QB error: %s', $error->getResponseBody()),
                     $error->getHttpStatusCode()
                 );
             }
