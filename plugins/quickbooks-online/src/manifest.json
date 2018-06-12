@@ -27,7 +27,7 @@
     },
     {
       "key": "qbBaseUrl",
-      "label": "baseUrl: Development/Production",
+      "label": "Account type (Development|Production)",
       "description": "If you use “Development Keys”, use “Development” here. Otherwise, use “Production”",
       "required": 1
     },
