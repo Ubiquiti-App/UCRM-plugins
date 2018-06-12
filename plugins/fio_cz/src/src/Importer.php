@@ -54,16 +54,31 @@ class Importer
             $startDate = new \DateTimeImmutable((string) $optionsData->startDate);
         } catch (\Exception $e) {
             $startDate = new \DateTimeImmutable('midnight first day of this month');
+            $this->logger->notice(
+                sprintf('Payments start date is not valid. Using "%s" instead.', $startDate->format('Y-m-d H:i:s'))
+            );
         }
 
         if ($endDate <= $startDate) {
-            $this->logger->notice(
+            $this->logger->warning(
                 'Start date is equal or greater than end date',
                 [
                     'startDate' => $startDate->format('Y-m-d H:i:s'),
                     'endDate' => $endDate->format('Y-m-d H:i:s'),
                 ]
             );
+
+            return;
+        }
+
+        if (! is_numeric($optionsData->lastProcessedPayment)) {
+            $this->logger->warning(
+                'Last processed payment must be number',
+                [
+                    'lastProcessedPayment' => $optionsData->lastProcessedPayment,
+                ]
+            );
+
             return;
         }
 
@@ -72,7 +87,7 @@ class Importer
                 $optionsData->token,
                 $startDate,
                 $endDate,
-                $optionsData->lastProcessedPayment === '' ? null : $optionsData->lastProcessedPayment
+                $optionsData->lastProcessedPayment === '' ? null : (int) $optionsData->lastProcessedPayment
             );
             foreach ($transactions as $transaction) {
                 $this->ucrmFacade->import($transaction);
