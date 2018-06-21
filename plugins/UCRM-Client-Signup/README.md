@@ -8,6 +8,7 @@ When installed onto UCRM the plugin public URL will display a form that anyone c
 ## Instructions
 
 _*Not ready for Production.*_
+
 _Primarily because there hasn't been many unit tests. So technically if you want to use it in production it will work. But as a best practice in coding and for the sake maintainability, "Programmatically Testing" the code is strongly recommended. So this is a disclaimer in light of that having not been done yet._
 
 This plugin does not use "Execution Period" or "Execute Manually". It is designed to use the plugin public URL to post from a form and create a new Client.
@@ -24,7 +25,7 @@ There are optional params for a custom Logo, Title, Form Description and Complet
 
 This is a simplified release of a more feature rich plugin planned for subscribing clients using the signup process via Stripe. Which will include charging the client immediately and creating their service in UCRM. Or even having an installation fee and delay creation of the service via a Stripe Subscription trial period, that once ended, creates the UCRM service.
 
-For more functionality, share your support by voting on these feature requests on the UCRM forum. And by making your interest known on the discussion thread.
+For more functionality, share your support by voting on these feature requests on the UCRM forum. And by making your interest known on the [discussion thread](https://community.ubnt.com/t5/UCRM/New-Plugin-Discussion-UCRM-Public-Client-Signup/m-p/2394250#M9593).
 
 ## Features in UCRM that will help make this plugin do more for you
 - [Creating Subscriptions via API](https://community.ubnt.com/t5/UCRM-Feature-Requests/Creating-Subscriptions-via-API/idi-p/2342937)
