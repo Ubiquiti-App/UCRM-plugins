@@ -8,6 +8,7 @@ When installed onto UCRM the plugin public URL will display a form that anyone c
 ## Instructions
 
 _*Not ready for Production.*_
+_Primarily because there hasn't been many unit tests. So technically if you want to use it in production it will work. But as a best practice in coding and for the sake maintainability, "Programmatically Testing" the code is strongly recommended. So this is a disclaimer in light of that having not been done yet._
 
 This plugin does not use "Execution Period" or "Execute Manually". It is designed to use the plugin public URL to post from a form and create a new Client.
 
