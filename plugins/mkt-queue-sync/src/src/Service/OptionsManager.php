@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace FioCz\Service;
+namespace MikrotikQueueSync\Service;
 
-use FioCz\Data\PluginData;
+use MikrotikQueueSync\Data\PluginData;
 
 class OptionsManager
 {

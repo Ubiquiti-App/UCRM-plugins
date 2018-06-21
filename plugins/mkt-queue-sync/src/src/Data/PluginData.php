@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace FioCz\Data;
+namespace MikrotikQueueSync\Data;
 
 class PluginData extends UcrmData
 {
