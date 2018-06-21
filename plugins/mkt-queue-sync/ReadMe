@@ -1,4 +1,0 @@
-Basic Plugin to sync UCRM Service Data rate with Mikrotik Simple Queue, comparing vi service IP-Address.
-
-Note: I've vary basic knowledge of PHP coding, so this code was based on a Ubiquiti FIO_CZ plugin and then modified to work. Any one that have more knowledge can improve this code.
-But, until now, the plugin is fully working, by changing de max-limit in Mikrotik Queue Simple with UCRM service Bandwith Value.

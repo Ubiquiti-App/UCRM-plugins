@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace FioCz\Service;
+namespace MikrotikQueueSync\Service;
 
-use FioCz\Exception\CurlException;
+use MikrotikQueueSync\Exception\CurlException;
 
 class UcrmApi
 {
     /**
      * @var CurlExecutor
      */
-    private $curlExecuter;
+    private $curlExecutor;
 
     /**
      * @var OptionsManager
      */
     private $optionsManager;
 
-    public function __construct(CurlExecutor $curlExecuter, OptionsManager $optionsManager)
+    public function __construct(CurlExecutor $curlExecutor, OptionsManager $optionsManager)
     {
-        $this->curlExecuter = $curlExecuter;
+        $this->curlExecutor = $curlExecutor;
         $this->optionsManager = $optionsManager;
     }
 
@@ -32,7 +32,7 @@ class UcrmApi
     {
         $optionsData = $this->optionsManager->loadOptions();
 
-        $this->curlExecuter->curlCommand(
+        $this->curlExecutor->curlCommand(
             sprintf('%sapi/v1.0/%s', $optionsData->ucrmPublicUrl, $endpoint),
             $method,
             [
@@ -51,7 +51,7 @@ class UcrmApi
     {
         $optionsData = $this->optionsManager->loadOptions();
 
-        return $this->curlExecuter->curlQuery(
+        return $this->curlExecutor->curlQuery(
             sprintf('%sapi/v1.0/%s', $optionsData->ucrmPublicUrl, $endpoint),
             [
                 'Content-Type: application/json',
