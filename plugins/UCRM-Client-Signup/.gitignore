@@ -2,7 +2,7 @@
 
 # compiled output
 /data/
-/vender/
+/vendor/
 /temp/
 errors.log
 ucrm.json
