@@ -32,12 +32,6 @@
                       "required": 1
                       },
                       {
-                      "key": "pmAPIPort",
-                      "label": "Packet Manager API Port",
-                      "description": "Port used to access RouterOS API if different from 8728.",
-                      "required": 0
-                      },
-                      {
                       "key": "pm2IP",
                       "label": "Second Packet Manager IP",
                       "description": "IP address of second RouterOS packet manager (if applicable).",
@@ -53,12 +47,6 @@
                       "key": "pm2AdminPass",
                       "label": "Second Packet Manager Admin Pass",
                       "description": "Password for previous username (if applicable).",
-                      "required": 0
-                      },
-                      {
-                      "key": "pm2APIPort",
-                      "label": "Second Packet Manager API Port",
-                      "description": "Port used to access RouterOS API if different from 8728.",
                       "required": 0
                       }
     ]
