@@ -32,15 +32,11 @@
     
     $pmAdminPass = $configs['pmAdminPass'];
     
-    $pmAPIPort = $configs['pmAPIPort'];
-    
     $pm2IP = $configs['pm2IP'];
     
     $pm2AdminUser = $configs['pm2AdminUser'];
     
     $pm2AdminPass = $configs['pm2AdminPass'];
-    
-    $pm2APIPort = $configs['pm2APIPort'];
     
     // Specific UCRM URL for private use
     
