@@ -6,7 +6,7 @@
     
     // Specify UCRM info file
     
-    $uFile = __DIR__ . "/..ucrm.json";
+    $uFile = __DIR__ . "/../ucrm.json";
     
     // Get the UCRM config file options
     
