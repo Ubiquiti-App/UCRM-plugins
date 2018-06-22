@@ -5,7 +5,7 @@
         "displayName": "RouterOS Packet Manager",
         "description": "This plugin allows using Mikrotik as a packet manager",
         "url": "http://www.atlinkservices.com",
-        "version": "1.0.4",
+        "version": "1.0.5",
         "ucrmVersionCompliancy": {
             "min": "2.10.0-beta1",
             "max": null
