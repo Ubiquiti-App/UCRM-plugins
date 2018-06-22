@@ -5,20 +5,23 @@ _Developed by [Charuwts, LLC](https://charuwts.com)_
 
 When installed onto UCRM the plugin public URL will display a form that anyone can enter valid info into to create a client.
 
-## Instructions
-
-_*Not ready for Production.*_
+*Not ready for Production.*
 
 _Primarily because there hasn't been many unit tests. So technically if you want to use it in production it will work. But as a best practice in coding and for the sake maintainability, "Programmatically Testing" the code is strongly recommended. So this is a disclaimer in light of that having not been done yet._
+
+
+## Instructions
 
 This plugin does not use "Execution Period" or "Execute Manually". It is designed to use the plugin public URL to post from a form and create a new Client.
 
 There are optional params for a custom Logo, Title, Form Description and Completion Text.
 
-*Form Title:* Displayed below logo before form description
-*Logo URL:* Displayed above form. Max width 400px
-*Form Description:* Displayed below logo before the form. (Can contain HTML)
-*Completion Text:* Text shown upon signup completion. (Text Only) - Defaults To: Thank you for signing up! You will receive an invitation to access your account upon approval.
+- *Form Title:* Displayed below logo before form description
+- *Logo URL:* Displayed above form. Max width 400px
+- *Form Description:* Displayed below logo before the form. (Can contain HTML)
+- *Completion Text:* Text shown upon signup completion. (Text Only) - Defaults To: Thank you for signing up! You will receive an invitation to access your account upon approval.
+
+Further information can be found at the [Charuwts Wiki](https://github.com/charuwts/UCRM-Client-Signup/wiki).
 
 
 ## Simplified release
