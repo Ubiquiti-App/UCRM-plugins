@@ -38,13 +38,13 @@ Example of the `ucrm.json` file:
 This directory is protected in between updates of the plugin. Anything in this directory will not be touched. All other files will be deleted and new files will appear from the plugin archive.
 
 ### data/config.json
-Plugin configuration will be saved to this file. When the UCRM plugin config form is saved, this file will be regenerated. Values can be modified by the plugin manually but any manual changes to the keys by the plugin will be discarded during any plugin configuration update.
+Plugin configuration (i.e. plugin's parameters and their values) will be saved to this file. When the UCRM plugin's paramteres are set by the user, this file is regenerated. Values can be modified by the plugin manually but any manual changes to the keys (e.g. removing, modifying or adding new keys) by the plugin will be discarded during any plugin configuration update. As a developer, you don't need to create this file unless you want to set default values for the parameters mentioned in the configuration section of manifest.json file.
 
 ### data/plugin.log
-Anything this file contains will be displayed as text on plugin detail page in UCRM.
+Anything this file contains will be displayed as text on plugin detail page in UCRM. You can use this file for logging the plugin's output, error messages, etc.
 
 ### .ucrm-plugin-running
-This file is used to prevent multiple plugin execution if the previous instance is still running.
+This file is used to prevent multiple plugin executions if the previous instance is still running. This measure is used only for manual execution (using the "execute manually" button) and for automatic execution (using cron and execution period). The execution triggered by plugin's public URL is not affected, it can be accessed and run simultaneously by users or webhooks without any limitations.
 
 > Please note, that regardless of execution period chosen by the user, the plugin is never executed if the previous instance did not finish. If the script does not finish in an hour, it will be automatically killed.
 

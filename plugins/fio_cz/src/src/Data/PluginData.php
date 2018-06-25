@@ -25,4 +25,14 @@ class PluginData extends UcrmData
      * @var string
      */
     public $token;
+
+    /**
+     * @var string
+     */
+    public $lastProcessedTimestamp;
+
+    /**
+     * @var string
+     */
+    public $importUnattached;
 }

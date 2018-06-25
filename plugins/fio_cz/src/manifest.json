@@ -5,7 +5,7 @@
     "displayName": "Fio bank payment import",
     "description": "This plugin enables you to import payments from Fio bank to UCRM. See https://www.fio.cz/bankovni-sluzby/api-bankovnictvi",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
-    "version": "1.0.1",
+    "version": "1.0.8",
     "ucrmVersionCompliancy": {
       "min": "2.10.0-beta1",
       "max": null
@@ -16,13 +16,13 @@
     {
       "key": "token",
       "label": "Fio token",
-      "description": "Token obtained from Fio bank internet banking.",
+      "description": "Token obtained from Fio bank internet banking. NOTE: the bank can issue the token with an expiration date, or without one (expired tokens will result in error 500, brand new tokens will return error 500 for a few minutes). Please do not reuse one token for multiple apps - generate one token for each, Fio bank's API usage limits are per token (exceeding limits will result in error 409).",
       "required": 1
     },
     {
       "key": "startDate",
       "label": "Payments start date",
-      "description": "Payments older than this date will be ignored.Use d.m.Y format",
+      "description": "Payments older than this date will be ignored. Use d.m.Y format.",
       "required": 1
     },
     {
@@ -32,8 +32,19 @@
       "required": 1
     },
     {
+      "key": "importUnattached",
+      "label": "Import all payments. (0|1)",
+      "description": "Import all payments. Payments without match will be imported as \"Unattached payments\". Fill 1 to enable or 0 to disable this feature.",
+      "required": 1
+    },
+    {
       "key": "lastProcessedPayment",
       "label": "Last processed payment",
+      "required": 0
+    },
+    {
+      "key": "lastProcessedTimestamp",
+      "label": "Last time the payment list was requested",
       "required": 0
     }
   ]

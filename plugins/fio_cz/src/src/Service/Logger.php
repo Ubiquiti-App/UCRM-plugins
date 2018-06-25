@@ -8,8 +8,11 @@ use Psr\Log\LogLevel;
 
 class Logger extends \Katzgrau\KLogger\Logger
 {
-    public function __construct()
+    private $debugLogger;
+
+    public function __construct($debug = false)
     {
+        $this->debugLogger = (bool)$debug;
         parent::__construct(
             'data',
             LogLevel::DEBUG,
@@ -18,5 +21,13 @@ class Logger extends \Katzgrau\KLogger\Logger
                 'filename' => 'plugin',
             ]
         );
+    }
+
+    public function write($message)
+    {
+        if ($this->debugLogger) {
+            echo $message, "\n";
+        }
+        parent::write($message);
     }
 }
