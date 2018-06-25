@@ -1,0 +1,41 @@
+{
+  "version": "1",
+  "information": {
+    "name": "ucrm-client-signup",
+    "displayName": "UCRM Client Signup",
+    "description": "A UCRM plugin that provides a frontend form for clients to signup.",
+    "url": "https://www.charuwts.com/plugins",
+    "version": "1.0.0",
+    "ucrmVersionCompliancy": {
+      "min": "2.11.1",
+      "max": null
+    },
+    "author": "Charuwts, LLC"
+  },
+  "configuration": [
+    {
+        "key": "optionalFormTitle",
+        "label": "Form Title",
+        "description": "Displayed below logo before form description",
+        "required": 0
+    },
+    {
+        "key": "optionalLogoUrl",
+        "label": "Logo URL",
+        "description": "Displayed above form. Max width 400px",
+        "required": 0
+    },
+    {
+        "key": "optionalFormDescription",
+        "label": "Form Description",
+        "description": "Displayed below logo before the form. (Can contain HTML)",
+        "required": 0
+    },
+    {
+        "key": "optionalCompletionText",
+        "label": "Completion Text",
+        "description": "Text shown upon signup completion. (Text Only) - Defaults To: Thank you for signing up! You will receive an invitation to access your account upon approval.",
+        "required": 0
+    }
+  ]
+}

@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace FioCz\FioCz;
 
-use FioCz\Service\CurlExecutor;
+use FioCz\Service\FioCurlExecutor;
 
 class FioCz
 {
     /**
-     * @var CurlExecutor
+     * @var FioCurlExecutor
      */
-    private $curlExecutor;
+    private $fioCurlExecutor;
 
-    public function __construct(CurlExecutor $curlExecutor)
+    public function __construct(FioCurlExecutor $fioCurlExecutor)
     {
-        $this->curlExecutor = $curlExecutor;
+        $this->fioCurlExecutor = $fioCurlExecutor;
     }
 
     /**
@@ -51,7 +51,7 @@ class FioCz
             $until->format('Y-m-d')
         );
 
-        return $this->curlExecutor->curlQuery(
+        return $this->fioCurlExecutor->curlQuery(
             $url,
             [
                 'Content-Type: application/json',
@@ -61,8 +61,6 @@ class FioCz
 
     private function transformTransactionsData(array $data): array
     {
-        $transactions = $data['accountStatement']['transactionList']['transaction'];
-
         return array_map(
             function ($transaction) {
                 $data = [];
@@ -84,7 +82,7 @@ class FioCz
                     'data' => $data,
                 ];
             },
-            $transactions
+            $data['accountStatement']['transactionList']['transaction']
         );
     }
 
