@@ -2,6 +2,11 @@
 This plugin handles import of your [UCRM](https://ucrm.ubnt.com/) customers, payments and invoices to 
 [QuickBooks Online](https://quickbooks.intuit.com/online/).
 
+## About UCRM data integration
+- The UCRM data are the single source of truth, the plugin only pushes data from UCRM to QuickBooks. 
+- On first run, all clients, payments and invoices are pushed to QuickBooks.
+- All following runs only pushes the newly created entities (i.e. new clients, new payments and new invoices with higher ID than the last).
+
 ## How to configure the plugin
 #### 1) QuickBooks - Create App
 - Create developer account at [Intuit Developer](https://developer.intuit.com/) site.
@@ -32,11 +37,6 @@ This plugin handles import of your [UCRM](https://ucrm.ubnt.com/) customers, pay
 - Wait until the plugin executes again, or do it manually.
 - You will now see the message `Exchange Authorization Code for Access Token succeeded.`.
 - Congratulations, UCRM and QuickBooks are now properly connected.
-
-## About UCRM data integration
-- The UCRM data are the single source of truth, the plugin only pushes data from UCRM to QuickBooks. 
-- On first run, all clients, payments and invoices are pushed to QuickBooks.
-- All following runs only pushes the newly created entities (i.e. new clients, new payments and new invoices with higher ID than the last).
 
 ## To be done in future version
 (Feel free to push your upgrades in this repo.)
