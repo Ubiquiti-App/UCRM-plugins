@@ -43,7 +43,7 @@ if (!empty($payload_decoded->pluginAppKey)) {
     <style type="text/css">
       <?php // ## UCRM requires file paths, Using PHP include instead of HTML tags to avoid relative URL ?>
       <?php include(PROJECT_PATH.'/assets/vendor-d3aa84b783735f00b7be359e81298bf2.css'); ?>
-      <?php include(PROJECT_PATH.'/assets/ucrm-client-signup-form-afe28287d01e4dd3416f7e015b65e994.css'); ?>
+      <?php include(PROJECT_PATH.'/assets/ucrm-client-signup-form-9a21c280b24385946f336cb12efa56fe.css'); ?>
     </style>
     
   </head>
@@ -69,7 +69,7 @@ if (!empty($payload_decoded->pluginAppKey)) {
     <script type="text/javascript">
       <?php // ## UCRM requires file paths, Using PHP include instead of HTML tags to avoid relative URL ?>
       <?php include(PROJECT_PATH.'/assets/vendor-1716fefcfca3e53fa332dd1a1c3eeead.js'); ?>
-      <?php include(PROJECT_PATH.'/assets/ucrm-client-signup-form-824a13215f7d640815d608e0869454d2.js'); ?>
+      <?php include(PROJECT_PATH.'/assets/ucrm-client-signup-form-be3bda63c1dd28be4ae04cb1304c6c78.js'); ?>
     </script>
 
     <div id="ember-bootstrap-wormhole"></div>
