@@ -1,0 +1,35 @@
+{
+  "version": "1",
+  "information": {
+    "name": "mkt-queue-sync",
+    "displayName": "Mikrotik Queue Sync Plugin",
+    "description": "Plugin para sincronizar simple queues con los limites de velocidad establecidos en Ucrm - Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https://wiki.mikrotik.com/wiki/Manual:Queue",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
+    "version": "1.0.0",
+    "ucrmVersionCompliancy": {
+      "min": "2.10.0-beta1",
+      "max": null
+    },
+    "author": "Franco Johan Gampel - franco@gampel.com.ar"
+  },
+  "configuration": [
+    {
+      "key": "mktip",
+      "label": "Mikrotik IP Address",
+      "description": "Direccion IP de Mikrotik",
+      "required": 1
+    },
+    {
+      "key": "mktusr",
+      "label": "Mikrotik Username",
+      "description": "Nombre de Usuario de Mikrotik",
+      "required": 1
+    },
+    {
+      "key": "mktpass",
+      "label": "Mikrotik Password",
+      "description": "Password de Mikrotik",
+      "required": 1
+    }
+  ]
+}
