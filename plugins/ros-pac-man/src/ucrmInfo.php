@@ -44,7 +44,7 @@
     
     // UCRM API key with read or write capability
     
-    $ucrmKey = "YOUR_KEY_HERE";
+    $ucrmKey = $uConfigs['pluginAppKey'];
     
     // Query used to pull client information
     
