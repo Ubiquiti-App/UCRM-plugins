@@ -1,10 +1,10 @@
 {
     "version": "1",
     "information": {
-        "name": "pacman",
+        "name": "routeros-packet-manager",
         "displayName": "RouterOS Packet Manager",
         "description": "This plugin allows using Mikrotik as a packet manager",
-        "url": "http://www.atlinkservices.com",
+        "url": "https://github.com/csylos/ucrm-ros-pac-man",
         "version": "1.0.5",
         "ucrmVersionCompliancy": {
             "min": "2.10.0-beta1",
