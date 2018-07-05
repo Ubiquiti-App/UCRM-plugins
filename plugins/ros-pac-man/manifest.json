@@ -20,7 +20,6 @@
                       "required": 1
                       },
                       {
-                      {
                       "key": "pm2IP",
                       "label": "Second Packet Manager IP",
                       "description": "IP address of second RouterOS packet manager (if applicable).",
