@@ -20,17 +20,6 @@
                       "required": 1
                       },
                       {
-                      "key": "pmAdminUser",
-                      "label": "Packet Manager Admin User",
-                      "description": "Username for the UCRM to write to the packet manager.",
-                      "required": 1
-                      },
-                      {
-                      "key": "pmAdminPass",
-                      "label": "Packet Manager Admin Password",
-                      "description": "Password for previous username.",
-                      "required": 1
-                      },
                       {
                       "key": "pm2IP",
                       "label": "Second Packet Manager IP",
@@ -38,14 +27,14 @@
                       "required": 0
                       },
                       {
-                      "key": "pm2AdminUser",
-                      "label": "Second Packet Manager Admin User",
+                      "key": "AdminUser",
+                      "label": "Packet Manager Admin User",
                       "description": "Username for the UCRM to write to the second packet manager (if applicable).",
                       "required": 0
                       },
                       {
-                      "key": "pm2AdminPass",
-                      "label": "Second Packet Manager Admin Pass",
+                      "key": "AdminPass",
+                      "label": "Packet Manager Admin Pass",
                       "description": "Password for previous username (if applicable).",
                       "required": 0
                       }
