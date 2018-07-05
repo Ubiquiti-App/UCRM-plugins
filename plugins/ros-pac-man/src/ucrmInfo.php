@@ -27,16 +27,12 @@
     $configs = json_decode($configInfo,true);
     
     $pmIP = $configs['pmIP'];
+
+    $pm2IP = $configs['pm2IP'];
     
     $pmAdminUser = $configs['pmAdminUser'];
     
     $pmAdminPass = $configs['pmAdminPass'];
-    
-    $pm2IP = $configs['pm2IP'];
-    
-    $pm2AdminUser = $configs['pm2AdminUser'];
-    
-    $pm2AdminPass = $configs['pm2AdminPass'];
     
     // Specific UCRM URL for private use
     
