@@ -1,0 +1,42 @@
+
+{
+    "version": "1",
+    "information": {
+        "name": "routeros-packet-manager",
+        "displayName": "RouterOS Packet Manager",
+        "description": "This plugin allows using Mikrotik as a packet manager",
+        "url": "https://github.com/csylos/ucrm-ros-pac-man",
+        "version": "1.0.5",
+        "ucrmVersionCompliancy": {
+            "min": "2.10.0-beta1",
+            "max": null
+        },
+        "author": "Shaun Wilkinson"
+    },
+    "configuration": [
+    {
+                      "key": "pmIP",
+                      "label": "Packet Manager IP",
+                      "description": "The IP address of your RouterOS packet manager.",
+                      "required": 1
+                      },
+                      {
+                      "key": "pm2IP",
+                      "label": "Second Packet Manager IP",
+                      "description": "IP address of second RouterOS packet manager (if applicable).",
+                      "required": 0
+                      },
+                      {
+                      "key": "AdminUser",
+                      "label": "Packet Manager Admin User",
+                      "description": "Username for the UCRM to write to the second packet manager (if applicable).",
+                      "required": 0
+                      },
+                      {
+                      "key": "AdminPass",
+                      "label": "Packet Manager Admin Pass",
+                      "description": "Password for previous username (if applicable).",
+                      "required": 0
+                      }
+    ]
+}
