@@ -4,7 +4,7 @@ The `manifest.json` file contains all needed information about the plugin and is
 ## Example
 ```json
 {
-    "version": "1",
+    "version": "2",
     "information": {
         "name": "ubnt__dummy-plugin",
         "displayName": "Dummy Plugin - documentation example",
@@ -28,7 +28,43 @@ The `manifest.json` file contains all needed information about the plugin and is
             "key": "optionalConfigurationField",
             "label": "An optional and not important configuration field",
             "required": 0
-        }
+        },
+        {
+            "key": "longText",
+            "label": "Long text field",
+            "required": 0,
+            "type": "textarea"
+        },
+        {
+            "key": "paymentMatchAttribute",
+            "label": "Match attribute from payment variable symbol to UCRM",
+            "description": "Can be 'invoiceNumber', 'clientId', 'clientUserIdent' or a custom attribute key.",
+            "required": 1,
+            "type": "choice",
+            "choices": {
+              "Invoice number": "invoiceNumber",
+              "Client ID": "clientId",
+              "Client User Ident": "clientUserIdent"
+            }
+        },
+        {
+            "key": "startDate",
+            "label": "Start date",
+            "required": 0,
+            "type": "date"
+        },
+        {
+            "key": "startDateTime",
+            "label": "Start date with time",
+            "required": 0,
+            "type": "datetime"
+        },
+        {
+            "key": "isBolean",
+            "label": "Is it true",
+            "required": 0,
+            "type": "checkbox"
+        },
     ]
 }
 ```
@@ -56,3 +92,7 @@ Contains an array of items. Each item is defined as follows:
 - `label` - label of the property as displayed in UCRM
 - `description` (optional) - description of the property, displayed under the form input in UCRM
 - `required` (optional, default: `1`) - whether the property is required or optional, configuration cannot be saved without required properties
+- `type` (optional, default: `text`) - (from version of UCRM v. 2.14.0-beta1) possible values are (`checkbox`, `choice`, `date`, `datetime`, `file`, `text`, `textarea`)
+- `choices` (optional) - object of name:value pairs for `choice` type
+
+Files from `"type": "file"` input field will be renamed to property key with the same extension as original file and uploaded to `data/files` directory.
