@@ -66,8 +66,8 @@ def makeServicePlan(plan,download,upload):
     else:
         rs.object_add("/NetObjects/Ubiquiti_CRM/Services/UCRM_%s" % psn)
         sloc = rs.object_find("/NetObjects/Ubiquiti_CRM/Services/UCRM_%s" % psn)
-        sobj = rs.shapingobject_find("UCRM_%s" % psn)
         rs.shapingobject_add(("UCRM_%s" % psn), inbound = pdn, outbound = pup, flags = ["counter", "blue"])
+        sobj = rs.shapingobject_find("UCRM_%s" % psn)
         o = rs.shapingrule_add("UCRM_%s" % psn)
         o.cond_add(rs.CONDITION_NETOBJECT_LOCAL, rs.CONDITION_OP_EQ, [sloc.id])
         o.set_objects([sobj.id])
