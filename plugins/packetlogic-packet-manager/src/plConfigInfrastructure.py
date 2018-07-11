@@ -14,7 +14,15 @@ from globals import rs
 # Function to add devices to the open access list
 def makeOpenAccess(ips):
     for ip in ips:
-        if not ip in rs.object_find("/NetObjects/Ubiquiti_CRM/UCRM_Open_Access").items:
+        fip = ip.split("/")[0]
+        fobj = rs.object_find("/NetObjects/Ubiquiti_CRM/UCRM_Open_Access").items
+        fobjf = []
+        for fo in fobj:
+            stfo = str(fo)
+            sfo = "".join(stfo)
+            rfo = sfo.split("/")[0]
+            fobjf.append(rfo)
+        if not fip in fobjf:
             o = rs.object_find("/NetObjects/Ubiquiti_CRM/UCRM_Open_Access")
             o.add(ip)
 
