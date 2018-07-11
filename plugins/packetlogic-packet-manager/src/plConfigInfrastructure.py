@@ -24,7 +24,7 @@ def makeOpenAccess(ips):
             fobjf.append(rfo)
         if not fip in fobjf:
             o = rs.object_find("/NetObjects/Ubiquiti_CRM/UCRM_Open_Access")
-            o.add(ip)
+            o.add(fip)
 
     # Exit the function after the FOR loop
     return
