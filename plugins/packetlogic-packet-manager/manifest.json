@@ -5,7 +5,7 @@
         "displayName": "PacketLogic Packet Manager",
         "description": "UCRM Plugin that synchronizes customers with Procera Networks PacketLogic system.",
         "url": "http://www.atlinkservices.com",
-        "version": "1.0.0",
+        "version": "1.0.1",
         "ucrmVersionCompliancy": {
             "min": "2.10.0-beta1",
             "max": null
