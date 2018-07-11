@@ -98,7 +98,8 @@ def InitializeAdd():
         o.add("ICMP")
 
     if not rs.object_find("/NetObjects/Ubiquiti_CRM"):
-        rs.object_add("/NetObjects/Ubiquiti_CRM")
+        o = rs.object_add("/NetObjects/Ubiquiti_CRM")
+        o.set_visible(True)
 
     if not rs.object_find("/NetObjects/Ubiquiti_CRM/UCRM_Authorized"):
         rs.object_add("/NetObjects/Ubiquiti_CRM/UCRM_Authorized")
