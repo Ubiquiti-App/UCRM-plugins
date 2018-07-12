@@ -18,6 +18,8 @@ UCRM plugins are compatible with UCRM 2.10.0+
 | [MKT&nbsp;Queue&nbsp;Sync](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/mkt-queue-sync) | Sync UCRM Service Data rate with Mikrotik Simple Queue by service IP Address and client's service speed set in UCRM |
 | [FIO CZ](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/fio_cz) | Automatic payments import and matching with clients - from WISP's FIO bank account |
 | [Client&nbsp;Signup](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/UCRM-Client-Signup) | Enables any visitor to register as a new client through a public web form |
+| [Router-OS&nbsp;packet&nbsp;manager](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/routeros-packet-manager) | Sync UCRM Service Data rate with Router-OS |
+
 
 
 ## How can I contribute?
