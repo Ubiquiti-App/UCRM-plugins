@@ -1,0 +1,47 @@
+{
+    "version": "1",
+    "information": {
+        "name": "packetlogic-packet-manager",
+        "displayName": "PacketLogic Packet Manager",
+        "description": "UCRM Plugin that synchronizes customers with Procera Networks PacketLogic system.",
+        "url": "http://www.atlinkservices.com",
+        "version": "1.0.2",
+        "ucrmVersionCompliancy": {
+            "min": "2.10.0-beta1",
+            "max": null
+        },
+        "author": "Shaun Wilkinson"
+    },
+    "configuration": [
+    {
+                      "key": "pmIP",
+                      "label": "Packet Manager IP",
+                      "description": "The IP address of your PacketLogic packet manager.",
+                      "required": 1
+                      },
+                      {
+                      "key": "pm2IP",
+                      "label": "Second Packet Manager IP",
+                      "description": "IP address of second PacketLogic packet manager (if applicable).",
+                      "required": 0
+                      },
+                      {
+                      "key": "pmAdminUser",
+                      "label": "Packet Manager(s) Admin User",
+                      "description": "Username for the UCRM to write to the second packet manager (must be the same on both Packet Managers).",
+                      "required": 1
+                      },
+                      {
+                      "key": "pmAdminPass",
+                      "label": "Packet Manager(s) Admin Pass",
+                      "description": "Password for previous username (must be the same on both Packet Managers).",
+                      "required": 1
+                      },
+                      {
+                      "key": "options",
+                      "label": "Configuration Options from List",
+                      "description": "Options can be chosen from the following list (options are case-sensitive): \r\n InitRemove: Initializes the Packet Manager (clears out all UCRM-related information)\r\n InitAdd: Adds necessary parent objects and rules to the PacketLogic\r\n Infrastructure: Adds all items in devices to the open access list \r\n Clients: Adds all clients to the PacketLogic in their current status and package\n Services: Adds all service plans to the PacketLogic\r\n Sync: Re-syncs the PacketLogic with the UCRM",
+                      "required": 1
+                      }
+    ]
+}
