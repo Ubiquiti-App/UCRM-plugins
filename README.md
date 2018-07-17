@@ -19,8 +19,7 @@ UCRM plugins are compatible with UCRM 2.10.0+
 | [FIO CZ](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/fio_cz) | Automatic payments import and matching with clients - from WISP's FIO bank account |
 | [Client&nbsp;Signup](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/UCRM-Client-Signup) | Enables any visitor to register as a new client through a public web form |
 | [RouterOS&nbsp;packet&nbsp;manager](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/routeros-packet-manager) | Sync UCRM Service Data rate with Router-OS |
-
-
+| [Packetlogic packet manager](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/packetlogic-packet-manager) | Sync UCRM Entities and Service Data Rate with Procera |
 
 ## How can I contribute?
 * These plugins are under MIT license enabling anyone to contribute any upgrades to existing plugins or create whole new ones.
