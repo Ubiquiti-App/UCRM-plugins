@@ -13,7 +13,6 @@ use QBExport\Service\UcrmApi;
 use QuickBooksOnline\API\Core\HttpClients\FaultHandler;
 use QuickBooksOnline\API\Data\IPPIntuitEntity;
 use QuickBooksOnline\API\DataService\DataService;
-use QuickBooksOnline\API\Exception\IdsException;
 use QuickBooksOnline\API\Exception\ServiceException;
 use QuickBooksOnline\API\Facades\Customer;
 use QuickBooksOnline\API\Facades\Invoice;
@@ -217,67 +216,73 @@ class QuickBooksFacade
 
             $this->logger->info(sprintf('Invoice ID: %s needs to be exported', $ucrmInvoice['id']));
 
-            if ($qbClient = $this->getQBClient($dataService, $ucrmInvoice['clientId'])) {
+            $qbClient = $this->getQBClient($dataService, $ucrmInvoice['clientId']);
 
-                $lines = [];
-                foreach ($ucrmInvoice['items'] as $item) {
-                    $qbItem = $this->createQBLineFromItem(
-                        $dataService,
-                        $item,
-                        (int) $pluginData->qbIncomeAccountNumber
-                    );
-                    if ($qbItem) {
-                        $lines[] = [
-                            'Amount' => $item['quantity'],
-                            'Description' => $item['label'],
-                            'DetailType' => 'SalesItemLineDetail',
-                            'SalesItemLineDetail' => [
-                                'ItemRef' => [
-                                    'value' => $qbItem->Id,
-                                ],
-                            ],
-                        ];
-                    }
-                }
-
-                try {
-                    $response = $dataService->Add(
-                        Invoice::create(
-                            [
-                                'Line' => $lines,
-                                'CustomerRef' => [
-                                    'value' => $qbClient->Id,
-                                ],
-                            ]
-                        )
-                    );
-
-                    if ($response instanceof IPPIntuitEntity) {
-                        $this->logger->info(
-                            sprintf('Invoice ID: %s exported successfully.', $ucrmInvoice['id'])
-                        );
-                    }
-                    if ($response instanceof \Exception) {
-                        throw $response;
-                    }
-                    $this->logger->info(
-                        sprintf(' Invoice ID: %s export failed.', $ucrmInvoice['id'])
-                    );
-
-                    $this->throwExceptionOnErrorResponse($dataService);
-                } catch (\Exception $exception) {
-                    $this->logger->error(
-                        sprintf(
-                            ' Invoice ID: %s export failed with error %s.',
-                            $ucrmInvoice['id'],
-                            $exception->getMessage()
-                        )
-                    );
-                }
-
-                $pluginData->lastExportedInvoiceID = $ucrmInvoice['id'];
-                $this->optionsManager->update();
+            if (! $qbClient) {
+                $this->logger->error(
+                    sprintf('Client with Display name containing: UCRMID-%s is not found', $ucrmInvoice['clientId'])
+                );
+                continue;
             }
+
+            $lines = [];
+            foreach ($ucrmInvoice['items'] as $item) {
+                $qbItem = $this->createQBLineFromItem(
+                    $dataService,
+                    $item,
+                    (int) $pluginData->qbIncomeAccountNumber
+                );
+                if ($qbItem) {
+                    $lines[] = [
+                        'Amount' => $item['quantity'],
+                        'Description' => $item['label'],
+                        'DetailType' => 'SalesItemLineDetail',
+                        'SalesItemLineDetail' => [
+                            'ItemRef' => [
+                                'value' => $qbItem->Id,
+                            ],
+                        ],
+                    ];
+                }
+            }
+
+            try {
+                $response = $dataService->Add(
+                    Invoice::create(
+                        [
+                            'Line' => $lines,
+                            'CustomerRef' => [
+                                'value' => $qbClient->Id,
+                            ],
+                        ]
+                    )
+                );
+
+                if ($response instanceof IPPIntuitEntity) {
+                    $this->logger->info(
+                        sprintf('Invoice ID: %s exported successfully.', $ucrmInvoice['id'])
+                    );
+                }
+                if ($response instanceof \Exception) {
+                    throw $response;
+                }
+                $this->logger->info(
+                    sprintf(' Invoice ID: %s export failed.', $ucrmInvoice['id'])
+                );
+
+                $this->throwExceptionOnErrorResponse($dataService);
+            } catch (\Exception $exception) {
+                $this->logger->error(
+                    sprintf(
+                        ' Invoice ID: %s export failed with error %s.',
+                        $ucrmInvoice['id'],
+                        $exception->getMessage()
+                    )
+                );
+            }
+
+            $pluginData->lastExportedInvoiceID = $ucrmInvoice['id'];
+            $this->optionsManager->update();
         }
     }
 
@@ -287,52 +292,59 @@ class QuickBooksFacade
         $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
 
         foreach ($this->ucrmApi->query('payments') as $ucrmPayment) {
-            if ($ucrmPayment['id'] <= $pluginData->lastExportedPaymentID) {
+            if ($ucrmPayment['id'] <= $pluginData->lastExportedPaymentID || ! $ucrmPayment['clientId']) {
                 continue;
             }
 
             $this->logger->info(sprintf('Payment ID: %s needs to be exported', $ucrmPayment['id']));
 
-            if ($ucrmPayment['clientId'] && $qbClient = $this->getQBClient($dataService, $ucrmPayment['clientId'])) {
-                try {
-                    $theResourceObj = Payment::create(
-                        [
-                            'CustomerRef' => [
-                                'value' => $qbClient->Id,
-                            ],
-                            'TotalAmt' => $ucrmPayment['amount'],
-                        ]
-                    );
+            $qbClient = $this->getQBClient($dataService, $ucrmPayment['clientId']);
 
-                    $response = $dataService->Add($theResourceObj);
-                    if ($response instanceof IPPIntuitEntity) {
-                        $this->logger->info(
-                            sprintf('Payment ID: %s exported successfully.', $ucrmPayment['id'])
-                        );
-                    }
-                    if (! $response) {
-                        $this->logger->info(
-                            sprintf('Payment ID: %s export failed.', $ucrmPayment['id'])
-                        );
-                    }
-                    if ($response instanceof \Exception) {
-                        throw $response;
-                    }
+            if (! $qbClient) {
+                $this->logger->error(
+                    sprintf('Client with Display name containing: UCRMID-%s is not found', $ucrmPayment['clientId'])
+                );
+                continue;
+            }
 
-                    $this->throwExceptionOnErrorResponse($dataService);
-                } catch (\Exception $exception) {
-                    $this->logger->error(
-                        sprintf(
-                            'Payment ID: %s export failed with error %s.',
-                            $ucrmPayment['id'],
-                            $exception->getMessage()
-                        )
+            try {
+                $theResourceObj = Payment::create(
+                    [
+                        'CustomerRef' => [
+                            'value' => $qbClient->Id,
+                        ],
+                        'TotalAmt' => $ucrmPayment['amount'],
+                    ]
+                );
+
+                $response = $dataService->Add($theResourceObj);
+                if ($response instanceof IPPIntuitEntity) {
+                    $this->logger->info(
+                        sprintf('Payment ID: %s exported successfully.', $ucrmPayment['id'])
                     );
                 }
+                if (! $response) {
+                    $this->logger->info(
+                        sprintf('Payment ID: %s export failed.', $ucrmPayment['id'])
+                    );
+                }
+                if ($response instanceof \Exception) {
+                    throw $response;
+                }
 
-                $pluginData->lastExportedPaymentID = $ucrmPayment['id'];
-                $this->optionsManager->update();
+                $this->throwExceptionOnErrorResponse($dataService);
+            } catch (\Exception $exception) {
+                $this->logger->error(
+                    sprintf(
+                        'Payment ID: %s export failed with error %s.',
+                        $ucrmPayment['id'],
+                        $exception->getMessage()
+                    )
+                );
             }
+
+            $pluginData->lastExportedPaymentID = $ucrmPayment['id'];
+            $this->optionsManager->update();
         }
     }
 
@@ -346,7 +358,7 @@ class QuickBooksFacade
             return null;
         }
 
-        return current($customers);
+        return reset($customers);
     }
 
     private function createQBLineFromItem(DataService $dataService, array $item, int $qbIncomeAccountNumber)
