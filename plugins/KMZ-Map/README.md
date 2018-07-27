@@ -1,13 +1,13 @@
-# UCRM Client Signup
+# KMZ Map
 A [UCRM plugin](https://github.com/Ubiquiti-App/UCRM-plugins) that provides a frontend Google Map for clients to view tower coverage.
 
 _Developed by [Charuwts, LLC](https://charuwts.com)_
 
-When installed onto UCRM the plugin public URL will display a Map and two option links.
+When installed onto UCRM the plugin public URL will display a Map and two optional links.
 
 ## Instructions
 
-This plugin does not use "Execution Period" or "Execute Manually". It is designed to use the plugin public URL to post from a form and create a new Client.
+This plugin does not use "Execution Period" or "Execute Manually". It is designed to use the plugin public URL to display a KMZ Map.
 
 If you use a UBNT device you can generate a KMZ file using the airLink simulation https://link.ubnt.com
 
