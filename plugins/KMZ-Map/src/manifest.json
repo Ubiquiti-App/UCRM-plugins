@@ -1,0 +1,53 @@
+{
+  "version": "1",
+  "information": {
+    "name": "kmz-map",
+    "displayName": "KMZ Map",
+    "description": "A UCRM plugin that provides a frontend Google Map for clients to view tower coverage.",
+    "url": "https://www.charuwts.com/plugins",
+    "version": "1.0.0",
+    "ucrmVersionCompliancy": {
+      "min": "2.11.1",
+      "max": null
+    },
+    "author": "Charuwts, LLC"
+  },
+  "configuration": [
+    {
+        "key": "requiredGoogleApiKey",
+        "label": "Maps JavaScript API Key",
+        "description": "",
+        "required": 1
+    },
+    {
+        "key": "requiredKMZFile",
+        "label": "KMZ File URL",
+        "description": "URL to your KMZ file.",
+        "required": 1
+    },
+    {
+        "key": "optionalLogoUrl",
+        "label": "Logo URL",
+        "description": "Displayed above form. Max width 400px",
+        "required": 0
+    },
+    {
+        "key": "optionalFormDescription",
+        "label": "Form Description",
+        "description": "Displayed below logo before the form. (Can contain HTML)",
+        "required": 0
+    },
+    {
+        "key": "optionalLinkOne",
+        "label": "Link 1",
+        "description": "Display a button on the left. Syntax is title|link Example: Signup Now! | https://www.charuwts.com/plugins",
+        "required": 0
+    },
+    {
+        "key": "optionalLinkTwo",
+        "label": "Link Two",
+        "description": "Display a button on the right. Syntax is title|link Example: Request for your area! | https://www.charuwts.com/contact",
+        "required": 0
+    }
+  ]
+}
