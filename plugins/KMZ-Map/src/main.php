@@ -3,6 +3,4 @@ chdir(__DIR__);
 
 define("PROJECT_PATH", __DIR__);
 
-require_once(PROJECT_PATH.'/src/functions.php');
-
-log_event('System', 'This plugin uses webhooks. Nothing to run.');
+file_put_contents(PROJECT_PATH.'/data/plugin.log', 'This plugin uses the public url. Nothing to run.', LOCK_EX);
