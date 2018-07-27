@@ -12,7 +12,7 @@ This plugin does not use "Execution Period" or "Execute Manually". It is designe
 If you use a UBNT device you can generate a KMZ file using the airLink simulation https://link.ubnt.com
 
 ### Config:
-![KMZ Config](https://s3.amazonaws.com/shared-charuwts/images/kmz_map_config.png)
+![KMZ Config](https://s3.amazonaws.com/shared-charuwts/images/kmz_map_example_config.png)
 
 - *Maps JavaScript API Key:* Get this from the Google Api Console, make sure to add your domain as an HTTP Referrer.
 - *KMZ File URL:* URL to your KMZ file
