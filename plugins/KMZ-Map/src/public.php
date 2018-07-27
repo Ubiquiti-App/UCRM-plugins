@@ -5,10 +5,6 @@ define("PROJECT_PATH", __DIR__);
 
 require_once(PROJECT_PATH.'/includes/initialize.php');
 
-// ## Get JSON from post request
-$payload = @file_get_contents("php://input");
-$payload_decoded = json_decode($payload);
-
 ?>
 
 <!DOCTYPE html>
@@ -24,26 +20,26 @@ $payload_decoded = json_decode($payload);
   </head>
   <body>
     <div id="aside">
-      <?php if (!empty(LOGO_URL)) { ?>
-        <img src="<?php echo LOGO_URL; ?>" class="logo">
+      <?php if (!empty(\KMZMap\Config::$LOGO_URL)) { ?>
+        <img src="<?php echo \KMZMap\Config::$LOGO_URL; ?>" class="logo">
       <?php } ?>
       <div id="description">
-        <?php if (!empty(FORM_DESCRIPTION)) { ?>
+        <?php if (!empty(\KMZMap\Config::$FORM_DESCRIPTION)) { ?>
           <div class="form-description">
-            <?php echo FORM_DESCRIPTION; ?>
+            <?php echo \KMZMap\Config::$FORM_DESCRIPTION; ?>
           </div>
         <?php } ?>
         <div class="buttons">
-          <?php if (!empty(LINK_ONE)) { ?>
-            <a href="<?php echo LINK_ONE; ?>" class="btn" style="background-color: #28a745;"><?php echo TEXT_ONE; ?></a>
+          <?php if (!empty(\KMZMap\Config::$LINK_ONE[0])) { ?>
+            <a href="<?php echo \KMZMap\Config::$LINK_ONE[0]; ?>" class="btn" style="background-color: #28a745;"><?php echo \KMZMap\Config::$LINK_ONE[1]; ?></a>
           <?php } ?>
-          <?php if (!empty(LINK_TWO)) { ?>
-            <a href="<?php echo LINK_TWO; ?>" class="btn" style="background-color: #007bff;"><?php echo TEXT_TWO; ?></a>
+          <?php if (!empty(\KMZMap\Config::$LINK_TWO[0])) { ?>
+            <a href="<?php echo \KMZMap\Config::$LINK_TWO[0]; ?>" class="btn" style="background-color: #007bff;"><?php echo \KMZMap\Config::$LINK_TWO[1]; ?></a>
           <?php } ?>
         </div>
       </div>
     </div>
-    <input id="kmzFile" value="<?php echo KMZ_FILE; ?>" type="hidden"></input>
+    <input id="kmzFile" value="<?php echo \KMZMap\Config::$KMZ_FILE; ?>" type="hidden"></input>
     <div id="map"></div>
     <script type="text/javascript">
       
@@ -59,7 +55,7 @@ $payload_decoded = json_decode($payload);
       }
     </script>
 
-    <script type="text/javascript" async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo API_KEY; ?>"></script>
+    <script type="text/javascript" async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo \KMZMap\Config::$GOOGLE_API_KEY; ?>"></script>
 
     <style type="text/css">
       html, body, div {
