@@ -39,7 +39,7 @@
     },
     {
         "key": "HYPER_LINK_LINK_ONE",
-        "label": "Link 1",
+        "label": "Link One",
         "description": "Display a button on the left. Syntax is Link|Title And you can use | in the Title after the first |. Example: https://www.charuwts.com/plugins | Signup Now!",
         "required": 0
     },
