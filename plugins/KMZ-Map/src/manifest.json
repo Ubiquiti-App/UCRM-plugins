@@ -28,13 +28,13 @@
     {
         "key": "optionalLogoUrl",
         "label": "Logo URL",
-        "description": "Displayed above form. Max width 400px",
+        "description": "Displayed next to map on larger screens, above on smaller.",
         "required": 0
     },
     {
         "key": "optionalFormDescription",
         "label": "Form Description",
-        "description": "Displayed below logo before the form. (Can contain HTML)",
+        "description": "Displayed below logo. (Can contain HTML)",
         "required": 0
     },
     {
