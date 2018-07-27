@@ -26,7 +26,7 @@ Further information can be found at the [Charuwts Wiki](https://github.com/charu
 
 ## Simplified release
 
-This is a simplified release of a more feature rich plugin planned for creating services for the client as well and automatically charging for invoices that are due using Stripe. More gateway integrations to come!
+This is a simplified release of a more feature rich plugin planned for creating services for the client as well and automatically charging for invoices that are due using Stripe. More gateway integrations to come! Full Release can be found at https://www.charuwts.com/plugins
 
 For more functionality, share your support by voting on these feature requests on the UCRM forum. And by making your interest known on the [discussion thread](https://community.ubnt.com/t5/UCRM/New-Plugin-Discussion-UCRM-Public-Client-Signup/m-p/2394250#M9593).
 
