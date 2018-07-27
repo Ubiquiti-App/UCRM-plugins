@@ -22,4 +22,4 @@ If you use a UBNT device you can generate a KMZ file using the airLink simulatio
 - *Link 2:* Display a button on the right. Syntax is title|link Example: Request for your area! | https://www.charuwts.com/contact
 
 ### Screenshot:
-![KMZ Config](https://s3.amazonaws.com/shared-charuwts/images/kmz_map_config.png)
+![KMZ Config](https://s3.amazonaws.com/shared-charuwts/images/kmz_map_example.png)
