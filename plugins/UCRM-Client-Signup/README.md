@@ -5,7 +5,7 @@ _Developed by [Charuwts, LLC](https://charuwts.com)_
 
 When installed onto UCRM the plugin public URL will display a form that anyone can enter valid info into to create a client.
 
-*Not ready for Production.*
+#### *_Not ready for Production._*
 
 _Primarily because there hasn't been many unit tests. So technically if you want to use it in production it will work. But as a best practice in coding and for the sake maintainability, "Programmatically Testing" the code is strongly recommended. So this is a disclaimer in light of that having not been done yet._
 
@@ -26,14 +26,14 @@ Further information can be found at the [Charuwts Wiki](https://github.com/charu
 
 ## Simplified release
 
-This is a simplified release of a more feature rich plugin planned for subscribing clients using the signup process via Stripe. Which will include charging the client immediately and creating their service in UCRM. Or even having an installation fee and delay creation of the service via a Stripe Subscription trial period, that once ended, creates the UCRM service.
+This is a simplified release of a more feature rich plugin planned for creating services for the client as well and automatically charging for invoices that are due using Stripe. More gateway integrations to come! Full Release can be found at https://www.charuwts.com/plugins
 
 For more functionality, share your support by voting on these feature requests on the UCRM forum. And by making your interest known on the [discussion thread](https://community.ubnt.com/t5/UCRM/New-Plugin-Discussion-UCRM-Public-Client-Signup/m-p/2394250#M9593).
 
 ## Features in UCRM that will help make this plugin do more for you
+- [Customizable Plugin Public Url](https://community.ubnt.com/t5/UCRM-Feature-Requests/Customizable-Plugin-Public-URL/idi-p/2388893)
 - [Creating Subscriptions via API](https://community.ubnt.com/t5/UCRM-Feature-Requests/Creating-Subscriptions-via-API/idi-p/2342937)
 - [API Linked Subscriptions](https://community.ubnt.com/t5/UCRM-Feature-Requests/API-Linked-Subscriptions/idc-p/2341614#M1150)
-- [Customizable Plugin Public Url](https://community.ubnt.com/t5/UCRM-Feature-Requests/Customizable-Plugin-Public-URL/idi-p/2388893)
 
 ## Form is built with Ember.js
 [UCRM Client Signup Form](https://github.com/charuwts/UCRM-Client-Signup-Form)
