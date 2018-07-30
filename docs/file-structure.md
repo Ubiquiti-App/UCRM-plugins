@@ -43,6 +43,9 @@ Plugin configuration (i.e. plugin's parameters and their values) will be saved t
 ### data/plugin.log
 Anything this file contains will be displayed as text on plugin detail page in UCRM. You can use this file for logging the plugin's output, error messages, etc.
 
+### data/files directory
+Files uploaded with `file` type configuration will be here.
+
 ### .ucrm-plugin-running
 This file is used to prevent multiple plugin executions if the previous instance is still running. This measure is used only for manual execution (using the "execute manually" button) and for automatic execution (using cron and execution period). The execution triggered by plugin's public URL is not affected, it can be accessed and run simultaneously by users or webhooks without any limitations.
 
