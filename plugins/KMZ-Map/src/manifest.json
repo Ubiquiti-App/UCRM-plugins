@@ -1,0 +1,53 @@
+{
+  "version": "1",
+  "information": {
+    "name": "kmz-map",
+    "displayName": "KMZ Map",
+    "description": "A UCRM plugin that provides a frontend Google Map for clients to view tower coverage.",
+    "url": "https://www.charuwts.com/plugins",
+    "version": "1.0.0",
+    "ucrmVersionCompliancy": {
+      "min": "2.11.1",
+      "max": null
+    },
+    "author": "Charuwts, LLC"
+  },
+  "configuration": [
+    {
+        "key": "REQUIRED_GOOGLE_API_KEY",
+        "label": "Maps JavaScript API Key",
+        "description": "",
+        "required": 1
+    },
+    {
+        "key": "REQUIRED_KMZ_FILE",
+        "label": "KMZ File URL",
+        "description": "URL to your KMZ file.",
+        "required": 1
+    },
+    {
+        "key": "OPTIONAL_LOGO_URL",
+        "label": "Logo URL",
+        "description": "Displayed next to map on larger screens, above on smaller.",
+        "required": 0
+    },
+    {
+        "key": "OPTIONAL_FORM_DESCRIPTION",
+        "label": "Form Description",
+        "description": "Displayed below logo. (Can contain HTML)",
+        "required": 0
+    },
+    {
+        "key": "HYPER_LINK_LINK_ONE",
+        "label": "Link One",
+        "description": "Display a button on the left. Syntax is Link|Title And you can use | in the Title after the first |. Example: https://www.charuwts.com/plugins | Signup Now!",
+        "required": 0
+    },
+    {
+        "key": "HYPER_LINK_LINK_TWO",
+        "label": "Link Two",
+        "description": "Display a button on the right. Syntax is Link|Title And you can use | in the Title after the first |. Example: https://www.charuwts.com/contact | Request for your area!",
+        "required": 0
+    }
+  ]
+}
