@@ -209,6 +209,17 @@ class QuickBooksFacade
         $pluginData = $this->optionsManager->load();
         $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
 
+        if (! $this->isAccountIdValid((int) $pluginData->qbIncomeAccountNumber)) {
+            $this->logger->info(
+                sprintf(
+                    'Income account number (%s) set in config is not contained in QB.',
+                    $pluginData->qbIncomeAccountNumber
+                )
+            );
+
+            return;
+        }
+
         foreach ($this->ucrmApi->query('invoices') as $ucrmInvoice) {
             if ($ucrmInvoice['id'] <= $pluginData->lastExportedInvoiceID) {
                 continue;
@@ -258,17 +269,19 @@ class QuickBooksFacade
                     )
                 );
 
+                if ($response instanceof \Exception) {
+                    throw $response;
+                }
+
                 if ($response instanceof IPPIntuitEntity) {
                     $this->logger->info(
                         sprintf('Invoice ID: %s exported successfully.', $ucrmInvoice['id'])
                     );
+                } else {
+                    $this->logger->info(
+                        sprintf('Invoice ID: %s export failed.', $ucrmInvoice['id'])
+                    );
                 }
-                if ($response instanceof \Exception) {
-                    throw $response;
-                }
-                $this->logger->info(
-                    sprintf(' Invoice ID: %s export failed.', $ucrmInvoice['id'])
-                );
 
                 $this->throwExceptionOnErrorResponse($dataService);
             } catch (\Exception $exception) {
@@ -406,5 +419,12 @@ class QuickBooksFacade
                 );
             }
         }
+    }
+
+    private function isAccountIdValid(int $accountId): bool
+    {
+        $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
+
+        return (bool) $dataService->FindById('Account', $accountId);
     }
 }
