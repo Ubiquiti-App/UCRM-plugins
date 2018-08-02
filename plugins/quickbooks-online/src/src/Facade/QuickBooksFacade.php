@@ -209,18 +209,29 @@ class QuickBooksFacade
         $pluginData = $this->optionsManager->load();
         $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
 
+        if (! $this->isAccountIdValid((int) $pluginData->qbIncomeAccountNumber)) {
+            $this->logger->info(
+                sprintf(
+                    'Income account number (%s) set in the plugin config does not exist in QB.',
+                    $pluginData->qbIncomeAccountNumber
+                )
+            );
+
+            return;
+        }
+
         foreach ($this->ucrmApi->query('invoices') as $ucrmInvoice) {
             if ($ucrmInvoice['id'] <= $pluginData->lastExportedInvoiceID) {
                 continue;
             }
 
-            $this->logger->info(sprintf('Invoice ID: %s needs to be exported', $ucrmInvoice['id']));
+            $this->logger->info(sprintf('Export of invoice ID %s started.', $ucrmInvoice['id']));
 
             $qbClient = $this->getQBClient($dataService, $ucrmInvoice['clientId']);
 
             if (! $qbClient) {
                 $this->logger->error(
-                    sprintf('Client with Display name containing: UCRMID-%s is not found', $ucrmInvoice['clientId'])
+                    sprintf('Client with Display name containing: UCRMID-%s is not found.', $ucrmInvoice['clientId'])
                 );
                 continue;
             }
@@ -258,17 +269,19 @@ class QuickBooksFacade
                     )
                 );
 
+                if ($response instanceof \Exception) {
+                    throw $response;
+                }
+
                 if ($response instanceof IPPIntuitEntity) {
                     $this->logger->info(
                         sprintf('Invoice ID: %s exported successfully.', $ucrmInvoice['id'])
                     );
+                } else {
+                    $this->logger->info(
+                        sprintf('Invoice ID: %s export failed.', $ucrmInvoice['id'])
+                    );
                 }
-                if ($response instanceof \Exception) {
-                    throw $response;
-                }
-                $this->logger->info(
-                    sprintf(' Invoice ID: %s export failed.', $ucrmInvoice['id'])
-                );
 
                 $this->throwExceptionOnErrorResponse($dataService);
             } catch (\Exception $exception) {
@@ -406,5 +419,12 @@ class QuickBooksFacade
                 );
             }
         }
+    }
+
+    private function isAccountIdValid(int $accountId): bool
+    {
+        $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
+
+        return (bool) $dataService->FindById('Account', $accountId);
     }
 }
