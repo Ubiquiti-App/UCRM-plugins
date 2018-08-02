@@ -212,7 +212,7 @@ class QuickBooksFacade
         if (! $this->isAccountIdValid((int) $pluginData->qbIncomeAccountNumber)) {
             $this->logger->info(
                 sprintf(
-                    'Income account number (%s) set in config is not contained in QB.',
+                    'Income account number (%s) set in the plugin config does not exist in QB.',
                     $pluginData->qbIncomeAccountNumber
                 )
             );
@@ -225,13 +225,13 @@ class QuickBooksFacade
                 continue;
             }
 
-            $this->logger->info(sprintf('Invoice ID: %s needs to be exported', $ucrmInvoice['id']));
+            $this->logger->info(sprintf('Export of invoice ID %s started.', $ucrmInvoice['id']));
 
             $qbClient = $this->getQBClient($dataService, $ucrmInvoice['clientId']);
 
             if (! $qbClient) {
                 $this->logger->error(
-                    sprintf('Client with Display name containing: UCRMID-%s is not found', $ucrmInvoice['clientId'])
+                    sprintf('Client with Display name containing: UCRMID-%s is not found.', $ucrmInvoice['clientId'])
                 );
                 continue;
             }
