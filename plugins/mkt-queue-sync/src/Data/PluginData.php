@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace FioCz\Data;
+namespace MikrotikQueueSync\Data;
 
 class PluginData extends UcrmData
 {
@@ -20,4 +20,19 @@ class PluginData extends UcrmData
      * @var string
      */
     public $mktpass;
+	
+	/**
+     * @var integrer
+     */
+    public $burstThresholdPercentage;
+	
+	/**
+     * @var integrer
+     */
+    public $burstTime;
+	
+	/**
+     * @var integrer
+     */
+    public $addQueue;
 }
