@@ -26,7 +26,6 @@ class Config {
       $config_string = file_get_contents($config_path);
       $config_json = json_decode($config_string);
 
-      \log_event('config json', print_r($config_json, true));
       
       foreach ($config_json as $key => $value) {
 
@@ -55,7 +54,6 @@ class Config {
           // ## Set to null if value is empty
           if (!empty($new_value)) {
             self::$$name = $new_value;
-            \log_event($name, $new_value);
           } else {
             self::$$name = null;
           }
