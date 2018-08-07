@@ -1,33 +1,22 @@
 <?php 
+namespace UCS;
+
 class UcrmApi {
-  // ### Class Properties
+  ## Class Properties
   private $response;
 
-  /**
-   * # Static Properties
-   *
-   */
+  ## Static Properties
   private static $ucrm_api_url;
   protected static $ucrm_key;
 
-  /**
-   * # Public Setters
-   *
-   * @param string self::$ucrm_key
-   * @param string self::$ucrm_api_url
-   *
-   */
+  ## Public Setters
   public static function setUcrmKey($value='')    { self::$ucrm_key     = $value; }
   public static function setUcrmApiUrl($value='') { self::$ucrm_api_url = $value; }
 
-  /**
-   * # Handle Guzzle Exception and exit
-   *
-   * @param array $e
-   * @param boolean $log
-   *
-   * @return exit();
-   */
+  ## Handle Guzzle Exception and exit
+  # @param array $e
+  # @param boolean $log
+  # @return exit();
   protected function handleGuzzleException($e, $log = false, $endpoint='') {
     // # Get json response
     $body = $e->getResponse()->getBody();
@@ -36,55 +25,42 @@ class UcrmApi {
     $code = $json_decoded->code;
     // # Send response and exit
     if ($log) {
-      log_event('Exception', "{$body}: {$code} - Endpoint: {$endpoint}", 'error');
+      \log_event('Exception', "{$body}: {$code} - Endpoint: {$endpoint}", 'error');
     }
     echo json_response($body, $code, true);
     exit();
   }
 
-  /**
-   * # Setup Guzzle for UCRM
-   *
-   * @param string $method // "GET", "POST", "PATCH"
-   * @param string $endpoint
-   * @param array  $content
-   *
-   * @return array
-   */
+  ## Setup Guzzle for UCRM
+  # @param string $method // "GET", "POST", "PATCH"
+  # @param string $endpoint
+  # @param array  $content
+  # @return array
   protected function guzzle(
     $method, 
     $endpoint,
     array $content = []
   ) {    
-    // log_event('method', $method, 'test');
-    // log_event('endpoint', $endpoint, 'test');
-    // log_event('content', print_r($content, true), 'test');
     try {      
-      $client = new GuzzleHttp\Client([
+      $client = new \GuzzleHttp\Client([
         'headers' => ['X-Auth-App-Key' => self::$ucrm_key]
       ]);
       $res = $client->request($method, self::$ucrm_api_url.$endpoint, ['json' => $content]);
       $code = $res->getStatusCode();
       $body = (string)$res->getBody();
-      // log_event('body', print_r($body, true), 'test');
 
       return ["status" => $code, "message" => $body];
-    } catch (GuzzleHttp\Exception\ClientException $e) {
+    } catch (\GuzzleHttp\Exception\ClientException $e) {
       $this->handleGuzzleException($e);
-    } catch (GuzzleHttp\Exception\ServerException $e) {
+    } catch (\GuzzleHttp\Exception\ServerException $e) {
       $this->handleGuzzleException($e, true, $endpoint);
     }
   }
 
-
-  /**
-   * # VALIDATE PAYLOAD OBJECTS
-   *
-   * @param array $object
-   * @param boolean $requireKey
-   *
-   * @return boolean
-   */
+  ## VALIDATE PAYLOAD OBJECTS
+  # @param array $object
+  # @param boolean $requireKey
+  # @return boolean
   protected function validateObject($object, $requireKey=false) {
     try {
       $errors = [];
@@ -105,13 +81,11 @@ class UcrmApi {
       }
 
     } catch(\UnexpectedValueException $e) {
-      log_event('UCRM exception', $e->getMessage(), 'error');
+      \log_event('UCRM exception', $e->getMessage(), 'error');
       echo json_response($e->getMessage(), 422, true);
       exit();
     }
     return true;
   }
-
-
 
 }

@@ -1,17 +1,14 @@
 <?php
+namespace UCS;
 
 class UcrmHandler extends UcrmApi {
-  /**
-   * # Create Client
-   *
-   * @param array $client
-   * 
-   * @return object
-   *
-   */
+  
+  ## Create Client
+  # @param array $client
+  # @return object
   public function createClient($client, $json_response=false) {
 
-    $content = array(
+    $content = [
       "firstName" => (empty($client->firstName)) ? null : $client->firstName,
       "lastName" => (empty($client->lastName)) ? null : $client->lastName,
       "street1" => (empty($client->street1)) ? null : $client->street1,
@@ -21,8 +18,10 @@ class UcrmHandler extends UcrmApi {
       "zipCode" => (empty($client->zipCode)) ? null : $client->zipCode,
       "username" => (empty($client->username)) ? null : $client->username,
       "contacts" => (empty($client->contacts)) ? null : $client->contacts,
-    );
+    ];
     $this->validateObject($content);
+
+    $content['isLead'] = (empty(Config::$LEAD)) ? false : Config::$LEAD;
 
     $response = $this->guzzle('POST', '/clients', $content);
     if ($json_response) {
@@ -31,6 +30,10 @@ class UcrmHandler extends UcrmApi {
     } else {
       return json_decode($response['message']);
     }
+  }
+
+  public function testMethod() {
+    return 'testing';
   }
 
 }
