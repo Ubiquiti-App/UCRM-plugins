@@ -1,4 +1,5 @@
 <?php
+
 chdir(__DIR__);
 
 define("PROJECT_PATH", __DIR__);
@@ -19,10 +20,15 @@ if (!empty($payload_decoded->pluginAppKey)) {
     // ## Create Client
     $handler->createClient($payload_decoded->client, true);
   
-  // ## If payload has servicePlans - servicePlans == true
-  } elseif (!empty($payload_decoded->servicePlans)) {   
-    // ## Return service plans
-    $handler->getServicePlans(); 
+  // ## If payload has countries - countries == true
+  } elseif (!empty($payload_decoded->countries)) {
+    // ## Return countries
+    echo json_response($handler->getCountries(), 200, true);
+  
+  // ## If payload has country_id
+  } elseif (!empty($payload_decoded->country_id)) {
+    // ## Return countries
+    echo json_response($handler->getStatesByCountry($payload_decoded->country_id), 200, true);
   }
   
   // ## Else, return form
@@ -42,12 +48,12 @@ if (!empty($payload_decoded->pluginAppKey)) {
 
     <style type="text/css">
       <?php // ## UCRM requires file paths, Using PHP include instead of HTML tags to avoid relative URL ?>
-      <?php include(PROJECT_PATH.'/assets/vendor-d3aa84b783735f00b7be359e81298bf2.css'); ?>
-      <?php include(PROJECT_PATH.'/assets/ucrm-client-signup-form-9a21c280b24385946f336cb12efa56fe.css'); ?>
+      <?php include(PROJECT_PATH."/assets/vendor-d3aa84b783735f00b7be359e81298bf2.css"); ?>
+      <?php include(PROJECT_PATH."/assets/ucrm-client-signup-form-883f793171e4b4cc98b9a928918a9189.css"); ?>
     </style>
     
   </head>
-  <body>    
+  <body>
     <?php if (!empty(UCS\Config::$LOGO_URL)) { ?>
       <img src="<?php echo UCS\Config::$LOGO_URL; ?>" class="logo">
     <?php } ?>
@@ -67,8 +73,8 @@ if (!empty($payload_decoded->pluginAppKey)) {
     <div id="ember-signup"></div>
     <script type="text/javascript">
       <?php // ## UCRM requires file paths, Using PHP include instead of HTML tags to avoid relative URL ?>
-      <?php include(PROJECT_PATH.'/assets/vendor-1716fefcfca3e53fa332dd1a1c3eeead.js'); ?>
-      <?php include(PROJECT_PATH.'/assets/ucrm-client-signup-form-be3bda63c1dd28be4ae04cb1304c6c78.js'); ?>
+      <?php include(PROJECT_PATH."/assets/vendor-2c628552e172e7331ad9cef9845edbd3.js"); ?>
+      <?php include(PROJECT_PATH."/assets/ucrm-client-signup-form-3240a881afb08a23df5e1ae7a7da5661.js"); ?>
     </script>
 
     <div id="ember-bootstrap-wormhole"></div>
