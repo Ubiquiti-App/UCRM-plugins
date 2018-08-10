@@ -35,5 +35,26 @@ class UcrmHandler extends UcrmApi {
   public function testMethod() {
     return 'testing';
   }
+  
+  ## Get Countries
+  # @return json
+  public function getCountries() {
+    $endpoint = "/countries";
+    $response = $this->guzzle('GET', $endpoint);
+    $this->response = $response['message'];
+    return $response['message'];
+  }
+
+  ## Get States by Country
+  #
+  # @return json
+  public function getStatesByCountry($country_id) {
+    $endpoint = "/countries/{$country_id}/states";
+    $response = $this->guzzle('GET', $endpoint);
+    $this->response = $response['message'];
+    return $response['message'];
+  }
+
+
 
 }
