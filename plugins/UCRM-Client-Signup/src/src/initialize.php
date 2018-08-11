@@ -14,7 +14,7 @@ define("PLUGIN_FILES_DIR", PROJECT_PATH.'/data/files/');
 $config_path = PROJECT_PATH."/data/config.json";
 
 ## Just a unique key to give to ember for extra security when making requests
-$key = password_hash(PLUGIN_PUBLIC_URL, PASSWORD_DEFAULT);
+$key = password_hash(PLUGIN_PUBLIC_URL.PROJECT_PATH, PASSWORD_DEFAULT);
 define("FRONTEND_PUBLIC_KEY", $key);
 
 

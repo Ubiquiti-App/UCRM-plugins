@@ -78,6 +78,7 @@ if (!empty($payload_decoded->pluginAppKey)) {
     </script>
 
     <div id="ember-bootstrap-wormhole"></div>
+    <div id="ember-basic-dropdown-wormhole"></div>
   </body>
 </html>
 
