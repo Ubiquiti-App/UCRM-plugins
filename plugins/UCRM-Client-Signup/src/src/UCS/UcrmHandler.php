@@ -8,19 +8,22 @@ class UcrmHandler extends UcrmApi {
   # @return object
   public function createClient($client, $json_response=false) {
 
+    # Validated Params
     $content = [
       "firstName" => (empty($client->firstName)) ? null : $client->firstName,
       "lastName" => (empty($client->lastName)) ? null : $client->lastName,
       "street1" => (empty($client->street1)) ? null : $client->street1,
       "city" => (empty($client->city)) ? null : $client->city,
-      "countryId" => (empty($client->countryId)) ? null : $client->countryId,
-      "stateId" => (empty($client->stateId)) ? null : $client->stateId,
       "zipCode" => (empty($client->zipCode)) ? null : $client->zipCode,
       "username" => (empty($client->username)) ? null : $client->username,
       "contacts" => (empty($client->contacts)) ? null : $client->contacts,
     ];
     $this->validateObject($content);
 
+    # Optional Params
+    $content['countryId'] = (empty($client->countryId)) ? null : $client->countryId;
+    $content['stateId'] = (empty($client->stateId)) ? null : $client->stateId;
+    $content['street2'] = (empty($client->street2)) ? null : $client->street2;
     $content['isLead'] = (empty(Config::$LEAD)) ? false : Config::$LEAD;
 
     $response = $this->guzzle('POST', '/clients', $content);

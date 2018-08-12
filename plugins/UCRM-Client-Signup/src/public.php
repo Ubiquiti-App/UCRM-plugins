@@ -74,7 +74,7 @@ if (!empty($payload_decoded->pluginAppKey)) {
     <script type="text/javascript">
       <?php // ## UCRM requires file paths, Using PHP include instead of HTML tags to avoid relative URL ?>
       <?php include(PROJECT_PATH."/assets/vendor-2c628552e172e7331ad9cef9845edbd3.js"); ?>
-      <?php include(PROJECT_PATH."/assets/ucrm-client-signup-form-3240a881afb08a23df5e1ae7a7da5661.js"); ?>
+      <?php include(PROJECT_PATH."/assets/ucrm-client-signup-form-f908bafccde77a5279ecb947c0985c3e.js"); ?>
     </script>
 
     <div id="ember-bootstrap-wormhole"></div>
