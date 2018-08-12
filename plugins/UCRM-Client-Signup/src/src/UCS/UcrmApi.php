@@ -71,17 +71,16 @@ class UcrmApi {
       }
       if (!empty($errors)) {
         $resp = ["code" => 422, "message" => "Validation failed.", "errors" => $errors ];
-        throw new UnexpectedValueException(json_encode($resp));   
+        throw new \UnexpectedValueException(json_encode($resp));
       }
 
       if ($requireKey) {
         if ($object['pluginAppKey'] != FRONTEND_PUBLIC_KEY) {
-          throw new UnexpectedValueException("Invalid pluginAppKey");   
+          throw new \UnexpectedValueException("Invalid pluginAppKey");
         }
       }
 
     } catch(\UnexpectedValueException $e) {
-      \log_event('UCRM exception', $e->getMessage(), 'error');
       echo json_response($e->getMessage(), 422, true);
       exit();
     }
