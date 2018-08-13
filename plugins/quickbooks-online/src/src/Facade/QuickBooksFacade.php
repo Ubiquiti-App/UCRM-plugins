@@ -209,11 +209,19 @@ class QuickBooksFacade
         $pluginData = $this->optionsManager->load();
         $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
 
-        if (! $this->isAccountIdValid((int) $pluginData->qbIncomeAccountNumber)) {
+        $activeAccounts = $this->getAccounts();
+
+        if (! array_key_exists((int) $pluginData->qbIncomeAccountNumber, $activeAccounts)) {
+            $accountsString = '';
+            foreach ($activeAccounts as $account) {
+                $accountsString .= 'Account:' . $account->Name . ' ID: ' . $account->Id . PHP_EOL;
+            }
+
             $this->logger->info(
                 sprintf(
-                    'Income account number (%s) set in the plugin config does not exist in QB.',
-                    $pluginData->qbIncomeAccountNumber
+                    'Income account number (%s) set in the plugin config does not exist in QB or is not active. Active accounts:\n %s',
+                    $pluginData->qbIncomeAccountNumber,
+                    $accountsString
                 )
             );
 
@@ -421,10 +429,29 @@ class QuickBooksFacade
         }
     }
 
-    private function isAccountIdValid(int $accountId): bool
+    private function getAccounts(): array
     {
-        $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
+        try {
+            $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
 
-        return (bool) $dataService->FindById('Account', $accountId);
+            $response = $dataService->FindAll('Account');
+
+            $this->throwExceptionOnErrorResponse($dataService);
+
+            $activeAccounts = [];
+            foreach ($response as $account) {
+                if (! $account->Active) {
+                    continue;
+                }
+
+                $activeAccounts[$account->Id] = $account;
+            }
+
+            return $activeAccounts;
+        } catch (\Exception $exception) {
+            $this->logger->error(
+                sprintf('Account: Getting all Accounts failed with error %s.', $exception->getMessage())
+            );
+        }
     }
 }
