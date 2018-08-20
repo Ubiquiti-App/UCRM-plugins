@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c839cba5c1bfe521cfb6366705096f75",
+    "content-hash": "49725418bf3e6d7d4c2fb88b98645c03",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -269,20 +269,20 @@
         },
         {
             "name": "php-di/phpdoc-reader",
-            "version": "2.0.1",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-DI/PhpDocReader.git",
-                "reference": "83f5ead159defccfa8e7092e5b6c1c533b326d68"
+                "reference": "7d0de60b9341933c8afd172a6255cd7557601e0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/PhpDocReader/zipball/83f5ead159defccfa8e7092e5b6c1c533b326d68",
-                "reference": "83f5ead159defccfa8e7092e5b6c1c533b326d68",
+                "url": "https://api.github.com/repos/PHP-DI/PhpDocReader/zipball/7d0de60b9341933c8afd172a6255cd7557601e0e",
+                "reference": "7d0de60b9341933c8afd172a6255cd7557601e0e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.4.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.6"
@@ -302,7 +302,7 @@
                 "phpdoc",
                 "reflection"
             ],
-            "time": "2015-11-29T10:34:25+00:00"
+            "time": "2018-02-18T17:39:01+00:00"
         },
         {
             "name": "psr/container",
@@ -402,16 +402,16 @@
         },
         {
             "name": "quickbooks/v3-php-sdk",
-            "version": "v4.0.2",
+            "version": "v5.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/intuit/QuickBooks-V3-PHP-SDK.git",
-                "reference": "04e750ae49f3fad6dfc8101266704c2834c1fa58"
+                "reference": "797d1a2dc2685b4f103e938c5d4f43da46af33ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/intuit/QuickBooks-V3-PHP-SDK/zipball/04e750ae49f3fad6dfc8101266704c2834c1fa58",
-                "reference": "04e750ae49f3fad6dfc8101266704c2834c1fa58",
+                "url": "https://api.github.com/repos/intuit/QuickBooks-V3-PHP-SDK/zipball/797d1a2dc2685b4f103e938c5d4f43da46af33ae",
+                "reference": "797d1a2dc2685b4f103e938c5d4f43da46af33ae",
                 "shasum": ""
             },
             "require": {
@@ -445,7 +445,7 @@
                 "rest",
                 "smallbusiness"
             ],
-            "time": "2018-02-14T00:51:38+00:00"
+            "time": "2018-08-09T00:18:21+00:00"
         }
     ],
     "packages-dev": [],
