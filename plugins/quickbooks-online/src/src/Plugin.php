@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace QBExport;
 
 
+use QBExport\Exception\QBAuthorizationException;
 use QBExport\Facade\QuickBooksFacade;
 use QBExport\Service\PluginDataValidator;
 use QBExport\Service\Logger;
@@ -59,17 +60,21 @@ class Plugin
         if ($this->pluginDataValidator->validate()) {
             $pluginData = $this->optionsManager->load();
             $this->logger->info('CLI process started');
-            if (! $pluginData->qbAuthorizationUrl) {
-                $this->quickBooksFacade->obtainAuthotizationURL();
-            } elseif (! $pluginData->oauthRefreshToken) {
-                $this->quickBooksFacade->obtainTokens();
-            } else {
-                $this->quickBooksFacade->refreshExpiredToken();
-                $this->quickBooksFacade->exportClients();
-                $this->quickBooksFacade->exportPayments();
-                $this->quickBooksFacade->exportInvoices();
+            try {
+                if (! $pluginData->qbAuthorizationUrl) {
+                    $this->quickBooksFacade->obtainAuthorizationURL();
+                } elseif (! $pluginData->oauthRefreshToken) {
+                    $this->quickBooksFacade->obtainTokens();
+                } else {
+                    $this->quickBooksFacade->refreshExpiredToken();
+                    $this->quickBooksFacade->exportClients();
+                    $this->quickBooksFacade->exportPayments();
+                    $this->quickBooksFacade->exportInvoices();
+                }
+                $this->logger->info('CLI process ended');
+            } catch (QBAuthorizationException $exception) {
+                $this->logger->info('Authorization failed - CLI process stopped');
             }
-            $this->logger->info('CLI process ended');
         }
     }
 
@@ -85,6 +90,7 @@ class Plugin
             $pluginData->oauthCode = $_GET['code'];
             $this->logger->notice('Authorization Code obtained.');
             $this->optionsManager->update();
+            echo 'Authorization Code obtained.';
         }
     }
 }
