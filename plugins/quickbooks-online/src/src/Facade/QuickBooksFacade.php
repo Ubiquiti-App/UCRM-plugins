@@ -474,7 +474,7 @@ class QuickBooksFacade
     private function invalidateTokens(): void
     {
         $this->logger->info(
-            'Connection failed. You need confirm your connection again.'
+            'Connection failed. Check your connection settings. You may need to remove and add the plugin again.'
         );
 
         $pluginData = $this->optionsManager->load();
