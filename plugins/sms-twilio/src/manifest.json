@@ -1,0 +1,149 @@
+{
+  "version": "1",
+  "information": {
+    "name": "sms-twilio",
+    "displayName": "SMS notifications via Twilio",
+    "description": "This plugin sends SMS notifications via Twilio",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
+    "version": "1.0.0",
+    "ucrmVersionCompliancy": {
+      "min": "2.14.0-dev",
+      "max": null
+    },
+    "author": "Ubiquiti Networks, Inc."
+  },
+  "configuration": [
+    {
+      "key": "twilioAccountSid",
+      "label": "Twilio Account Sid",
+      "description": "Account SID obtained from twilio.com/console",
+      "required": 1
+    },
+    {
+      "key": "twilioAuthToken",
+      "label": "Twilio Auth Token",
+      "description": "Auth Token obtained from twilio.com/console",
+      "required": 1
+    },
+    {
+      "key": "twilioSmsNumber",
+      "label": "Twilio SMS number",
+      "description": "A Twilio phone number you purchased at twilio.com/console",
+      "required": 1
+    },
+    {
+      "key": "event_client_add",
+      "label": "client.add",
+      "description": "Example: Added client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_client_archive",
+      "label": "client.archive",
+      "description": "Example: Archived client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_client_delete",
+      "label": "client.delete",
+      "description": "Example: Deleted client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_client_edit",
+      "label": "client.edit",
+      "description": "Example: Edited client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_invoice_add",
+      "label": "invoice.add",
+      "description": "Example: Created invoice %%invoice.number%% for %%invoice.total%% %%invoice.currencyCode%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_invoice_add_draft",
+      "label": "invoice.add_draft",
+      "description": "Example: Created draft of invoice for %%invoice.total%% %%invoice.currencyCode%%  for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_invoice_delete",
+      "label": "invoice.delete",
+      "description": "Example: Deleted invoice %%invoice.number%% for %%invoice.total%% %%invoice.currencyCode%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_invoice_edit",
+      "label": "invoice.edit",
+      "description": "Example: Edited invoice %%invoice.number%% for %%invoice.total%% %%invoice.currencyCode%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_payment_add",
+      "label": "payment.add",
+      "description": "Example: Received payment for %%payment.amount%% %%payment.currencyCode%% from  client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_payment_delete",
+      "label": "payment.delete",
+      "description": "Example: Deleted payment for %%payment.amount%% %%payment.currencyCode%% from  client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_payment_edit",
+      "label": "payment.edit",
+      "description": "Example: Edited payment for %%payment.amount%% %%payment.currencyCode%% from client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_payment_unmatch",
+      "label": "payment.unmatch",
+      "description": "Example: Unmatched payment for %%payment.amount%% %%payment.currencyCode%% from client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_service_activate",
+      "label": "service.activate",
+      "description": "Example: Activated service %%service.name%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_service_add",
+      "label": "service.add",
+      "description": "Example: Added service %%service.name%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_service_archive",
+      "label": "service.archive",
+      "description": "Example: Archived service %%service.name%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_service_end",
+      "label": "service.end",
+      "description": "Example: Ended service %%service.name%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_service_postpone",
+      "label": "service.postpone",
+      "description": "Example: Postponed service %%service.name%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_service_suspend_cancel",
+      "label": "service.suspend_cancel",
+      "description": "Example: Unsuspended service %%service.name%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_service_suspend",
+      "label": "service.suspend",
+      "description": "Example: Suspended service %%service.name%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    }
+  ]
+}
