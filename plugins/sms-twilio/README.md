@@ -36,53 +36,53 @@ Client variables are replaced always; payment invoice and service only with the 
 
 ### Client variables
 
-* `%% client.id%%` => 20
-* `%% client.userIdent%%` => '18'
-* `%% client.previousIsp%%` => ''
-* `%% client.isLead%%` => false
-* `%% client.clientType%%` => 1
-* `%% client.companyName%%` => ''
-* `%% client.companyRegistrationNumber%%` => ''
-* `%% client.companyTaxId%%` => ''
-* `%% client.companyWebsite%%` => ''
-* `%% client.street1%%` => '2544 Hillview Drive'
-* `%% client.street2%%` => ''
-* `%% client.city%%` => 'San Jose'
-* `%% client.countryId%%` => 249
-* `%% client.stateId%%` => 5
-* `%% client.zipCode%%` => '95113'
-* `%% client.invoiceStreet1%%` => ''
-* `%% client.invoiceStreet2%%` => ''
-* `%% client.invoiceCity%%` => ''
-* `%% client.invoiceStateId%%` => ''
-* `%% client.invoiceCountryId%%` => ''
-* `%% client.invoiceZipCode%%` => ''
-* `%% client.invoiceAddressSameAsContact%%` => true
-* `%% client.note%%` => ''
-* `%% client.sendInvoiceByPost%%` => false
-* `%% client.invoiceMaturityDays%%` => 14
-* `%% client.stopServiceDue%%` => true
-* `%% client.stopServiceDueDays%%` => 7
-* `%% client.organizationId%%` => 1
-* `%% client.tax1Id%%` => 1
-* `%% client.tax2Id%%` => ''
-* `%% client.tax3Id%%` => ''
-* `%% client.registrationDate%%` => '2016-04-26 00:00'
-* `%% client.companyContactFirstName%%` => ''
-* `%% client.companyContactLastName%%` => ''
-* `%% client.isActive%%` => false
-* `%% client.firstName%%` => 'Tyson'
-* `%% client.lastName%%` => 'Doe'
-* `%% client.username%%` => 'tyson.doe@example.com'
-* `%% client.accountBalance%%` => 0
-* `%% client.accountCredit%%` => 0
-* `%% client.accountOutstanding%%` => 0
-* `%% client.currencyCode%%` => 'USD'
-* `%% client.organizationName%%` => 'UBNT ISP'
-* `%% client.invitationEmailSentDate%%` => ''
-* `%% client.avatarColor%%` => '#e53935'
-* `%% client.addressGpsLat%%` => 37.401482000001
-* `%% client.addressGpsLon%%` => -121.966545
+* `%%client.id%%` => 20
+* `%%client.userIdent%%` => '18'
+* `%%client.previousIsp%%` => ''
+* `%%client.isLead%%` => false
+* `%%client.clientType%%` => 1
+* `%%client.companyName%%` => ''
+* `%%client.companyRegistrationNumber%%` => ''
+* `%%client.companyTaxId%%` => ''
+* `%%client.companyWebsite%%` => ''
+* `%%client.street1%%` => '2544 Hillview Drive'
+* `%%client.street2%%` => ''
+* `%%client.city%%` => 'San Jose'
+* `%%client.countryId%%` => 249
+* `%%client.stateId%%` => 5
+* `%%client.zipCode%%` => '95113'
+* `%%client.invoiceStreet1%%` => ''
+* `%%client.invoiceStreet2%%` => ''
+* `%%client.invoiceCity%%` => ''
+* `%%client.invoiceStateId%%` => ''
+* `%%client.invoiceCountryId%%` => ''
+* `%%client.invoiceZipCode%%` => ''
+* `%%client.invoiceAddressSameAsContact%%` => true
+* `%%client.note%%` => ''
+* `%%client.sendInvoiceByPost%%` => false
+* `%%client.invoiceMaturityDays%%` => 14
+* `%%client.stopServiceDue%%` => true
+* `%%client.stopServiceDueDays%%` => 7
+* `%%client.organizationId%%` => 1
+* `%%client.tax1Id%%` => 1
+* `%%client.tax2Id%%` => ''
+* `%%client.tax3Id%%` => ''
+* `%%client.registrationDate%%` => '2016-04-26 00:00'
+* `%%client.companyContactFirstName%%` => ''
+* `%%client.companyContactLastName%%` => ''
+* `%%client.isActive%%` => false
+* `%%client.firstName%%` => 'Tyson'
+* `%%client.lastName%%` => 'Doe'
+* `%%client.username%%` => 'tyson.doe@example.com'
+* `%%client.accountBalance%%` => 0
+* `%%client.accountCredit%%` => 0
+* `%%client.accountOutstanding%%` => 0
+* `%%client.currencyCode%%` => 'USD'
+* `%%client.organizationName%%` => 'UBNT ISP'
+* `%%client.invitationEmailSentDate%%` => ''
+* `%%client.avatarColor%%` => '#e53935'
+* `%%client.addressGpsLat%%` => 37.401482000001
+* `%%client.addressGpsLon%%` => -121.966545
 
 ### Invoice variables
 * `%%invoice.id%%` => 4
@@ -128,21 +128,21 @@ Client variables are replaced always; payment invoice and service only with the 
 * `%%invoice.uncollectible%%` => false
 
 ### Payment variables 
-* `%% payment.id%%` => 28
-* `%% payment.clientId%%` => 20
-* `%% payment.invoiceId%%` => ''
-* `%% payment.method%%` => 2
-* `%% payment.checkNumber%%` => ''
-* `%% payment.createdDate%%` => '2018-08-24 11:36'
-* `%% payment.amount%%` => 1
-* `%% payment.currencyCode%%` => 'USD'
-* `%% payment.note%%` => ''
-* `%% payment.receiptSentDate%%` => ''
-* `%% payment.providerName%%` => ''
-* `%% payment.providerPaymentId%%` => ''
-* `%% payment.providerPaymentTime%%` => ''
-* `%% payment.creditAmount%%` => 0
-* `%% payment.applyToInvoicesAutomatically%%` => false
+* `%%payment.id%%` => 28
+* `%%payment.clientId%%` => 20
+* `%%payment.invoiceId%%` => ''
+* `%%payment.method%%` => 2
+* `%%payment.checkNumber%%` => ''
+* `%%payment.createdDate%%` => '2018-08-24 11:36'
+* `%%payment.amount%%` => 1
+* `%%payment.currencyCode%%` => 'USD'
+* `%%payment.note%%` => ''
+* `%%payment.receiptSentDate%%` => ''
+* `%%payment.providerName%%` => ''
+* `%%payment.providerPaymentId%%` => ''
+* `%%payment.providerPaymentTime%%` => ''
+* `%%payment.creditAmount%%` => 0
+* `%%payment.applyToInvoicesAutomatically%%` => false
 
 ### Service variables
 * `%%service.id%%` => 23
@@ -199,8 +199,9 @@ Client variables are replaced always; payment invoice and service only with the 
 * This plugin is MIT-licensed and can be used by developers as a template for integrating with a different messaging solution:
   * Create a new plugin based on this one
   * Replace the TwilioNotifierFacade and any references to it with a different class which extends AbstractMessageNotifierFacade
+  * Update libraries in composer.json as needed
   * Communicate with the remote system in the sendMessage() function
-  * Preferably also change the SmsNotifier namespace to some other, but that's not strictly necessary.
+  * Preferably also change the SmsNotifier namespace to some other (not strictly necessary).
 
 Read more about creating your own plugin in the [Developer documentation](https://github.com/Ubiquiti-App/UCRM-plugins/blob/master/docs/index.md).
 
