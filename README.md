@@ -22,6 +22,9 @@ UCRM plugins are compatible with UCRM 2.10.0+
 | [Packetlogic packet manager](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/packetlogic-packet-manager) | Sync UCRM Entities and Service Data Rate with Procera |
 | [KMZ Map](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/KMZ-Map) | Provides a frontend Google Map for clients to view tower coverage. |
 
+## Plugins from other sources
+* [Client&nbsp;Signup Extended](https://www.charuwts.com/plugins/ucrm-signup) - Extended version of Client Signup Plugin 
+
 ## How can I contribute?
 * These plugins are under MIT license enabling anyone to contribute any upgrades to existing plugins or create whole new ones.
 * Propose any Pull Request in this repository.
