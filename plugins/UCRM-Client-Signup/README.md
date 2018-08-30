@@ -3,12 +3,14 @@ A [UCRM plugin](https://github.com/Ubiquiti-App/UCRM-plugins) that provides a fr
 
 _Developed by [Charuwts, LLC](https://charuwts.com)_
 
-When installed onto UCRM the plugin public URL will display a form that anyone can enter valid info into to create a client.
+When installed onto UCRM the plugin public URL will display a form that anyone can enter valid info into to create a client or lead.
 
 #### *_Not ready for Production._*
 
 _Primarily because there hasn't been many unit tests. So technically if you want to use it in production it will work. But as a best practice in coding and for the sake maintainability, "Programmatically Testing" the code is strongly recommended. So this is a disclaimer in light of that having not been done yet._
 
+
+#### Note, version 1.1.0 is only compatable with 2.13.0-beta1 and beyond
 
 ## Instructions
 
@@ -17,9 +19,10 @@ This plugin does not use "Execution Period" or "Execute Manually". It is designe
 There are optional params for a custom Logo, Title, Form Description and Completion Text.
 
 - *Form Title:* Displayed below logo before form description
-- *Logo URL:* Displayed above form. Max width 400px
+- *Logo URL:* Displayed above form
 - *Form Description:* Displayed below logo before the form. (Can contain HTML)
-- *Completion Text:* Text shown upon signup completion. (Text Only) - Defaults To: Thank you for signing up! You will receive an invitation to access your account upon approval.
+- *Completion Text:* Text shown upon signup completion. (Text Only)
+- *Create Lead:* Select "Yes" to create a lead instead of a client.
 
 Further information can be found at the [Charuwts Wiki](https://github.com/charuwts/UCRM-Client-Signup/wiki).
 
