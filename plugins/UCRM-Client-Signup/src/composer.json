@@ -1,5 +1,22 @@
 {
     "require": {
         "guzzlehttp/guzzle": "~6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    },
+
+    "name": "charuwts/UCS",
+    "description": "UCRM Client Signup Plugin",
+    "authors": [
+        {
+            "name": "Brandon White",
+            "email": "info@charuwts.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "UCS": "src"
+        }
     }
 }
