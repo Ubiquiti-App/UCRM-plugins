@@ -245,7 +245,7 @@ class QuickBooksFacade
                 );
                 if ($qbItem) {
                     $lines[] = [
-                        'Amount' => $item['quantity'],
+                        'Amount' => $item['price'],
                         'Description' => $item['label'],
                         'DetailType' => 'SalesItemLineDetail',
                         'SalesItemLineDetail' => [
