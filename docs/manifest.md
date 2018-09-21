@@ -116,7 +116,7 @@ Contains an array of items. Each item is defined as follows:
         - `file` - file upload input (the file will have name based on the `key` definition, the filename will be saved in [`data/config.json`](file-structure.md#dataconfigjson) and the file itself will be saved in [`data/files`](file-structure.md#datafiles-directory) directory)
 - `choices` (optional) - defines possible options for `choice` type (see manifest example above)
 
-### menuLinks
+### menu
 Adds link(s) to the plugin from UCRM menu.
 
 Contains an array of items. Each item is defined as follows:
