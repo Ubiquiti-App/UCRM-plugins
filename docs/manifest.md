@@ -67,6 +67,14 @@ The `manifest.json` file contains all needed information about the plugin and is
             "required": 0,
             "type": "checkbox"
         },
+    ],
+    "menuLinks": [
+        {
+            "label": "Dummy Plugin",
+            "parameters": {
+                "hook": "main"
+            }
+        }
     ]
 }
 ```
@@ -105,3 +113,12 @@ Contains an array of items. Each item is defined as follows:
         - `datetime` - date and time input with calendar
         - `file` - file upload input (the file will have name based on the `key` definition, the filename will be saved in [`data/config.json`](file-structure.md#dataconfigjson) and the file itself will be saved in [`data/files`](file-structure.md#datafiles-directory) directory)
 - `choices` (optional) - defines possible options for `choice` type (see manifest example above)
+
+### menuLinks
+Adds link(s) to the plugin from UCRM menu.
+
+Contains an array of items. Each item is defined as follows:
+- `label` - Label of the link
+- `parameters` - Array of parameters for the link
+
+For example if `parameters` are `{"hook": "main"},` then the link will be `/_plugins/<plugin-name>/public.php?hook=main`.
