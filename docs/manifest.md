@@ -68,9 +68,11 @@ The `manifest.json` file contains all needed information about the plugin and is
             "type": "checkbox"
         },
     ],
-    "menuLinks": [
+    "menu": [
         {
             "label": "Dummy Plugin",
+            "type": "admin",
+            "target": "iframe",
             "parameters": {
                 "hook": "main"
             }
@@ -118,7 +120,13 @@ Contains an array of items. Each item is defined as follows:
 Adds link(s) to the plugin from UCRM menu.
 
 Contains an array of items. Each item is defined as follows:
-- `label` - Label of the link
-- `parameters` - Array of parameters for the link
+- `type` - required, can have these values:
+  - `"admin"` - the link will show in admin zone
+  - `"client"` - the link will show in client zone
+- `target` - required, can have these values:
+  - `"blank"` - The link will lead simply to the target page
+  - `"iframe"` - The link will lead to special page within UCRM which will show the target page in an iframe
+- `label` - Label of the link (optional, default value is plugin name)
+- `parameters` - Array of parameters for the link (optional)
 
 For example if `parameters` are `{"hook": "main"},` then the link will be `/_plugins/<plugin-name>/public.php?hook=main`.
