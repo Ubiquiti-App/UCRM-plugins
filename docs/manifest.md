@@ -70,6 +70,7 @@ The `manifest.json` file contains all needed information about the plugin and is
     ],
     "menu": [
         {
+            "key": "Reports",
             "label": "Dummy Plugin",
             "type": "admin",
             "target": "iframe",
@@ -126,6 +127,7 @@ Contains an array of items. Each item is defined as follows:
 - `target` - required, can have these values:
   - `"blank"` - The link will lead simply to the target page
   - `"iframe"` - The link will lead to special page within UCRM which will show the target page in an iframe
+- `key` - Menu category to insert the link into (optional, is missing the link will be top-level)
 - `label` - Label of the link (optional, default value is plugin name)
 - `parameters` - Array of parameters for the link (optional)
 
