@@ -118,7 +118,7 @@ Contains an array of items. Each item is defined as follows:
 - `choices` (optional) - defines possible options for `choice` type (see manifest example above)
 
 ### menu
-Adds link(s) to the plugin from UCRM menu.
+Adds link(s) to the plugin into UCRM menu.
 
 Contains an array of items. Each item is defined as follows:
 - `type` - required, can have these values:
@@ -127,7 +127,7 @@ Contains an array of items. Each item is defined as follows:
 - `target` - required, can have these values:
   - `"blank"` - The link will lead simply to the target page
   - `"iframe"` - The link will lead to special page within UCRM which will show the target page in an iframe
-- `key` - Menu category to insert the link into (optional, is missing the link will be top-level)
+- `key` - Menu category to insert the link into (optional, if missing the link will be top-level)
 - `label` - Label of the link (optional, default value is plugin name)
 - `parameters` - Array of parameters for the link (optional)
 
