@@ -19,8 +19,6 @@ class Logger extends \Katzgrau\KLogger\Logger
                 'filename' => 'plugin',
             ]
         );
-
-        $this->info('started');
     }
 
     public function log($level, $message, array $context = array())

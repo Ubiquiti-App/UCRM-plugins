@@ -8,26 +8,29 @@
 
 * Install the plugin into UCRM and enable it.
 * Keep execution period at "don't execute automatically" - the plugin will react to webhook events.
-* Set up with your data from [Twilio Console](https://twilio.com/console):
+* Set up with data which you obtain from [Twilio Console](https://twilio.com/console):
    * Account SID
    * Auth Token
-   * SMS number to send from 
+   * SMS number to send from
+    
+Note: there are two sets of credentials available, the default ("LIVE credentials") for actual use and [test credentials](https://www.twilio.com/console/project/settings) for development.
+   
 * Customize the texts you wish to send to a client when an event happens
    * Each event has its own row
    * Empty row means "do not send SMS for this"
    * It is possible to replace predefined variables: `%%some.variable%%`, see full list below
    * If a variable is not set for a client, it is replaced with an empty string
-* Save the configuration and copy the Public URL
-* Go to UCRM administration / System / Webhooks / Endpoints
-* Add endpoint
-* Paste the URL you copied above
+* Save the configuration
+* Enable the plugin
+* Add webhook (button next to Public URL)
+* Save webhook using defaults
   * Optionally select events about which to notify clients
 
 ## Usage
 * In UCRM admin, go to System / Webhooks / Endpoints
 * Click Test Endpoint
 * Go to System / Plugins / SMS notifications via Twilio
-* In log, you'll see `No client specified, cannot notify them.` - the endpoint test worked. 
+* In the log output, you'll see `Webhook test successful.`
 
 ## Variables replaced
 

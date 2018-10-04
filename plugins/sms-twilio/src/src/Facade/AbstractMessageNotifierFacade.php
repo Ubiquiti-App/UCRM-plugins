@@ -8,6 +8,7 @@ use SmsNotifier\Data\NotificationData;
 use SmsNotifier\Factory\MessageTextFactory;
 use SmsNotifier\Service\Logger;
 use SmsNotifier\Service\SmsNumberProvider;
+use Twilio\Exceptions\HttpException;
 
 /*
  * send message to client's number
@@ -66,7 +67,11 @@ abstract class AbstractMessageNotifierFacade
             return;
         }
 
-        $this->sendMessage($notificationData, $clientSmsNumber, $messageBody);
+        try {
+            $this->sendMessage($notificationData, $clientSmsNumber, $messageBody);
+        } catch (HttpException $httpException) {
+            $this->logger->error($httpException->getCode().' '.$httpException->getMessage());
+        }
     }
 
 }
