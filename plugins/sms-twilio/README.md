@@ -7,7 +7,7 @@
 
 ## Configuration
 
-* Install the plugin into UCRM and enable it. I.e. download the plugin [zip file](https://github.com/Ubiquiti-App/UCRM-plugins/blob/master/plugins/sms-twilio/sms-twilio.zip) and upload it to UCRM in System > Plugins.
+* Install the plugin into UCRM and enable it. I.e. download the plugin [zip file](https://github.com/Ubiquiti-App/UCRM-plugins/raw/master/plugins/sms-twilio/sms-twilio.zip) and upload it to UCRM in System > Plugins.
 * Keep execution period at "don't execute automatically" - the plugin will react to webhook events.
 * Set up with data which you obtain from [Twilio Console](https://twilio.com/console):
    * Account SID
