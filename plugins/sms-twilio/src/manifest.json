@@ -7,7 +7,7 @@
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/sms-twilio",
     "version": "1.0.0",
     "ucrmVersionCompliancy": {
-      "min": "2.14.0-dev",
+      "min": "2.14.0-beta",
       "max": null
     },
     "author": "Ubiquiti Networks, Inc."

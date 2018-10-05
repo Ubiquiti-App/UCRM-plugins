@@ -1,7 +1,8 @@
 # SMS notifier - Twilio
 
-* This plugin sends clients SMS notifications on changes.
-* It only sends to clients which have phone numbers in their contacts
+* This plugin sends SMS notifications to clients.
+* SMS is triggered by an event which happened in UCRM, e.g. new invoice has been issued, or client's sevice became suspended.
+* It only sends SMS to clients having a phone number in their contacts.
 * [Twilio](https://www.twilio.com/) account is required to access its API.
 
 ## Configuration
