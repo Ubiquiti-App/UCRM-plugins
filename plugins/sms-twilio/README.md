@@ -2,12 +2,12 @@
 
 * This plugin sends SMS notifications to clients.
 * SMS is triggered by an event which happened in UCRM, e.g. new invoice has been issued, or client's sevice became suspended.
-* It only sends SMS to clients having a phone number in their contacts.
+* It only sends SMS to clients having a phone number set in their contacts details.
 * [Twilio](https://www.twilio.com/) account is required to access its API.
 
 ## Configuration
 
-* Install the plugin into UCRM and enable it.
+* Install the plugin into UCRM and enable it. I.e. download the plugin [zip file](https://github.com/Ubiquiti-App/UCRM-plugins/blob/master/plugins/sms-twilio/sms-twilio.zip) and upload it to UCRM in System > Plugins.
 * Keep execution period at "don't execute automatically" - the plugin will react to webhook events.
 * Set up with data which you obtain from [Twilio Console](https://twilio.com/console):
    * Account SID
