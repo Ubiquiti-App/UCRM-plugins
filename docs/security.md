@@ -1,5 +1,5 @@
 # Security
-*Note: This feature is available since UCRM 2.14.0-beta1
+*Note: This feature is available since UCRM 2.14.0-beta1.*
 
 The `public.php` file can be used to provide a customized public page or even more of them if you decide to use `$_GET` parameters with some routing.
 
@@ -7,13 +7,13 @@ However you might want to restrict some or all of these pages to only be availab
 
 You can use the received information to:
 - determine if the user can access the page
-- check if he should be somehow limited (for example that he only has read access)
+- check if they should be somehow limited (for example that they only have read access)
 - show only information relevant for that user (for example only show services for the current client)
 
 Here is an example function using CURL:
 
 ```php
-function retreiveCurrentUser(string $ucrmPublicUrl): array
+function retrieveCurrentUser(string $ucrmPublicUrl): array
 {
     $url = sprintf('%scurrent-user', $ucrmPublicUrl);
 
