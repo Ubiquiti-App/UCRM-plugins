@@ -1,0 +1,15 @@
+{
+  "version": "1",
+  "information": {
+    "name": "example-invoice-csv-export",
+    "displayName": "[Example] Invoice CSV export",
+    "description": " This is a sample plugin showcasing a custom link in menu and security checks.",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
+    "version": "1.0.0",
+    "ucrmVersionCompliancy": {
+      "min": "2.14.0-beta1",
+      "max": null
+    },
+    "author": "Ubiquiti Networks, Inc."
+  }
+}
