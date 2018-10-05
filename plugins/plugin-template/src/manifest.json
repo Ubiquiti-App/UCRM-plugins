@@ -11,15 +11,5 @@
       "max": null
     },
     "author": "Ubiquiti Networks, Inc."
-  },
-  "menu": [
-    {
-      "key": "Reports",
-      "type": "admin",
-      "target": "iframe",
-      "parameters": {
-        "hook": "main"
-      }
-    }
-  ]
+  }
 }
