@@ -127,8 +127,12 @@ Contains an array of items. Each item is defined as follows:
 - `target` - required, can have these values:
   - `"blank"` - The link will lead simply to the target page
   - `"iframe"` - The link will lead to special page within UCRM which will show the target page in an iframe
-- `key` - Menu category to insert the link into (optional, if missing the link will be top-level)
+- `key` - Menu category to insert the link into (optional)\*
 - `label` - Label of the link (optional, default value is plugin name)
-- `parameters` - Array of parameters for the link (optional)
+- `parameters` - Array of parameters for the link (optional)\*\*
 
-For example if `parameters` are `{"hook": "main"},` then the link will be `/_plugins/<plugin-name>/public.php?hook=main`.
+\*) If `type` is `"admin"` then `"Billing"`, `"Network"`, `"Reports"` or `"System"` can be used to add the link under these existing categories in UCRM menu. In other cases a new item will be added to the menu.
+
+\*\*) For example if `parameters` are `{"hook": "main"},` then the link will be `/_plugins/<plugin-name>/public.php?hook=main`.
+
+Note: The target pages should typically be protected to be available only to authorized clients or admins. Read [this](security.md)  for details.
