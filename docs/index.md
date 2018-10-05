@@ -10,3 +10,8 @@ The minimum valid plugin consists of 2 files, [`manifest.json`](file-structure.m
 These files are required for successful installation in UCRM. Other than the required files, archives can contain anything the plugin needs (with some exceptions - see [reserved files](file-structure.md#reserved-files)).
 
 Read more in the [File structure](file-structure.md) documentation.
+
+## Security
+The plugins can also add custom pages via `public.php`. You can put additional security restrictions on these pages if desired.
+
+Read more in the [Security](security.md) documentation.
