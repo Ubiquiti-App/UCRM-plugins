@@ -1,5 +1,5 @@
 # Security
-*Note: This feature is available since UCRM 2.14.0.*
+*Note: This feature is available since UCRM 2.14.0-beta1
 
 The `public.php` file can be used to provide a customized public page or even more of them if you decide to use `$_GET` parameters with some routing.
 
