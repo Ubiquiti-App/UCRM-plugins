@@ -118,7 +118,7 @@ Contains an array of items. Each item is defined as follows:
 - `choices` (optional) - defines possible options for `choice` type (see manifest example above)
 
 ### menu
-*Note: This feature is available since UCRM 2.14.0.*
+*Note: This feature is available since UCRM 2.14.0-beta1
 
 Adds link(s) to the plugin into UCRM menu.
 
