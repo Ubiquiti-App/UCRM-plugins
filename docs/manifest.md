@@ -118,6 +118,8 @@ Contains an array of items. Each item is defined as follows:
 - `choices` (optional) - defines possible options for `choice` type (see manifest example above)
 
 ### menu
+*Note: This feature is available since UCRM 2.14.0.*
+
 Adds link(s) to the plugin into UCRM menu.
 
 Contains an array of items. Each item is defined as follows:
@@ -133,6 +135,6 @@ Contains an array of items. Each item is defined as follows:
 
 \*) If `type` is `"admin"` then `"Billing"`, `"Network"`, `"Reports"` or `"System"` can be used to add the link under these existing categories in UCRM menu. In other cases a new item will be added to the menu.
 
-\*\*) For example if `parameters` are `{"hook": "main"},` then is `/_plugins/<plugin-name>/public.php?hook=main`.
+\*\*) For example if `parameters` are `{"hook": "main"},` then link is `/_plugins/<plugin-name>/public.php?hook=main`.
 
 Note: The target pages should typically be protected to be available only to authorized clients or admins. Read [this](security.md)  for details.
