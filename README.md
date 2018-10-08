@@ -21,6 +21,7 @@ UCRM plugins are compatible with UCRM 2.10.0+
 | [RouterOS&nbsp;packet&nbsp;manager](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/routeros-packet-manager) | Sync UCRM Service Data rate with Router-OS |
 | [Packetlogic packet manager](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/packetlogic-packet-manager) | Sync UCRM Entities and Service Data Rate with Procera |
 | [KMZ Map](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/KMZ-Map) | Provides a frontend Google Map for clients to view tower coverage. |
+| [SMS Gateway Integration](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/sms-twilio) | Integrates Twilio SMS gateway which enables UCRM to send SMS to clients triggered by custom defined events, e.g. client's service gets suspended. |
 
 ## Plugins from other sources
 * [Client&nbsp;Signup Extended](https://www.charuwts.com/plugins/ucrm-signup) - Extended version of Client Signup Plugin 
