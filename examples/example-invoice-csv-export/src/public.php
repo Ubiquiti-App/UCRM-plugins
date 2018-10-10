@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 chdir(__DIR__);
 
-require __DIR__ . '/src/functions.php';
+require __DIR__ . '/vendor/autoload.php';
 
-$config = loadConfig(__DIR__ . '/ucrm.json');
+$builder = new \DI\ContainerBuilder();
+$builder->setDefinitionCache(new \Doctrine\Common\Cache\ApcuCache());
+$container = $builder->build();
 
-$user = retrieveCurrentUser($config['ucrmPublicUrl']);
+$api = $container->get(\App\Service\UcrmApi::class);
+$user = $api->getUser();
 
-echo 'Api key is: ' . $config['pluginAppKey'];
-
-var_export($user);
+if (! $user || $user->isClient || ! $user->canView('billing/invoices')) {
+    // User is not logged into UCRM or can't view invoices.
+    \App\Http::forbidden();
+}
