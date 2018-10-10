@@ -10,6 +10,7 @@
   },
   "require": {
     "php-di/php-di": "^5.4",
-    "doctrine/cache": "^1.7"
+    "doctrine/cache": "^1.7",
+    "league/csv": "^9.1"
   }
 }
