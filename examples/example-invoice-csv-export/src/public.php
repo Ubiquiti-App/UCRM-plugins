@@ -21,15 +21,16 @@ if (! $user || $user->isClient || ! $user->canView('billing/invoices')) {
 }
 
 // Process submitted form.
-if (array_key_exists('since', $_GET) && array_key_exists('until', $_GET)) {
+if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) && array_key_exists('until', $_GET)) {
     $parameters = [
+        'organizationId' => $_GET['organization'],
         'createdDateFrom' => $_GET['since'],
         'createdDateTo' => $_GET['until'],
     ];
 
     $invoices = $api->query('invoices', $parameters);
 
-    $csv = Writer::createFromFileObject(new SplTempFileObject());
+    $csv = \League\Csv\Writer::createFromFileObject(new SplTempFileObject());
 
     foreach ($invoices as $invoice) {
         $line = [
@@ -46,4 +47,13 @@ if (array_key_exists('since', $_GET) && array_key_exists('until', $_GET)) {
     exit;
 }
 
-require __DIR__ . '/templates/form.php';
+// Render form.
+$organizations = $api->query('organizations');
+
+$renderer = $container->get(\App\Service\TemplateRenderer::class);
+$renderer->render(
+    __DIR__ . '/templates/form.php',
+    [
+        'organizations' => $organizations,
+    ]
+);

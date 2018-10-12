@@ -11,6 +11,22 @@
 <form>
 	<table>
 		<tr>
+			<td>Organization:</td>
+			<td>
+				<select name="organization">
+					<?php
+						foreach ($organizations as $organization) {
+							printf(
+								'<option value="%d">%s</option>',
+								$organization->id,
+                                htmlspecialchars($organization->name, ENT_QUOTES)
+							);
+						}
+					?>
+				</select>
+			</td>
+		</tr>
+		<tr>
 			<td>Since:</td>
 			<td><input type="date" name="since"></td>
 		</tr>
