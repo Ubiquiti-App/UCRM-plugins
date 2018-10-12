@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Service\CsvGenerator;
+
 chdir(__DIR__);
 
 require __DIR__ . '/vendor/autoload.php';
@@ -28,21 +30,19 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
         'createdDateTo' => $_GET['until'],
     ];
 
+    $countries = $api->query('countries');
+    $states = array_merge(
+        // Canada
+        $api->query('countries/54/states'),
+        // USA
+        $api->query('countries/249/states')
+    );
+
+    $csvGenerator = new CsvGenerator($countries, $states);
+
     $invoices = $api->query('invoices', $parameters);
 
-    $csv = \League\Csv\Writer::createFromFileObject(new SplTempFileObject());
-
-    foreach ($invoices as $invoice) {
-        $line = [
-            $invoice['id'],
-            $invoice['clientId'],
-            $invoice['number'],
-        ];
-
-        $csv->insertOne($line);
-    }
-
-    $csv->output('ucrm-invoices.csv');
+    $csvGenerator->generate('ucrm-invoices.csv', $invoices);
 
     exit;
 }
