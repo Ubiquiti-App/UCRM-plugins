@@ -51,11 +51,9 @@ class CsvGenerator
             'Discount',
             'Amount paid',
             'Amount due',
-            'Organization name',
             'Client firstname',
             'Client lastname',
             'Client company name',
-            'Organization address',
             'Client address',
         ];
     }
@@ -70,14 +68,12 @@ class CsvGenerator
             $invoice['currencyCode'],
             $invoice['total'],
             $this->sumTaxes($invoice['taxes']),
-            $invoice['discount'],
+            $invoice['discount'] ?? 0,
             $invoice['amountPaid'],
             $invoice['total'] - $invoice['amountPaid'],
-            $invoice['organizationName'],
             $invoice['clientFirstName'],
             $invoice['clientLastName'],
             $invoice['clientCompanyName'],
-            $this->formatOrganizationAddress($invoice),
             $this->formatClientAddress($invoice),
         ];
     }
@@ -111,24 +107,11 @@ class CsvGenerator
         return $sum;
     }
 
-    private function formatOrganizationAddress(array $invoice): string
-    {
-        return sprintf(
-            '%s, %s, %s, %s, %s',
-            $invoice['organizationStreet1'],
-            $invoice['organizationStreet2'],
-            $invoice['organizationCity'],
-            $invoice['organizationZipCode'],
-            $this->formatCountry($invoice['organizationCountryId'], $invoice['organizationStateId'])
-        );
-    }
-
     private function formatClientAddress(array $invoice)
     {
         return sprintf(
-            '%s, %s, %s, %s, %s',
-            $invoice['clientStreet1'],
-            $invoice['clientStreet2'],
+            '%s, %s, %s, %s',
+            $invoice['clientStreet1'] . ($invoice['clientStreet2'] ? ', ' . $invoice['clientStreet2'] : ''),
             $invoice['clientCity'],
             $invoice['clientZipCode'],
             $this->formatCountry($invoice['clientCountryId'], $invoice['clientStateId'])
@@ -159,10 +142,8 @@ class CsvGenerator
     {
         $map = [];
 
-        foreach ($states as $countryStates) {
-            foreach ($countryStates as $state) {
-                $map[$state['id']] = $state['name'];
-            }
+        foreach ($states as $state) {
+            $map[$state['id']] = $state['name'];
         }
 
         return $map;
