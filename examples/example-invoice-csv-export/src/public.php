@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Service\CsvGenerator;
-
 chdir(__DIR__);
 
 require __DIR__ . '/vendor/autoload.php';
@@ -38,7 +36,7 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
         $api->query('countries/249/states')
     );
 
-    $csvGenerator = new CsvGenerator($countries, $states);
+    $csvGenerator = new \App\Service\CsvGenerator($countries, $states);
 
     $invoices = $api->query('invoices', $parameters);
 

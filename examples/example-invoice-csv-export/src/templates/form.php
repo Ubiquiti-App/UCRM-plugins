@@ -18,8 +18,8 @@
 						foreach ($organizations as $organization) {
 							printf(
 								'<option value="%d">%s</option>',
-								$organization->id,
-                                htmlspecialchars($organization->name, ENT_QUOTES)
+								$organization['id'],
+                                htmlspecialchars($organization['name'], ENT_QUOTES)
 							);
 						}
 					?>
