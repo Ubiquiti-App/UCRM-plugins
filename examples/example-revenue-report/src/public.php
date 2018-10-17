@@ -26,7 +26,7 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
         'organizationId' => $_GET['organization'],
         'createdDateFrom' => $_GET['since'],
         'createdDateTo' => $_GET['until'],
-        'status' => [3], // InvoiceStatus Paid.
+        'status' => [1, 2, 3],
     ];
 
     $organization = $api->query('organizations/' . $_GET['organization']);
@@ -42,14 +42,22 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
 
     $servicePlansMap = [];
     foreach ($servicePlans as $servicePlan) {
-        $servicePlansMap[$servicePlan['id']] = 0;
+        $servicePlansMap[$servicePlan['id']] = [
+            'totalIssued' => 0,
+            'totalPaid' => 0,
+            'data' => $servicePlan,
+        ];
     }
 
     foreach ($invoices as $invoice) {
         foreach ($invoice['items'] as $invoiceItem) {
             if ($invoiceItem['type'] === 'service' && isset($invoiceItem['serviceId']) && isset($servicesMap[$invoiceItem['serviceId']])) {
                 $servicePlanId = $servicesMap[$invoiceItem['serviceId']];
-                $servicePlansMap[$servicePlanId] += $invoiceItem['total'] + $invoiceItem['discountTotal'];
+                $price = $invoiceItem['total'] + $invoiceItem['discountTotal'];
+                $servicePlansMap[$servicePlanId]['totalIssued'] += $price;
+                if ($invoice['status'] === 3) {
+                    $servicePlansMap[$servicePlanId]['totalPaid'] += $price;
+                }
             }
         }
     }
