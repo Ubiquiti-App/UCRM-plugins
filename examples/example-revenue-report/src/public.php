@@ -22,7 +22,39 @@ if (! $user || $user->isClient || ! $user->canView('billing/invoices')) {
 
 // Process submitted form.
 if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) && array_key_exists('until', $_GET)) {
+    $parameters = [
+        'organizationId' => $_GET['organization'],
+        'createdDateFrom' => $_GET['since'],
+        'createdDateTo' => $_GET['until'],
+        'status' => [3], // InvoiceStatus Paid.
+    ];
 
+    $organization = $api->query('organizations/' . $_GET['organization']);
+    $currency = $api->query('currencies/' . $organization['currencyId']);
+    $invoices = $api->query('invoices', $parameters);
+    $services = $api->query('clients/services', ['organizationId' => $_GET['organization']]);
+    $servicePlans = $api->query('service-plans');
+
+    $servicesMap = [];
+    foreach ($services as $service) {
+        $servicesMap[$service['id']] = $service['servicePlanId'];
+    }
+
+    $servicePlansMap = [];
+    foreach ($servicePlans as $servicePlan) {
+        $servicePlansMap[$servicePlan['id']] = 0;
+    }
+
+    foreach ($invoices as $invoice) {
+        foreach ($invoice['items'] as $invoiceItem) {
+            if ($invoiceItem['type'] === 'service' && isset($invoiceItem['serviceId']) && isset($servicesMap[$invoiceItem['serviceId']])) {
+                $servicePlanId = $servicesMap[$invoiceItem['serviceId']];
+                $servicePlansMap[$servicePlanId] += $invoiceItem['total'] + $invoiceItem['discountTotal'];
+            }
+        }
+    }
+
+    var_export($servicePlansMap);
 
     exit;
 }
