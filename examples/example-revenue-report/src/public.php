@@ -20,6 +20,9 @@ if (! $user || $user->isClient || ! $user->canView('billing/invoices')) {
     \App\Http::forbidden();
 }
 
+// Retrieve renderer.
+$renderer = $container->get(\App\Service\TemplateRenderer::class);
+
 // Process submitted form.
 if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) && array_key_exists('until', $_GET)) {
     $parameters = [
@@ -43,9 +46,9 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
     $servicePlansMap = [];
     foreach ($servicePlans as $servicePlan) {
         $servicePlansMap[$servicePlan['id']] = [
+            'name' => $servicePlan['name'],
             'totalIssued' => 0,
             'totalPaid' => 0,
-            'data' => $servicePlan,
         ];
     }
 
@@ -62,7 +65,13 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
         }
     }
 
-    var_export($servicePlansMap);
+    $renderer->render(
+        __DIR__ . '/templates/result.php',
+        [
+            'servicePlans' => array_values($servicePlansMap),
+            'currency' => $currency['code'],
+        ]
+    );
 
     exit;
 }
@@ -70,7 +79,6 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
 // Render form.
 $organizations = $api->query('organizations');
 
-$renderer = $container->get(\App\Service\TemplateRenderer::class);
 $renderer->render(
     __DIR__ . '/templates/form.php',
     [
