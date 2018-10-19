@@ -11,5 +11,13 @@
       "max": null
     },
     "author": "Ubiquiti Networks, Inc."
-  }
+  },
+  "menu": [
+    {
+      "key": "Reports",
+      "label": "Revenue report",
+      "type": "admin",
+      "target": "iframe"
+    }
+  ]
 }
