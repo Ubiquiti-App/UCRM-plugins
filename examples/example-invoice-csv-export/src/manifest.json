@@ -11,5 +11,13 @@
       "max": null
     },
     "author": "Ubiquiti Networks, Inc."
-  }
+  },
+  "menu": [
+    {
+      "key": "Reports",
+      "label": "Invoice CSV export",
+      "type": "admin",
+      "target": "iframe"
+    }
+  ]
 }
