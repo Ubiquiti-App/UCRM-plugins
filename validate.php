@@ -10,7 +10,7 @@ function findPluginDirectories(): Traversable
     );
 }
 
-function requireFile(string $file): int
+function ensureFileExists(string $file): int
 {
     if (! file_exists($file)) {
         printf('Could not find required file "%s".' . PHP_EOL, $file);
@@ -20,7 +20,7 @@ function requireFile(string $file): int
     return 0;
 }
 
-function requireArrayKey(array $array, string... $keys): int
+function ensureArrayKeyExists(array $array, string... $keys): int
 {
     $count = count($keys);
     $i = 1;
@@ -45,7 +45,7 @@ function validateManifest(string $file): int
 {
     $errors = 0;
 
-    $errors += requireFile($file);
+    $errors += ensureFileExists($file);
 
     if ($errors) {
         return $errors;
@@ -54,13 +54,13 @@ function validateManifest(string $file): int
     $manifestData = file_get_contents($file);
     $manifest = json_decode($manifestData, true);
 
-    $errors += requireArrayKey($manifest, 'information');
-    $errors += requireArrayKey($manifest, 'information', 'name');
+    $errors += ensureArrayKeyExists($manifest, 'information');
+    $errors += ensureArrayKeyExists($manifest, 'information', 'name');
 
     if ($errors === 0) {
         $name = $manifest['information']['name'];
         $directory = dirname(dirname($file));
-        $errors += requireFile($directory . '/' . $name . '.zip');
+        $errors += ensureFileExists($directory . '/' . $name . '.zip');
         $basename = pathinfo($directory, PATHINFO_BASENAME);
 
         if ($basename !== $name) {
@@ -69,14 +69,14 @@ function validateManifest(string $file): int
         }
     }
 
-    $errors += requireArrayKey($manifest, 'version');
-    $errors += requireArrayKey($manifest, 'information', 'displayName');
-    $errors += requireArrayKey($manifest, 'information', 'description');
-    $errors += requireArrayKey($manifest, 'information', 'url');
-    $errors += requireArrayKey($manifest, 'information', 'version');
-    $errors += requireArrayKey($manifest, 'information', 'ucrmVersionCompliancy');
-    $errors += requireArrayKey($manifest, 'information', 'ucrmVersionCompliancy', 'min');
-    $errors += requireArrayKey($manifest, 'information', 'author');
+    $errors += ensureArrayKeyExists($manifest, 'version');
+    $errors += ensureArrayKeyExists($manifest, 'information', 'displayName');
+    $errors += ensureArrayKeyExists($manifest, 'information', 'description');
+    $errors += ensureArrayKeyExists($manifest, 'information', 'url');
+    $errors += ensureArrayKeyExists($manifest, 'information', 'version');
+    $errors += ensureArrayKeyExists($manifest, 'information', 'ucrmVersionCompliancy');
+    $errors += ensureArrayKeyExists($manifest, 'information', 'ucrmVersionCompliancy', 'min');
+    $errors += ensureArrayKeyExists($manifest, 'information', 'author');
 
 
 
@@ -89,8 +89,8 @@ function validatePlugin(SplFileInfo $pluginDirectory): int
 
     $errors = 0;
 
-    $errors += requireFile($path . '/README.md');
-    $errors += requireFile($path . '/src/main.php');
+    $errors += ensureFileExists($path . '/README.md');
+    $errors += ensureFileExists($path . '/src/main.php');
     $errors += validateManifest($path . '/src/manifest.json');
 
     return $errors;
