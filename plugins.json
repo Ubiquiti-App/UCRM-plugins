@@ -1,0 +1,88 @@
+{
+    "plugins": [
+        {
+            "name": "ucrm-client-signup",
+            "displayName": "UCRM Client Signup",
+            "description": "A UCRM plugin that provides a frontend form for clients to signup.",
+            "url": "https:\/\/www.charuwts.com\/plugins",
+            "version": "1.1.1",
+            "ucrmVersionCompliancy": {
+                "min": "2.13.0-beta1",
+                "max": null
+            },
+            "author": "Charuwts, LLC"
+        },
+        {
+            "name": "kmz-map",
+            "displayName": "KMZ Map",
+            "description": "A UCRM plugin that provides a frontend Google Map for clients to view tower coverage.",
+            "url": "https:\/\/www.charuwts.com\/plugins",
+            "version": "1.0.0",
+            "ucrmVersionCompliancy": {
+                "min": "2.11.1",
+                "max": null
+            },
+            "author": "Charuwts, LLC"
+        },
+        {
+            "name": "plugin-template",
+            "displayName": "Plugin template",
+            "description": "This is plugin template.",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins",
+            "version": "1.0.0",
+            "ucrmVersionCompliancy": {
+                "min": "2.10.0-beta1",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc."
+        },
+        {
+            "name": "quickbooks-online",
+            "displayName": "QuickBooks Online export",
+            "description": "This plugin exports payments and invoices to QuickBooks Online",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins",
+            "version": "1.0.6",
+            "ucrmVersionCompliancy": {
+                "min": "2.10.0-beta1",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc."
+        },
+        {
+            "name": "mkt-queue-sync",
+            "displayName": "Mikrotik Queue Sync Plugin",
+            "description": "Plugin para sincronizar simple queues con los limites de velocidad establecidos en Ucrm - Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https:\/\/wiki.mikrotik.com\/wiki\/Manual:Queue",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins",
+            "version": "1.0.0",
+            "ucrmVersionCompliancy": {
+                "min": "2.10.0-beta1",
+                "max": null
+            },
+            "author": "Franco Johan Gampel - franco@gampel.com.ar"
+        },
+        {
+            "name": "sms-twilio",
+            "displayName": "SMS notifications via Twilio",
+            "description": "This plugin sends SMS notifications via Twilio. NOTE: only phone numbers in the international format can be used, e.g. +155 555 1234",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/sms-twilio",
+            "version": "1.0.0",
+            "ucrmVersionCompliancy": {
+                "min": "2.14.0-beta",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc."
+        },
+        {
+            "name": "fio_cz",
+            "displayName": "Fio bank payment import",
+            "description": "This plugin enables you to import payments from Fio bank to UCRM. See https:\/\/www.fio.cz\/bankovni-sluzby\/api-bankovnictvi",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins",
+            "version": "1.0.8",
+            "ucrmVersionCompliancy": {
+                "min": "2.10.0-beta1",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc."
+        }
+    ]
+}
