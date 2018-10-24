@@ -3,42 +3,42 @@
     {
       "name": "fio_cz",
       "displayName": "Fio bank payment import",
-      "description": "This plugin enables you to import payments from Fio bank to UCRM. See https://www.fio.cz/bankovni-sluzby/api-bankovnictvi",
+      "description": "This plugin enables you to import payments from Fio bank to UCRM. See https://www.fio.cz/bankovni-sluzby/api-bankovnictvi"
     },
     {
       "name": "kmz-map",
       "displayName": "KMZ Map",
-      "description": "A UCRM plugin that provides a frontend Google Map for clients to view tower coverage.",
+      "description": "A UCRM plugin that provides a frontend Google Map for clients to view tower coverage."
     },
     {
       "name": "mkt-queue-sync",
       "displayName": "Mikrotik Queue Sync Plugin",
-      "description": "Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https://wiki.mikrotik.com/wiki/Manual:Queue",
+      "description": "Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https://wiki.mikrotik.com/wiki/Manual:Queue"
     },
     {
       "name": "packetlogic-packet-manager",
       "displayName": "PacketLogic Packet Manager",
-      "description": "UCRM Plugin that synchronizes customers with Procera Networks PacketLogic system.",    
+      "description": "UCRM Plugin that synchronizes customers with Procera Networks PacketLogic system."
     },
     {
       "name": "plugin-template",
       "displayName": "Plugin template",
-      "description": "This is plugin template.",    
+      "description": "This is plugin template."
     },
     {
       "name": "quickbooks-online",
       "displayName": "QuickBooks Online export",
-      "description": "This plugin exports payments and invoices to QuickBooks Online",
+      "description": "This plugin exports payments and invoices to QuickBooks Online"
     },
     {
       "name": "routeros-packet-manager",
       "displayName": "RouterOS Packet Manager",
-      "description": "This plugin allows using Mikrotik as a packet manager",
+      "description": "This plugin allows using Mikrotik as a packet manager"
     },
     {
       "name": "ucrm-client-signup",
       "displayName": "UCRM Client Signup",
-      "description": "A UCRM plugin that provides a frontend form for clients to signup.",    
+      "description": "A UCRM plugin that provides a frontend form for clients to signup."
     }
   ]
 }
