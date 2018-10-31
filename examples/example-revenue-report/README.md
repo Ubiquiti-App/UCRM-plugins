@@ -10,7 +10,7 @@ First you can find some classes here that you can use in your own plugins.
 
 ### `App\Service\OptionsManager`
 
-OptionsManager can be used to load the current configuration from both [ucrm.json](../../docs/file-structure.md#ucrmjson) and [config.json](../../docs/file-structure.md#dataconfigjson). 
+OptionsManager can be used to load the current configuration from both [ucrm.json](../../docs/file-structure.md#ucrmjson) and [config.json](../../docs/file-structure.md#dataconfigjson). The data are returned in form of `App\Data\UcrmData` and `App\Data\PluginData` respectively.
 
 ### `App\Service\UcrmApi`
 

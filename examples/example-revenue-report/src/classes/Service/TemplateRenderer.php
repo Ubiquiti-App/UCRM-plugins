@@ -6,6 +6,9 @@ namespace App\Service;
 
 class TemplateRenderer
 {
+    /**
+     * @param array<string, mixed> $__parameters
+     */
     public function render(string $__template, array $__parameters): void
     {
         foreach ($__parameters as $__name => $__value) {

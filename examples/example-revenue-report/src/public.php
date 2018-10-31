@@ -24,12 +24,19 @@ if (! $user || $user->isClient || ! $user->canView('billing/invoices')) {
 $renderer = $container->get(\App\Service\TemplateRenderer::class);
 
 // Process submitted form.
-if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) && array_key_exists('until', $_GET)) {
+if (
+    array_key_exists('organization', $_GET)
+    && is_string($_GET['organization'])
+    && array_key_exists('since', $_GET)
+    && is_string($_GET['since'])
+    && array_key_exists('until', $_GET)
+    && is_string($_GET['until'])
+) {
     $parameters = [
         'organizationId' => $_GET['organization'],
         'createdDateFrom' => $_GET['since'],
         'createdDateTo' => $_GET['until'],
-        'status' => [1, 2, 3],
+        'status' => [1, 2, 3], // 1 = Unpaid, 2 = Partially paid, 3 = Paid
     ];
 
     $organization = $api->query('organizations/' . $_GET['organization']);
