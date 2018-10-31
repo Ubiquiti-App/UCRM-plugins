@@ -87,7 +87,7 @@ function validatePlugin(SplFileInfo $pluginDirectory): int
 function checkPluginsJson(): int
 {
     ob_start();
-    include __DIR__ . '/generate-json.php';
+    require __DIR__ . '/generate-json.php';
     $correctJson = ob_get_clean();
 
     $currentJson = file_get_contents(__DIR__ . '/plugins.json');

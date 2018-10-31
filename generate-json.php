@@ -19,7 +19,9 @@ foreach ($pluginDirectories as $directory) {
         $plugin['name']
     );
 
-    $plugins[] = $plugin;
+    $plugins[$plugin['name']] = $plugin;
 }
+
+ksort($plugins);
 
 echo json_encode(['plugins' => array_values(array_filter($plugins))], JSON_PRETTY_PRINT);
