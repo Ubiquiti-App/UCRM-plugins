@@ -1,6 +1,30 @@
 {
     "plugins": [
         {
+            "name": "packetlogic-packet-manager",
+            "displayName": "PacketLogic Packet Manager",
+            "description": "UCRM Plugin that synchronizes customers with Procera Networks PacketLogic system.",
+            "url": "http:\/\/www.atlinkservices.com",
+            "version": "1.0.2",
+            "ucrmVersionCompliancy": {
+                "min": "2.10.0-beta1",
+                "max": null
+            },
+            "author": "Shaun Wilkinson"
+        },
+        {
+            "name": "routeros-packet-manager",
+            "displayName": "RouterOS Packet Manager",
+            "description": "This plugin allows using Mikrotik as a packet manager",
+            "url": "https:\/\/github.com\/csylos\/ucrm-ros-pac-man",
+            "version": "1.0.5",
+            "ucrmVersionCompliancy": {
+                "min": "2.10.0-beta1",
+                "max": null
+            },
+            "author": "Shaun Wilkinson"
+        },
+        {
             "name": "ucrm-client-signup",
             "displayName": "UCRM Client Signup",
             "description": "A UCRM plugin that provides a frontend form for clients to signup.",
@@ -23,18 +47,6 @@
                 "max": null
             },
             "author": "Charuwts, LLC"
-        },
-        {
-            "name": "plugin-template",
-            "displayName": "Plugin template",
-            "description": "This is plugin template.",
-            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins",
-            "version": "1.0.0",
-            "ucrmVersionCompliancy": {
-                "min": "2.10.0-beta1",
-                "max": null
-            },
-            "author": "Ubiquiti Networks, Inc."
         },
         {
             "name": "quickbooks-online",
