@@ -92,7 +92,7 @@ function checkPluginsJson(): int
 
     $currentJson = file_get_contents(__DIR__ . '/plugins.json');
 
-    if ($currentJson === $correctJson) {
+    if (json_decode($currentJson, true) === json_decode($correctJson, true)) {
         return 0;
     }
 
