@@ -26,6 +26,9 @@ only the events for which you want notifications sent.  See currently "Supported
     - Settings: Server IP
     - "http://localhost"
 - A static Google Maps image will be embedded in HTML notifications only when a Google Maps API Key is set in the UCRM.
+- If SSL is not enabled on your UCRM system, make sure to set "Verify SSL Certificate" to "No" in the Webhook 
+Settings.  My recommendation is to leave the setting to "No" always, as the plugin is designed communicating with the
+ server using 'localhost' and should not pose a security risk. 
 
 ## Configuration
 
