@@ -62,7 +62,7 @@ class TicketEvent
         ];
 
         /** @var Ticket $ticket */
-        $ticket = Ticket::getById(14);
+        $ticket = Ticket::getById($entityId);
         $clientId = $ticket->getClientId();
 
         /** @var Client|null $client Get the actual Client from the UCRM. */
