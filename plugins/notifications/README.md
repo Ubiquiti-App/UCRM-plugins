@@ -11,7 +11,7 @@ interactions directly.
 
 ## Installation
 
-1. Download the [Plugin](/plugin-notifier.zip) and add it to the System/Plugins in your UCRM.
+1. Download the [Plugin](/notifications.zip) and add it to the System/Plugins in your UCRM.
 2. Configure the plugin as noted below and then "Save and Enable".
 3. Enable a Webhook pointing to your newly added public URL or use the "Add webhook" button.
 4. In the Webhook, set "Any event" to "No" and then multi-select only the events for which you want notifications sent.
