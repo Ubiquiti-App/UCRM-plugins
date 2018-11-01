@@ -76,14 +76,25 @@
             {{ "Contacts"|translate }}</h5>
         <div>
             {% for contact in contacts %}
-                <div style="border-left:4px solid gray;max-width:3.5in;min-width:3.5in;">
+                <div style="border-left:4px solid {{ loop.first ? "blue" : "gray" }};max-width:3.5in;min-width:3.5in;">
                     {# Contact Name #}
                     <div style="margin:0.5rem 0.75rem;">
                         <div style="font-size:0.75rem;color:gray;font-style:italic">
                             {{ "Contact Name"|translate }}
                         </div>
                         <div style="">
-                            {{ contact.getName }}
+                            {% if loop.first and contact.getName == "" %}
+                                {% if client.getClientType == 2 %}
+                                    {# Commercial #}
+                                    {{ client.getCompanyName }}<br/>
+                                    {{ "c/o" }} {{ client.getCompanyContactFirstName }} {{ client.getCompanyContactLastName }}
+                                {% else %}
+                                    {# Residential #}
+                                    {{ client.getFirstName }} {{ client.getLastName }}
+                                {% endif %}
+                            {% else %}
+                                {{ contact.getName }}
+                            {% endif %}
                         </div>
                     </div>
                     {# Contact Phone #}
