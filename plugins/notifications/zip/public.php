@@ -12,6 +12,7 @@ use MVQN\UCRM\Plugins\Settings;
 use MVQN\UCRM\Plugins\Plugin;
 use MVQN\UCRM\Plugins\Events\ClientEvent;
 use MVQN\UCRM\Plugins\Events\TicketEvent;
+use MVQN\UCRM\Plugins\Events\TicketCommentEvent;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -113,8 +114,26 @@ use PHPMailer\PHPMailer\Exception;
                 }
                 break;
 
-            case "ticket":
             case "ticketComment":
+                $ticketCommentEvent = new TicketCommentEvent($twig);
+
+                switch ($eventName)
+                {
+                    case "ticket.comment":
+                        $results = $ticketCommentEvent->event("comment", $entityId);
+                        break;
+
+                    default:
+                        http_response_code(200);
+                        Log::write("SKIPPING: The Webhook Event: '$eventName' is not currently supported!");
+                        die("The Webhook Event: '$eventName' is not currently supported!");
+                        break;
+                }
+                break;
+
+                break;
+            case "ticket":
+
 
                 $ticketEvent = new TicketEvent($twig);
 
