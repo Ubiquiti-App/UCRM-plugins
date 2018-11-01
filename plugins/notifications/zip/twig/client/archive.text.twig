@@ -30,7 +30,7 @@
     {{- client.getCity }}, {{ client.getState.getCode }} {{ client.getZipCode }}{{ ", " }}
     {{- client.getCountry.getName }}{{ EOL -}}
 {# Client Link #}
-{% set _link = url ~ "client/" ~ client.getId %}
+{% set _link = url ?? "http://localhost/" ~ "client/" ~ client.getId %}
 {{ TAB }}{{ PAD|format("Client Link"|translate) }}: {{ _link }}{{ EOL -}}
 {{- EOL -}}
 {# Client Contacts #}

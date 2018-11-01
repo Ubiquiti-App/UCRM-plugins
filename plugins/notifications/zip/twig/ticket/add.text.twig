@@ -27,7 +27,7 @@
 {{ TAB }}{{ PAD|format("Ticket From"|translate) }}: {{ ticket.getEmailFromName }}{{ EOL -}}
 {{ TAB }}{{ PAD|format("") }}: {{ ticket.getEmailFromAddress }}{{ EOL -}}
 {# Ticket Link #}
-{% set _link = url ~ "ticketing/" ~ ticket.getId %}
+{% set _link = url ?? "http://localhost/" ~ "ticketing/" ~ ticket.getId %}
 {{ TAB }}{{ PAD|format("Ticket Link"|translate) }}: {{ _link }}{{ EOL -}}
 {% if latestComment %}
 {{ TAB }}{{ PAD|format("Latest Comment"|translate) }}: {{ latestComment.getComment.getBody }}{{ EOL -}}
@@ -54,7 +54,7 @@
 {{- client.getCity }}, {{ client.getState.getCode }} {{ client.getZipCode }}{{ ", " }}
 {{- client.getCountry.getName }}{{ EOL -}}
 {# Client Link #}
-{% set _link = url ~ "client/" ~ client.getId %}
+{% set _link = url ?? "http://localhost/" ~ "client/" ~ client.getId %}
 {{ TAB }}{{ PAD|format("Client Link"|translate) }}: {{ _link }}{{ EOL -}}
 {{- EOL -}}
 {# Client Contacts #}

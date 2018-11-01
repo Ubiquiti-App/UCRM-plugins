@@ -65,7 +65,7 @@
                 </div>
                 <div style="">
                     {# URLs do not seem to be translated! #}
-                    {% set _link = url ~ "client/" ~ client.getId %}
+                    {% set _link = url ?? "http://localhost/" ~ "client/" ~ client.getId %}
                     <strong><a href="{{ _link }}" target="_blank">{{ _link }}</a></strong>
                 </div>
             </div>
