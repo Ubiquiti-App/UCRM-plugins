@@ -1,0 +1,85 @@
+{
+    "version": "1",
+    "information": {
+        "name": "notifications",
+        "displayName": "UCRM Notifications Plugin",
+        "description": "A simple UCRM Plugin to send notifications for items not currently built-in.",
+        "url": "https://github.com/mvqn/ucrm-plugins",
+        "version": "1.1.0",
+        "ucrmVersionCompliancy": {
+            "min": "2.14.0-beta2",
+            "max": null
+        },
+        "author": "Ryan Spaeth <rspaeth@mvqn.net>"
+    },
+    "configuration": [
+        {
+            "key": "smtpUseHTML",
+            "label": "Use HTML?",
+            "description": "If enabled, will attempt to send messages in HTML format.",
+            "required": 0,
+            "type": "checkbox"
+        },
+        {
+            "key": "clientTypes",
+            "label": "Client Types",
+            "description": "The type of Client events for which notifications should be sent.",
+            "required": 0,
+            "type": "choice",
+            "choices": {
+                "Clients & Leads": "",
+                "Clients Only": "clients",
+                "Leads Only": "leads"
+            }
+        },
+        {
+            "key": "clientRecipients",
+            "label": "Client Recipients",
+            "description": "A comma separated list of email addresses to which Client notifications should be sent.",
+            "required": 1
+        },
+        {
+            "key": "invoiceRecipients",
+            "label": "Invoice Recipients",
+            "description": "A comma separated list of email addresses to which Invoice notifications should be sent.",
+            "required": 1
+        },
+        {
+            "key": "paymentRecipients",
+            "label": "Payment Recipients",
+            "description": "A comma separated list of email addresses to which Payment notifications should be sent.",
+            "required": 1
+        },
+        {
+            "key": "quoteRecipients",
+            "label": "Quote Recipients",
+            "description": "A comma separated list of email addresses to which Quote notifications should be sent.",
+            "required": 1
+        },
+        {
+            "key": "serviceRecipients",
+            "label": "Service Recipients",
+            "description": "A comma separated list of email addresses to which Service notifications should be sent.",
+            "required": 1
+        },
+        {
+            "key": "ticketRecipients",
+            "label": "Ticket Recipients",
+            "description": "A comma separated list of email addresses to which Ticket notifications should be sent.",
+            "required": 1
+        },
+        {
+            "key": "userRecipients",
+            "label": "User Recipients",
+            "description": "A comma separated list of email addresses to which User notifications should be sent.",
+            "required": 1
+        },
+        {
+            "key": "webhookRecipients",
+            "label": "Webhook Recipients",
+            "description": "A comma separated list of email addresses to which Webhook notifications should be sent.",
+            "required": 1
+        }
+    ]
+}
+

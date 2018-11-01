@@ -1,0 +1,30 @@
+{
+    "name": "mvqn/common",
+    "description": "A library of common classes and functions, specifically designed for use in MVQN projects, but generic enough for anything!",
+    "minimum-stability": "stable",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ryan Spaeth",
+            "email": "rspaeth@mvqn.net"
+        }
+    ],
+    "require": {
+        "php": "~7.1",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "7.2.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "MVQN\\": "src/MVQN/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\MVQN\\": "tests/MVQN/"
+        }
+    }
+}

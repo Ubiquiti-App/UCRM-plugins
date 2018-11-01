@@ -1,0 +1,67 @@
+{% set EOL = "\r\n" %}
+{% set TAB = "    " %}
+{% set PAD = "% -20.20s" %}
+{% set datetimeFormat = "m/d/Y @ H:i:s" %}
+{{ "Dear Sales Team,"|translate }}{{ EOL }}
+{{- EOL -}}
+{{- "The following Ticket has been edited in your UCRM."|translate }}{{ EOL -}}
+{{- EOL -}}
+{# Ticket #}
+{{ "Ticket"|translate|upper }}{{ EOL -}}
+{# Ticket Timestamp #}
+{{ TAB }}{{ PAD|format("Edited"|translate) }}: {{ ticket.getLastActivity|date(datetimeFormat) }}{{ EOL -}}
+{# Ticket Status #}
+{{ TAB }}{{ PAD|format("Status"|translate) }}{{ ": " }}
+{%- if ticket.getStatus == 0 %}{{ "New"|translate }}{% endif %}
+{%- if ticket.getStatus == 1 %}{{ "Open"|translate }}{% endif %}
+{%- if ticket.getStatus == 2 %}{{ "Pending"|translate }}{% endif %}
+{%- if ticket.getStatus == 3 %}{{ "Solved"|translate }}{% endif %}
+{{ EOL -}}
+{# Ticket Assigned User #}
+{% if user %}
+{{ TAB }}{{ PAD|format("Assigned User"|translate) }}: {{ user.getFirstName }} {{ user.getLastName }}{{ EOL -}}
+{% endif %}
+{# Ticket Subject #}
+{{ TAB }}{{ PAD|format("Subject"|translate) }}: {{ ticket.getSubject }}{{ EOL -}}
+{# Ticket From #}
+{{ TAB }}{{ PAD|format("Ticket From"|translate) }}: {{ ticket.getEmailFromName }}{{ EOL -}}
+{{ TAB }}{{ PAD|format("") }}: {{ ticket.getEmailFromAddress }}{{ EOL -}}
+{# Ticket Link #}
+{% set _link = url ~ "ticketing/" ~ ticket.getId %}
+{{ TAB }}{{ PAD|format("Ticket Link"|translate) }}: {{ _link }}{{ EOL -}}
+{% if latestComment %}
+{{ TAB }}{{ PAD|format("Latest Comment"|translate) }}: {{ latestComment.getComment.getBody }}{{ EOL -}}
+{% endif %}
+{{ EOL -}}
+{# Client #}
+{{ "Client"|translate|upper }}{{ EOL -}}
+{# Client Type #}
+{% if client.getClientType == 2 %}{# Commercial #}
+{{ TAB }}{{ PAD|format("Client Type"|translate) }}: {{ "Commercial"|translate }}{{ EOL -}}
+{% else %}{# Residential #}
+{{ TAB }}{{ PAD|format("Client Type"|translate) }}: {{ "Residential"|translate }}{{ EOL -}}
+{% endif %}
+{# Client Name #}
+{% if client.getClientType == 2 %}{# Commercial #}
+{{ TAB }}{{ PAD|format("Client Name"|translate) }}: {{ client.getCompanyName }}{{ " " }}
+{{- "c/o" }} {{ client.getCompanyContactFirstName }} {{ client.getCompanyContactLastName }}{{ EOL -}}
+{% else %}{# Residential #}
+{{ TAB }}{{ PAD|format("Client Name"|translate) }}: {{ client.getFirstName }} {{ client.getLastName }}{{ EOL -}}
+{% endif %}
+{# Client Address #}
+{{ TAB }}{{ PAD|format("Client Address"|translate) }}: {{ client.getStreet1}}{{ ", " }}
+{%- if client.getStreet2 != "" %}{{ client.getStreet2}}{{ ", " }}{% endif %}
+{{- client.getCity }}, {{ client.getState.getCode }} {{ client.getZipCode }}{{ ", " }}
+{{- client.getCountry.getName }}{{ EOL -}}
+{# Client Link #}
+{% set _link = url ~ "client/" ~ client.getId %}
+{{ TAB }}{{ PAD|format("Client Link"|translate) }}: {{ _link }}{{ EOL -}}
+{{- EOL -}}
+{# Client Contacts #}
+{{ "Contacts"|translate|upper }}{{ EOL -}}
+{% for contact in contacts %}
+{{ TAB }}{{ PAD|format("Contact Name" |translate) }}: {{ contact.getName }}{{ EOL -}}
+{{ TAB }}{{ PAD|format("Contact Phone"|translate) }}: {{ contact.getPhone }}{{ EOL -}}
+{{ TAB }}{{ PAD|format("Contact Email"|translate) }}: {{ contact.getEmail }}{{ EOL -}}
+{% if not loop.last %}{{ EOL }}{% endif %}
+{% endfor %}

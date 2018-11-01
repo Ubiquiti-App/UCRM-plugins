@@ -1,0 +1,29 @@
+[2018-11-01 20:16:16.856109] [INFO] Log created!
+[2018-11-01 20:16:16.856177] [INFO] *** CONFIGURATION: START
+[2018-11-01 20:16:16.878897] [INFO] Locale was determined as 'en_US' by UCRM Settings.
+[2018-11-01 20:16:16.879245] [INFO] Transport Type determined as 'smtp' by UCRM Settings.
+[2018-11-01 20:16:16.879634] [INFO] SMTP Username determined as 'dev@mvqn.net' by UCRM Settings.
+[2018-11-01 20:16:16.882584] [INFO] SMTP Password successfully decrypted from UCRM Settings.
+[2018-11-01 20:16:16.882934] [INFO] SMTP Server determined as 'smtp.mvqn.net' by UCRM Settings.
+[2018-11-01 20:16:16.883224] [INFO] SMTP Port determined as '25' by UCRM Settings.
+[2018-11-01 20:16:16.883552] [INFO] SMTP Encryption determined as 'none' by UCRM Settings.
+[2018-11-01 20:16:16.883900] [INFO] SMTP Authentication determined as 'none' by UCRM Settings.
+[2018-11-01 20:16:16.884197] [INFO] Verify SSL Certificate determined as 'yes' by UCRM Settings.
+[2018-11-01 20:16:16.884504] [INFO] SMTP Sender Email determined as 'info@mvqn.net' by UCRM Settings.
+[2018-11-01 20:16:16.884800] [INFO] Google API Key determined as 'AIzaSyBlnA9LaNLBTuWzVlWIeXW9MhCYNP-z9-0' by UCRM Settings.
+[2018-11-01 20:16:16.884831] [INFO] *** CONFIGURATION: END
+[2018-11-01 20:16:16.894379] RECEIVED: {"uuid":"ee421dae-e9c9-4d8a-aef6-6716db9040e4","changeType":"comment","entity":"ticketComment","entityId":48,"eventName":"ticket.comment"}
+[2018-11-01 20:16:17.540597] SUCCESS : A valid Webhook Event was received and a notification message sent successfully!
+[2018-11-01 13:20:07.783514] [INFO] *** CONFIGURATION: START
+[2018-11-01 13:20:08.429533] [INFO] Locale was determined as 'en_US' by UCRM Settings.
+[2018-11-01 13:20:08.435731] [INFO] Transport Type determined as 'smtp' by UCRM Settings.
+[2018-11-01 13:20:08.441592] [INFO] SMTP Username determined as 'dev@mvqn.net' by UCRM Settings.
+[2018-11-01 13:20:08.460086] [INFO] SMTP Password successfully decrypted from UCRM Settings.
+[2018-11-01 13:20:08.465763] [INFO] SMTP Server determined as 'smtp.mvqn.net' by UCRM Settings.
+[2018-11-01 13:20:08.474293] [INFO] SMTP Port determined as '25' by UCRM Settings.
+[2018-11-01 13:20:08.480177] [INFO] SMTP Encryption determined as 'none' by UCRM Settings.
+[2018-11-01 13:20:08.485837] [INFO] SMTP Authentication determined as 'none' by UCRM Settings.
+[2018-11-01 13:20:08.491625] [INFO] Verify SSL Certificate determined as 'yes' by UCRM Settings.
+[2018-11-01 13:20:08.497320] [INFO] SMTP Sender Email determined as 'info@mvqn.net' by UCRM Settings.
+[2018-11-01 13:20:08.503098] [INFO] Google API Key determined as 'AIzaSyBlnA9LaNLBTuWzVlWIeXW9MhCYNP-z9-0' by UCRM Settings.
+[2018-11-01 13:20:08.504425] [INFO] *** CONFIGURATION: END

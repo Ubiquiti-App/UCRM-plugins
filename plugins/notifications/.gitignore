@@ -1,0 +1,14 @@
+.idea/
+
+zip/data/config.json
+zip/data/plugin.log
+
+zip/vendor/
+zip/composer.lock
+zip/ucrm.json
+
+**/.cache/
+
+.env
+
+zip/test.php
