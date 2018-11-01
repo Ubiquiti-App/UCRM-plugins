@@ -20,6 +20,12 @@ versions of UCRM.
 only the events for which you want notifications sent.  See currently "Supported Events" below.
 5. Your all set!
 
+##### NOTES
+- Notification links will be build using settings in the following order:
+    - Settings: Server Domain Name
+    - Settings: Server IP
+    - "http://localhost"
+- A static Google Maps image will be embedded in HTML notifications only when a Google Maps API Key is set in the UCRM.
 
 ## Configuration
 
