@@ -42,25 +42,25 @@
             "key": "invoiceRecipients",
             "label": "Invoice Recipients",
             "description": "A comma separated list of email addresses to which Invoice notifications should be sent.",
-            "required": 1
+            "required": 0
         },
         {
             "key": "paymentRecipients",
             "label": "Payment Recipients",
             "description": "A comma separated list of email addresses to which Payment notifications should be sent.",
-            "required": 1
+            "required": 0
         },
         {
             "key": "quoteRecipients",
             "label": "Quote Recipients",
             "description": "A comma separated list of email addresses to which Quote notifications should be sent.",
-            "required": 1
+            "required": 0
         },
         {
             "key": "serviceRecipients",
             "label": "Service Recipients",
             "description": "A comma separated list of email addresses to which Service notifications should be sent.",
-            "required": 1
+            "required": 0
         },
         {
             "key": "ticketRecipients",
@@ -72,13 +72,13 @@
             "key": "userRecipients",
             "label": "User Recipients",
             "description": "A comma separated list of email addresses to which User notifications should be sent.",
-            "required": 1
+            "required": 0
         },
         {
             "key": "webhookRecipients",
             "label": "Webhook Recipients",
             "description": "A comma separated list of email addresses to which Webhook notifications should be sent.",
-            "required": 1
+            "required": 0
         }
     ]
 }
