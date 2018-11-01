@@ -1,2 +1,9 @@
 # JetBrains IDE Project Folder(s)
 .idea/
+
+# Standard Plugin Ignores
+**/data/config.json
+**/data/plugin.log
+**/ucrm.json
+
+# Add other global ignores here...
