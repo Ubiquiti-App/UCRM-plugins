@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="notifications: www" type="PhpBuiltInWebServerConfigurationType" factoryName="PHP Built-in Web Server" singleton="true" document_root="$PROJECT_DIR$/plugins/notifications/zip">
-    <method v="2" />
-  </configuration>
-</component>
