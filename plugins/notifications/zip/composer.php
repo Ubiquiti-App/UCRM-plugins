@@ -12,8 +12,21 @@ use MVQN\UCRM\Plugins\Plugin;
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  */
 
+if($argc === 1)
+{
+    $usage = "\n".
+        "Usage:\n".
+        "    composer.php [create|bundle]\n";
+
+    die($usage);
+}
+
+$pluginPath = realpath(__DIR__."/../");
+$pluginName = baseName($pluginPath);
+
 // Handle the different command line arguments...
-switch ($argv[1]) {
+switch ($argv[1])
+{
     // Perform initialization of the Plugin libraries and create the auto-generated Settings class.
     case "create":
         Plugin::initialize(__DIR__);
@@ -23,7 +36,7 @@ switch ($argv[1]) {
     // Bundle the 'zip/' directory into a package ready for Plugin installation on the UCRM server.
     case "bundle":
         Plugin::initialize(__DIR__);
-        Plugin::bundle(__DIR__, "notifications", __DIR__ . "/.zipignore", __DIR__ . "/../");
+        Plugin::bundle(__DIR__, $pluginName, __DIR__."/.zipignore", __DIR__."/../");
         break;
 
     // TODO: More commands to come!
