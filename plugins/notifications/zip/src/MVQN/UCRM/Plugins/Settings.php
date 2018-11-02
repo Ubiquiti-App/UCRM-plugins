@@ -9,13 +9,13 @@ namespace MVQN\UCRM\Plugins;
  * @method static bool|null getSmtpUseHTML()
  * @method static string|null getClientTypes()
  * @method static string getClientRecipients()
- * @method static string getInvoiceRecipients()
- * @method static string getPaymentRecipients()
- * @method static string getQuoteRecipients()
- * @method static string getServiceRecipients()
+ * @method static string|null getInvoiceRecipients()
+ * @method static string|null getPaymentRecipients()
+ * @method static string|null getQuoteRecipients()
+ * @method static string|null getServiceRecipients()
  * @method static string getTicketRecipients()
- * @method static string getUserRecipients()
- * @method static string getWebhookRecipients()
+ * @method static string|null getUserRecipients()
+ * @method static string|null getWebhookRecipients()
  */
 final class Settings extends SettingsBase
 {
@@ -54,25 +54,25 @@ final class Settings extends SettingsBase
 
 	/**
 	 * Invoice Recipients
-	 * @var string A comma separated list of email addresses to which Invoice notifications should be sent.
+	 * @var string|null A comma separated list of email addresses to which Invoice notifications should be sent.
 	 */
 	protected static $invoiceRecipients;
 
 	/**
 	 * Payment Recipients
-	 * @var string A comma separated list of email addresses to which Payment notifications should be sent.
+	 * @var string|null A comma separated list of email addresses to which Payment notifications should be sent.
 	 */
 	protected static $paymentRecipients;
 
 	/**
 	 * Quote Recipients
-	 * @var string A comma separated list of email addresses to which Quote notifications should be sent.
+	 * @var string|null A comma separated list of email addresses to which Quote notifications should be sent.
 	 */
 	protected static $quoteRecipients;
 
 	/**
 	 * Service Recipients
-	 * @var string A comma separated list of email addresses to which Service notifications should be sent.
+	 * @var string|null A comma separated list of email addresses to which Service notifications should be sent.
 	 */
 	protected static $serviceRecipients;
 
@@ -84,13 +84,13 @@ final class Settings extends SettingsBase
 
 	/**
 	 * User Recipients
-	 * @var string A comma separated list of email addresses to which User notifications should be sent.
+	 * @var string|null A comma separated list of email addresses to which User notifications should be sent.
 	 */
 	protected static $userRecipients;
 
 	/**
 	 * Webhook Recipients
-	 * @var string A comma separated list of email addresses to which Webhook notifications should be sent.
+	 * @var string|null A comma separated list of email addresses to which Webhook notifications should be sent.
 	 */
 	protected static $webhookRecipients;
 }
