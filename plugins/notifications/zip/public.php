@@ -1,18 +1,17 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . "/vendor/autoload.php";
-
-use MVQN\Localization\Translator;
+require_once __DIR__."/bootstrap.php";
 
 use MVQN\REST\UCRM\Endpoints\WebhookEvent;
 
 use MVQN\UCRM\Plugins\Log;
 use MVQN\UCRM\Plugins\Config;
 use MVQN\UCRM\Plugins\Settings;
-use MVQN\UCRM\Plugins\Plugin;
-use MVQN\UCRM\Plugins\Events\ClientEvent;
-use MVQN\UCRM\Plugins\Events\TicketEvent;
-use MVQN\UCRM\Plugins\Events\TicketCommentEvent;
+
+use MVQN\UCRM\Plugins\Controllers\EmailActionResult;
+use MVQN\UCRM\Plugins\Controllers\ClientEventController;
+use MVQN\UCRM\Plugins\Controllers\TicketEventController;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -27,37 +26,25 @@ use PHPMailer\PHPMailer\Exception;
  *
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  */
-(function()
+(function() use ($twig)
 {
-    // Include the bootstrap.php configuration and setup file.
-    require __DIR__."/bootstrap.php";
-
     // Parse the input received from Webhook events.
     $data = file_get_contents("php://input");
-    Log::write("RECEIVED: ".$data);
+    //Log::write("RECEIVED: ".$data);
 
     // Parse the JSON payload into an array for further handling.
     $dataArray = json_decode($data, true);
 
-    // IF the array/payload is empty...
-    if (!$dataArray) {
-        // THEN return a "Bad Request" response and skip this event!
-        http_response_code(400);
-        Log::write("SKIPPING: The Webhook Event payload was empty!\n".$data);
-        die("The Webhook Event payload was empty!\n".$data);
-    }
+    // IF the array/payload is empty, THEN return a "Bad Request" response and skip this event!
+    if (!$dataArray)
+        Log::http("The Webhook Event payload was empty!\n$data", 400);
 
     // Attempt to get the UUID from the payload.
     $uuid = array_key_exists("uuid", $dataArray) ? $dataArray["uuid"] : "";
 
-    // IF the data does not include a valid UUID...
+    // IF the data does not include a valid UUID, THEN return a "Bad Request" response and skip this event!
     if (!$uuid)
-    {
-        // THEN return a "Bad Request" response and skip this event!
-        http_response_code(400);
-        Log::write("SKIPPING: The Webhook Event payload did not contain a valid UUID field!\n$data");
-        die("The Webhook Event payload did not contain a valid UUID field!\n$data");
-    }
+        Log::http("The Webhook Event payload did not contain a valid UUID field!\n$data", 400);
 
     // OTHERWISE, attempt to get the Webhook Event from the UCRM system for validation...
     $event = WebhookEvent::getByUuid($uuid);
@@ -65,7 +52,7 @@ use PHPMailer\PHPMailer\Exception;
     // IF the Webhook Event exists in the UCRM...
     if ($event->getUuid() === $uuid)
     {
-        // THEN we should be good to continue!
+        // THEN we should be good to continue, as this is our verification of a valid event!
 
         // Get the individual values from the payload.
         $changeType = $dataArray["changeType"]; // edit
@@ -73,112 +60,128 @@ use PHPMailer\PHPMailer\Exception;
         $entityId = $dataArray["entityId"]; // 1
         $eventName = $dataArray["eventName"]; // client.edit
 
-        $results = [
-            "html" => "",
-            "text" => "",
-            "recipients" => [],
-            "subject" => ""
-        ];
+        // Create a new EmailActionResult to store our rendered template and other data.
+        $result = new EmailActionResult();
 
         // Handle the different Webhook Event types...
-        switch ($entityType) {
+        switch ($entityType)
+        {
             case "client":
-                // Instantiate a new ClientEvent.
-                $clientEvent = new ClientEvent($twig);
-
-                switch ($eventName)
+                // Instantiate a new EventController and determine the correct type of action to take...
+                $controller =               new ClientEventController($twig);
+                switch ($changeType)
                 {
-                    case "client.add":
-                        $results = $clientEvent->event("add", $entityId);
-                        break;
-                    case "client.archive":
-                        $results = $clientEvent->event("archive", $entityId);
-                        break;
-                    // TODO: The Client at this point no longer exists, so how should we handle the notification???
-                    // NOTE: Check with UBNT about firing this event before the client is actually deleted!
-                    //case "client.delete":
-                    //    $results = $clientEvent->event("delete", $entityId);
-                    //    break;
-                    case "client.edit":
-                        $results = $clientEvent->event("edit", $entityId);
-                        break;
-                    case "client.invite":
-                        $results = $clientEvent->event("invite", $entityId);
-                        break;
+                    case "add":             $result = $controller->action("add", $entityId);                    break;
+                    case "archive":         $result = $controller->action("archive", $entityId);                break;
+                    case "delete":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "edit":            $result = $controller->action("edit", $entityId);                   break;
+                    case "invite":          $result = $controller->action("invite", $entityId);                 break;
+                    default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                }   break;
 
-                    default:
-                        http_response_code(200);
-                        Log::write("SKIPPING: The Webhook Event: '$eventName' is not currently supported!");
-                        die("The Webhook Event: '$eventName' is not currently supported!");
-                        break;
-                }
-                break;
+            case "invoice":
+                // Instantiate a new EventController and determine the correct type of action to take...
+                //$controller =             new InvoiceEventController($twig);
+                switch ($changeType)
+                {
+                    case "add":             Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "add_draft":       Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "delete":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "edit":            Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "near_due":        Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "overdue":         Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                }   break;
+
+            case "payment":
+                // Instantiate a new EventController and determine the correct type of action to take...
+                //$controller =             new PaymentEventController($twig);
+                switch ($changeType)
+                {
+                    case "add":             Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "delete":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "edit":            Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "unmatch":         Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                }   break;
+
+            case "quote":
+                // Instantiate a new EventController and determine the correct type of action to take...
+                //$controller =             new QuoteEventController($twig);
+                switch ($changeType)
+                {
+                    case "add":             Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "delete":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "edit":            Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                }   break;
+
+            case "service":
+                // Instantiate a new EventController and determine the correct type of action to take...
+                //$controller =             new ServiceEventController($twig);
+                switch ($changeType)
+                {
+                    case "add":             Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "archive":         Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "edit":            Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "end":             Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "postpone":        Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "suspend":         Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "suspend_cancel":  Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                }   break;
+
+            case "ticket":
+                // Instantiate a new EventController and determine the correct type of action to take...
+                $controller =               new TicketEventController($twig);
+                switch ($changeType)
+                {
+                    case "add":             $result = $controller->action("add", $entityId);                    break;
+                    case "delete":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "edit":            $result = $controller->action("edit", $entityId);                   break;
+                    case "status_change":   $result = $controller->action("status_change", $entityId);          break;
+                    default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                }   break;
 
             case "ticketComment":
-                $ticketCommentEvent = new TicketCommentEvent($twig);
-
-                switch ($eventName)
+                // Instantiate a new EventController and determine the correct type of action to take...
+                $controller =               new TicketEventController($twig);
+                switch ($changeType)
                 {
-                    case "ticket.comment":
-                        $results = $ticketCommentEvent->event("comment", $entityId);
-                        break;
+                    case "comment":         $result = $controller->action("comment", $entityId);                break;
+                    default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                }   break;
 
-                    default:
-                        http_response_code(200);
-                        Log::write("SKIPPING: The Webhook Event: '$eventName' is not currently supported!");
-                        die("The Webhook Event: '$eventName' is not currently supported!");
-                        break;
-                }
-                break;
-
-                break;
-            case "ticket":
-
-
-                $ticketEvent = new TicketEvent($twig);
-
-                switch ($eventName)
+            case "user":
+                // Instantiate a new EventController and determine the correct type of action to take...
+                //$controller =             new UserEventController($twig);
+                switch ($changeType)
                 {
-                    case "ticket.add":
-                        $results = $ticketEvent->event("add", $entityId);
-                        break;
-                    //case "ticket.comment":
-                    //    $results = $ticketEvent->event("comment", $entityId);
-                    //    break;
-                    // TODO: The Ticket at this point no longer exists, so how should we handle the notification???
-                    // NOTE: Check with UBNT about firing this event before the client is actually deleted!
-                    //case "ticket.delete":
-                    //    $results = $ticketEvent->event("delete", $entityId);
-                    //    break;
-                    case "ticket.edit":
-                        $results = $ticketEvent->event("edit", $entityId);
-                        break;
-                    case "ticket.status_change":
-                        $results = $ticketEvent->event("status_change", $entityId);
-                        break;
+                    case "reset_password":  Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                }   break;
 
-                    default:
-                        http_response_code(200);
-                        Log::write("SKIPPING: The Webhook Event: '$eventName' is not currently supported!");
-                        die("The Webhook Event: '$eventName' is not currently supported!");
-                        break;
-                }
-                break;
+            case "webhook":
+                // Instantiate a new EventController and determine the correct type of action to take...
+                //$controller =             new WebhookEventController($twig);
+                switch ($changeType)
+                {
+                    case "test":            Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                }   break;
 
-
-            // TODO: Add the other event types as needed!!!
-
-            default:
-                http_response_code(200);
-                Log::write("SKIPPING: The Webhook Event Type: '$entityType' is not currently supported!");
-                die("The Webhook Event Type: '$entityType' is not currently supported!");
+            default:                        Log::http("The Entity: '$entityType' is not supported!", 501);      break;
         }
 
-        // Initialize an instance of the mailer!
-        $mail = new PHPMailer(true);
+        // DEBUG: Echo any debug messages to the Webhook Request Log...
+        $result->echoDebug();
 
         // Setup the mailer for our use here...
-        try {
+        try
+        {
+            // Initialize an instance of the mailer!
+            $mail = new PHPMailer(true);
+
             //$mail->SMTPDebug = 2;
             $mail->isSMTP();
             $mail->Host = Config::getSmtpHost();
@@ -190,15 +193,12 @@ use PHPMailer\PHPMailer\Exception;
             $mail->Port = Config::getSmtpPort();
             $mail->setFrom(Config::getSmtpSenderEmail());
 
-            if(is_array($results["debug"]))
-                print_r($results["debug"]);
-            else
-                echo $results["debug"]."\n";
+
 
             //echo Settings::getTicketRecipients()."\n";
             //echo count($results["recipients"])."\n";
 
-            foreach ($results["recipients"] as $email)
+            foreach ($result->recipients as $email)
             {
                 //echo "$email\n";
                 $mail->addAddress($email);
@@ -215,9 +215,9 @@ use PHPMailer\PHPMailer\Exception;
             //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');
 
             $mail->isHTML(Settings::getSmtpUseHTML());
-            $mail->Subject = $results["subject"];
-            $mail->Body = $results["html"];
-            $mail->AltBody = $results["text"];
+            $mail->Subject = $result->subject;
+            $mail->Body = $result->html;
+            $mail->AltBody = $result->text;
 
             // Finally, attempt to send the message!
             $mail->send();

@@ -76,8 +76,6 @@ final class Config extends AutoObject
      */
     public static function __beforeFirstStaticCall(): bool
     {
-        Log::info("*** CONFIGURATION: START");
-
         // =============================================================================================================
         // ENVIRONMENT
         // =============================================================================================================
@@ -122,77 +120,57 @@ final class Config extends AutoObject
         // LANGUAGE/LOCALE
         $option = $options->where("code", "APP_LOCALE")->first();
         self::$language = $option->getValue();
-        Log::info("Locale was determined as '" . self::$language . "' by UCRM Settings.");
+
 
         // SMTP TRANSPORT
         $option = $options->where("code", "MAILER_TRANSPORT")->first();
         self::$smtpTransport = $option->getValue();
-        Log::info("Transport Type determined as '" . self::$smtpTransport . "' by UCRM Settings.");
-
-        //if (self::$smtpTransport !== "smtp")
-        //    Log::error("Only SMTP transport is currently supported!", \Exception::class);
 
         // SMTP USERNAME
         $option = $options->where("code", "MAILER_USERNAME")->first();
         self::$smtpUsername = $option->getValue();
-        Log::info("SMTP Username determined as '" . self::$smtpUsername . "' by UCRM Settings.");
 
         // SMTP PASSWORD
         $option = $options->where("code", "MAILER_PASSWORD")->first();
         self::$smtpPassword = $option->getValue() !== "" ? Plugin::decrypt($option->getValue(), $cryptoKey) : null;
-        //Log::info("SMTP Password determined as '$smtpPassword' by UCRM Settings.");
 
-        if (self::$smtpPassword !== null && self::$smtpPassword !== "")
-            Log::info("SMTP Password successfully decrypted from UCRM Settings.");
-        else
+        if (self::$smtpPassword === null || self::$smtpPassword === "")
             Log::error("SMTP Password could not be determined by UCRM Settings!", \Exception::class);
 
         // SMTP HOST
         $option = $options->where("code", "MAILER_HOST")->first();
         self::$smtpHost = self::$smtpTransport === "gmail" ? "smtp.gmail.com" : $option->getValue();
-        Log::info("SMTP Server determined as '" . self::$smtpHost . "' by UCRM Settings.");
 
         // SMTP PORT
         $option = $options->where("code", "MAILER_PORT")->first();
         self::$smtpPort = self::$smtpTransport === "gmail" ? "587" : $option->getValue();
-        Log::info("SMTP Port determined as '" . self::$smtpPort . "' by UCRM Settings.");
 
         // SMTP ENCRYPTION
         $option = $options->where("code", "MAILER_ENCRYPTION")->first();
         // None = "", SSL = "ssl", TLS = "tls"
         self::$smtpEncryption = self::$smtpTransport === "gmail" ? "tls" : $option->getValue();
-        Log::info("SMTP Encryption determined as '" . (self::$smtpEncryption !== "" ? self::$smtpEncryption : "none") .
-            "' by UCRM Settings.");
 
         // SMTP AUTHENTICATION ( None = "", Plain = "plain", Login = "login", CRAM-MD5 = "cram-md5" )
         $option = $options->where("code", "MAILER_AUTH_MODE")->first();
         self::$smtpAuthentication = self::$smtpTransport === "gmail" ? "login" : $option->getValue(); //
-        Log::info("SMTP Authentication determined as '" . (self::$smtpAuthentication !== "" ? self::$smtpAuthentication
-            : "none") . "' by UCRM Settings.");
 
         // SMTP VERIFY SSL CERTIFICATE?
         $option = $options->where("code", "MAILER_VERIFY_SSL_CERTIFICATES")->first();
         self::$smtpVerifySslCertificate = (bool)$option->getValue();
-        Log::info("Verify SSL Certificate determined as '" . (self::$smtpVerifySslCertificate === 0 ? "no" : "yes") .
-            "' by UCRM Settings.");
 
         // SMTP SENDER ADDRESS
         $option = $options->where("code", "MAILER_SENDER_ADDRESS")->first();
         self::$smtpSenderEmail = $option->getValue();
-        Log::info("SMTP Sender Email determined as '" . self::$smtpSenderEmail . "' by UCRM Settings.");
 
         // GOOGLE API KEY
         $option = $options->where("code", "GOOGLE_API_KEY")->first();
         self::$googleApiKey = $option->getValue();
-        Log::info("Google API Key determined as '" . (self::$googleApiKey !== null ? self::$googleApiKey :
-            "<MISSING>") . "' by UCRM Settings.");
 
-        Log::info("*** CONFIGURATION: END");
+        $properties = get_class_vars(Config::class);
+        $properties["smtpPassword"] = str_repeat("*", strlen($properties["smtpPassword"]));
+        Log::info("CONFIGURATION: ".json_encode($properties, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 
         return true;
-
     }
-
-
 
 }

@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
-require_once __DIR__ . "/vendor/autoload.php";
+require_once __DIR__."/vendor/autoload.php";
 
 use MVQN\Localization\Translator;
 use MVQN\REST\RestClient;
 
-use MVQN\UCRM\Plugins\Log;
 use MVQN\UCRM\Plugins\Plugin;
 use MVQN\UCRM\Plugins\Config;
 use MVQN\UCRM\Plugins\Settings;

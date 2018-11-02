@@ -1,4 +1,5 @@
 <?php
+/** @noinspection SpellCheckingInspection */
 declare(strict_types=1);
 
 namespace MVQN\UCRM\Plugins;
@@ -31,7 +32,7 @@ final class Settings extends SettingsBase
 	/** @const string The publicly accessible URL of this UCRM, null if not configured in UCRM. */
 	public const UCRM_PUBLIC_URL = 'http://ucrm.dev.mvqn.net/';
 
-	/** @const string An automatically generated UCRM API 'App Key' with read/write access. */
+    /** @const string An automatically generated UCRM API 'App Key' with read/write access. */
 	public const PLUGIN_APP_KEY = '4LOxNWuUXlvk26C3puUrVcZU/wPK3jtmrytqY84JKN/Al7XmFAlN3nJ86Gp2wNU2';
 
 	/**
@@ -78,7 +79,7 @@ final class Settings extends SettingsBase
 
 	/**
 	 * Ticket Recipients
-	 * @var string A comma separated list of email addresses to which Ticket notifications should be sent.
+	 * @var string A comma separated list of email addresses to which Ticket notifications should be sent.  Currently Supported Variables: %TICKET_ASSIGNED_USER%
 	 */
 	protected static $ticketRecipients;
 
