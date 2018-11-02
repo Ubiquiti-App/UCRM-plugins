@@ -1,9 +1,8 @@
 
-zip/vendor/
-zip/composer.lock
+src/vendor/
 
 **/.cache/
 
 .env
 
-
+src/test.php
