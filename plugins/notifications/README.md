@@ -111,6 +111,12 @@ Automatically compose and send an email notification upon the occurrence of any 
 - Client (add, archive, ~~delete~~, edit, invite) [html/text]
 - Ticket (add, comment, ~~delete~~, edit, status_change) [html/text]
 
+#### Localization
+All templates currently support ALL of the supported locales of UCRM. Currently, all of the translations have been 
+done by the Google Translations API, but I am hoping to get some reviews by fluent speakers on some of them soon.
+
+Please let me know if you are interested in assisting with translations. 
+
 #### Customization
 Allow for the customization of both HTML and TEXT templates to suit individual needs.
 
