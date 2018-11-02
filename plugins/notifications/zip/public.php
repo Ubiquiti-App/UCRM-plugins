@@ -142,9 +142,9 @@ use PHPMailer\PHPMailer\Exception;
                     case "ticket.add":
                         $results = $ticketEvent->event("add", $entityId);
                         break;
-                    case "ticket.comment":
-                        $results = $ticketEvent->event("comment", $entityId);
-                        break;
+                    //case "ticket.comment":
+                    //    $results = $ticketEvent->event("comment", $entityId);
+                    //    break;
                     // TODO: The Ticket at this point no longer exists, so how should we handle the notification???
                     // NOTE: Check with UBNT about firing this event before the client is actually deleted!
                     //case "ticket.delete":
@@ -190,8 +190,23 @@ use PHPMailer\PHPMailer\Exception;
             $mail->Port = Config::getSmtpPort();
             $mail->setFrom(Config::getSmtpSenderEmail());
 
+            if(is_array($results["debug"]))
+                print_r($results["debug"]);
+            else
+                echo $results["debug"]."\n";
+
+            //echo Settings::getTicketRecipients()."\n";
+            //echo count($results["recipients"])."\n";
+
             foreach ($results["recipients"] as $email)
+            {
+                //echo "$email\n";
                 $mail->addAddress($email);
+            }
+
+            //echo "*** ";
+            //echo print_r($mail->getToAddresses());
+            //echo "\n";
 
             $mail->addReplyTo(Config::getSmtpSenderEmail());
 
