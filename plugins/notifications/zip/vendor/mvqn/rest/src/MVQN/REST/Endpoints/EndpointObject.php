@@ -277,13 +277,16 @@ abstract class EndpointObject extends RestObject
     /**
      * Sends an HTTP GET Request using the calling class's annotated information, for a single object, given the ID.
      *
-     * @param int $id The ID of the EndpointObject for which to retrieve.
+     * @param int|null $id The ID of the EndpointObject for which to retrieve.
      * @return EndpointObject|null Returns the EndpointObject, or NULL if the object can not be found with this ID.
      *
      * @throws \Exception
      */
-    public static function getById(int $id): ?EndpointObject
+    public static function getById(?int $id): ?EndpointObject
     {
+        if($id === null)
+            return null;
+
         // Get a reference to the type of EndpointObject calling this function.
         $class = get_called_class();
 
