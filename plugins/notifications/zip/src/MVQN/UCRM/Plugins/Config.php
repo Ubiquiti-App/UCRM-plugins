@@ -129,8 +129,8 @@ final class Config extends AutoObject
         self::$smtpTransport = $option->getValue();
         Log::info("Transport Type determined as '" . self::$smtpTransport . "' by UCRM Settings.");
 
-        if (self::$smtpTransport !== "smtp")
-            Log::error("Only SMTP transport is currently supported!", \Exception::class);
+        //if (self::$smtpTransport !== "smtp")
+        //    Log::error("Only SMTP transport is currently supported!", \Exception::class);
 
         // SMTP USERNAME
         $option = $options->where("code", "MAILER_USERNAME")->first();
@@ -149,23 +149,24 @@ final class Config extends AutoObject
 
         // SMTP HOST
         $option = $options->where("code", "MAILER_HOST")->first();
-        self::$smtpHost = $option->getValue();
+        self::$smtpHost = self::$smtpTransport === "gmail" ? "smtp.gmail.com" : $option->getValue();
         Log::info("SMTP Server determined as '" . self::$smtpHost . "' by UCRM Settings.");
 
         // SMTP PORT
         $option = $options->where("code", "MAILER_PORT")->first();
-        self::$smtpPort = $option->getValue();
+        self::$smtpPort = self::$smtpTransport === "gmail" ? "587" : $option->getValue();
         Log::info("SMTP Port determined as '" . self::$smtpPort . "' by UCRM Settings.");
 
         // SMTP ENCRYPTION
         $option = $options->where("code", "MAILER_ENCRYPTION")->first();
-        self::$smtpEncryption = $option->getValue(); // None = "", SSL = "ssl", TLS = "tls"
+        // None = "", SSL = "ssl", TLS = "tls"
+        self::$smtpEncryption = self::$smtpTransport === "gmail" ? "tls" : $option->getValue();
         Log::info("SMTP Encryption determined as '" . (self::$smtpEncryption !== "" ? self::$smtpEncryption : "none") .
             "' by UCRM Settings.");
 
         // SMTP AUTHENTICATION ( None = "", Plain = "plain", Login = "login", CRAM-MD5 = "cram-md5" )
         $option = $options->where("code", "MAILER_AUTH_MODE")->first();
-        self::$smtpAuthentication = $option->getValue(); //
+        self::$smtpAuthentication = self::$smtpTransport === "gmail" ? "login" : $option->getValue(); //
         Log::info("SMTP Authentication determined as '" . (self::$smtpAuthentication !== "" ? self::$smtpAuthentication
             : "none") . "' by UCRM Settings.");
 
