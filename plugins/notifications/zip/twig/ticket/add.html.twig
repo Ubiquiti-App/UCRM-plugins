@@ -40,6 +40,16 @@
                     {% if ticket.getStatus == 3 %}{{ "Solved"|translate }}{% endif %}
                 </div>
             </div>
+            {% if group %}
+                <div style="margin:0.5rem 1rem;">
+                    <div style="font-size:0.75rem;color:gray;font-style:italic">
+                        {{ "Assigned Group"|translate }}
+                    </div>
+                    <div style="">
+                        {{ group.getName }}
+                    </div>
+                </div>
+            {% endif %}
             {% if user %}
                 <div style="margin:0.5rem 1rem;">
                     <div style="font-size:0.75rem;color:gray;font-style:italic">
