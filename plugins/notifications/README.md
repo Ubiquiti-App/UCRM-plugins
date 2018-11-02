@@ -25,7 +25,8 @@ only the events for which you want notifications sent.  See currently "Supported
     - Settings: Server Domain Name
     - Settings: Server IP
     - "http://localhost"
-- A static Google Maps image will be embedded in HTML notifications only when a Google Maps API Key is set in the UCRM.
+- A static Google Maps image will be embedded in HTML notifications only when a Google Maps API Key (with Google 
+Maps Static API enabled) is set in the UCRM.
 - If SSL is not enabled on your UCRM system, make sure to set "Verify SSL Certificate" to "No" in the Webhook 
 Settings.  My recommendation is to leave the setting to "No" always, as the plugin is designed communicating with the
  server using 'localhost' and should not pose a security risk. 
@@ -89,6 +90,10 @@ Example: `rspaeth@mvqn.net`
 **Ticket Recipients**
 
 A comma separated list of email addresses to which Ticket notifications should be sent.
+
+Supported Variables:
+- `%TICKET_ASSIGNED_USER%`\
+Will also send an email to the Ticket's Assigned User, if one exists!
 
 Example: `rspaeth@mvqn.net`
 
