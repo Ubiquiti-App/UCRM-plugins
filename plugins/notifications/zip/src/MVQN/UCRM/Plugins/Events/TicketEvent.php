@@ -46,6 +46,7 @@ class TicketEvent
      * @param string $event
      * @param int $entityId
      * @return array
+     * @throws PluginNotInitializedException
      * @throws \MVQN\Localization\Exceptions\DictionaryException
      * @throws \MVQN\Localization\Exceptions\TranslatorException
      * @throws \Twig_Error_Loader
@@ -58,7 +59,8 @@ class TicketEvent
             "html" => "",
             "text" => "",
             "recipients" => [],
-            "subject" => ""
+            "subject" => "",
+            "debug" => ""
         ];
 
         /** @var Ticket $ticket */
@@ -98,11 +100,61 @@ class TicketEvent
         // Generate the TEXT version of the email, to be used as a fall back!
         $results["text"] = $this->twig->render("ticket/$event.text.twig", $viewData);
 
-        // Set the appropriate set of recipients for this notification.
-        if(Settings::getClientRecipients() !== "" && Settings::getClientRecipients() !== null)
-            $results["recipients"] = explode(",", Settings::getClientRecipients());
-        //else
-        //    $results["recipients"] = ["rspaeth@mvqn.net"];
+        $recipientsString = Settings::getTicketRecipients();
+
+        // IF the recipients list is not NULL and not empty...
+        if($recipientsString !== "" && $recipientsString !== null)
+        {
+            // THEN handle parsing the recipients.
+
+            // Split the list by commas and create the recipients array.
+            $recipients = array_map("trim", explode(",", $recipientsString));
+
+            // IF the recipients list does NOT contain any variables...
+            if(strpos($recipientsString, "%") !== false)
+            {
+                // OTHERWISE, we need to parse the variables also.
+
+                $results["recipients"] = [];
+
+                // Loop through each recipient in the list...
+                foreach($recipients as $recipient)
+                {
+                    $variable = preg_match("/^%(.+)%$/", $recipient, $matches);
+
+                    if($matches !== null && count($matches) > 0)
+                    {
+                        switch($matches[1])
+                        {
+                            case "TICKET_ASSIGNED_USER":
+                                $results["recipients"][] = $user->getEmail(); // Email is a required field of User!
+                                break;
+
+                            // TODO: Add other variables as needed!
+
+                            default:
+                                Log::warning("An unknown variable '{$matches[1]}' was encountered in the Ticket "
+                                    ."Recipients field of the plugin Settings!");
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        $results["recipients"][] = $recipient;
+                    }
+
+                }
+
+            }
+            else
+            {
+                // THEN simply provide the recipients array!
+                $results["recipients"][] = $recipients;
+                //$results["debug"] = "NONE";
+            }
+
+
+        }
 
         // Set the appropriate subject line for this notification.
         $subject = "Ticket";
