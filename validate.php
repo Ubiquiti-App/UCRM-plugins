@@ -1,15 +1,5 @@
 <?php
 
-function findPluginDirectories(): Traversable
-{
-    return new CallbackFilterIterator(
-        new DirectoryIterator(__DIR__ . '/plugins'),
-        function (DirectoryIterator $fileInfo) {
-            return $fileInfo->isDir() && ! $fileInfo->isDot();
-        }
-    );
-}
-
 function ensureFileExists(string $file): int
 {
     if (! file_exists($file)) {
@@ -78,8 +68,6 @@ function validateManifest(string $file): int
     $errors += ensureArrayKeyExists($manifest, 'information', 'ucrmVersionCompliancy', 'min');
     $errors += ensureArrayKeyExists($manifest, 'information', 'author');
 
-
-
     return $errors;
 }
 
@@ -96,10 +84,35 @@ function validatePlugin(SplFileInfo $pluginDirectory): int
     return $errors;
 }
 
+function checkPluginsJson(): int
+{
+    ob_start();
+    require __DIR__ . '/generate-json.php';
+    $correctJson = ob_get_clean();
+
+    $currentJson = file_get_contents(__DIR__ . '/plugins.json');
+
+    if (json_decode($currentJson, true) === json_decode($correctJson, true)) {
+        return 0;
+    }
+
+    printf('The "plugins.json" file is not up to date. Run `php generate-json.php > plugins.json` to update it.' . PHP_EOL);
+    return 1;
+}
+
+$pluginDirectories = new CallbackFilterIterator(
+    new DirectoryIterator(__DIR__ . '/plugins'),
+    function (DirectoryIterator $fileInfo) {
+        return $fileInfo->isDir() && ! $fileInfo->isDot();
+    }
+);
+
 $errors = 0;
-foreach (findPluginDirectories() as $directory) {
+foreach ($pluginDirectories as $directory) {
     $errors += validatePlugin($directory);
 }
+
+$errors += checkPluginsJson();
 
 printf('Found %d errors.' . PHP_EOL, $errors);
 

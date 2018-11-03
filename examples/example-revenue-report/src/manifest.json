@@ -1,0 +1,23 @@
+{
+  "version": "1",
+  "information": {
+    "name": "example-revenue-report",
+    "displayName": "[Example] Revenue report",
+    "description": "This is a sample UCRM plugin showcasing a custom link in menu and security checks.",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins/examples/example-revenue-report",
+    "version": "1.0.0",
+    "ucrmVersionCompliancy": {
+      "min": "2.14.0-beta2",
+      "max": null
+    },
+    "author": "Ubiquiti Networks, Inc."
+  },
+  "menu": [
+    {
+      "key": "Reports",
+      "label": "Revenue report",
+      "type": "admin",
+      "target": "iframe"
+    }
+  ]
+}
