@@ -184,17 +184,7 @@ use PHPMailer\PHPMailer\Exception;
         // DEBUG: Echo any debug messages to the Webhook Request Log...
         if($verboseDebug)
         {
-
-            //echo $results[0]->debug["lastActivity"]."\n";
-            //print_r($results);
-            //$results["0"]->echoDebug();
-            //$results["1"]->echoDebug();
-            //echo $results[0]->subject."\n";
-            //print_r($results[0]->recipients);
-
-            //echo $results[1]->subject."\n";
-            //print_r($results[1]->recipients);
-            //print_r($results);
+            print_r($results);
         }
 
         // Setup the mailer for our use here...
