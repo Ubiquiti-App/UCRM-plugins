@@ -1,0 +1,16 @@
+{# Google Static Map w/ Marker #}
+{% if googleMapsApiKey != "" and client.getAddressGpsLat != "" and client.getAddressGpsLon != ""  %}
+<h5>{{ "Location"|translate }}</h5>
+<div id="map">
+    {% set mapCenter = "center=" ~ client.getAddressGpsLat ~ "," ~ client.getAddressGpsLon %}
+    {% set mapZoom = "zoom=14" %}
+    {% set mapType = "maptype=roadmap" %}
+    {% set mapSize = "size=640x480" %}
+    {% set mapMarker = "markers=color:green|" ~ client.getAddressGpsLat ~ "," ~ client.getAddressGpsLon %}
+
+    {% set mapUrl = "https://maps.googleapis.com/maps/api/staticmap?" %}
+    {% set mapQuery = [ mapCenter, mapZoom, mapType, mapSize, mapMarker, "key=" ~ googleMapsApiKey ] %}
+
+    <img src="{{ mapUrl }}{{ mapQuery|join("&") }}"/>
+</div>
+{% endif %}

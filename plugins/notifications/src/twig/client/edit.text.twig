@@ -1,43 +1,10 @@
 {% set EOL = "\r\n" %}
 {% set TAB = "    " %}
 {% set PAD = "% -20.20s" %}
-{{ "Dear Sales Team,"|translate }}{{ EOL }}
+{% set datetimeFormat = "m/d/Y @ H:i:s" %}
+{{- "Dear Sales Team,"|translate }}{{ EOL }}
 {{- EOL -}}
-{% if client.getIsLead %}
-    {{- "The following Client Lead has been edited in your UCRM."|translate }}{{ EOL -}}
-{% else %}
-    {{- "The following Client has been edited in your UCRM."|translate }}{{ EOL -}}
-{% endif %}
+{{- "The following Client has been edited in the UCRM."|translate }}{{ EOL -}}
 {{- EOL -}}
 {# Client #}
-{{ "Client"|translate|upper }}{{ EOL -}}
-{# Client Type #}
-{% if client.getClientType == 2 %}{# Commercial #}
-    {{ TAB }}{{ PAD|format("Client Type"|translate) }}: {{ "Commercial"|translate }}{{ EOL -}}
-{% else %}{# Residential #}
-    {{ TAB }}{{ PAD|format("Client Type"|translate) }}: {{ "Residential"|translate }}{{ EOL -}}
-{% endif %}
-{# Client Name #}
-{% if client.getClientType == 2 %}{# Commercial #}
-    {{ TAB }}{{ PAD|format("Client Name"|translate) }}: {{ client.getCompanyName }}{{ " " }}
-    {{- "c/o" }} {{ client.getCompanyContactFirstName }} {{ client.getCompanyContactLastName }}{{ EOL -}}
-{% else %}{# Residential #}
-    {{ TAB }}{{ PAD|format("Client Name"|translate) }}: {{ client.getFirstName }} {{ client.getLastName }}{{ EOL -}}
-{% endif %}
-{# Client Address #}
-{{ TAB }}{{ PAD|format("Client Address"|translate) }}: {{ client.getStreet1}}{{ ", " }}
-    {%- if client.getStreet2 != "" %}{{ client.getStreet2}}{{ ", " }}{% endif %}
-    {{- client.getCity }}, {{ client.getState.getCode }} {{ client.getZipCode }}{{ ", " }}
-    {{- client.getCountry.getName }}{{ EOL -}}
-{# Client Link #}
-{% set _link = url ?? "http://localhost/" ~ "client/" ~ client.getId %}
-{{ TAB }}{{ PAD|format("Client Link"|translate) }}: {{ _link }}{{ EOL -}}
-{{- EOL -}}
-{# Client Contacts #}
-{{ "Contacts"|translate|upper }}{{ EOL -}}
-{% for contact in contacts %}
-    {{ TAB }}{{ PAD|format("Contact Name" |translate) }}: {{ contact.getName }}{{ EOL -}}
-    {{ TAB }}{{ PAD|format("Contact Phone"|translate) }}: {{ contact.getPhone }}{{ EOL -}}
-    {{ TAB }}{{ PAD|format("Contact Email"|translate) }}: {{ contact.getEmail }}{{ EOL -}}
-    {% if not loop.last %}{{ EOL }}{% endif %}
-{% endfor %}
+{% include "_partials/client.text.twig" %}

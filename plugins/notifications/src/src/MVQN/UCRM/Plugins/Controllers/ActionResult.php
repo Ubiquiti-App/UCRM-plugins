@@ -14,20 +14,23 @@ abstract class ActionResult
     /** @var string */
     public $html;
 
-    /** @var mixed */
+    /** @var array */
     public $debug;
+
+
 
     public function echoDebug(): void
     {
-        if($this->debug !== null && $this->debug !== "")
+        if($this->debug !== null && $this->debug !== [])
         {
-            if (is_array($this->debug))
-                print_r($this->debug);
-            else
-                echo $this->debug."\n";
+            foreach($this->debug as $entry)
+            {
+                if (is_array($entry))
+                    print_r($entry);
+                else
+                    echo $entry."\n";
+            }
         }
-
-
     }
 
 }

@@ -1,0 +1,70 @@
+.container
+{
+    margin: 1rem;
+    font-family: 'Helvetica Neue','Helvetica','Arial','sans-serif';
+    font-size: 16px;
+    line-height: 1.25rem;
+}
+
+p
+{
+    margin: 0 0 1rem;
+    padding: 0;
+}
+
+h5
+{
+    margin: 1.75rem 0 1rem;
+    font-size: 1.5rem;
+}
+
+.section-container
+{
+
+}
+
+.field-group
+{
+    margin: 0.5rem 1rem;
+}
+
+.field-label
+{
+    font-size: 0.75rem;
+    font-style:italic;
+    color:gray;
+}
+
+.field-value
+{
+
+}
+
+.contact
+{
+    border-left: 4px solid gray;
+    max-width: 3.5in;
+    min-width: 3.5in;
+}
+
+.contact-primary
+{
+    border-left: 4px solid blue;
+}
+
+.contact-group
+{
+    margin: 1rem 0.75rem;
+}
+
+#map
+{
+    margin: 1rem 0 0 0;
+    max-width: 640px;
+    min-width: 3.5in;
+}
+
+#map > img
+{
+    width: 100%;
+}

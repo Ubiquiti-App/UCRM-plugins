@@ -10,8 +10,10 @@ use MVQN\UCRM\Plugins\Config;
 use MVQN\UCRM\Plugins\Settings;
 
 use MVQN\UCRM\Plugins\Controllers\EmailActionResult;
+use MVQN\UCRM\Plugins\Controllers\DeleteEventController;
 use MVQN\UCRM\Plugins\Controllers\ClientEventController;
 use MVQN\UCRM\Plugins\Controllers\TicketEventController;
+use MVQN\UCRM\Plugins\Controllers\TicketCommentEventController;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -61,7 +63,9 @@ use PHPMailer\PHPMailer\Exception;
         $eventName = $dataArray["eventName"]; // client.edit
 
         // Create a new EmailActionResult to store our rendered template and other data.
-        $result = new EmailActionResult();
+        $results = []; //  new EmailActionResult();
+
+        $deleteController = new DeleteEventController($twig);
 
         // Handle the different Webhook Event types...
         switch ($entityType)
@@ -71,11 +75,11 @@ use PHPMailer\PHPMailer\Exception;
                 $controller =               new ClientEventController($twig);
                 switch ($changeType)
                 {
-                    case "add":             $result = $controller->action("add", $entityId);                    break;
-                    case "archive":         $result = $controller->action("archive", $entityId);                break;
-                    case "delete":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
-                    case "edit":            $result = $controller->action("edit", $entityId);                   break;
-                    case "invite":          $result = $controller->action("invite", $entityId);                 break;
+                    case "insert":          $results = $controller->action("add", $entityId);                   break;
+                    case "archive":         $results = $controller->action("archive", $entityId);               break;
+                    case "delete":          $results = $deleteController->action("client", $entityId);          break;
+                    case "edit":            $results = $controller->action("edit", $entityId);                  break;
+                    case "invitation":      $results = $controller->action("invite", $entityId);                break;
                     default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
                 }   break;
 
@@ -84,9 +88,9 @@ use PHPMailer\PHPMailer\Exception;
                 //$controller =             new InvoiceEventController($twig);
                 switch ($changeType)
                 {
-                    case "add":             Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "insert":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
                     case "add_draft":       Log::http("The Event: '$eventName' is not supported!", 501);        break;
-                    case "delete":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "delete":          $results = $deleteController->action("invoice", $entityId);         break;
                     case "edit":            Log::http("The Event: '$eventName' is not supported!", 501);        break;
                     case "near_due":        Log::http("The Event: '$eventName' is not supported!", 501);        break;
                     case "overdue":         Log::http("The Event: '$eventName' is not supported!", 501);        break;
@@ -98,8 +102,8 @@ use PHPMailer\PHPMailer\Exception;
                 //$controller =             new PaymentEventController($twig);
                 switch ($changeType)
                 {
-                    case "add":             Log::http("The Event: '$eventName' is not supported!", 501);        break;
-                    case "delete":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "insert":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "delete":          $results = $deleteController->action("payment", $entityId);         break;
                     case "edit":            Log::http("The Event: '$eventName' is not supported!", 501);        break;
                     case "unmatch":         Log::http("The Event: '$eventName' is not supported!", 501);        break;
                     default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
@@ -110,8 +114,8 @@ use PHPMailer\PHPMailer\Exception;
                 //$controller =             new QuoteEventController($twig);
                 switch ($changeType)
                 {
-                    case "add":             Log::http("The Event: '$eventName' is not supported!", 501);        break;
-                    case "delete":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "insert":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "delete":          $results = $deleteController->action("quote", $entityId);           break;
                     case "edit":            Log::http("The Event: '$eventName' is not supported!", 501);        break;
                     default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
                 }   break;
@@ -121,7 +125,7 @@ use PHPMailer\PHPMailer\Exception;
                 //$controller =             new ServiceEventController($twig);
                 switch ($changeType)
                 {
-                    case "add":             Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                    case "insert":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
                     case "archive":         Log::http("The Event: '$eventName' is not supported!", 501);        break;
                     case "edit":            Log::http("The Event: '$eventName' is not supported!", 501);        break;
                     case "end":             Log::http("The Event: '$eventName' is not supported!", 501);        break;
@@ -131,24 +135,24 @@ use PHPMailer\PHPMailer\Exception;
                     default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
                 }   break;
 
+            case "ticketComment":
+                // Instantiate a new EventController and determine the correct type of action to take...
+                $controller =               new TicketCommentEventController($twig);
+                switch ($changeType)
+                {
+                    case "comment":         $results = $controller->action("comment", $entityId);               break;
+                    default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
+                }   break;
+
             case "ticket":
                 // Instantiate a new EventController and determine the correct type of action to take...
                 $controller =               new TicketEventController($twig);
                 switch ($changeType)
                 {
-                    case "add":             $result = $controller->action("add", $entityId);                    break;
-                    case "delete":          Log::http("The Event: '$eventName' is not supported!", 501);        break;
-                    case "edit":            $result = $controller->action("edit", $entityId);                   break;
-                    case "status_change":   $result = $controller->action("status_change", $entityId);          break;
-                    default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
-                }   break;
-
-            case "ticketComment":
-                // Instantiate a new EventController and determine the correct type of action to take...
-                $controller =               new TicketEventController($twig);
-                switch ($changeType)
-                {
-                    case "comment":         $result = $controller->action("comment", $entityId);                break;
+                    case "insert":          $results = $controller->action("add", $entityId);                   break;
+                    case "delete":          $results = $deleteController->action("ticket", $entityId);          break;
+                    case "edit":            $results = $controller->action("edit", $entityId);                  break;
+                    case "status_change":   $results = $controller->action("status_change", $entityId);         break;
                     default:                Log::http("The Event: '$eventName' is not supported!", 501);        break;
                 }   break;
 
@@ -173,8 +177,25 @@ use PHPMailer\PHPMailer\Exception;
             default:                        Log::http("The Entity: '$entityType' is not supported!", 501);      break;
         }
 
+        $verboseDebug = Settings::getVerboseDebug();
+
+        echo "\n";
+
         // DEBUG: Echo any debug messages to the Webhook Request Log...
-        $result->echoDebug();
+        if($verboseDebug)
+        {
+
+            //echo $results[0]->debug["lastActivity"]."\n";
+            //print_r($results);
+            //$results["0"]->echoDebug();
+            //$results["1"]->echoDebug();
+            //echo $results[0]->subject."\n";
+            //print_r($results[0]->recipients);
+
+            //echo $results[1]->subject."\n";
+            //print_r($results[1]->recipients);
+            //print_r($results);
+        }
 
         // Setup the mailer for our use here...
         try
@@ -182,7 +203,10 @@ use PHPMailer\PHPMailer\Exception;
             // Initialize an instance of the mailer!
             $mail = new PHPMailer(true);
 
-            //$mail->SMTPDebug = 2;
+            //$mail->Debugoutput = "echo";
+            //if($verboseDebug)
+            //    $mail->SMTPDebug = 2;
+
             $mail->isSMTP();
             $mail->Host = Config::getSmtpHost();
             $mail->SMTPAuth = true;
@@ -192,47 +216,44 @@ use PHPMailer\PHPMailer\Exception;
                 $mail->SMTPSecure = Config::getSmtpEncryption();
             $mail->Port = Config::getSmtpPort();
             $mail->setFrom(Config::getSmtpSenderEmail());
-
-
-
-            //echo Settings::getTicketRecipients()."\n";
-            //echo count($results["recipients"])."\n";
-
-            foreach ($result->recipients as $email)
-            {
-                //echo "$email\n";
-                $mail->addAddress($email);
-            }
-
-            //echo "*** ";
-            //echo print_r($mail->getToAddresses());
-            //echo "\n";
-
             $mail->addReplyTo(Config::getSmtpSenderEmail());
 
-            //Attachments
-            //$mail->addAttachment('/var/tmp/file.tar.gz');
-            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');
-
             $mail->isHTML(Settings::getSmtpUseHTML());
-            $mail->Subject = $result->subject;
-            $mail->Body = $result->html;
-            $mail->AltBody = $result->text;
 
-            // Finally, attempt to send the message!
-            $mail->send();
+
+            foreach($results as $result)
+            {
+                if($result->recipients === [])
+                    continue;
+
+                $mail->clearAddresses();
+
+                print_r($result->recipients);
+
+                foreach ($result->recipients as $email)
+                    $mail->addAddress($email);
+
+                $mail->Subject = $result->subject;
+                $mail->Body = $result->html;
+                $mail->AltBody = $result->text;
+
+                // Finally, attempt to send the message!
+                $mail->send();
+            }
+
+            if($verboseDebug)
+                echo "\n";
 
             // IF we've made it this far, the message should have sent successfully, notify the system.
-            http_response_code(200);
-            Log::write("SUCCESS : A valid Webhook Event was received and a notification message sent successfully!");
-            die("A valid Webhook Event was received and a notification message sent successfully!");
+            Log::http("A valid Webhook Event was received and a notification message sent successfully!", 200);
         }
         catch (Exception $e)
         {
+            if($verboseDebug)
+                echo "\n";
+
             // OTHERWISE, something went wrong, so notify the system of failure.
-            http_response_code(400);
-            Log::write("ERROR   : Message could not be sent, Mailer Error: '{$mail->ErrorInfo}'");
-            die("Message could not be sent, Mailer Error: '{$mail->ErrorInfo}'");
+            Log::http("A valid Webhook Event was received and a notification message sent successfully!\n{$mail->ErrorInfo}", 400);
         }
     }
 

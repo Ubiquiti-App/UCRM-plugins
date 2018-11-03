@@ -1,0 +1,100 @@
+{% if client %}
+<h5>{{ "Client"|translate }}</h5>
+<div class="section-container">
+    {# Client Type #}
+    <div class="field-group">
+        <div class="field-label">{{ "Client Type"|translate }}</div>
+        <div class="field-value">
+            {{ (client.getClientType == 2 ? "Commercial" : "Residential")|translate }}
+        </div>
+    </div>
+    {# Client Name #}
+    <div class="field-group">
+        <div class="field-label">{{ "Client Name"|translate }}</div>
+        <div class="field-value">
+            {% if client.getClientType == 2 %}
+                {# Commercial #}
+                {{ client.getCompanyName }}<br/>
+                {{ "c/o" }} {{ client.getCompanyContactFirstName }} {{ client.getCompanyContactLastName }}
+            {% else %}
+                {# Residential #}
+                {{ client.getFirstName }} {{ client.getLastName }}
+            {% endif %}
+        </div>
+    </div>
+    {# Client Address #}
+    <div class="field-group">
+        <div class="field-label">{{ "Client Address"|translate }}</div>
+        <div class="field-value">
+            {{ client.getStreet1 }}<br/>
+            {% if client.getStreet2 != "" %}{{ client.getStreet2 }}<br/>{% endif %}
+            {{ client.getCity }}, {{ client.getState.getCode }} &nbsp;{{ client.getZipCode }}<br/>
+            {{ client.getCountry.getName }}
+        </div>
+    </div>
+    {# Client Link #}
+    <div class="field-group">
+        <div class="field-label">{{ "Client Link"|translate }}</div>
+        <div class="field-value">
+            {# URLs do not seem to be translated! #}
+            {% set _link = url ?? "http://localhost/" ~ "client/" ~ client.getId %}
+            <strong><a href="{{ _link }}" target="_blank">{{ _link }}</a></strong>
+        </div>
+    </div>
+</div>
+
+{% if contacts %}
+<h5>{{ "Contacts"|translate }}</h5>
+<div class="section-container">
+    {% for contact in contacts %}
+    <div class="contact{{ loop.first ? " contact-primary" : "" }}">
+        {# Contact Name #}
+        <div class="contact-group">
+            <div class="field-label">{{ "Contact Name"|translate }}</div>
+            <div class="field-value">
+                {% if loop.first and contact.getName == "" %}
+                    {% if client.getClientType == 2 %}
+                        {# Commercial #}
+                        {{ client.getCompanyName }}<br/>
+                        {{ "c/o" }} {{ client.getCompanyContactFirstName }} {{ client.getCompanyContactLastName }}
+                    {% else %}
+                        {# Residential #}
+                        {{ client.getFirstName }} {{ client.getLastName }}
+                    {% endif %}
+                {% else %}
+                    {{ contact.getName }}
+                {% endif %}
+            </div>
+        </div>
+        {# Contact Phone #}
+        <div class="contact-group">
+            <div class="field-label">
+                {{ "Contact Phone"|translate }}
+            </div>
+            <div class="field-value">
+                {% if contact.getPhone != "" %}
+                    {% set _compact = contact.getPhone|replace({"(":"", ")":"", "-":"", " ":""}) %}
+                    {% set _phone = _compact|split("x")[0] %}
+                    <a href="tel:{{ _phone }}">{{ contact.getPhone }}</a>
+                {% else %}
+                    {{ "None Provided"|translate }}
+                {% endif %}
+            </div>
+        </div>
+        {# Contact Email #}
+        <div class="contact-group">
+            <div class="field-label">{{ "Contact Email"|translate }}</div>
+            <div class="field-value">
+                {% if contact.getEmail != "" %}
+                    <a href="mailto:{{ contact.getEmail }}">{{ contact.getEmail }}</a>
+                {% else %}
+                    {{ "None Provided"|translate }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endif %}
+

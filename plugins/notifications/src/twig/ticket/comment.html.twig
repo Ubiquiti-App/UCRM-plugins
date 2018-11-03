@@ -1,237 +1,33 @@
 {% extends "common.html.twig" %}
-
 {% set datetimeFormat = "m/d/Y @ H:i:s" %}
-
-{% set title = "Ticket Added"|translate %}
 
 {% block body %}
     <div>
         {# Salutation #}
-        <p style="margin:0 0 1rem;padding:0;">
-            {{ "Dear Sales Team,"|translate }}
+        <p>
+            {% if personalized and user %}
+                {{ "Dear"|translate }} {{ user.getFirstName }} {{ user.getLastName }},
+            {% else %}
+                {{ "Dear Sales Team,"|translate }}
+            {% endif %}
         </p>
 
         {# Content #}
-        <p style="margin:0 0 1rem;padding:0;">
-            {{ "The following Ticket has received a new comment in your UCRM."|translate }}
+        <p>
+            {% if personalized %}
+                {{ "The following Ticket has received a comment in the UCRM."|translate }}
+            {% else %}
+                {{ "The following Ticket has received a comment in the UCRM."|translate }}
+            {% endif %}
         </p>
 
         {# Ticket #}
-        <h5 style="font-size:1.25rem;margin:1.5rem 0 1rem;">{{ "Ticket"|translate }}</h5>
-        <div>
-            <div style="margin:0.5rem 1rem;">
-                <div style="font-size:0.75rem;color:gray;font-style:italic">
-                    {{ "Commented"|translate }}
-                </div>
-                <div style="">
-                    {#{{ ticket.getCreatedAt|date(datetimeFormat) }}#}
-                    {{ ticket.getLastActivity|date(datetimeFormat) }}
-                </div>
-            </div>
-            <div style="margin:0.5rem 1rem;">
-                <div style="font-size:0.75rem;color:gray;font-style:italic">
-                    {{ "Status"|translate }}
-                </div>
-                <div style="">
-                    {% if ticket.getStatus == 0 %}{{ "New"|translate }}{% endif %}
-                    {% if ticket.getStatus == 1 %}{{ "Open"|translate }}{% endif %}
-                    {% if ticket.getStatus == 2 %}{{ "Pending"|translate }}{% endif %}
-                    {% if ticket.getStatus == 3 %}{{ "Solved"|translate }}{% endif %}
-                </div>
-            </div>
-            {% if group %}
-                <div style="margin:0.5rem 1rem;">
-                    <div style="font-size:0.75rem;color:gray;font-style:italic">
-                        {{ "Assigned Group"|translate }}
-                    </div>
-                    <div style="">
-                        {{ group.getName }}
-                    </div>
-                </div>
-            {% endif %}
-            {% if user %}
-            <div style="margin:0.5rem 1rem;">
-                <div style="font-size:0.75rem;color:gray;font-style:italic">
-                    {{ "Assigned User"|translate }}
-                </div>
-                <div style="">
-                    {{ user.getFirstName }} {{ user.getLastName }}
-                    &lt;<a href="mailto:{{ user.getEmail }}">{{ user.getEmail }}</a>&gt;
-                </div>
-            </div>
-            {% endif %}
-            <div style="margin:0.5rem 1rem;">
-                <div style="font-size:0.75rem;color:gray;font-style:italic">
-                    {{ "Subject"|translate }}
-                </div>
-                <div style="">
-                    {{ ticket.getSubject }}
-                </div>
-            </div>
-            <div style="margin:0.5rem 1rem;">
-                <div style="font-size:0.75rem;color:gray;font-style:italic">
-                    {{ "Ticket From"|translate }}
-                </div>
-                <div style="">
-                    {% if ticket.getEmailFromName != "" %}
-                        {{ ticket.getEmailFromName }}
-                    {% endif %}
-                    {% if ticket.getEmailFromAddress != "" %}
-                        &lt;<a href="mailto:{{ ticket.getEmailFromAddress }}">{{ ticket.getEmailFromAddress }}</a>&gt;
-                    {% endif %}
-                    {% if ticket.getEmailFromName == "" and ticket.getEmailFromAddress == "" %}&nbsp;{% endif %}
-                </div>
-            </div>
-            <div style="margin:0.5rem 1rem;">
-                <div style="font-size:0.75rem;color:gray;font-style:italic">
-                    {{ "Ticket Link"|translate }}
-                </div>
-                <div style="">
-                    {# URLs do not seem to be translated! #}
-                    {% set _link = url ?? "http://localhost/" ~ "ticketing/" ~ ticket.getId %}
-                    <strong><a href="{{ _link }}" target="_blank">{{ _link }}</a></strong>
-                </div>
-            </div>
-            <div style="margin:0.5rem 1rem;">
-                <div style="font-size:0.75rem;color:gray;font-style:italic">
-                    {{ "Latest Comment"|translate }}
-                </div>
-                <div style="">
-                    {{ latestComment.getComment.getBody }}
-                </div>
-            </div>
-        </div>
+        {% include "_partials/ticket.html.twig" %}
 
-        {% if client %}
-            {# Client #}
-            <h5 style="font-size:1.25rem;margin:1.5rem 0 1rem;">{{ "Client"|translate }}</h5>
-            <div>
-                {# Client Type #}
-                <div style="margin:0.5rem 1rem;">
-                    <div style="font-size:0.75rem;color:gray;font-style:italic">
-                        {{ "Client Type"|translate }}
-                    </div>
-                    <div style="">
-                        {{ (client.getClientType == 2 ? "Commercial" : "Residential")|translate }}
-                    </div>
-                </div>
-                {# Client Name #}
-                <div style="margin:0.5rem 1rem;">
-                    <div style="font-size:0.75rem;color:gray;font-style:italic">
-                        {{ "Client Name"|translate }}
-                    </div>
-                    <div style="">
-                        {% if client.getClientType == 2 %}
-                            {# Commercial #}
-                            {{ client.getCompanyName }}<br/>
-                            {{ "c/o" }} {{ client.getCompanyContactFirstName }} {{ client.getCompanyContactLastName }}
-                        {% else %}
-                            {# Residential #}
-                            {{ client.getFirstName }} {{ client.getLastName }}
-                        {% endif %}
-                    </div>
-                </div>
-                {# Client Address #}
-                <div style="margin:0.5rem 1rem;">
-                    <div style="font-size:0.75rem;color:gray;font-style:italic">
-                        {{ "Client Address"|translate }}
-                    </div>
-                    <div style="">
-                        {{ client.getStreet1 }}<br/>
-                        {% if client.getStreet2 != "" %}{{ client.getStreet2 }}<br/>{% endif %}
-                        {{ client.getCity }}, {{ client.getState.getCode }} &nbsp;{{ client.getZipCode }}<br/>
-                        {{ client.getCountry.getName }}
-                    </div>
-                </div>
-                {# Client Link #}
-                <div style="margin:0.5rem 1rem;">
-                    <div style="font-size:0.75rem;color:gray;font-style:italic">
-                        {{ "Client Link"|translate }}
-                    </div>
-                    <div style="">
-                        {# URLs do not seem to be translated! #}
-                        {% set _link = url ?? "http://localhost/" ~ "client/" ~ client.getId %}
-                        <strong><a href="{{ _link }}" target="_blank">{{ _link }}</a></strong>
-                    </div>
-                </div>
-            </div>
+        {# Client #}
+        {% include "_partials/client.html.twig" %}
 
-
-            <!--<div style="text-align:center;margin-bottom:0;">-->
-            <h5 style="font-size:1.25rem;margin:1.5rem 0 1rem;">
-                {{ "Contacts"|translate }}</h5>
-            <div>
-                {% for contact in contacts %}
-                    <div style="border-left:4px solid {{ loop.first ? "blue" : "gray" }};max-width:3.5in;min-width:3.5in;">
-                        {# Contact Name #}
-                        <div style="margin:0.5rem 0.75rem;">
-                            <div style="font-size:0.75rem;color:gray;font-style:italic">
-                                {{ "Contact Name"|translate }}
-                            </div>
-                            <div style="">
-                                {% if loop.first and contact.getName == "" %}
-                                    {% if client.getClientType == 2 %}
-                                        {# Commercial #}
-                                        {{ client.getCompanyName }}<br/>
-                                        {{ "c/o" }} {{ client.getCompanyContactFirstName }} {{ client.getCompanyContactLastName }}
-                                    {% else %}
-                                        {# Residential #}
-                                        {{ client.getFirstName }} {{ client.getLastName }}
-                                    {% endif %}
-                                {% else %}
-                                    {{ contact.getName }}
-                                {% endif %}
-                            </div>
-                        </div>
-                        {# Contact Phone #}
-                        <div style="margin:0.5rem 0.75rem;">
-                            <div style="font-size:0.75rem;color:gray;font-style:italic">
-                                {{ "Contact Phone"|translate }}
-                            </div>
-                            <div style="">
-                                {% if contact.getPhone != "" %}
-                                    {% set _compact = contact.getPhone|replace({"(":"", ")":"", "-":"", " ":""}) %}
-                                    {% set _phone = _compact|split("x")[0] %}
-                                    <a href="tel:{{ _phone }}">{{ contact.getPhone }}</a>
-                                {% else %}
-                                    {{ "None Provided"|translate }}
-                                {% endif %}
-                            </div>
-                        </div>
-                        {# Contact Email #}
-                        <div style="margin:0.5rem 0.75rem;">
-                            <div style="font-size:0.75rem;color:gray;font-style:italic">
-                                {{ "Contact Email"|translate }}
-                            </div>
-                            <div style="">
-                                {% if contact.getEmail != "" %}
-                                    <a href="mailto:{{ contact.getEmail }}">{{ contact.getEmail }}</a>
-                                {% else %}
-                                    {{ "None Provided"|translate }}
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-
-            {# Google Static Map w/ Marker #}
-            {% if googleMapsApiKey != "" and client.getAddressGpsLat != "" and client.getAddressGpsLon != ""  %}
-            <h5 style="font-size:1.25rem;margin:1.5rem 0 1rem;">{{ "Location"|translate }}</h5>
-            <div id="map" style="margin:1rem 0 0 0;max-width:640px;min-width:3.5in;">
-                {% set mapCenter = "center=" ~ client.getAddressGpsLat ~ "," ~ client.getAddressGpsLon %}
-                {% set mapZoom = "zoom=14" %}
-                {% set mapType = "maptype=roadmap" %}
-                {% set mapSize = "size=640x480" %}
-                {% set mapMarker = "markers=color:green|" ~ client.getAddressGpsLat ~ "," ~ client.getAddressGpsLon %}
-
-                {% set mapUrl = "https://maps.googleapis.com/maps/api/staticmap?" %}
-                {% set mapQuery = [ mapCenter, mapZoom, mapType, mapSize, mapMarker, "key=" ~ googleMapsApiKey ] %}
-
-                <img style="width:100%;"
-                     src="{{ mapUrl }}{{ mapQuery|join("&") }}"/>
-            </div>
-            {% endif %}
-        {% endif %}
+        {# Map #}
+        {% include "_partials/map.html.twig" %}
     </div>
 {% endblock %}

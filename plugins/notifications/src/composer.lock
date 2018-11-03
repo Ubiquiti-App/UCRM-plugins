@@ -347,16 +347,16 @@
         },
         {
             "name": "mvqn-ucrm/rest",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mvqn-ucrm/rest.git",
-                "reference": "952da1057e7032b3fe8381130861a19a3828f2a4"
+                "reference": "7865abd9184997da701f4171f070ec26f3ebbc90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mvqn-ucrm/rest/zipball/952da1057e7032b3fe8381130861a19a3828f2a4",
-                "reference": "952da1057e7032b3fe8381130861a19a3828f2a4",
+                "url": "https://api.github.com/repos/mvqn-ucrm/rest/zipball/7865abd9184997da701f4171f070ec26f3ebbc90",
+                "reference": "7865abd9184997da701f4171f070ec26f3ebbc90",
                 "shasum": ""
             },
             "require": {
@@ -389,7 +389,7 @@
                 }
             ],
             "description": "A simple REST Client library for interfacing with UCRM Endpoints.",
-            "time": "2018-10-30T01:11:07+00:00"
+            "time": "2018-11-02T19:11:24+00:00"
         },
         {
             "name": "mvqn/annotations",

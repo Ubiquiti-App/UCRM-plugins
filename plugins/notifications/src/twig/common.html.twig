@@ -2,10 +2,16 @@
 <html lang={{ locale()|default("en-US") }}>
 <head>
     <meta charset={{ charset|default("UTF-8") }}>
-    <title>{{ title }}</title>
+    <title>UCRM Notification</title>
 </head>
-<body style="margin:0;padding:1rem;font-family:'Helvetica Neue','Helvetica','Arial','sans-serif';
-    font-size:16px;line-height:1.25rem;">
-{% block body %}{% endblock %}
+
+<body>
+<style>
+    {% include "common.css" %}
+</style>
+<div class="container">
+    {% block body %}
+    {% endblock %}
+</div>
 </body>
 </html>

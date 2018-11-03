@@ -1,0 +1,30 @@
+{% if ticket %}
+{{ "Ticket"|translate|upper }}{{ EOL -}}
+{# Ticket Timestamp #}
+{{ TAB }}{{ PAD|format("Edited"|translate) }}: {{ ticket.getLastActivity|date(datetimeFormat) }}{{ EOL -}}
+{# Ticket Status #}
+{{ TAB }}{{ PAD|format("Status"|translate) }}{{ ": " }}
+{%- if ticket.getStatus == 0 %}{{ "New"|translate }}{% endif %}
+{%- if ticket.getStatus == 1 %}{{ "Open"|translate }}{% endif %}
+{%- if ticket.getStatus == 2 %}{{ "Pending"|translate }}{% endif %}
+{%- if ticket.getStatus == 3 %}{{ "Solved"|translate }}{% endif %}
+{{ EOL -}}
+{# Ticket Assigned User #}
+{% if user %}
+    {{- TAB }}{{ PAD|format("Assigned User"|translate) }}: {{ user.getFirstName }} {{ user.getLastName }}{{ EOL -}}
+{% endif %}
+{# Ticket Subject #}
+{{ TAB }}{{ PAD|format("Subject"|translate) }}: {{ ticket.getSubject }}{{ EOL -}}
+{# Ticket From #}
+{{ TAB }}{{ PAD|format("Ticket From"|translate) }}: {{ ticket.getEmailFromName }}{{ EOL -}}
+{{ TAB }}{{ PAD|format("") }}: {{ ticket.getEmailFromAddress }}{{ EOL -}}
+{# Ticket Link #}
+{% set _link = url ?? "http://localhost/" ~ "ticketing/" ~ ticket.getId %}
+{{ TAB }}{{ PAD|format("Ticket Link"|translate) }}: {{ _link }}{{ EOL -}}
+{#
+{% if latestComment %}
+    {{- TAB }}{{ PAD|format("Latest Comment"|translate) }}: {{ latestComment.getComment.getBody }}{{ EOL -}}
+{% endif %}
+#}
+{{ EOL -}}
+{% endif %}

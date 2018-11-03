@@ -5,7 +5,7 @@
         "displayName": "UCRM Notifications Plugin",
         "description": "A simple UCRM Plugin to send notifications for items not currently built-in.",
         "url": "https://github.com/mvqn/ucrm-plugins",
-        "version": "1.3.0",
+        "version": "1.3.2",
         "ucrmVersionCompliancy": {
             "min": "2.14.0-beta2",
             "max": null
@@ -13,6 +13,13 @@
         "author": "Ryan Spaeth <rspaeth@mvqn.net>"
     },
     "configuration": [
+        {
+            "key": "verboseDebug",
+            "label": "Verbose Debugging?",
+            "description": "If enabled, will include verbose debug messages in the Webhook Request Body.",
+            "required": 0,
+            "type": "checkbox"
+        },
         {
             "key": "smtpUseHTML",
             "label": "Use HTML?",
@@ -67,6 +74,12 @@
             "label": "Ticket Recipients",
             "description": "A comma separated list of email addresses to which Ticket notifications should be sent.  Currently Supported Variables: %TICKET_ASSIGNED_USER%",
             "required": 1
+        },
+        {
+            "key": "ticketJobRecipients",
+            "label": "Job Recipients [BETA]",
+            "description": "A comma separated list of email addresses to which Ticket Job Assignment notifications should be sent.  Currently Supported Variables: %JOB_ASSIGNED_USER%",
+            "required": 0
         },
         {
             "key": "userRecipients",

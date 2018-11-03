@@ -1,0 +1,62 @@
+{% if ticket %}
+<h5>{{ "Ticket"|translate }}</h5>
+<div class="section-container">
+    <div class="field-group">
+        <div class="field-label">{{ "Edited"|translate }}</div>
+        <div class="field-value">
+            {{ ticket.getLastActivity|date(datetimeFormat) }}
+        </div>
+    </div>
+    <div class="field-group">
+        <div class="field-label">{{ "Status"|translate }}</div>
+        <div class="field-value">
+            {% if ticket.getStatus == 0 %}{{ "New"|translate }}{% endif %}
+            {% if ticket.getStatus == 1 %}{{ "Open"|translate }}{% endif %}
+            {% if ticket.getStatus == 2 %}{{ "Pending"|translate }}{% endif %}
+            {% if ticket.getStatus == 3 %}{{ "Solved"|translate }}{% endif %}
+        </div>
+    </div>
+    {% if group %}
+    <div class="field-group">
+        <div class="field-label">{{ "Assigned Group"|translate }}</div>
+        <div class="field-value">
+            {{ group.getName }}
+        </div>
+    </div>
+    {% endif %}
+    {% if user %}
+    <div class="field-group">
+        <div class="field-label">{{ "Assigned User"|translate }}</div>
+        <div class="field-value">
+            {{ user.getFirstName }} {{ user.getLastName }}
+            &lt;<a href="mailto:{{ user.getEmail }}">{{ user.getEmail }}</a>&gt;
+        </div>
+    </div>
+    {% endif %}
+    <div class="field-group">
+        <div class="field-label">{{ "Subject"|translate }}</div>
+        <div class="field-value">
+            {{ ticket.getSubject }}
+        </div>
+    </div>
+    <div class="field-group">
+        <div class="field-label">{{ "Ticket From"|translate }}</div>
+        <div class="field-value">
+            {% if ticket.getEmailFromName and ticket.getEmailFromAddress %}
+                {{ ticket.getEmailFromName }}
+                &lt;<a href="mailto:{{ ticket.getEmailFromAddress }}">{{ ticket.getEmailFromAddress }}</a>&gt;
+            {% else %}
+                &nbsp;
+            {% endif %}
+        </div>
+    </div>
+    <div class="field-group">
+        <div class="field-label">{{ "Ticket Link"|translate }}</div>
+        <div class="field-value">
+            {# URLs do not seem to be translated! #}
+            {% set _link = url ?? "http://localhost/" ~ "ticketing/" ~ ticket.getId %}
+            <strong><a href="{{ _link }}" target="_blank">{{ _link }}</a></strong>
+        </div>
+    </div>
+</div>
+{% endif %}

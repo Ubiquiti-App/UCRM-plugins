@@ -17,57 +17,60 @@ use MVQN\UCRM\Plugins\Config;
 use MVQN\UCRM\Plugins\Settings;
 
 /**
- * Class TicketEventController
+ * Class TicketCommentEventController
  *
  * @package MVQN\UCRM\Plugins\Controllers
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  */
-class TicketEventController extends EventController
+class TicketCommentEventController extends EventController
 {
     /**
      * @param string $action
-     * @param int $ticketId
+     * @param int $ticketCommentId
      * @return EmailActionResult[]
      * @throws \Exception
      */
-    public function action(string $action, int $ticketId): array
+    public function action(string $action, int $ticketCommentId): array
     {
         $results = [];
         $results["0"] = new EmailActionResult();
         $results["1"] = new EmailActionResult();
 
         // =============================================================================================================
-        // ENTITIES
+        // DATA
         // =============================================================================================================
 
+        /** @var TicketComment $comment */
+        $comment = TicketComment::getById($ticketCommentId);
+
         /** @var Ticket $ticket */
-        $ticket = Ticket::getById($ticketId);
-        $results["0"]->debug[] = "Ticket\n" . json_encode($ticket, JSON_PRETTY_PRINT) . "\n";
+        $ticket = Ticket::getById($comment->getTicketId());
+        $results["0"]->debug[] = "Ticket\n".json_encode($ticket, JSON_PRETTY_PRINT)."\n";
 
         /** @var TicketGroup|null $group */
         $group = TicketGroup::getById($ticket->getAssignedGroupId());
-        $results["0"]->debug[] = "Ticket Group\n" . json_encode($group, JSON_PRETTY_PRINT) . "\n";
+        $results["0"]->debug[] = "Ticket Group\n".json_encode($group, JSON_PRETTY_PRINT)."\n";
 
         /** @var User|null $user */
         $user = User::getById($ticket->getAssignedUserId());
-        $results["0"]->debug[] = "User\n" . json_encode($user, JSON_PRETTY_PRINT) . "\n";
+        $results["0"]->debug[] = "User\n".json_encode($user, JSON_PRETTY_PRINT)."\n";
 
         /** @var TicketComment|null $latestComment */
         $latestComment = $ticket->getActivity()->where("type", "comment")->last();
-        $results["0"]->debug[] = "Latest Comment\n" . json_encode($latestComment, JSON_PRETTY_PRINT) . "\n";
+        $results["0"]->debug[] = "Latest Comment\n".json_encode($latestComment, JSON_PRETTY_PRINT)."\n";
 
         /** @var Client|null $client */
         $client = Client::getById($ticket->getClientId());
-        $results["0"]->debug[] = "Client\n" . json_encode($client, JSON_PRETTY_PRINT) . "\n";
+        $results["0"]->debug[] = "Client\n".json_encode($client, JSON_PRETTY_PRINT)."\n";
 
         /** @var ClientContact[] $contacts */
         $contacts = $client !== null ? $client->getContacts()->elements() : null;
-        $results["0"]->debug[] = "Contacts\n" . json_encode($contacts, JSON_PRETTY_PRINT) . "\n";
+        $results["0"]->debug[] = "Contacts\n".json_encode($contacts, JSON_PRETTY_PRINT)."\n";
 
         // LAST ACTIVITY
         /** @var TicketActivity $lastActivity */
         $lastActivity = $ticket->getActivity()->last();
-        $results["0"]->debug[] = "Last Activity\n" . json_encode($lastActivity, JSON_PRETTY_PRINT) . "\n";
+        $results["0"]->debug[] = "Last Activity\n".json_encode($lastActivity, JSON_PRETTY_PRINT)."\n";
 
         $results["1"] = clone $results["0"];
 
@@ -75,30 +78,27 @@ class TicketEventController extends EventController
         // RECIPIENTS
         // =============================================================================================================
 
+        /*
         switch($lastActivity->getType())
         {
             case "assignment_job":
-                /** @var Job $job */
+
                 $job = Job::getById($lastActivity->getJobAssignment()->getAssignedJobId());
 
-                /** @var User $jobUser */
+
                 $jobUser = User::getById($job->getAssignedUserId());
 
                 array_map("trim", explode(",", $this->replaceVariables(
                     Settings::getTicketJobRecipients(),
                     [
-                        "JOB_ASSIGNED_USER" => $jobUser !== null ? $jobUser->getEmail() : "",
+                        "JOB_ASSIGNED_USER" => $jobUser->getEmail(),
                     ],
                     $results["0"]->recipients, // Static Recipients
                     $results["1"]->recipients  // Dynamic Recipients
                 )));
                 break;
 
-            //case "status_change":
-            //    break;
-
             default:
-                /*
                 array_map("trim", explode(",", $this->replaceVariables(
                     Settings::getTicketRecipients(),
                     [
@@ -107,9 +107,9 @@ class TicketEventController extends EventController
                     $results["0"]->recipients, // Static Recipients
                     $results["1"]->recipients  // Dynamic Recipients
                 )));
-                */
                 break;
         }
+        */
 
         array_map("trim", explode(",", $this->replaceVariables(
             Settings::getTicketRecipients(),
@@ -126,15 +126,10 @@ class TicketEventController extends EventController
         $results["0"]->debug[] = "Recipients\n".json_encode($results["0"]->recipients, JSON_PRETTY_PRINT)."\n";
         $results["1"]->debug[] = "Recipients\n".json_encode($results["1"]->recipients, JSON_PRETTY_PRINT)."\n";
 
-        // =============================================================================================================
-        // DATA
-        // =============================================================================================================
-
         // Build some view data to be passed to the Twig template.
         $viewData =
             [
                 "personalized" => false,
-                "ticketId" => $ticketId,
                 "ticket" => $ticket,
                 "group" => $group,
                 "user" => $user,
@@ -173,14 +168,17 @@ class TicketEventController extends EventController
         // Set the appropriate subject line for this notification.
         switch ($action)
         {
+            /*
             case "add":
                 $results["0"]->subject = "Ticket Added";
                 $results["1"]->subject = "Ticket Added";
                 break;
+            */
             case "comment":
-                $results["0"]->subject = "Ticket Commented";
-                $results["1"]->subject = "Ticket Commented";
+                $results["0"]->subject = "A Ticket has received a Comment";
+                $results["1"]->subject = "A Ticket assigned to You has received a Comment";
                 break;
+            /*
             case "delete":
                 $results["0"]->subject = "Ticket Deleted";
                 $results["1"]->subject = "Ticket Deleted";
@@ -188,24 +186,17 @@ class TicketEventController extends EventController
             case "edit":
                 switch($lastActivity->getType())
                 {
-                    // Comments are now handled by their own entity 'ticketComment.comment'!
-                    //case "comment":
-                    //    break;
                     case "assignment":
                         $results["0"]->subject = "A Ticket has been assigned to a User";
                         $results["1"]->subject = "A Ticket has been assigned to You";
                         break;
                     case "assignment_client":
                         $results["0"]->subject = "A Ticket has been assigned to a Client";
-                        $results["1"]->subject = "A Ticket assigned to You has been assigned to a Client";
+                        $results["1"]->subject = "A Ticket Assigned to You has been assigned to a Client";
                         break;
                     case "assignment_job":
                         $results["0"]->subject = "A Ticket has been assigned to a Job";
-                        $results["1"]->subject = "A Ticket assigned to You has been assigned to a Job";
-                        break;
-                    case "status_change":
-                        $results["0"]->subject = "A Ticket has received a Status Change";
-                        $results["1"]->subject = "A Ticket assigned to You has received a Status Change";
+                        $results["1"]->subject = "A Ticket Assigned to You has been assigned to a Job";
                         break;
                     default:
                         $results["0"]->subject = "Ticket Edited";
@@ -213,11 +204,11 @@ class TicketEventController extends EventController
                         break;
                 }
                 break;
-            // This is not currently being called correctly and is caught by 'ticket.edit'!
             case "status_change":
-                $results["0"]->subject = "A Ticket has received a Status Change";
-                $results["1"]->subject = "A Ticket assigned to You has received a Status Change";
+                $results["0"]->subject = "Ticket Changed";
+                $results["1"]->subject = "Ticket Changed";
                 break;
+            */
             default:
                 $results["0"]->subject = "";
                 $results["1"]->subject = "";
@@ -234,7 +225,8 @@ class TicketEventController extends EventController
         // RESULT
         // =============================================================================================================
 
-        // Return the ActionResults!
+        // Return the ActionResult!
         return $results;
     }
+
 }
