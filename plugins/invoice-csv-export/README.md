@@ -1,6 +1,8 @@
-# [Example] Invoice CSV export
+# Invoice CSV export
 
-This plugin serves as an example to show some of the possibilities of what you can do with UCRM plugins. It can be used by developers as a template for creating a new plugin.
+Configurable export of invoices into CSV. Using this plugin, user can define From and To date filters and export the given invoices into a CSV file, this can be used for a manual export to 3rd party accounting tools.
+
+Also, this plugin can be used as an example to show some of the possibilities of what you can do with UCRM plugins. It can be used by developers as a template for creating a new plugin.
 
 Read more about creating your own plugin in the [Developer documentation](../../master/docs/index.md).
 
