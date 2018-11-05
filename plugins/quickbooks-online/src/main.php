@@ -11,8 +11,8 @@ require 'vendor/autoload.php';
     $plugin = $container->get(\QBExport\Plugin::class);
     try {
         $plugin->run();
-    } catch (Exception $e) {
+    } catch (Exception $exception) {
         $logger = new \QBExport\Service\Logger();
-        $logger->error($e->getMessage());
+        $logger->error($exception->getMessage());
     }
 })();
