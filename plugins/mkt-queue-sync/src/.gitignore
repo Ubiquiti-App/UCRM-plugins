@@ -1,4 +1,1 @@
-composer.phar
-/vendor/
-/ucrm.json
-/data/
+vendor/

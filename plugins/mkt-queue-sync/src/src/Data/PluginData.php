@@ -20,4 +20,19 @@ class PluginData extends UcrmData
      * @var string
      */
     public $mktpass;
+	
+	/**
+     * @var integrer
+     */
+    public $burstThresholdPercentage;
+	
+	/**
+     * @var integrer
+     */
+    public $burstTime;
+	
+	/**
+     * @var integrer
+     */
+    public $addQueue;
 }
