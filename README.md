@@ -1,6 +1,7 @@
 # UCRM-plugins
 
-Plugins are open-source programs that extend the functionality of [UCRM](https://ucrm.ubnt.com/). These plugins will enable your UCRM to import payments, integrate with another accounting software, cooperate with 3rd party HW and tools, etc. [Read more](https://help.ubnt.com/hc/en-us/articles/360002433113-UCRM-Plugins).
+Plugins are open-source programs that extend the functionality of [UCRM](https://ucrm.ubnt.com/). 
+These plugins will enable your UCRM to import payments, integrate with another accounting software, cooperate with 3rd party HW and tools, view or create custom reports, modify all the UCRM data in a batch, etc. [Read more](https://help.ubnt.com/hc/en-us/articles/360002433113-UCRM-Plugins).
 
 UCRM plugins are compatible with UCRM 2.10.0+
 
@@ -13,7 +14,7 @@ UCRM plugins are compatible with UCRM 2.10.0+
 ## List of available plugins
 | Name | Description |
 | ----------- | ------------- |
-| [Plugin template](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/plugin-template) | UCRM plugin sample. Can be used as a base for a new plugin development. |
+| [SMS Gateway Integration](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/sms-twilio) | Integrates Twilio SMS gateway which enables UCRM to send SMS to clients triggered by custom defined events, e.g. client's service gets suspended. |
 | [QuickBooks&nbsp;Online](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/quickbooks-online) | Sync financial data from UCRM into QB Online |
 | [MKT&nbsp;Queue&nbsp;Sync](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/mkt-queue-sync) | Sync UCRM Service Data rate with Mikrotik Simple Queue by service IP Address and client's service speed set in UCRM |
 | [FIO CZ](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/fio_cz) | Automatic payments import and matching with clients - from WISP's FIO bank account |
@@ -21,7 +22,8 @@ UCRM plugins are compatible with UCRM 2.10.0+
 | [RouterOS&nbsp;packet&nbsp;manager](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/routeros-packet-manager) | Sync UCRM Service Data rate with Router-OS |
 | [Packetlogic packet manager](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/packetlogic-packet-manager) | Sync UCRM Entities and Service Data Rate with Procera |
 | [KMZ Map](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/KMZ-Map) | Provides a frontend Google Map for clients to view tower coverage. |
-| [SMS Gateway Integration](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/sms-twilio) | Integrates Twilio SMS gateway which enables UCRM to send SMS to clients triggered by custom defined events, e.g. client's service gets suspended. |
+| [Invoice CSV Export](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/examples/example-invoice-csv-export) | Configurable export of invoices into CSV, can be used for a manual export to 3rd party accounting tools. |
+| [Revenue Report](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/revenue-report) | Revenue report grouped by products or services, shown under the Reporting main menu section. |
 
 ## Plugins from other sources
 * [Client&nbsp;Signup Extended](https://www.charuwts.com/plugins/ucrm-signup) - Extended version of Client Signup Plugin 
