@@ -1,0 +1,50 @@
+{
+  "version": "1",
+  "information": {
+    "name": "ucrm-client-signup",
+    "displayName": "UCRM Client Signup",
+    "description": "A UCRM plugin that provides a frontend form for clients to signup.",
+    "url": "https://www.charuwts.com/plugins",
+    "version": "1.1.1",
+    "ucrmVersionCompliancy": {
+      "min": "2.13.0-beta1",
+      "max": null
+    },
+    "author": "Charuwts, LLC"
+  },
+  "configuration": [
+    {
+        "key": "optional_form_title",
+        "label": "Form Title",
+        "description": "Displayed below logo before form description",
+        "required": 0
+    },
+    {
+        "key": "optional_logo_url",
+        "label": "Logo URL",
+        "description": "Displayed above form.",
+        "required": 0
+    },
+    {
+        "key": "optional_form_description",
+        "label": "Form Description",
+        "description": "Displayed below logo before the form. (Can contain HTML)",
+        "type": "textarea",
+        "required": 0
+    },
+    {
+        "key": "optional_completion_text",
+        "label": "Completion Text",
+        "description": "Text shown upon signup completion. (Text Only)",
+        "type": "textarea",
+        "required": 0
+    },
+    {
+        "key": "optional_lead",
+        "label": "Create Lead",
+        "type": "checkbox",
+        "description": "Create Lead instead of Client",
+        "required": 0
+    }
+  ]
+}

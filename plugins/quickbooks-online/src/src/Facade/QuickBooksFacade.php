@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace QBExport\Facade;
 
 
+use QBExport\Exception\QBAuthorizationException;
 use QBExport\Factory\DataServiceFactory;
 use QBExport\Service\Logger;
 use QBExport\Service\OptionsManager;
@@ -53,7 +54,7 @@ class QuickBooksFacade
         $this->ucrmApi = $ucrmApi;
     }
 
-    public function obtainAuthotizationURL(): void
+    public function obtainAuthorizationURL(): void
     {
         $pluginData = $this->optionsManager->load();
         $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_URL_GENERATOR);
@@ -66,11 +67,16 @@ class QuickBooksFacade
         $this->optionsManager->update();
     }
 
+    /**
+     * @throws QBAuthorizationException
+     * @throws \QuickBooksOnline\API\Exception\SdkException
+     * @throws \ReflectionException
+     */
     public function obtainTokens(): void
     {
-        $pluginData = $this->optionsManager->load();
-        $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_EXCHANGE_CODE_FOR_TOKEN);
         try {
+            $pluginData = $this->optionsManager->load();
+            $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_EXCHANGE_CODE_FOR_TOKEN);
             $accessToken = $dataService->getOAuth2LoginHelper()->exchangeAuthorizationCodeForToken(
                 $pluginData->oauthCode,
                 $pluginData->oauthRealmID
@@ -82,22 +88,8 @@ class QuickBooksFacade
 
             $this->optionsManager->update();
             $this->logger->notice('Exchange Authorization Code for Access Token succeeded.');
-
         } catch (ServiceException $exception) {
-            $this->logger->info(
-                'Exchange Authorization Code for Access Token failed. You need confirm your connection again.'
-            );
-            $pluginData->oauthCode = null;
-            $pluginData->oauthRealmID = null;
-            $pluginData->oauthAccessToken = null;
-            $pluginData->oauthRefreshToken = null;
-            $pluginData->oauthRefreshTokenExpiration = null;
-            $pluginData->oauthAccessTokenExpiration = null;
-            $pluginData->qbStateCSRF = null;
-
-            $this->optionsManager->update();
-
-            $this->obtainAuthotizationURL();
+            $this->invalidateTokens();
         }
     }
 
@@ -165,7 +157,7 @@ class QuickBooksFacade
                     if ($response instanceof \Exception) {
                         throw $response;
                     }
-                    $this->throwExceptionOnErrorResponse($dataService);
+                    $this->handleErrorResponse($dataService);
                 } catch (\Exception $exception) {
                     $this->logger->error(
                         sprintf(
@@ -209,11 +201,19 @@ class QuickBooksFacade
         $pluginData = $this->optionsManager->load();
         $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
 
-        if (! $this->isAccountIdValid((int) $pluginData->qbIncomeAccountNumber)) {
+        $activeAccounts = $this->getAccounts();
+
+        if (! array_key_exists((int) $pluginData->qbIncomeAccountNumber, $activeAccounts)) {
+            $accountsString = '';
+            foreach ($activeAccounts as $account) {
+                $accountsString .= 'Account:' . $account->Name . ' ID: ' . $account->Id . PHP_EOL;
+            }
+
             $this->logger->info(
                 sprintf(
-                    'Income account number (%s) set in the plugin config does not exist in QB.',
-                    $pluginData->qbIncomeAccountNumber
+                    'Income account number (%s) set in the plugin config does not exist in QB or is not active. Active accounts:\n %s',
+                    $pluginData->qbIncomeAccountNumber,
+                    $accountsString
                 )
             );
 
@@ -245,7 +245,7 @@ class QuickBooksFacade
                 );
                 if ($qbItem) {
                     $lines[] = [
-                        'Amount' => $item['quantity'],
+                        'Amount' => $item['price'],
                         'Description' => $item['label'],
                         'DetailType' => 'SalesItemLineDetail',
                         'SalesItemLineDetail' => [
@@ -283,11 +283,11 @@ class QuickBooksFacade
                     );
                 }
 
-                $this->throwExceptionOnErrorResponse($dataService);
+                $this->handleErrorResponse($dataService);
             } catch (\Exception $exception) {
                 $this->logger->error(
                     sprintf(
-                        ' Invoice ID: %s export failed with error %s.',
+                        'Invoice ID: %s export failed with error %s.',
                         $ucrmInvoice['id'],
                         $exception->getMessage()
                     )
@@ -345,7 +345,7 @@ class QuickBooksFacade
                     throw $response;
                 }
 
-                $this->throwExceptionOnErrorResponse($dataService);
+                $this->handleErrorResponse($dataService);
             } catch (\Exception $exception) {
                 $this->logger->error(
                     sprintf(
@@ -374,8 +374,11 @@ class QuickBooksFacade
         return reset($customers);
     }
 
-    private function createQBLineFromItem(DataService $dataService, array $item, int $qbIncomeAccountNumber)
-    {
+    private function createQBLineFromItem(
+        DataService $dataService,
+        array $item,
+        int $qbIncomeAccountNumber
+    ): ?IPPIntuitEntity {
         try {
             $response = $dataService->Add(
                 Item::create(
@@ -389,7 +392,7 @@ class QuickBooksFacade
                 )
             );
 
-            $this->throwExceptionOnErrorResponse($dataService);
+            $this->handleErrorResponse($dataService);
 
             return $response;
         } catch (\Exception $exception) {
@@ -399,20 +402,36 @@ class QuickBooksFacade
         }
     }
 
-    private function throwExceptionOnErrorResponse(DataService $dataService): void
+    /**
+     * @throws QBAuthorizationException
+     */
+    private function handleErrorResponse(DataService $dataService): void
     {
         /** @var FaultHandler $error */
         if ($error = $dataService->getLastError()) {
             try {
                 $xml = new \SimpleXMLElement($error->getResponseBody());
+
+                if (isset($xml->Fault)) {
+                    foreach ($xml->Fault->attributes() as $attributeName => $attributeValue) {
+                        if ($attributeName === 'type' && (string) $attributeValue === 'AUTHENTICATION') {
+                            $this->invalidateTokens();
+                        }
+                    }
+                }
+
                 if (isset($xml->Fault->Error->Detail)) {
                     $message = (string) $xml->Fault->Error->Detail;
                 }
+
                 throw new \RuntimeException(
                     $message ?? sprintf('Unexpected XML response: %s', $error->getResponseBody()),
                     $error->getHttpStatusCode()
                 );
-            } catch (\Exception $e) {
+
+            } catch (QBAuthorizationException $exception) {
+                throw new QBAuthorizationException($exception->getMessage());
+            } catch (\Exception $exception) {
                 throw new \RuntimeException(
                     sprintf('It is not possible to parse QB error: %s', $error->getResponseBody()),
                     $error->getHttpStatusCode()
@@ -421,10 +440,56 @@ class QuickBooksFacade
         }
     }
 
-    private function isAccountIdValid(int $accountId): bool
+    private function getAccounts(): array
     {
-        $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
+        try {
+            $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
 
-        return (bool) $dataService->FindById('Account', $accountId);
+            $response = $dataService->FindAll('Account');
+
+            $this->handleErrorResponse($dataService);
+
+            $activeAccounts = [];
+            foreach ($response as $account) {
+                if (! $account->Active) {
+                    continue;
+                }
+
+                $activeAccounts[$account->Id] = $account;
+            }
+
+        } catch (\Exception $exception) {
+            $this->logger->error(
+                sprintf('Account: Getting all Accounts failed with error %s.', $exception->getMessage())
+            );
+        }
+
+        return $activeAccounts;
+    }
+
+    /**
+     * @throws QBAuthorizationException
+     * @throws \ReflectionException
+     */
+    private function invalidateTokens(): void
+    {
+        $this->logger->info(
+            'Connection failed. Check your connection settings. You may need to remove and add the plugin again.'
+        );
+
+        $pluginData = $this->optionsManager->load();
+        $pluginData->oauthCode = null;
+        $pluginData->oauthRealmID = null;
+        $pluginData->oauthAccessToken = null;
+        $pluginData->oauthRefreshToken = null;
+        $pluginData->oauthRefreshTokenExpiration = null;
+        $pluginData->oauthAccessTokenExpiration = null;
+        $pluginData->qbStateCSRF = null;
+
+        $this->optionsManager->update();
+
+        $this->obtainAuthorizationURL();
+
+        throw new QBAuthorizationException('Connection failed');
     }
 }

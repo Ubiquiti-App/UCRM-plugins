@@ -67,6 +67,17 @@ The `manifest.json` file contains all needed information about the plugin and is
             "required": 0,
             "type": "checkbox"
         },
+    ],
+    "menu": [
+        {
+            "key": "Reports",
+            "label": "Dummy Plugin",
+            "type": "admin",
+            "target": "iframe",
+            "parameters": {
+                "hook": "main"
+            }
+        }
     ]
 }
 ```
@@ -105,3 +116,25 @@ Contains an array of items. Each item is defined as follows:
         - `datetime` - date and time input with calendar
         - `file` - file upload input (the file will have name based on the `key` definition, the filename will be saved in [`data/config.json`](file-structure.md#dataconfigjson) and the file itself will be saved in [`data/files`](file-structure.md#datafiles-directory) directory)
 - `choices` (optional) - defines possible options for `choice` type (see manifest example above)
+
+### menu
+*Note: This feature is available since UCRM 2.14.0-beta1
+
+Adds link(s) to the plugin into UCRM menu.
+
+Contains an array of items. Each item is defined as follows:
+- `type` - required, can have these values:
+  - `"admin"` - the link will show in admin zone
+  - `"client"` - the link will show in client zone
+- `target` - required, can have these values:
+  - `"blank"` - The link will lead simply to the target page
+  - `"iframe"` - The link will lead to special page within UCRM which will show the target page in an iframe
+- `key` - Menu category to insert the link into (optional)\*
+- `label` - Label of the link (optional, default value is plugin name)
+- `parameters` - Array of parameters for the link (optional)\*\*
+
+\*) If `type` is `"admin"` then `"Billing"`, `"Network"`, `"Reports"` or `"System"` can be used to add the link under these existing categories in UCRM menu. In other cases a new item will be added to the menu.
+
+\*\*) For example if `parameters` are `{"hook": "main"},` then link is `/_plugins/<plugin-name>/public.php?hook=main`.
+
+Note: The target pages should typically be protected to be available only to authorized clients or admins. Read [this](security.md)  for details.
