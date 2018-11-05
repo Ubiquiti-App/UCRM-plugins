@@ -12,6 +12,7 @@ set -o pipefail
 
 PLUGIN_DIR_INPUT=${1:-}
 ZIP="$(which zip)"
+COMPOSER="$(which composer)" || true
 
 if [[ ! -x "$ZIP" ]]; then
     echo "Cannot find executable: zip"
@@ -54,6 +55,10 @@ cd "$PLUGIN_DIR_SRC" || (
     echo "Cannot enter directory: $PLUGIN_DIR_SRC"
     exit 6
 )
+
+if [[ -x "${COMPOSER}" ]]; then
+    "${COMPOSER}" install
+fi
 
 rm "$PLUGIN_ZIP_FILE" && "$ZIP" -o -v -r "$PLUGIN_ZIP_FILE" ./*
 
