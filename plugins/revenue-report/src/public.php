@@ -20,6 +20,9 @@ if (! $user || $user->isClient || ! $user->canView('billing/invoices')) {
     \App\Http::forbidden();
 }
 
+// Retrieve options manager.
+$optionsManager = $container->get(\App\Service\OptionsManager::class);
+
 // Retrieve renderer.
 $renderer = $container->get(\App\Service\TemplateRenderer::class);
 
@@ -72,15 +75,13 @@ if (
         }
     }
 
-    $renderer->render(
-        __DIR__ . '/templates/result.php',
-        [
-            'servicePlans' => array_values($servicePlansMap),
-            'currency' => $currency['code'],
-        ]
-    );
-
-    exit;
+    $resultParameters = [
+        'servicePlans' => array_values($servicePlansMap),
+        'currency' => $currency['code'],
+        'organization' => $_GET['organization'],
+        'since' => $_GET['since'],
+        'until' => $_GET['until'],
+    ];
 }
 
 // Render form.
@@ -90,5 +91,7 @@ $renderer->render(
     __DIR__ . '/templates/form.php',
     [
         'organizations' => $organizations,
+        'ucrmPublicUrl' => $optionsManager->loadOptions()->ucrmPublicUrl,
+        'result' => $resultParameters ?? [],
     ]
 );
