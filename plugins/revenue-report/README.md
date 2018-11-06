@@ -1,6 +1,9 @@
 # [Example] Revenue Report Plugin
 
-This plugin serves as an example to show some of the possibilities of what you can do with UCRM plugins. It can be used by developers as a template for creating a new plugin.
+This plugin calculates the organization's revenue. The data can be grouped by products or service plans.
+When this plugin is deployed no configuration is needed. It just creates a new item under the Reporting main menu section.
+
+Also, this plugin can be used as an example to show what you can do with UCRM plugins. It can be used by developers as a template for creating a new plugin.
 
 Read more about creating your own plugin in the [Developer documentation](../../master/docs/index.md).
 
