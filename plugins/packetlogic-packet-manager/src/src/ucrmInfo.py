@@ -29,8 +29,14 @@ with open(filepath) as config:
 # Set option variable
 opt = cData["options"]
 
-# Specify the public URL for the UCRM
-ucrmURL = uData["ucrmPublicUrl"]
+# Specify the API URL for the UCRM
+try:
+    ucrmURL = uData["ucrmLocalUrl"]
+except IndexError:
+    if uData["ucrmPublicUrl"].startswith("https://")
+        ucrmURL = "https://localhost/"
+    else
+        ucrmURL = "http://localhost/"
 
 if opt == "Clients":
     configset = "/clients/services"
@@ -56,6 +62,9 @@ def ucrmConnect(url,key):
     cURL = Request(url)
     cURL.add_header("Content-Type","application/json")
     cURL.add_header("X-Auth-App-Key",key)
+    # when using loopback interface, certificate won't match anyway
+    cURL.setopt(cURL.SSL_VERIFYPEER, false);
+    cURL.setopt(cURL.SSL_VERIFYHOST, 0);
     request = urlopen(cURL)
     response = request.read()
     data = json.loads(response)
