@@ -28,8 +28,12 @@ class UcrmApi
     {
         $this->curlExecutor = $curlExecutor;
         $this->optionsManager = $optionsManager;
+
         $optionsData = $this->optionsManager->loadOptions();
-        $this->verifyUcrmApiConnection = strpos($optionsData->ucrmPublicUrl, 'https://localhost') !== 0;
+        $apiUrl = (property_exists($optionsData, 'ucrmLocalUrl') && $optionsData->ucrmLocalUrl)
+            ? $optionsData->ucrmLocalUrl
+            : $optionsData->ucrmPublicUrl;
+        $this->verifyUcrmApiConnection = strpos($apiUrl, 'https://localhost') !== 0;
     }
 
     /**
