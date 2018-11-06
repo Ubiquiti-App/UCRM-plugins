@@ -5,7 +5,9 @@ declare(strict_types=1);
 
 namespace QBExport\Data;
 
-
+/*
+ * automatically filled data for UCRM API
+ */
 class UcrmData
 {
     /**
@@ -17,6 +19,11 @@ class UcrmData
      * @var string
      */
     public $ucrmPublicUrl;
+
+    /**
+     * @var string|null
+     */
+    public $ucrmLocalUrl;
 
     /**
      * @var string
