@@ -1,6 +1,14 @@
 # Developer documentation
 
-Plugins are PHP programs, that extend functionality of UCRM. They are automatically executed based on user defined period and can handle things like importing payments from bank accounts, synchronizing UCRM data with other systems and many more.
+## Plugins are PHP programs that extend functionality of UCRM.
+Plugins can be used as: 
+* backend scripts - reading/writing UCRM data (batch changes, batch exports/imports, etc.). These plugins can be executed automatically with a defined frequency.
+* frontend pages - a completely new page with own features and UI can be shown to authenticated UCRM users or clients. This can be used for a custom features, for example user-defined reports, batch data changes with user input, etc.
+
+## Plugin samples for an easy start of creating your own plugin
+* [Plugin Template](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/examples/plugin-template) - Simpliest UCRM plugin sample, can be used as a base for a new plugin development.
+* [Invoice CSV Export](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/example-invoice-csv-export) - Better plugin example, actually doing something: a new menu item shown, enables user to define From & To date filters, exports filtered invoices into CSV.  
+* [Revenue Report](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/revenue-report) - Revenue report grouped by products or services, shown under the Reporting main menu section.
 
 ## Distribution
 Plugins are distributed as ZIP archives. User uploads the archive into UCRM, it's validated and if valid, extracted to a folder based on plugin's name.
