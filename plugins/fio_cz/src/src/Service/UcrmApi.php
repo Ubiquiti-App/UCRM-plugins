@@ -11,17 +11,28 @@ class UcrmApi
     /**
      * @var CurlExecutor
      */
-    private $curlExecuter;
+    private $curlExecutor;
 
     /**
      * @var OptionsManager
      */
     private $optionsManager;
 
-    public function __construct(CurlExecutor $curlExecuter, OptionsManager $optionsManager)
+    /**
+     * @var bool
+     */
+    private $verifyUcrmApiConnection;
+
+    public function __construct(CurlExecutor $curlExecutor, OptionsManager $optionsManager)
     {
-        $this->curlExecuter = $curlExecuter;
+        $this->curlExecutor = $curlExecutor;
         $this->optionsManager = $optionsManager;
+
+        $optionsData = $this->optionsManager->loadOptions();
+        $apiUrl = (property_exists($optionsData, 'ucrmLocalUrl') && $optionsData->ucrmLocalUrl)
+            ? $optionsData->ucrmLocalUrl
+            : $optionsData->ucrmPublicUrl;
+        $this->verifyUcrmApiConnection = strpos($apiUrl, 'https://localhost') !== 0;
     }
 
     /**
@@ -32,14 +43,15 @@ class UcrmApi
     {
         $optionsData = $this->optionsManager->loadOptions();
 
-        $this->curlExecuter->curlCommand(
+        $this->curlExecutor->curlCommand(
             sprintf('%sapi/v1.0/%s', $optionsData->ucrmPublicUrl, $endpoint),
             $method,
             [
                 'Content-Type: application/json',
                 'X-Auth-App-Key: ' . $optionsData->pluginAppKey,
             ],
-            json_encode((object) $data)
+            json_encode((object)$data),
+            $this->verifyUcrmApiConnection
         );
     }
 
@@ -51,13 +63,14 @@ class UcrmApi
     {
         $optionsData = $this->optionsManager->loadOptions();
 
-        return $this->curlExecuter->curlQuery(
+        return $this->curlExecutor->curlQuery(
             sprintf('%sapi/v1.0/%s', $optionsData->ucrmPublicUrl, $endpoint),
             [
                 'Content-Type: application/json',
                 'X-Auth-App-Key: ' . $optionsData->pluginAppKey,
             ],
-            $parameters
+            $parameters,
+            $this->verifyUcrmApiConnection
         );
     }
 }

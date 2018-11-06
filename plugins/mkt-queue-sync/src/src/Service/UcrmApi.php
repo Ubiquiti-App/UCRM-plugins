@@ -18,10 +18,21 @@ class UcrmApi
      */
     private $optionsManager;
 
+    /**
+     * @var bool
+     */
+    private $verifyUcrmApiConnection;
+
     public function __construct(CurlExecutor $curlExecutor, OptionsManager $optionsManager)
     {
         $this->curlExecutor = $curlExecutor;
         $this->optionsManager = $optionsManager;
+
+        $optionsData = $this->optionsManager->loadOptions();
+        $apiUrl = (property_exists($optionsData, 'ucrmLocalUrl') && $optionsData->ucrmLocalUrl)
+            ? $optionsData->ucrmLocalUrl
+            : $optionsData->ucrmPublicUrl;
+        $this->verifyUcrmApiConnection = strpos($apiUrl, 'https://localhost') !== 0;
     }
 
     /**
@@ -39,7 +50,8 @@ class UcrmApi
                 'Content-Type: application/json',
                 'X-Auth-App-Key: ' . $optionsData->pluginAppKey,
             ],
-            json_encode((object) $data)
+            json_encode((object)$data),
+            $this->verifyUcrmApiConnection
         );
     }
 
@@ -47,7 +59,7 @@ class UcrmApi
      * @throws CurlException
      * @throws \ReflectionException
      */
-    public function query(string $endpoint, array $parameters = [])
+    public function query(string $endpoint, array $parameters = []): array
     {
         $optionsData = $this->optionsManager->loadOptions();
 
@@ -57,7 +69,8 @@ class UcrmApi
                 'Content-Type: application/json',
                 'X-Auth-App-Key: ' . $optionsData->pluginAppKey,
             ],
-            $parameters
+            $parameters,
+            $this->verifyUcrmApiConnection
         );
     }
 }
