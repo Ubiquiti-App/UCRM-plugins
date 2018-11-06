@@ -75,12 +75,12 @@ if (
         }
     }
 
-    $resultParameters = [
+    $result = [
         'servicePlans' => array_values($servicePlansMap),
         'currency' => $currency['code'],
-        'organization' => $_GET['organization'],
-        'since' => $_GET['since'],
-        'until' => $_GET['until'],
+        'organization' => $parameters['organizationId'],
+        'since' => $parameters['createdDateFrom'],
+        'until' => $parameters['createdDateTo'],
     ];
 }
 
@@ -92,6 +92,6 @@ $renderer->render(
     [
         'organizations' => $organizations,
         'ucrmPublicUrl' => $optionsManager->loadOptions()->ucrmPublicUrl,
-        'result' => $resultParameters ?? [],
+        'result' => $result ?? [],
     ]
 );
