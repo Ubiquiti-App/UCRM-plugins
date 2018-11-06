@@ -94,7 +94,7 @@ class QuickBooksFacade
 
             $activeAccounts = $this->getAccounts();
 
-            if (! array_key_exists((int) $pluginData->qbIncomeAccountNumber, $activeAccounts)) {
+            
                 $accountsString = '';
                 foreach ($activeAccounts as $account) {
                     $accountsString .= 'Account:' . $account->Name . ' ID: ' . $account->Id . PHP_EOL;
@@ -105,7 +105,7 @@ class QuickBooksFacade
                     'Income account numbers in QBO Active accounts:\n %s',
                     $accountsString)
             );
-	   }
+	   
         } catch (ServiceException $exception) {
             $this->invalidateTokens();
         }
