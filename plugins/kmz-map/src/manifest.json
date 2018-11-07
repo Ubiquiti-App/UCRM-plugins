@@ -5,7 +5,7 @@
     "displayName": "KMZ Map",
     "description": "A UCRM plugin that provides a frontend Google Map for clients to view tower coverage.",
     "url": "https://www.charuwts.com/plugins",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "ucrmVersionCompliancy": {
       "min": "2.11.1",
       "max": null
