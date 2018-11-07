@@ -4,7 +4,7 @@
             "name": "fio_cz",
             "displayName": "Fio bank payment import",
             "description": "This plugin enables you to import payments from Fio bank to UCRM. See https:\/\/www.fio.cz\/bankovni-sluzby\/api-bankovnictvi",
-            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/fio_cz",
             "version": "1.0.8",
             "ucrmVersionCompliancy": {
                 "min": "2.10.0-beta1",
@@ -17,7 +17,7 @@
             "name": "invoice-csv-export",
             "displayName": "Invoice CSV export",
             "description": "Configurable export of invoices into CSV.",
-            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/example-invoice-csv-export",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/invoice-csv-export",
             "version": "1.0.0",
             "ucrmVersionCompliancy": {
                 "min": "2.14.0-beta2",
@@ -30,7 +30,7 @@
             "name": "kmz-map",
             "displayName": "KMZ Map",
             "description": "A UCRM plugin that provides a frontend Google Map for clients to view tower coverage.",
-            "url": "https:\/\/www.charuwts.com\/plugins",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/kmz-map",
             "version": "1.0.0",
             "ucrmVersionCompliancy": {
                 "min": "2.11.1",
@@ -43,7 +43,7 @@
             "name": "mkt-queue-sync",
             "displayName": "Mikrotik Queue Sync Plugin",
             "description": "Plugin para sincronizar simple queues con los limites de velocidad establecidos en Ucrm - Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https:\/\/wiki.mikrotik.com\/wiki\/Manual:Queue",
-            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/mkt-queue-sync",
             "version": "1.1.0",
             "ucrmVersionCompliancy": {
                 "min": "2.10.0-beta1",
@@ -56,7 +56,7 @@
             "name": "packetlogic-packet-manager",
             "displayName": "PacketLogic Packet Manager",
             "description": "UCRM Plugin that synchronizes customers with Procera Networks PacketLogic system.",
-            "url": "http:\/\/www.atlinkservices.com",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/packetlogic-packet-manager",
             "version": "1.0.2",
             "ucrmVersionCompliancy": {
                 "min": "2.10.0-beta1",
@@ -69,7 +69,7 @@
             "name": "quickbooks-online",
             "displayName": "QuickBooks Online export",
             "description": "This plugin exports payments and invoices to QuickBooks Online",
-            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/quickbooks-online",
             "version": "1.0.6",
             "ucrmVersionCompliancy": {
                 "min": "2.10.0-beta1",
@@ -82,7 +82,7 @@
             "name": "revenue-report",
             "displayName": "Revenue report",
             "description": "Grids and charts showing organization's revenue grouped by products or services. Shown in the Reporting main menu section.",
-            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/revenue-report",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/revenue-report",
             "version": "1.0.0",
             "ucrmVersionCompliancy": {
                 "min": "2.14.0-beta2",
@@ -95,7 +95,7 @@
             "name": "routeros-packet-manager",
             "displayName": "RouterOS Packet Manager",
             "description": "This plugin allows using Mikrotik as a packet manager",
-            "url": "https:\/\/github.com\/csylos\/ucrm-ros-pac-man",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/routeros-packet-manager",
             "version": "1.0.5",
             "ucrmVersionCompliancy": {
                 "min": "2.10.0-beta1",
@@ -121,7 +121,7 @@
             "name": "ucrm-client-signup",
             "displayName": "UCRM Client Signup",
             "description": "A UCRM plugin that provides a frontend form for clients to signup.",
-            "url": "https:\/\/www.charuwts.com\/plugins",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/ucrm-client-signup",
             "version": "1.1.1",
             "ucrmVersionCompliancy": {
                 "min": "2.13.0-beta1",

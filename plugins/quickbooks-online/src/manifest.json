@@ -4,7 +4,7 @@
     "name": "quickbooks-online",
     "displayName": "QuickBooks Online export",
     "description": "This plugin exports payments and invoices to QuickBooks Online",
-    "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/quickbooks-online",
     "version": "1.0.6",
     "ucrmVersionCompliancy": {
       "min": "2.10.0-beta1",

@@ -47,6 +47,7 @@ function validateManifest(string $file): int
     $errors += ensureArrayKeyExists($manifest, 'information');
     $errors += ensureArrayKeyExists($manifest, 'information', 'name');
 
+    $name = null;
     if ($errors === 0) {
         $name = $manifest['information']['name'];
         $directory = dirname(dirname($file));
@@ -62,11 +63,32 @@ function validateManifest(string $file): int
     $errors += ensureArrayKeyExists($manifest, 'version');
     $errors += ensureArrayKeyExists($manifest, 'information', 'displayName');
     $errors += ensureArrayKeyExists($manifest, 'information', 'description');
-    $errors += ensureArrayKeyExists($manifest, 'information', 'url');
+    $errors += validateUrl($manifest, $name);
     $errors += ensureArrayKeyExists($manifest, 'information', 'version');
     $errors += ensureArrayKeyExists($manifest, 'information', 'ucrmVersionCompliancy');
     $errors += ensureArrayKeyExists($manifest, 'information', 'ucrmVersionCompliancy', 'min');
     $errors += ensureArrayKeyExists($manifest, 'information', 'author');
+
+    return $errors;
+}
+
+function validateUrl(array $manifest, ?string $name): int {
+    $errors = 0;
+
+    $errors += ensureArrayKeyExists($manifest, 'information', 'url');
+
+    if ($errors === 0 && $name !== null) {
+        $url = $manifest['information']['url'];
+        $correctUrl = sprintf(
+            'https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/%s',
+            $name
+        );
+
+        if ($url !== $correctUrl) {
+            printf('Url for plugin "%s" should be "%s".' . PHP_EOL, $name, $correctUrl);
+            $errors += 1;
+        }
+    }
 
     return $errors;
 }

@@ -4,7 +4,7 @@
     "name": "fio_cz",
     "displayName": "Fio bank payment import",
     "description": "This plugin enables you to import payments from Fio bank to UCRM. See https://www.fio.cz/bankovni-sluzby/api-bankovnictvi",
-    "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/fio_cz",
     "version": "1.0.8",
     "ucrmVersionCompliancy": {
       "min": "2.10.0-beta1",
