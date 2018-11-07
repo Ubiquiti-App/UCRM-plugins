@@ -4,7 +4,7 @@
     "name": "ucrm-client-signup",
     "displayName": "UCRM Client Signup",
     "description": "A UCRM plugin that provides a frontend form for clients to signup.",
-    "url": "https://www.charuwts.com/plugins",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/ucrm-client-signup",
     "version": "1.1.2",
     "ucrmVersionCompliancy": {
       "min": "2.13.0-beta1",

@@ -44,9 +44,17 @@ function validateManifest(string $file): int
     $manifestData = file_get_contents($file);
     $manifest = json_decode($manifestData, true);
 
+    if ($jsonError = json_last_error()) {
+        printf('File "%s" is not a valid JSON.' . PHP_EOL, $file);
+        ++$errors;
+
+        return $errors;
+    }
+
     $errors += ensureArrayKeyExists($manifest, 'information');
     $errors += ensureArrayKeyExists($manifest, 'information', 'name');
 
+    $name = null;
     if ($errors === 0) {
         $name = $manifest['information']['name'];
         $directory = dirname(dirname($file));
@@ -55,18 +63,39 @@ function validateManifest(string $file): int
 
         if ($basename !== $name) {
             printf('Directory name "%s" doesn\'t match the plugin name "%s".' . PHP_EOL, $basename, $name);
-            $errors += 1;
+            ++$errors;
         }
     }
 
     $errors += ensureArrayKeyExists($manifest, 'version');
     $errors += ensureArrayKeyExists($manifest, 'information', 'displayName');
     $errors += ensureArrayKeyExists($manifest, 'information', 'description');
-    $errors += ensureArrayKeyExists($manifest, 'information', 'url');
+    $errors += validateUrl($manifest, $name);
     $errors += ensureArrayKeyExists($manifest, 'information', 'version');
     $errors += ensureArrayKeyExists($manifest, 'information', 'ucrmVersionCompliancy');
     $errors += ensureArrayKeyExists($manifest, 'information', 'ucrmVersionCompliancy', 'min');
     $errors += ensureArrayKeyExists($manifest, 'information', 'author');
+
+    return $errors;
+}
+
+function validateUrl(array $manifest, ?string $name): int {
+    $errors = 0;
+
+    $errors += ensureArrayKeyExists($manifest, 'information', 'url');
+
+    if ($errors === 0 && $name !== null) {
+        $url = $manifest['information']['url'];
+        $correctUrl = sprintf(
+            'https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/%s',
+            $name
+        );
+
+        if ($url !== $correctUrl) {
+            printf('Url for plugin "%s" should be "%s".' . PHP_EOL, $name, $correctUrl);
+            ++$errors;
+        }
+    }
 
     return $errors;
 }
