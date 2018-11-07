@@ -44,6 +44,13 @@ function validateManifest(string $file): int
     $manifestData = file_get_contents($file);
     $manifest = json_decode($manifestData, true);
 
+    if ($jsonError = json_last_error()) {
+        printf('File "%s" is not a valid JSON.' . PHP_EOL, $file);
+        ++$errors;
+
+        return $errors;
+    }
+
     $errors += ensureArrayKeyExists($manifest, 'information');
     $errors += ensureArrayKeyExists($manifest, 'information', 'name');
 
@@ -56,7 +63,7 @@ function validateManifest(string $file): int
 
         if ($basename !== $name) {
             printf('Directory name "%s" doesn\'t match the plugin name "%s".' . PHP_EOL, $basename, $name);
-            $errors += 1;
+            ++$errors;
         }
     }
 
@@ -86,7 +93,7 @@ function validateUrl(array $manifest, ?string $name): int {
 
         if ($url !== $correctUrl) {
             printf('Url for plugin "%s" should be "%s".' . PHP_EOL, $name, $correctUrl);
-            $errors += 1;
+            ++$errors;
         }
     }
 
