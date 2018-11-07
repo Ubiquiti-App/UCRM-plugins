@@ -52,7 +52,7 @@ class UcrmApi
                 'Content-Type: application/json',
                 'X-Auth-App-Key: ' . $optionsData->pluginAppKey,
             ],
-            json_encode((object)$data),
+            json_encode((object) $data),
             $this->verifyUcrmApiConnection
         );
     }
