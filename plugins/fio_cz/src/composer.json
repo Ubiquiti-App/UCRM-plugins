@@ -1,5 +1,6 @@
 {
   "description": "UCRM plugin for import Fio.cz bank payments",
+  "version": "1.0.9",
   "license": "MIT",
   "autoload": {
     "psr-4": {

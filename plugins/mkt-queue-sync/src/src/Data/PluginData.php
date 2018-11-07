@@ -22,17 +22,17 @@ class PluginData extends UcrmData
     public $mktpass;
 	
 	/**
-     * @var integrer
+     * @var integer
      */
     public $burstThresholdPercentage;
 	
 	/**
-     * @var integrer
+     * @var integer
      */
     public $burstTime;
 	
 	/**
-     * @var integrer
+     * @var integer
      */
     public $addQueue;
 }

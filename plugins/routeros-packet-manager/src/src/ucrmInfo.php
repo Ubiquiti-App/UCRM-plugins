@@ -15,8 +15,14 @@
     // Decode the UCRM file from JSON to an array
     
     $uConfigs = json_decode($uConfigInfo,true);
-    
-    $ucrmPublicURL = $uConfigs['ucrmPublicUrl'];
+
+// use ucrmLocalUrl, or substitute for localhost
+$ucrmPublicURL = $uConfigs['ucrmLocalUrl'] ?: null;
+if (! $ucrmPublicURL) {
+    $ucrmPublicURL = strpos($uConfigs['ucrmPublicUrl'], 'https://') !== 0
+        ? 'http://localhost/'
+        : 'https://localhost/';
+}
     
     // Get the config file options
     
@@ -58,18 +64,16 @@
         global $ucrmKey;
         
         $sslVerify = parse_url($connURL);
-        
-        if($sslVerify['scheme'] == 'https') {
-            
-            $ch = curl_init();
-            
+
+        if (strtolower($sslVerify['scheme']) === 'https') {
+
             $ch = curl_init();
             
             curl_setopt($ch, CURLOPT_URL, $connURL . $options);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HEADER, false);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             
             curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "X-Auth-App-Key: ".$ucrmKey));
             

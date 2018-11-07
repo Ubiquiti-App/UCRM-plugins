@@ -15,4 +15,9 @@ class UcrmData
      * @var string
      */
     public $ucrmPublicUrl;
+
+    /**
+     * @var string|null
+     */
+    public $ucrmLocalUrl;
 }
