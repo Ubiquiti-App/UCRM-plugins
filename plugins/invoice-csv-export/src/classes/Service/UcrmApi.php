@@ -19,10 +19,24 @@ class UcrmApi
      */
     private $optionsManager;
 
+    /**
+     * @var bool
+     */
+    private $verifyUcrmApiConnection;
+
     public function __construct(CurlExecutor $curlExecutor, OptionsManager $optionsManager)
     {
         $this->curlExecutor = $curlExecutor;
         $this->optionsManager = $optionsManager;
+
+        $optionsData = $this->optionsManager->loadOptions();
+        $apiUrl = (property_exists($optionsData, 'ucrmLocalUrl') && $optionsData->ucrmLocalUrl)
+            ? $optionsData->ucrmLocalUrl
+            : $optionsData->ucrmPublicUrl;
+        $urlData = parse_url($apiUrl);
+        $this->verifyUcrmApiConnection = $urlData
+            && strtolower($urlData['host']) === 'localhost'
+            && strtolower($urlData['scheme']) === 'https';
     }
 
     /**
@@ -39,7 +53,8 @@ class UcrmApi
                 'Content-Type: application/json',
                 'X-Auth-App-Key: ' . $optionsData->pluginAppKey,
             ],
-            $data
+            $data,
+            $this->verifyUcrmApiConnection
         );
     }
 
@@ -56,7 +71,8 @@ class UcrmApi
                 'Content-Type: application/json',
                 'X-Auth-App-Key: ' . $optionsData->pluginAppKey,
             ],
-            $parameters
+            $parameters,
+            $this->verifyUcrmApiConnection
         );
     }
 
@@ -73,7 +89,9 @@ class UcrmApi
                 [
                     'Content-Type: application/json',
                     'Cookie: PHPSESSID=' . preg_replace('~[^a-zA-Z0-9]~', '', $_COOKIE['PHPSESSID'] ?? ''),
-                ]
+                ],
+                [],
+                $this->verifyUcrmApiConnection
             );
         } catch (CurlException $exception) {
             if ($exception->getCode() === 403) {
