@@ -1,31 +1,39 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Revenue report</title>
-</head>
-<body>
-<h1>Revenue report</h1>
-<form>
-    <table>
-        <tr>
-            <th>Service Plan</th>
-            <th>Total invoiced</th>
-            <th>Total paid</th>
-        </tr>
-        <?php foreach ($servicePlans as $servicePlan) { ?>
-            <tr>
-                <td><?php echo htmlspecialchars($servicePlan['name'], ENT_QUOTES); ?></td>
-                <td><?php echo number_format($servicePlan['totalIssued'], 2) . ' ' . $currency; ?></td>
-                <td><?php echo number_format($servicePlan['totalPaid'], 2) . ' ' . $currency; ?></td>
-            </tr>
-        <?php } ?>
-    </table>
-</form>
-<div id="chart-total-invoiced" style="width: 500px; height: 350px;"></div>
-<div id="chart-total-paid" style="width: 500px; height: 350px;"></div>
+<div class="row mb-4">
+    <div class="col-12">
+        <table class="table table-hover table-bordered bg-light mb-0">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Service Plan</th>
+                    <th scope="col">Total invoiced</th>
+                    <th scope="col">Total paid</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($result['servicePlans'] as $servicePlan) { ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($servicePlan['name'], ENT_QUOTES); ?></td>
+                        <td><?php echo number_format($servicePlan['totalIssued'], 2) . ' ' . $result['currency']; ?></td>
+                        <td><?php echo number_format($servicePlan['totalPaid'], 2) . ' ' . $result['currency']; ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div class="embed-responsive embed-responsive-4by3">
+            <div id="chart-total-invoiced" class="embed-responsive-item"></div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="embed-responsive embed-responsive-4by3">
+            <div id="chart-total-paid" class="embed-responsive-item"></div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
     google.charts.load('current', {'packages':['corechart']});
@@ -38,7 +46,7 @@
             [
                 ['Service Plan', 'Total invoiced'],
                 <?php
-                foreach ($servicePlans as $servicePlan) {
+                foreach ($result['servicePlans'] as $servicePlan) {
                     printf(
                         '[%s, %F],',
                         json_encode($servicePlan['name']),
@@ -55,7 +63,7 @@
             [
                 ['Service Plan', 'Total paid'],
                 <?php
-                foreach ($servicePlans as $servicePlan) {
+                foreach ($result['servicePlans'] as $servicePlan) {
                     printf(
                         '[%s, %F],',
                         json_encode($servicePlan['name']),
@@ -79,5 +87,3 @@
         chart.draw(dataTable, options);
     }
 </script>
-</body>
-</html>
