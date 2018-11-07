@@ -34,7 +34,10 @@ class UcrmApi
         $apiUrl = (property_exists($optionsData, 'ucrmLocalUrl') && $optionsData->ucrmLocalUrl)
             ? $optionsData->ucrmLocalUrl
             : $optionsData->ucrmPublicUrl;
-        $this->verifyUcrmApiConnection = strpos($apiUrl, 'https://localhost') !== 0;
+        $urlData = parse_url($apiUrl);
+        $this->verifyUcrmApiConnection = $urlData
+            && strtolower($urlData['host']) === 'localhost'
+            && strtolower($urlData['scheme']) === 'https';
     }
 
     /**
