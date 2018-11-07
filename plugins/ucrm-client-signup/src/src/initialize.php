@@ -11,7 +11,7 @@ define("PLUGIN_PUBLIC_URL", $ucrm_json->pluginPublicUrl);
 $apiUrl = (property_exists($ucrm_json, 'ucrmLocalUrl') && $ucrm_json->ucrmLocalUrl)
     ? $ucrm_json->ucrmLocalUrl
     : $ucrm_json->ucrmPublicUrl;
-define("UCRM_API_URL", $apiUrl.'api/v2.9');
+define("UCRM_API_URL", $apiUrl.'api/v1.0');
 define("PLUGIN_FILES_DIR", PROJECT_PATH.'/data/files/');
 
 $config_path = PROJECT_PATH."/data/config.json";
