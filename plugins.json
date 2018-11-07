@@ -5,7 +5,7 @@
             "displayName": "Fio bank payment import",
             "description": "This plugin enables you to import payments from Fio bank to UCRM. See https:\/\/www.fio.cz\/bankovni-sluzby\/api-bankovnictvi",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/fio_cz",
-            "version": "1.0.8",
+            "version": "1.0.9",
             "ucrmVersionCompliancy": {
                 "min": "2.10.0-beta1",
                 "max": null
@@ -18,7 +18,7 @@
             "displayName": "Invoice CSV export",
             "description": "Configurable export of invoices into CSV.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/invoice-csv-export",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "ucrmVersionCompliancy": {
                 "min": "2.14.0-beta2",
                 "max": null
@@ -31,7 +31,7 @@
             "displayName": "KMZ Map",
             "description": "A UCRM plugin that provides a frontend Google Map for clients to view tower coverage.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/kmz-map",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "ucrmVersionCompliancy": {
                 "min": "2.11.1",
                 "max": null
@@ -44,7 +44,7 @@
             "displayName": "Mikrotik Queue Sync Plugin",
             "description": "Plugin para sincronizar simple queues con los limites de velocidad establecidos en Ucrm - Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https:\/\/wiki.mikrotik.com\/wiki\/Manual:Queue",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/mkt-queue-sync",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "ucrmVersionCompliancy": {
                 "min": "2.10.0-beta1",
                 "max": null
@@ -57,7 +57,7 @@
             "displayName": "PacketLogic Packet Manager",
             "description": "UCRM Plugin that synchronizes customers with Procera Networks PacketLogic system.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/packetlogic-packet-manager",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "ucrmVersionCompliancy": {
                 "min": "2.10.0-beta1",
                 "max": null
@@ -70,7 +70,7 @@
             "displayName": "QuickBooks Online export",
             "description": "This plugin exports payments and invoices to QuickBooks Online",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/quickbooks-online",
-            "version": "1.0.6",
+            "version": "1.0.7",
             "ucrmVersionCompliancy": {
                 "min": "2.10.0-beta1",
                 "max": null
@@ -96,7 +96,7 @@
             "displayName": "RouterOS Packet Manager",
             "description": "This plugin allows using Mikrotik as a packet manager",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/routeros-packet-manager",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "ucrmVersionCompliancy": {
                 "min": "2.10.0-beta1",
                 "max": null
@@ -109,7 +109,7 @@
             "displayName": "SMS notifications via Twilio",
             "description": "This plugin sends SMS notifications via Twilio. NOTE: only phone numbers in the international format can be used, e.g. +155 555 1234",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/sms-twilio",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "ucrmVersionCompliancy": {
                 "min": "2.14.0-beta",
                 "max": null
@@ -122,7 +122,7 @@
             "displayName": "UCRM Client Signup",
             "description": "A UCRM plugin that provides a frontend form for clients to signup.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/ucrm-client-signup",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "ucrmVersionCompliancy": {
                 "min": "2.13.0-beta1",
                 "max": null

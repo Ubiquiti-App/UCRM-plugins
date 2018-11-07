@@ -1,5 +1,6 @@
 {
   "description": "UCRM plugin for export payments and invoces to QuickBooks",
+  "version": "1.0.7",
   "license": "MIT",
   "autoload": {
     "psr-4": {

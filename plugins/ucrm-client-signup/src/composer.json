@@ -8,6 +8,7 @@
 
     "name": "charuwts/UCS",
     "description": "UCRM Client Signup Plugin",
+    "version": "1.1.2",
     "authors": [
         {
             "name": "Brandon White",

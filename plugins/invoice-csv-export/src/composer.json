@@ -1,6 +1,7 @@
 {
   "description": "This is a sample UCRM plugin showcasing a custom link in menu and security checks.",
   "license": "MIT",
+  "version": "1.0.1",
   "autoload": {
     "psr-4": {
       "App\\": [

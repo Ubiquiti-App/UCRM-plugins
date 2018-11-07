@@ -11,7 +11,7 @@ class CurlExecutor
     /**
      * @throws CurlException
      */
-    public function curlCommand($url, $method, array $headers = [], array $data = null): void
+    public function curlCommand($url, $method, array $headers = [], array $data = null, bool $verifySsl = true): void
     {
         $c = curl_init();
         curl_setopt($c, CURLOPT_URL, $url);
@@ -24,9 +24,14 @@ class CurlExecutor
         }
 
         curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($c, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
-
+        if ($verifySsl) {
+            curl_setopt($c, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
+        } else {
+            // we are disabling verification by request
+            curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 0);
+        }
         $result = curl_exec($c);
 
         $error = curl_error($c);
@@ -51,7 +56,7 @@ class CurlExecutor
     /**
      * @throws CurlException
      */
-    public function curlQuery($url, array $headers = [], array $parameters = []): array
+    public function curlQuery($url, array $headers = [], array $parameters = [], bool $verifySsl = true): array
     {
         if ($parameters) {
             $url .= '?' . http_build_query($parameters);
@@ -62,9 +67,14 @@ class CurlExecutor
         curl_setopt($c, CURLOPT_HTTPHEADER, $headers);
 
         curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($c, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
-
+        if ($verifySsl) {
+            curl_setopt($c, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
+        } else {
+            // we are disabling verification by request
+            curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 0);
+        }
         $result = curl_exec($c);
 
         $error = curl_error($c);

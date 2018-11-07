@@ -21,6 +21,11 @@ class UcrmData
     public $ucrmPublicUrl;
 
     /**
+     * @var string|null
+     */
+    public $ucrmLocalUrl;
+
+    /**
      * @var string
      */
     public $pluginPublicUrl;

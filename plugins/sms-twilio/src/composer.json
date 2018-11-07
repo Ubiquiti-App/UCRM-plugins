@@ -1,5 +1,6 @@
 {
   "description": "UCRM plugin for SMS notifications, powered by Twilio",
+  "version": "1.0.1",
   "license": "MIT",
   "autoload": {
     "psr-4": {

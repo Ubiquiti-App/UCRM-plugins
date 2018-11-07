@@ -5,7 +5,7 @@
         "displayName": "PacketLogic Packet Manager",
         "description": "UCRM Plugin that synchronizes customers with Procera Networks PacketLogic system.",
         "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/packetlogic-packet-manager",
-        "version": "1.0.2",
+        "version": "1.0.3",
         "ucrmVersionCompliancy": {
             "min": "2.10.0-beta1",
             "max": null
