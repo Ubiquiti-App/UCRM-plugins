@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e641cedc9252bc6435e86ce6c5e0ba87",
+    "content-hash": "b9e2d7addb05f058a7d6c7353f7f5026",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
