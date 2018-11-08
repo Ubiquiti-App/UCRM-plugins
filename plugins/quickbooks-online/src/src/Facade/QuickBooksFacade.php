@@ -340,7 +340,14 @@ class QuickBooksFacade
 
         $pluginData = $this->optionsManager->load();
         $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
-        foreach ($this->ucrmApi->query('payments?direction=ASC') as $ucrmPayment) {
+        $ucrmPayments = $this->ucrmApi->query('payments?direction=ASC');
+		usort(
+			$ucrmPayments,
+			function (array $a, array $b) {
+			return $a['id'] <=> $b['id'];
+			}
+		);
+	    foreach ($ucrmPayments as $ucrmPayment) {
             if ($ucrmPayment['id'] <= $pluginData->lastExportedPaymentID || ! $ucrmPayment['clientId']) {
                 continue;
             }
