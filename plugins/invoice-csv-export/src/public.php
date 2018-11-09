@@ -48,10 +48,14 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
 // Render form.
 $organizations = $api->query('organizations');
 
+// Retrieve options manager.
+$optionsManager = $container->get(\App\Service\OptionsManager::class);
+
 $renderer = $container->get(\App\Service\TemplateRenderer::class);
 $renderer->render(
     __DIR__ . '/templates/form.php',
     [
         'organizations' => $organizations,
+        'ucrmPublicUrl' => $optionsManager->loadOptions()->ucrmPublicUrl,
     ]
 );
