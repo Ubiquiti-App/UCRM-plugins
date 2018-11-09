@@ -21,7 +21,8 @@ This is an auto-generated file, created after plugin is installed in UCRM. It co
 The configuration is automatically refreshed, when changes are made in UCRM settings.
 
 The following options are available:
-- `ucrmPublicUrl` - URL under which is UCRM publicly accessible, this will be `null` if the `Server domain name` or `Server IP` options are not configured in UCRM.
+- `ucrmPublicUrl` - URL under which UCRM is publicly accessible, this will be `null` if the `Server domain name` or `Server IP` options are not configured in UCRM.
+- `ucrmLocalUrl` - URL under which UCRM is locally accessible. This should be used to call UCRM API to prevent issues with self-signed certificates. Available since UCRM 2.14.0-beta3.
 - `pluginPublicUrl` - URL under which the `public.php` file is publicly accessible, this will be `null` if the plugin does not have `public.php` file or if the `Server domain name` or `Server IP` options are not configured in UCRM.
 - `pluginAppKey` - An App key automatically generated for the plugin (with write permissions), which can be used to access UCRM API.
 
