@@ -18,11 +18,11 @@ UCRM plugins are compatible with UCRM 2.10.0+
 | [QuickBooks&nbsp;Online](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/quickbooks-online) | Sync financial data from UCRM into QB Online |
 | [MKT&nbsp;Queue&nbsp;Sync](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/mkt-queue-sync) | Sync UCRM Service Data rate with Mikrotik Simple Queue by service IP Address and client's service speed set in UCRM |
 | [FIO CZ](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/fio_cz) | Automatic payments import and matching with clients - from WISP's FIO bank account |
-| [Client&nbsp;Signup](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/UCRM-Client-Signup) | Enables any visitor to register as a new client through a public web form |
+| [Client&nbsp;Signup](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/ucrm-client-signup) | Enables any visitor to register as a new client through a public web form |
 | [RouterOS&nbsp;packet&nbsp;manager](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/routeros-packet-manager) | Sync UCRM Service Data rate with Router-OS |
 | [Packetlogic packet manager](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/packetlogic-packet-manager) | Sync UCRM Entities and Service Data Rate with Procera |
-| [KMZ Map](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/KMZ-Map) | Provides a frontend Google Map for clients to view tower coverage. |
-| [Invoice CSV Export](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/examples/example-invoice-csv-export) | Configurable export of invoices into CSV, can be used for a manual export to 3rd party accounting tools. |
+| [KMZ Map](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/kmz-map) | Provides a frontend Google Map for clients to view tower coverage. |
+| [Invoice CSV Export](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-csv-export) | Configurable export of invoices into CSV, can be used for a manual export to 3rd party accounting tools. |
 | [Revenue Report](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/revenue-report) | Revenue report grouped by products or services, shown under the Reporting main menu section. |
 
 ## Plugins from other sources

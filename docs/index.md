@@ -7,7 +7,7 @@ Plugins can be used as:
 
 ## Plugin samples for an easy start of creating your own plugin
 * [Plugin Template](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/examples/plugin-template) - Simpliest UCRM plugin sample, can be used as a base for a new plugin development.
-* [Invoice CSV Export](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/example-invoice-csv-export) - Better plugin example, actually doing something: a new menu item shown, enables user to define From & To date filters, exports filtered invoices into CSV.  
+* [Invoice CSV Export](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-csv-export) - Better plugin example, actually doing something: a new menu item shown, enables user to define From & To date filters, exports filtered invoices into CSV.  
 * [Revenue Report](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/revenue-report) - Revenue report grouped by products or services, shown under the Reporting main menu section.
 
 ## Distribution

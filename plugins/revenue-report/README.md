@@ -5,7 +5,7 @@ When this plugin is deployed no configuration is needed. It just creates a new i
 
 Also, this plugin can be used as an example to show what you can do with UCRM plugins. It can be used by developers as a template for creating a new plugin.
 
-Read more about creating your own plugin in the [Developer documentation](../../master/docs/index.md).
+Read more about creating your own plugin in the [Developer documentation](../../docs/index.md).
 
 ## Useful classes
 
