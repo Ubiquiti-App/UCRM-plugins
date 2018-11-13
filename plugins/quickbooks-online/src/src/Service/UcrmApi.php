@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace QBExport\Service;
 
 
+use QBExport\Data\PluginData;
 use QBExport\Exception\CurlException;
 
 class UcrmApi
@@ -30,11 +31,9 @@ class UcrmApi
         $this->curlExecutor = $curlExecutor;
         $this->optionsManager = $optionsManager;
 
-        $optionsData = $this->optionsManager->loadOptions();
-        $apiUrl = (property_exists($optionsData, 'ucrmLocalUrl') && $optionsData->ucrmLocalUrl)
-            ? $optionsData->ucrmLocalUrl
-            : $optionsData->ucrmPublicUrl;
-        $urlData = parse_url($apiUrl);
+        $urlData = parse_url(
+            $this->getApiUrl($this->optionsManager->load())
+        );
         $this->verifyUcrmApiConnection = $urlData
             && strtolower($urlData['host']) === 'localhost'
             && strtolower($urlData['scheme']) === 'https';
@@ -49,7 +48,7 @@ class UcrmApi
         $optionsData = $this->optionsManager->load();
 
         $this->curlExecutor->curlCommand(
-            sprintf('%sapi/v1.0/%s', $optionsData->ucrmPublicUrl, $endpoint),
+            sprintf('%sapi/v1.0/%s', $this->getApiUrl($optionsData), $endpoint),
             $method,
             [
                 'Content-Type: application/json',
@@ -69,7 +68,7 @@ class UcrmApi
         $optionsData = $this->optionsManager->load();
 
         return $this->curlExecutor->curlQuery(
-            sprintf('%sapi/v1.0/%s', $optionsData->ucrmPublicUrl, $endpoint),
+            sprintf('%sapi/v1.0/%s', $this->getApiUrl($optionsData), $endpoint),
             [
                 'Content-Type: application/json',
                 'X-Auth-App-Key: ' . $optionsData->pluginAppKey,
@@ -77,5 +76,10 @@ class UcrmApi
             $parameters,
             $this->verifyUcrmApiConnection
         );
+    }
+
+    private function getApiUrl(PluginData $optionsData): string
+    {
+        return ($optionsData->ucrmLocalUrl ?? false) ?: $optionsData->ucrmPublicUrl;
     }
 }
