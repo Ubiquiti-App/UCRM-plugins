@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Data\PluginData;
 use App\Data\UcrmUser;
 use App\Exception\CurlException;
 
@@ -29,11 +30,9 @@ class UcrmApi
         $this->curlExecutor = $curlExecutor;
         $this->optionsManager = $optionsManager;
 
-        $optionsData = $this->optionsManager->loadOptions();
-        $apiUrl = (property_exists($optionsData, 'ucrmLocalUrl') && $optionsData->ucrmLocalUrl)
-            ? $optionsData->ucrmLocalUrl
-            : $optionsData->ucrmPublicUrl;
-        $urlData = parse_url($apiUrl);
+        $urlData = parse_url(
+            $this->getApiUrl($this->optionsManager->loadOptions())
+        );
         $this->verifyUcrmApiConnection = $urlData
             && strtolower($urlData['host']) === 'localhost'
             && strtolower($urlData['scheme']) === 'https';
@@ -47,7 +46,7 @@ class UcrmApi
         $optionsData = $this->optionsManager->loadOptions();
 
         $this->curlExecutor->curlCommand(
-            sprintf('%sapi/v1.0/%s', $optionsData->ucrmPublicUrl, $endpoint),
+            sprintf('%sapi/v1.0/%s', $this->getApiUrl($optionsData), $endpoint),
             $method,
             [
                 'Content-Type: application/json',
@@ -66,7 +65,7 @@ class UcrmApi
         $optionsData = $this->optionsManager->loadOptions();
 
         return $this->curlExecutor->curlQuery(
-            sprintf('%sapi/v1.0/%s', $optionsData->ucrmPublicUrl, $endpoint),
+            sprintf('%sapi/v1.0/%s', $this->getApiUrl($optionsData), $endpoint),
             [
                 'Content-Type: application/json',
                 'X-Auth-App-Key: ' . $optionsData->pluginAppKey,
@@ -85,7 +84,7 @@ class UcrmApi
 
         try {
             $data = $this->curlExecutor->curlQuery(
-                sprintf('%scurrent-user', $optionsData->ucrmPublicUrl),
+                sprintf('%scurrent-user', $this->getApiUrl($optionsData)),
                 [
                     'Content-Type: application/json',
                     'Cookie: PHPSESSID=' . preg_replace('~[^a-zA-Z0-9]~', '', $_COOKIE['PHPSESSID'] ?? ''),
@@ -102,5 +101,10 @@ class UcrmApi
         }
 
         return new UcrmUser($data);
+    }
+
+    private function getApiUrl(PluginData $optionsData): string
+    {
+        return ($optionsData->ucrmLocalUrl ?? false) ?: $optionsData->ucrmPublicUrl;
     }
 }
