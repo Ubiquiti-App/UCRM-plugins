@@ -13,6 +13,11 @@ Main file of the plugin. This is what will be executed when the plugin is run by
 ### public.php
 If this file is present, public URL will be generated for the plugin which will point to this file. When the URL is accessed, the file will be parsed as PHP script and executed.
 
+### "public" directory
+*Available since UCRM 2.14.0-beta4.*  
+All files placed in this directory will be publicly accessible without any authentication. It should be used for static assets (e.g. CSS, javascript, images) as the files will be served without any processing.  
+> Please note, that the directory will only work if the plugin has `public.php` file (see above).
+
 ## Reserved files
 These files cannot be contained in the plugin archive as UCRM handles them and they would be overridden.
 
