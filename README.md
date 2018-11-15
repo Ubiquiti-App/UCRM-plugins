@@ -24,10 +24,11 @@ UCRM plugins are compatible with UCRM 2.10.0+
 | [KMZ Map](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/kmz-map) | Provides a frontend Google Map for clients to view tower coverage. |
 | [Invoice CSV Export](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-csv-export) | Configurable export of invoices into CSV, can be used for a manual export to 3rd party accounting tools. |
 | [Revenue Report](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/revenue-report) | Revenue report grouped by products or services, shown under the Reporting main menu section. |
+| [TowerCoverage](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/towercoverage) | Receives TowerCoverage.com End-User Submission (EUS) data and creates/updates a Client Lead in UCRM. |
 
 ## Plugins from other sources
 * [Client&nbsp;Signup Extended](https://www.charuwts.com/plugins/ucrm-signup) - Extended version of Client Signup Plugin
-* [Notification Plugin](https://community.ubnt.com/t5/UCRM-Plugins/Notification-Plugin/td-p/2541572) - Extended UCRM's notification system. More event-triggered emails sent to UCRM administrators.  
+* [Notification Plugin](https://github.com/ucrm-plugins/notifications) - Extended UCRM's notification system. More event-triggered emails sent to UCRM administrators.  
 
 ## How can I contribute?
 * These plugins are under MIT license enabling anyone to contribute any upgrades to existing plugins or create whole new ones.
