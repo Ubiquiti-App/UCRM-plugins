@@ -6,3 +6,6 @@
 
 # Ignore .env files in all Plugins.
 **/.env
+
+# Ignore vendor/ folders in all Plugins.
+**/vendor/
