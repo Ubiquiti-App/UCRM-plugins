@@ -1,0 +1,8 @@
+
+# Ignore Plugin Reserved files in all Plugins.
+**/data/config.json
+**/data/plugin.log
+**/ucrm.json
+
+# Ignore .env files in all Plugins.
+**/.env

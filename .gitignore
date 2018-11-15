@@ -1,0 +1,4 @@
+
+# Ignore JetBrains Project files in all Projects.
+**/.idea/
+
