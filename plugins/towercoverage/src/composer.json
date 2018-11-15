@@ -1,0 +1,47 @@
+{
+    "name": "mvqn-ucrm/tower-coverage",
+    "description": "A simple UCRM Plugin to receive push data from towercoverage.com.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ryan Spaeth",
+            "email": "rspaeth@mvqn.net"
+        }
+    ],
+    "require": {
+        "php": "~7.1",
+        "ext-json": "*",
+        "ext-zip": "*",
+        "ext-libxml": "*",
+        "ext-simplexml": "*",
+
+        "mvqn/localization": "1.*",
+
+        "ucrm-modules/common": "1.*",
+        "ucrm-modules/rest": "1.*",
+        "ucrm-modules/data": "1.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "7.2.7",
+        "vlucas/phpdotenv": "2.5.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "MVQN\\": "src/MVQN",
+            "UCRM\\": "src/UCRM"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+        }
+    },
+    "scripts": {
+        "create": [
+            "@php bin/composer.php create"
+        ],
+        "bundle": [
+            "@composer --no-interaction --verbose dump-autoload",
+            "@php bin/composer.php bundle"
+        ]
+    }
+}

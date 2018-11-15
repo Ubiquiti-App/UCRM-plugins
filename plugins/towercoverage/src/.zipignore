@@ -1,0 +1,22 @@
+#
+# A comprehensive list of file and folder exclusions for the Bundler.
+#
+
+# Ignore THIS file.
+.zipignore
+
+# Ignore reserved Plugin files.
+data/config.json
+data/plugin.log
+ucrm.json
+
+# Ignore examples.
+examples/push-data.xml
+
+# Ignore local development files.
+eus-form.html
+index.php
+
+# Ignore test files.
+test.php
+

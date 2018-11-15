@@ -1,0 +1,65 @@
+{
+    "version": "1",
+    "information": {
+        "name": "towercoverage",
+        "displayName": "UCRM TowerCoverage Plugin",
+        "description": "Receives TowerCoverage.com End-User Submission (EUS) data and creates/updates a Client Lead in UCRM.",
+        "url": "https://github.com/ucrm-plugins/towercoverage",
+        "version": "1.1.0",
+        "ucrmVersionCompliancy": {
+            "min": "2.14.0-beta4",
+            "max": null
+        },
+        "author": "Ryan Spaeth <rspaeth@mvqn.net>"
+    },
+    "configuration": [
+        {
+            "key": "development",
+            "label": "Development?",
+            "description": "If enabled, the system will force the plugin's environment to 'dev', regardless of the actual environment config.  NOTE: This should be disabled unless the plugin is not functioning correctly and debug information is needed!",
+            "required": 0,
+            "type": "checkbox"
+        },
+        {
+            "key": "verboseLogging",
+            "label": "Verbose Logging?",
+            "description": "If enabled, will include verbose debug messages in the logs.",
+            "required": 0,
+            "type": "checkbox"
+        },
+        {
+            "key": "apiKey",
+            "label": "API Key",
+            "description": "The API Key from TowerCoverage.com. If blank, allows submissions from any EUS API.",
+            "required": 0,
+            "type": "text"
+        },
+        {
+            "key": "apiUsername",
+            "label": "API Username",
+            "description": "The API Username from TowerCoverage.com. If blank, allows submissions from any EUS API.",
+            "required": 0,
+            "type": "text"
+        },
+        {
+            "key": "apiPassword",
+            "label": "API Password",
+            "description": "The API Password from TowerCoverage.com. If blank, allows submissions from any EUS API.",
+            "required": 0,
+            "type": "text"
+        },
+        {
+            "key": "duplicateMode",
+            "label": "Duplicate Mode",
+            "description": "Select the method for determining duplicate entries.",
+            "required": 0,
+            "type": "choice",
+            "choices": {
+                "First & Last Names": "",
+                "Primary Email": "email",
+                "Street Address": "street"
+            }
+        }
+    ]
+}
+
