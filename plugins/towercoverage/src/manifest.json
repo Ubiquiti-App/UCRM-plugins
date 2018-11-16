@@ -4,7 +4,7 @@
         "name": "towercoverage",
         "displayName": "UCRM TowerCoverage Plugin",
         "description": "Receives TowerCoverage.com End-User Submission (EUS) data and creates/updates a Client Lead in UCRM.",
-        "url": "https://github.com/ucrm-plugins/towercoverage",
+        "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/towercoverage",
         "version": "1.1.0",
         "ucrmVersionCompliancy": {
             "min": "2.14.0-beta4",
