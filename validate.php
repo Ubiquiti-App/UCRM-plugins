@@ -101,12 +101,6 @@ function parseManifest(string $manifestString): ?array
     return $manifest;
 }
 
-/**
- * @param $manifest
- * @param int $errors
- * @param $name
- * @return int
- */
 function validateManifestData(array $manifest, string $name): int
 {
     $errors = 0;
@@ -124,21 +118,15 @@ function validateManifestData(array $manifest, string $name): int
 
 function ensureManifestMatches(string $zipFile, array $manifest, string $manifestFile): int
 {
-    $zipHandle = zip_open(realpath($zipFile));
-    if (! is_resource($zipHandle)) {
+    $zipArchive = new ZipArchive();
+    if (! $zipArchive->open(realpath($zipFile))) {
         printf('Could not open zipfile - invalid format: "%s"' . PHP_EOL, $zipFile);
 
         return 1;
     }
 
-    $manifestZipString = '';
-    while ($zipEntry = zip_read($zipHandle)) {
-        if (zip_entry_name($zipEntry) !== 'manifest.json') {
-            continue;
-        }
-        $manifestZipString = zip_entry_read($zipEntry, zip_entry_filesize($zipEntry));
-        break;
-    }
+    $manifestZipString = $zipArchive->getFromName('manifest.json');
+    unset($zipArchive);
 
     if (! $manifestZipString) {
         printf('Could not read manifest.json from zipfile "%s"' . PHP_EOL, $zipFile);
@@ -167,22 +155,14 @@ function ensureManifestMatches(string $zipFile, array $manifest, string $manifes
     return 0;
 }
 
-function printArrayRecursiveDiff(
-    $keyPrefix,
-    array $arrayDifference,
-    array $manifest,
-    array $manifestZip,
-    int $depth =
-    0
-):
-void
+function printArrayRecursiveDiff(string $keyPrefix, array $arrayDifference, array $manifest, array $manifestZip, int $depth = 0): void
 {
     ++$depth;
     if ($depth > 50) {
         return;
     }
     foreach ($arrayDifference as $key => $value) {
-        if (isset($manifest[$key], $manifestZip[$key]) && is_array($manifest[$key])) {
+        if (array_key_exists($key,$manifest) && array_key_exists($key, $manifestZip) && is_array($manifest[$key])) {
             printArrayRecursiveDiff(
                 $key . ':',
                 arrayRecursiveDiff($manifest[$key], $manifestZip[$key]),
@@ -196,9 +176,9 @@ void
                 $keyPrefix,
                 $key,
                 PHP_EOL,
-                isset($manifest[$key]) ? (is_array($manifest[$key]) ? 'Array' : $manifest[$key]) : '(none)',
+                array_key_exists($key,$manifest) ? (is_array($manifest[$key]) ? 'Array' : $manifest[$key]) : '(none)',
                 PHP_EOL,
-                isset($manifestZip[$key]) ? (is_array($manifestZip[$key]) ? 'Array' : $manifestZip[$key]) : '(none)',
+                array_key_exists($key,$manifestZip) ? (is_array($manifestZip[$key]) ? 'Array' : $manifestZip[$key]) : '(none)',
                 PHP_EOL
             );
         }
@@ -207,12 +187,13 @@ void
 
 function arrayRecursiveDiff(array $aArray1, array $aArray2, int $depth = 0): array
 {
-    $aReturn = array();
+    $aReturn = [];
     ++$depth;
     if ($depth > 50) {
         return $aReturn;
     }
 
+    // as per @mhitza at https://stackoverflow.com/a/3877494/19746
     foreach ($aArray1 as $mKey => $mValue) {
         if (array_key_exists($mKey, $aArray2)) {
             if (is_array($mValue)) {
@@ -220,10 +201,8 @@ function arrayRecursiveDiff(array $aArray1, array $aArray2, int $depth = 0): arr
                 if (count($aRecursiveDiff)) {
                     $aReturn[$mKey] = $aRecursiveDiff;
                 }
-            } else {
-                if ($mValue !== $aArray2[$mKey]) {
-                    $aReturn[$mKey] = $mValue;
-                }
+            } else if ($mValue !== $aArray2[$mKey]) {
+                $aReturn[$mKey] = $mValue;
             }
         } else {
             $aReturn[$mKey] = $mValue;
@@ -236,10 +215,8 @@ function arrayRecursiveDiff(array $aArray1, array $aArray2, int $depth = 0): arr
                 if (count($aRecursiveDiff)) {
                     $aReturn[$mKey] = $aRecursiveDiff;
                 }
-            } else {
-                if ($mValue !== $aArray1[$mKey]) {
-                    $aReturn[$mKey] = $mValue;
-                }
+            } else if ($mValue !== $aArray1[$mKey]) {
+                $aReturn[$mKey] = $mValue;
             }
         } else {
             $aReturn[$mKey] = $mValue;
