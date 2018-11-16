@@ -89,8 +89,4 @@ final class Coverage extends XmlElementClass
      */
     protected $receivedSignal;
 
-
-
-
-
 }

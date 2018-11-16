@@ -38,10 +38,6 @@ RestClient::setHeaders([
     "X-Auth-App-Key: " . Settings::PLUGIN_APP_KEY
 ]);
 
-
-// Configure the language...
-//$translations = include_once __DIR__."/translations/" . (Config::getLanguage() ?: "en_US") . ".php";
-
 // Set the dictionary directory and "default" locale.
 try
 {

@@ -22,4 +22,5 @@ final class TowerCoverage extends XmlElementClass
      * @XmlElement CustomerDetails
      */
     protected $customerDetails;
+
 }

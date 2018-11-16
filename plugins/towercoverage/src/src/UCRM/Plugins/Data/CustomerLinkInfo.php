@@ -31,5 +31,4 @@ final class CustomerLinkInfo extends XmlElementClass
      */
     protected $coverages;
 
-
 }
