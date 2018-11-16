@@ -156,7 +156,7 @@ function ensureManifestMatches(string $zipFile, array $manifest, string $manifes
 function printArrayRecursiveDiff($keyPrefix, array $arrayDifference, array $manifest, array $manifestZip): void
 {
     foreach ($arrayDifference as $key => $value) {
-        if (is_array($manifest[$key])) {
+        if (isset($manifest[$key], $manifestZip[$key]) && is_array($manifest[$key])) {
             printArrayRecursiveDiff(
                 $key.':',
                 arrayRecursiveDiff($manifest[$key], $manifestZip[$key]),
@@ -169,9 +169,9 @@ function printArrayRecursiveDiff($keyPrefix, array $arrayDifference, array $mani
                 $keyPrefix,
                 $key,
                 PHP_EOL,
-                $manifest[$key] ?? '(none)',
+                isset($manifest[$key]) ? (is_array($manifest[$key]) ? 'Array' : $manifest[$key]) : '(none)',
                 PHP_EOL,
-                $manifestZip[$key] ?? '(none)',
+                isset($manifestZip[$key]) ? (is_array($manifestZip[$key]) ? 'Array' : $manifestZip[$key]) : '(none)',
                 PHP_EOL
             );
         }
@@ -191,6 +191,22 @@ function arrayRecursiveDiff($aArray1, $aArray2)
                 }
             } else {
                 if ($mValue != $aArray2[$mKey]) {
+                    $aReturn[$mKey] = $mValue;
+                }
+            }
+        } else {
+            $aReturn[$mKey] = $mValue;
+        }
+    }
+    foreach ($aArray2 as $mKey => $mValue) {
+        if (array_key_exists($mKey, $aArray1)) {
+            if (is_array($mValue)) {
+                $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray1[$mKey]);
+                if (count($aRecursiveDiff)) {
+                    $aReturn[$mKey] = $aRecursiveDiff;
+                }
+            } else {
+                if ($mValue != $aArray1[$mKey]) {
                     $aReturn[$mKey] = $mValue;
                 }
             }
