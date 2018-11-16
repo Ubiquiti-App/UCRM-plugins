@@ -65,7 +65,7 @@ if (! $ucrmPublicURL) {
         
         $sslVerify = parse_url($connURL);
 
-        if (strtolower($sslVerify['scheme']) === 'https') {
+        if (strtolower($sslVerify['scheme']) === 'https' && strtolower($sslVerify['host']) === 'localhost') {
 
             $ch = curl_init();
             
