@@ -153,15 +153,28 @@ function ensureManifestMatches(string $zipFile, array $manifest, string $manifes
     return 0;
 }
 
-function printArrayRecursiveDiff($keyPrefix, array $arrayDifference, array $manifest, array $manifestZip): void
+function printArrayRecursiveDiff(
+    $keyPrefix,
+    array $arrayDifference,
+    array $manifest,
+    array $manifestZip,
+    int $depth =
+    0
+):
+void
 {
+    ++$depth;
+    if ($depth > 50) {
+        return;
+    }
     foreach ($arrayDifference as $key => $value) {
         if (isset($manifest[$key], $manifestZip[$key]) && is_array($manifest[$key])) {
             printArrayRecursiveDiff(
                 $key.':',
                 arrayRecursiveDiff($manifest[$key], $manifestZip[$key]),
                 $manifest[$key],
-                $manifestZip[$key]
+                $manifestZip[$key],
+                $depth
             );
         } else {
             printf(
@@ -178,19 +191,23 @@ function printArrayRecursiveDiff($keyPrefix, array $arrayDifference, array $mani
     }
 }
 
-function arrayRecursiveDiff($aArray1, $aArray2)
+function arrayRecursiveDiff(array $aArray1, array $aArray2, int $depth = 0): array
 {
     $aReturn = array();
+    ++$depth;
+    if ($depth > 50) {
+        return $aReturn;
+    }
 
     foreach ($aArray1 as $mKey => $mValue) {
         if (array_key_exists($mKey, $aArray2)) {
             if (is_array($mValue)) {
-                $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray2[$mKey]);
+                $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray2[$mKey], $depth);
                 if (count($aRecursiveDiff)) {
                     $aReturn[$mKey] = $aRecursiveDiff;
                 }
             } else {
-                if ($mValue != $aArray2[$mKey]) {
+                if ($mValue !== $aArray2[$mKey]) {
                     $aReturn[$mKey] = $mValue;
                 }
             }
@@ -201,12 +218,12 @@ function arrayRecursiveDiff($aArray1, $aArray2)
     foreach ($aArray2 as $mKey => $mValue) {
         if (array_key_exists($mKey, $aArray1)) {
             if (is_array($mValue)) {
-                $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray1[$mKey]);
+                $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray1[$mKey], $depth);
                 if (count($aRecursiveDiff)) {
                     $aReturn[$mKey] = $aRecursiveDiff;
                 }
             } else {
-                if ($mValue != $aArray1[$mKey]) {
+                if ($mValue !== $aArray1[$mKey]) {
                     $aReturn[$mKey] = $mValue;
                 }
             }
