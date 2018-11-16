@@ -192,24 +192,6 @@ use UCRM\REST\Endpoints\Country;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     http_response_code(200);
 
 

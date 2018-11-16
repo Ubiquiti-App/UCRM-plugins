@@ -12,8 +12,3 @@ $data = json_decode($json, true);
 $coverage = new Coverage($data["CustomerDetails"]["CustomerLinkInfo"]["coverage"][0]);
 
 var_dump($coverage);
-
-
-
-
-

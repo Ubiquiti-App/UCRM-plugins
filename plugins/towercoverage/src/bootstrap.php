@@ -56,4 +56,3 @@ catch (\MVQN\Localization\Exceptions\TranslatorException $e)
     //die("The locale '$locale' is not currently supported!");
     die($e->getMessage());
 }
-
