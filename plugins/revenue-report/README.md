@@ -1,4 +1,4 @@
-# [Example] Revenue Report Plugin
+# Revenue Report Plugin
 
 This plugin calculates the organization's revenue. The data can be grouped by products or service plans.
 When this plugin is deployed no configuration is needed. It just creates a new item under the Reporting main menu section.
