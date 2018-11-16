@@ -24,4 +24,4 @@ foreach ($pluginDirectories as $directory) {
 
 ksort($plugins);
 
-echo json_encode(['plugins' => array_values(array_filter($plugins))], JSON_PRETTY_PRINT);
+echo json_encode(['plugins' => array_values(array_filter($plugins))], JSON_PRETTY_PRINT) . PHP_EOL;
