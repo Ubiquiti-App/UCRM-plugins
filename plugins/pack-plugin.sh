@@ -82,7 +82,9 @@ cd "${PLUGIN_DIR_SRC}" || (
 
 # compose if available
 if [[ -x "${COMPOSER}" ]]; then
-    "${COMPOSER}" install
+    if [[ -f "./composer.json" ]] ; then
+        "${COMPOSER}" install
+    fi
 fi
 
 rm "${PLUGIN_ZIP_FILE}" && "${ZIP}" --latest-time --verbose --recurse-paths "${PLUGIN_ZIP_FILE}" ./*
