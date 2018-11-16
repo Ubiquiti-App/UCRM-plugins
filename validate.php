@@ -11,6 +11,20 @@ function ensureFileExists(string $file): int
     return 0;
 }
 
+function ensureComposerLockExists(string $path): int
+{
+    $composerJson = $path . '/src/composer.json';
+    $composerLock = $path . '/src/composer.lock';
+    if (file_exists($composerJson) && ! file_exists($composerLock)) {
+        $pluginName = basename($path);
+        printf('%s: Found composer.json, but did not find "%s".' . PHP_EOL, $pluginName, $composerLock);
+
+        return 1;
+    }
+
+    return 0;
+}
+
 function ensureArrayKeyExists(array $array, string... $keys): int
 {
     $count = count($keys);
@@ -265,6 +279,7 @@ function validatePlugin(SplFileInfo $pluginDirectory): int
 
     $errors += ensureFileExists($path . '/README.md');
     $errors += ensureFileExists($path . '/src/main.php');
+    $errors += ensureComposerLockExists($path);
     $errors += validateManifest($path . '/src/manifest.json');
 
     return $errors;
