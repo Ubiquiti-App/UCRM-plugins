@@ -44,7 +44,7 @@ class MessageTextFactory
 
     public function createBody(NotificationData $notificationData): string
     {
-        // configuration keys do not allow underscore
+        // configuration keys do not allow dots, replace with underscore
         $eventName = 'event_'.str_replace('.', '_', $notificationData->eventName);
 
         if (!property_exists($this->pluginData, $eventName)) {
