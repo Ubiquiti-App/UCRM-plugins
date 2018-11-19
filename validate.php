@@ -162,7 +162,7 @@ function printArrayRecursiveDiff(string $keyPrefix, array $arrayDifference, arra
         return;
     }
     foreach ($arrayDifference as $key => $value) {
-        if (array_key_exists($key,$manifest) && array_key_exists($key, $manifestZip) && is_array($manifest[$key])) {
+        if (array_key_exists($key, $manifest) && array_key_exists($key, $manifestZip) && is_array($manifest[$key])) {
             printArrayRecursiveDiff(
                 $key . ':',
                 arrayRecursiveDiff($manifest[$key], $manifestZip[$key]),
@@ -176,9 +176,9 @@ function printArrayRecursiveDiff(string $keyPrefix, array $arrayDifference, arra
                 $keyPrefix,
                 $key,
                 PHP_EOL,
-                array_key_exists($key,$manifest) ? (is_array($manifest[$key]) ? 'Array' : $manifest[$key]) : '(none)',
+                array_key_exists($key, $manifest) ? (is_array($manifest[$key]) ? 'Array' : $manifest[$key]) : '(none)',
                 PHP_EOL,
-                array_key_exists($key,$manifestZip) ? (is_array($manifestZip[$key]) ? 'Array' : $manifestZip[$key]) : '(none)',
+                array_key_exists($key, $manifestZip) ? (is_array($manifestZip[$key]) ? 'Array' : $manifestZip[$key]) : '(none)',
                 PHP_EOL
             );
         }
@@ -254,6 +254,7 @@ function validatePlugin(SplFileInfo $pluginDirectory): int
 
     $errors = 0;
 
+    $errors += validatePhp($path);
     $errors += ensureFileExists($path . '/README.md');
     $errors += ensureFileExists($path . '/src/main.php');
     $errors += ensureComposerLockExists($path);
@@ -279,6 +280,34 @@ function checkPluginsJson(): int
     );
 
     return 1;
+}
+
+function validatePhp(string $path): int
+{
+    $errors = 0;
+    $files = new CallbackFilterIterator(
+        new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path)
+        ),
+        function (SplFileInfo $fileInfo) {
+            return (! $fileInfo->isDir()) && (stripos($fileInfo->getBasename(), '.php') === strlen($fileInfo->getBasename()) - 4) && (strpos($fileInfo->getPathname(), '/src/vendor/') === false);
+        }
+    );
+    /** @var SplFileInfo $file */
+    foreach ($files as $file) {
+        $output = [];
+        $result = null;
+        exec(
+            escapeshellcmd(PHP_BINARY) . ' -l ' . escapeshellarg($file->getPathname()),
+            $output,
+            $result
+        );
+        if ($result !== 0) {
+            $errors++;
+        }
+    }
+    return $errors;
+
 }
 
 $pluginDirectories = new CallbackFilterIterator(
