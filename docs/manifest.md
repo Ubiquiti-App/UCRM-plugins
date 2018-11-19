@@ -84,10 +84,10 @@ The `manifest.json` file contains all needed information about the plugin and is
 
 ## Structure
 
-### version
+### version _(required)_
 Determines version of the configuration file, for now only possible value is "1".
 
-### information
+### information _(required)_
 Contains information describing the plugin.
 - `name` - lowercase name of the plugin (can contain dashes `-` and underscores `_`), plugin folder name is determined by this
 - `displayName` - name of the plugin as displayed on UCRM frontend
