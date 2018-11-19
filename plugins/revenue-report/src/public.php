@@ -2,29 +2,28 @@
 
 declare(strict_types=1);
 
+use App\Service\TemplateRenderer;
+use Ubnt\UcrmPluginSdk\Security\PermissionNames;
+use Ubnt\UcrmPluginSdk\Service\UcrmApi;
+use Ubnt\UcrmPluginSdk\Service\UcrmOptionsManager;
+use Ubnt\UcrmPluginSdk\Service\UcrmSecurity;
+
 chdir(__DIR__);
 
 require __DIR__ . '/vendor/autoload.php';
 
-// Create Dependency Injection container.
-$builder = new \DI\ContainerBuilder();
-$builder->setDefinitionCache(new \Doctrine\Common\Cache\ApcuCache());
-$container = $builder->build();
-
 // Retrieve API connection.
-$api = $container->get(\App\Service\UcrmApi::class);
+$api = UcrmApi::create();
 
 // Ensure that user is logged in and has permission to view invoices.
-$user = $api->getUser();
-if (! $user || $user->isClient || ! $user->canView('billing/invoices')) {
+$security = UcrmSecurity::create();
+$user = $security->getUser();
+if (! $user || $user->isClient || ! $user->hasViewPermission(PermissionNames::BILLING_INVOICES)) {
     \App\Http::forbidden();
 }
 
-// Retrieve options manager.
-$optionsManager = $container->get(\App\Service\OptionsManager::class);
-
 // Retrieve renderer.
-$renderer = $container->get(\App\Service\TemplateRenderer::class);
+$renderer = new TemplateRenderer();
 
 // Process submitted form.
 if (
@@ -42,11 +41,11 @@ if (
         'status' => [1, 2, 3], // 1 = Unpaid, 2 = Partially paid, 3 = Paid
     ];
 
-    $organization = $api->query('organizations/' . $_GET['organization']);
-    $currency = $api->query('currencies/' . $organization['currencyId']);
-    $invoices = $api->query('invoices', $parameters);
-    $services = $api->query('clients/services', ['organizationId' => $_GET['organization']]);
-    $servicePlans = $api->query('service-plans');
+    $organization = $api->get('organizations/' . $_GET['organization']);
+    $currency = $api->get('currencies/' . $organization['currencyId']);
+    $invoices = $api->get('invoices', $parameters);
+    $services = $api->get('clients/services', ['organizationId' => $_GET['organization']]);
+    $servicePlans = $api->get('service-plans');
 
     $servicesMap = [];
     foreach ($services as $service) {
@@ -85,7 +84,9 @@ if (
 }
 
 // Render form.
-$organizations = $api->query('organizations');
+$organizations = $api->get('organizations');
+
+$optionsManager = new UcrmOptionsManager();
 
 $renderer->render(
     __DIR__ . '/templates/form.php',
