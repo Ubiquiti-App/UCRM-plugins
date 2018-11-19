@@ -86,7 +86,7 @@ if (
 // Render form.
 $organizations = $api->get('organizations');
 
-$optionsManager = new UcrmOptionsManager();
+$optionsManager = UcrmOptionsManager::create();
 
 $renderer->render(
     __DIR__ . '/templates/form.php',

@@ -51,7 +51,7 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
 // Render form.
 $organizations = $api->get('organizations');
 
-$optionsManager = new UcrmOptionsManager();
+$optionsManager = UcrmOptionsManager::create();
 
 $renderer = new TemplateRenderer();
 $renderer->render(
