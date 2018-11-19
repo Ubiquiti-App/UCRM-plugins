@@ -1,6 +1,4 @@
 {
-    "description": "This is plugin template.",
-    "license": "MIT",
     "require": {
         "ubnt/ucrm-plugin-sdk": "~0.3"
     }

@@ -11,7 +11,7 @@ $directory = __DIR__ . '/plugins/' . $plugin . '/src';
 
 if (! $plugin || ! preg_match('~^(?:[a-z-_]++)$~', $plugin)) {
     echo 'Plugin name was not specified or is invalid.' . PHP_EOL;
-    exit(2);
+    exit(1);
 }
 
 if (! is_dir($directory)) {
@@ -20,7 +20,7 @@ if (! is_dir($directory)) {
         echo 'Specified plugin was not found in the "plugins" directory, using "examples" directory instead.' . PHP_EOL;
     } else {
         echo 'Specified plugin was not found in "plugins" nor "examples" directories.' . PHP_EOL;
-        exit(3);
+        exit(1);
     }
 }
 
@@ -40,7 +40,7 @@ $zip = new ZipArchive();
 
 if ($zip->open($zipFile, ZipArchive::CREATE) !== true) {
     echo 'Can\'t open zip file.' . PHP_EOL;
-    exit(4);
+    exit(1);
 }
 
 $files = new CallbackFilterIterator(
@@ -69,7 +69,7 @@ foreach ($files as $fileInfo) {
 
     if (! $zip->addFile($fileInfo->getPathname(), ltrim($filename, '/'))) {
         echo sprintf('Unable to add file "%s".', $filename) . PHP_EOL;
-        exit(5);
+        exit(1);
     }
 }
 

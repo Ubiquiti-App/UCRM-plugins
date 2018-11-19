@@ -7,15 +7,15 @@ Plugins can be used as:
 
 ## Plugin samples for an easy start of creating your own plugin
 * [Plugin Template](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/examples/plugin-template) - Simplest UCRM plugin sample, can be used as a base for a new plugin development.
-* [Invoice CSV Export](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-csv-export) - Better plugin example, actually doing something: a new menu item shown, enables user to define From & To date filters, exports filtered invoices into CSV.  
+* [Invoice CSV Export](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-csv-export) - Better plugin example, that actually does something: a new menu item is shown, user can filter invoices by date and export them into a CSV file.  
 * [Revenue Report](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/revenue-report) - Revenue report grouped by products or services, shown under the Reporting main menu section.
 
 ## UCRM Plugin SDK
 You can use [UCRM Plugin SDK](https://github.com/Ubiquiti-App/UCRM-Plugin-SDK) to help you with development of plugins.  
-It contains classes able to help you with calling UCRM API, getting plugin's configuration and much more.
+It contains classes for calling UCRM API, getting plugin's configuration and much more.
 
 ## Distribution
-Plugins are distributed as ZIP archives. User uploads the archive into UCRM, it's validated and if valid, extracted to a folder based on plugin's name.
+Plugins are distributed as ZIP archives. User uploads the archive into UCRM, it's checked and if valid, extracted to a folder based on plugin's name.
 
 ## File structure
 The minimum valid plugin consists of 2 files, [`manifest.json`](file-structure.md#manifestjson) and [`main.php`](file-structure.md#mainphp).
