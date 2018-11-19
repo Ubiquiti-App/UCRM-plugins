@@ -10,6 +10,10 @@ Plugins can be used as:
 * [Invoice CSV Export](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-csv-export) - Better plugin example, actually doing something: a new menu item shown, enables user to define From & To date filters, exports filtered invoices into CSV.  
 * [Revenue Report](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/revenue-report) - Revenue report grouped by products or services, shown under the Reporting main menu section.
 
+## UCRM Plugin SDK
+You can use [UCRM Plugin SDK](https://github.com/Ubiquiti-App/UCRM-Plugin-SDK) to help you with development of plugins.  
+It contains classes able to help you with calling UCRM API, getting plugin's configuration and much more.
+
 ## Distribution
 Plugins are distributed as ZIP archives. User uploads the archive into UCRM, it's validated and if valid, extracted to a folder based on plugin's name.
 

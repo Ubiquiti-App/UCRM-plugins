@@ -5,9 +5,9 @@
     "displayName": "Plugin template",
     "description": "This is plugin template.",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "ucrmVersionCompliancy": {
-      "min": "2.10.0-beta1",
+      "min": "2.14.0-beta4",
       "max": null
     },
     "author": "Ubiquiti Networks, Inc."
