@@ -290,7 +290,9 @@ function validatePhp(string $path): int
             new \RecursiveDirectoryIterator($path)
         ),
         function (SplFileInfo $fileInfo) {
-            return (! $fileInfo->isDir()) && (stripos($fileInfo->getBasename(), '.php') === strlen($fileInfo->getBasename()) - 4) && (strpos($fileInfo->getPathname(), '/src/vendor/') === false);
+            return (! $fileInfo->isDir())
+                && (stripos($fileInfo->getBasename(), '.php') === strlen($fileInfo->getBasename()) - 4)
+                && (strpos($fileInfo->getPathname(), '/src/vendor/') === false);
         }
     );
     /** @var SplFileInfo $file */
