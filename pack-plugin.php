@@ -57,7 +57,7 @@ foreach ($files as $fileInfo) {
         continue;
     }
 
-    if (! $zip->addFile($fileInfo->getPathname(), $filename)) {
+    if (! $zip->addFile($fileInfo->getPathname(), ltrim($filename, '/'))) {
         echo sprintf('Unable to add file "%s".', $filename) . PHP_EOL;
         exit(4);
     }
