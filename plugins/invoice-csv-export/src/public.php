@@ -2,21 +2,24 @@
 
 declare(strict_types=1);
 
+use App\Service\CsvGenerator;
+use App\Service\TemplateRenderer;
+use Ubnt\UcrmPluginSdk\Security\PermissionNames;
+use Ubnt\UcrmPluginSdk\Service\UcrmApi;
+use Ubnt\UcrmPluginSdk\Service\UcrmOptionsManager;
+use Ubnt\UcrmPluginSdk\Service\UcrmSecurity;
+
 chdir(__DIR__);
 
 require __DIR__ . '/vendor/autoload.php';
 
-// Create Dependency Injection container.
-$builder = new \DI\ContainerBuilder();
-$builder->setDefinitionCache(new \Doctrine\Common\Cache\ApcuCache());
-$container = $builder->build();
-
 // Retrieve API connection.
-$api = $container->get(\App\Service\UcrmApi::class);
+$api = UcrmApi::create();
 
 // Ensure that user is logged in and has permission to view invoices.
-$user = $api->getUser();
-if (! $user || $user->isClient || ! $user->canView('billing/invoices')) {
+$security = UcrmSecurity::create();
+$user = $security->getUser();
+if (! $user || $user->isClient || ! $user->hasViewPermission(PermissionNames::BILLING_INVOICES)) {
     \App\Http::forbidden();
 }
 
@@ -28,17 +31,17 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
         'createdDateTo' => $_GET['until'],
     ];
 
-    $countries = $api->query('countries');
+    $countries = $api->get('countries');
     $states = array_merge(
         // Canada
-        $api->query('countries/54/states'),
+        $api->get('countries/54/states'),
         // USA
-        $api->query('countries/249/states')
+        $api->get('countries/249/states')
     );
 
-    $csvGenerator = new \App\Service\CsvGenerator($countries, $states);
+    $csvGenerator = new CsvGenerator($countries, $states);
 
-    $invoices = $api->query('invoices', $parameters);
+    $invoices = $api->get('invoices', $parameters);
 
     $csvGenerator->generate('ucrm-invoices.csv', $invoices);
 
@@ -46,12 +49,11 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
 }
 
 // Render form.
-$organizations = $api->query('organizations');
+$organizations = $api->get('organizations');
 
-// Retrieve options manager.
-$optionsManager = $container->get(\App\Service\OptionsManager::class);
+$optionsManager = new UcrmOptionsManager();
 
-$renderer = $container->get(\App\Service\TemplateRenderer::class);
+$renderer = new TemplateRenderer();
 $renderer->render(
     __DIR__ . '/templates/form.php',
     [
