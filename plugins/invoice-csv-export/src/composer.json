@@ -11,6 +11,6 @@
   },
   "require": {
     "league/csv": "^9.1",
-    "ubnt/ucrm-plugin-sdk": "^0.2.0"
+    "ubnt/ucrm-plugin-sdk": "~0.3"
   }
 }
