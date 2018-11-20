@@ -96,7 +96,7 @@
             "displayName": "RouterOS Packet Manager",
             "description": "This plugin allows using Mikrotik as a packet manager",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/routeros-packet-manager",
-            "version": "1.0.7",
+            "version": "1.0.8",
             "ucrmVersionCompliancy": {
                 "min": "2.10.0-beta1",
                 "max": null
