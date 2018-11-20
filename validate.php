@@ -4,6 +4,21 @@ function ensureFileExists(string $file): int
 {
     if (! file_exists($file)) {
         printf('Could not find required file "%s".' . PHP_EOL, $file);
+
+        return 1;
+    }
+
+    return 0;
+}
+
+function ensureComposerLockExists(string $path): int
+{
+    $composerJson = $path . '/src/composer.json';
+    $composerLock = $path . '/src/composer.lock';
+    if (file_exists($composerJson) && ! file_exists($composerLock)) {
+        $pluginName = basename($path);
+        printf('%s: Found composer.json, but did not find "%s".' . PHP_EOL, $pluginName, $composerLock);
+
         return 1;
     }
 
@@ -18,6 +33,7 @@ function ensureArrayKeyExists(array $array, string... $keys): int
         if (! array_key_exists($key, $array)) {
             if ($i === $count) {
                 printf('Manifest does not contain required key "%s".' . PHP_EOL, implode('.', $keys));
+
                 return 1;
             }
 
@@ -42,9 +58,8 @@ function validateManifest(string $file): int
     }
 
     $manifestData = file_get_contents($file);
-    $manifest = json_decode($manifestData, true);
-
-    if ($jsonError = json_last_error()) {
+    $manifest = parseManifest($manifestData);
+    if (! $manifest) {
         printf('File "%s" is not a valid JSON.' . PHP_EOL, $file);
         ++$errors;
 
@@ -57,8 +72,11 @@ function validateManifest(string $file): int
     $name = null;
     if ($errors === 0) {
         $name = $manifest['information']['name'];
-        $directory = dirname(dirname($file));
-        $errors += ensureFileExists($directory . '/' . $name . '.zip');
+        $directory = dirname($file, 2);
+        $zipFile = $directory . '/' . $name . '.zip';
+        $errors += ensureFileExists($zipFile);
+        $errors += ensureManifestMatches($zipFile, $manifest, $file);
+
         $basename = pathinfo($directory, PATHINFO_BASENAME);
 
         if ($basename !== $name) {
@@ -67,6 +85,25 @@ function validateManifest(string $file): int
         }
     }
 
+    $errors += validateManifestData($manifest, $name);
+
+    return $errors;
+}
+
+function parseManifest(string $manifestString): ?array
+{
+    $manifest = json_decode($manifestString, true);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        return null;
+    }
+
+    return $manifest;
+}
+
+function validateManifestData(array $manifest, string $name): int
+{
+    $errors = 0;
     $errors += ensureArrayKeyExists($manifest, 'version');
     $errors += ensureArrayKeyExists($manifest, 'information', 'displayName');
     $errors += ensureArrayKeyExists($manifest, 'information', 'description');
@@ -79,7 +116,118 @@ function validateManifest(string $file): int
     return $errors;
 }
 
-function validateUrl(array $manifest, ?string $name): int {
+function ensureManifestMatches(string $zipFile, array $manifest, string $manifestFile): int
+{
+    $zipArchive = new ZipArchive();
+    if (! $zipArchive->open(realpath($zipFile))) {
+        printf('Could not open zipfile - invalid format: "%s"' . PHP_EOL, $zipFile);
+
+        return 1;
+    }
+
+    $manifestZipString = $zipArchive->getFromName('manifest.json');
+    unset($zipArchive);
+
+    if (! $manifestZipString) {
+        printf('Could not read manifest.json from zipfile "%s"' . PHP_EOL, $zipFile);
+
+        return 1;
+    }
+    $manifestZip = parseManifest($manifestZipString);
+    if (! $manifestZip) {
+        printf('Could not parse manifest.json from zipfile "%s"' . PHP_EOL, $zipFile);
+
+        return 1;
+    }
+
+    $arrayDifference = arrayRecursiveDiff($manifestZip, $manifest);
+    if (count($arrayDifference) > 0) {
+        printf(
+            'Different manifest.json from zipfile "%s" and from "%s" - plugin not packed yet?' . PHP_EOL,
+            $zipFile,
+            $manifestFile
+        );
+        printArrayRecursiveDiff('', $arrayDifference, $manifest, $manifestZip);
+
+        return 1;
+    }
+
+    return 0;
+}
+
+function printArrayRecursiveDiff(string $keyPrefix, array $arrayDifference, array $manifest, array $manifestZip, int $depth = 0): void
+{
+    ++$depth;
+    if ($depth > 50) {
+        return;
+    }
+    foreach ($arrayDifference as $key => $value) {
+        if (array_key_exists($key, $manifest) && array_key_exists($key, $manifestZip) && is_array($manifest[$key])) {
+            printArrayRecursiveDiff(
+                $key . ':',
+                arrayRecursiveDiff($manifest[$key], $manifestZip[$key]),
+                $manifest[$key],
+                $manifestZip[$key],
+                $depth
+            );
+        } else {
+            printf(
+                "\t%s%s%s\t\t file: %s%s\t\t zip:  %s%s",
+                $keyPrefix,
+                $key,
+                PHP_EOL,
+                array_key_exists($key, $manifest) ? (is_array($manifest[$key]) ? 'Array' : $manifest[$key]) : '(none)',
+                PHP_EOL,
+                array_key_exists($key, $manifestZip) ? (is_array($manifestZip[$key]) ? 'Array' : $manifestZip[$key]) : '(none)',
+                PHP_EOL
+            );
+        }
+    }
+}
+
+function arrayRecursiveDiff(array $aArray1, array $aArray2, int $depth = 0): array
+{
+    $aReturn = [];
+    ++$depth;
+    if ($depth > 50) {
+        return $aReturn;
+    }
+
+    // as per @mhitza at https://stackoverflow.com/a/3877494/19746
+    foreach ($aArray1 as $mKey => $mValue) {
+        if (array_key_exists($mKey, $aArray2)) {
+            if (is_array($mValue)) {
+                $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray2[$mKey], $depth);
+                if (count($aRecursiveDiff)) {
+                    $aReturn[$mKey] = $aRecursiveDiff;
+                }
+            } else if ($mValue !== $aArray2[$mKey]) {
+                $aReturn[$mKey] = $mValue;
+            }
+        } else {
+            $aReturn[$mKey] = $mValue;
+        }
+    }
+    foreach ($aArray2 as $mKey => $mValue) {
+        if (array_key_exists($mKey, $aArray1)) {
+            if (is_array($mValue)) {
+                $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray1[$mKey], $depth);
+                if (count($aRecursiveDiff)) {
+                    $aReturn[$mKey] = $aRecursiveDiff;
+                }
+            } else if ($mValue !== $aArray1[$mKey]) {
+                $aReturn[$mKey] = $mValue;
+            }
+        } else {
+            $aReturn[$mKey] = $mValue;
+        }
+    }
+
+    return $aReturn;
+}
+
+function validateUrl(array $manifest, ?string $name): int
+{
     $errors = 0;
 
     $errors += ensureArrayKeyExists($manifest, 'information', 'url');
@@ -106,8 +254,10 @@ function validatePlugin(SplFileInfo $pluginDirectory): int
 
     $errors = 0;
 
+    $errors += validatePhp($path);
     $errors += ensureFileExists($path . '/README.md');
     $errors += ensureFileExists($path . '/src/main.php');
+    $errors += ensureComposerLockExists($path);
     $errors += validateManifest($path . '/src/manifest.json');
 
     return $errors;
@@ -125,8 +275,41 @@ function checkPluginsJson(): int
         return 0;
     }
 
-    printf('The "plugins.json" file is not up to date. Run `php generate-json.php > plugins.json` to update it.' . PHP_EOL);
+    printf(
+        'The "plugins.json" file is not up to date. Run `php generate-json.php > plugins.json` to update it.' . PHP_EOL
+    );
+
     return 1;
+}
+
+function validatePhp(string $path): int
+{
+    $errors = 0;
+    $files = new CallbackFilterIterator(
+        new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path)
+        ),
+        function (SplFileInfo $fileInfo) {
+            return (! $fileInfo->isDir())
+                && (stripos($fileInfo->getBasename(), '.php') === strlen($fileInfo->getBasename()) - 4)
+                && (strpos($fileInfo->getPathname(), '/src/vendor/') === false);
+        }
+    );
+    /** @var SplFileInfo $file */
+    foreach ($files as $file) {
+        $output = [];
+        $result = null;
+        exec(
+            escapeshellcmd(PHP_BINARY) . ' -l ' . escapeshellarg($file->getPathname()),
+            $output,
+            $result
+        );
+        if ($result !== 0) {
+            $errors++;
+        }
+    }
+    return $errors;
+
 }
 
 $pluginDirectories = new CallbackFilterIterator(
