@@ -2,13 +2,13 @@
 
 This is a step by step guide for creating your first simple UCRM plugin.
 
-## Get your environment ready
+## 1) Get your environment ready
 First step is to prepare your development environment. You should have to following software installed:
 - PHP 7.1 - https://secure.php.net/downloads.php
 - Git - https://git-scm.com/
 - Composer - https://getcomposer.org/
 
-## Prepare plugin's directory structure
+## 2) Prepare plugin's directory structure
 UCRM plugins have a required directory structure. You can get started quickly by downloading the [skeleton ZIP archive](first-plugin/skeleton.zip) and unpacking it in your working directory.
 You can get detailed information about plugin's file structure in [File structure](../file-structure.md) documentation.
 
@@ -28,7 +28,7 @@ Take a look at the [skeleton directory](first-plugin/skeleton) to see an example
 
 After the plugin is finished and ready for release, the plugin's ZIP archive will also reside next to the `README.md` file.
 
-## Prepare your manifest file
+## 3) Prepare your manifest file
 Next we're going to take a look at the `manifest.json` file. This file describes your plugin to UCRM.
 You can get detailed information about manifest structure in [Plugin manifest](../manifest.md) documentation.
 
@@ -52,11 +52,11 @@ The manifest should look like this, after your change:
 }
 </pre>
 
-## Install plugin dependencies
+## 4) Install plugin dependencies
 The skeleton comes with [UCRM Plugin SDK](https://github.com/Ubiquiti-App/UCRM-Plugin-SDK) as a composer dependency.
 To install it just go to the `src` directory and run `composer install`.
 
-## Let's write some code
+## 5) Let's write some code
 The `main.php` file is used to execute code in the background. We won't be actually using it in this tutorial, so let's just leave it as is.  
 Instead we're going to create a `public.php` file right next to it.
 This is used to display something in the browser and we can create a UCRM menu item leading to it.
@@ -164,7 +164,7 @@ foreach ($jobs as $job) {
 echo '</ul>';
 ```
 
-## Add a menu item
+## 6) Add a menu item
 To make the plugin easily accessible for UCRM users, we should add an item to UCRM menu.
 To do that, we will extend the plugin's manifest file with menu information:
 <pre>
@@ -192,7 +192,7 @@ To do that, we will extend the plugin's manifest file with menu information:
 }
 </pre>
 
-## Try the plugin
+## 7) Try the plugin
 We have the plugin's code ready, but we have not actually tried if it works. To do that we will have to pack the plugin to ZIP archive first.
 Run the following command in the `src` directory:
 ```bash
@@ -203,6 +203,6 @@ A ZIP archive called `my-first-plugin.zip` will be created next to the `README.m
 Take it and upload it to UCRM in the System -> Plugins section.
 After you enable the plugin, you will see new menu item for your plugin and the list of open jobs.
 
-## Finish line
+## 8) Finish line
 __Congratulations,__ you've just created your first UCRM plugin! Play around and take a look at the complete [plugin documentation](../index.md).
 If you get stuck on something or want to share your new plugin, make a post in the [UCRM Plugins community forum](https://community.ubnt.com/t5/UCRM-Plugins/bd-p/UCRMPlugins).
