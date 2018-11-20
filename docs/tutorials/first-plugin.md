@@ -10,7 +10,7 @@ First step is to prepare your development environment. You should have to follow
 
 ## Prepare plugin's directory structure
 UCRM plugins have a required directory structure. You can get started quickly by downloading the [skeleton ZIP archive](first-plugin/skeleton.zip) and unpacking it in your working directory.
-You can get detailed information about plugin's file structure in [File structure](file-structure.md) documentation.
+You can get detailed information about plugin's file structure in [File structure](../file-structure.md) documentation.
 
 After unpacking the skeleton archive, you should have the following structure ready:
 ```
@@ -24,13 +24,13 @@ src/manifest.json
 Everything in the `src` directory is the plugin itself.
 The `README.md` file should contain description of what your plugin does.
 It is also automatically displayed by Github when accessing the plugin's directory in the official UCRM Plugin repository.
-Take a look at the [skeleton directory](first-plugin/skeleton) to see an example. Or at [Revenue Report Plugin](../plugins/revenue-report) for a real one.  
+Take a look at the [skeleton directory](first-plugin/skeleton) to see an example. Or at [Revenue Report Plugin](../../plugins/revenue-report) for a real one.  
 
 After the plugin is finished and ready for release, the plugin's ZIP archive will also reside next to the `README.md` file.
 
 ## Prepare your manifest file
 Next we're going to take a look at the `manifest.json` file. This file describes your plugin to UCRM.
-You can get detailed information about manifest structure in [Plugin manifest](manifest.md) documentation.
+You can get detailed information about manifest structure in [Plugin manifest](../manifest.md) documentation.
 
 There is basic manifest file already present in the skeleton files. For now, just change the name of your plugin to `My First Plugin`.
 The manifest should look like this, after your change:
@@ -204,5 +204,5 @@ Take it and upload it to UCRM in the System -> Plugins section.
 After you enable the plugin, you will see new menu item for your plugin and the list of open jobs.
 
 ## Finish line
-__Congratulations,__ you've just created your first UCRM plugin! Play around and take a look at the complete [plugin documentation](index.md).
+__Congratulations,__ you've just created your first UCRM plugin! Play around and take a look at the complete [plugin documentation](../index.md).
 If you get stuck on something or want to share your new plugin, make a post in the [UCRM Plugins community forum](https://community.ubnt.com/t5/UCRM-Plugins/bd-p/UCRMPlugins).
