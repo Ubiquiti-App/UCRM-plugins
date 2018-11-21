@@ -3,7 +3,7 @@
 This is a step by step guide for creating your first simple UCRM plugin.
 
 ## 1) Get your environment ready
-First step is to prepare your development environment. You should have to following software installed:
+First step is to prepare your development environment. You should have the following software installed:
 - PHP 7.1 - https://secure.php.net/downloads.php
 - Git - https://git-scm.com/
 - Composer - https://getcomposer.org/
@@ -184,7 +184,7 @@ To do that, we will extend the plugin's manifest file with menu information:
     },
     <strong>"menu": [
         {
-            "label": "My First Plugin",
+            "label": "My Jobs",
             "type": "admin",
             "target": "iframe"
         }
@@ -201,7 +201,7 @@ Run the following command in the `src` directory:
 
 A ZIP archive called `my-first-plugin.zip` will be created next to the `README.md` file.
 Take it and upload it to UCRM in the System -> Plugins section.
-After you enable the plugin, you will see new menu item for your plugin and the list of open jobs.
+After you enable the plugin, you will see new menu item "My Jobs" for your plugin and the list of open jobs for current user when you open it.
 
 ## 8) Finish line
 __Congratulations,__ you've just created your first UCRM plugin! Play around and take a look at the complete [plugin documentation](../index.md).
