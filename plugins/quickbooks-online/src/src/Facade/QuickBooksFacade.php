@@ -471,8 +471,8 @@ class QuickBooksFacade
                 );
             }
 	    }
-            $pluginData->lastExportedPaymentID = $ucrmPayment['id'];
-            $this->optionsManager->update();
+        $pluginData->lastExportedPaymentID = $ucrmPayment['id'];
+        $this->optionsManager->update();
         }
     	}
 
