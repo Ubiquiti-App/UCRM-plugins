@@ -14,33 +14,33 @@
   },
   "configuration": [
     {
-        "key": "FORM_TITLE",
+        "key": "optional_form_title",
         "label": "Form Title",
         "description": "Displayed below logo before form description",
         "required": 0
     },
     {
-        "key": "LOGO_URL",
+        "key": "optional_logo_url",
         "label": "Logo URL",
         "description": "Displayed above form.",
         "required": 0
     },
     {
-        "key": "FORM_DESCRIPTION",
+        "key": "optional_form_description",
         "label": "Form Description",
         "description": "Displayed below logo before the form. (Can contain HTML)",
         "type": "textarea",
         "required": 0
     },
     {
-        "key": "COMPLETION_TEXT",
+        "key": "optional_completion_text",
         "label": "Completion Text",
         "description": "Text shown upon signup completion. (Text Only)",
         "type": "textarea",
         "required": 0
     },
     {
-        "key": "LEAD",
+        "key": "optional_lead",
         "label": "Create Lead",
         "type": "checkbox",
         "description": "Create Lead instead of Client",
