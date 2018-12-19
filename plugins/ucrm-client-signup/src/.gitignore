@@ -1,8 +1,5 @@
-# See https://help.github.com/ignore-files/ for more about ignoring files.
-
-# compiled output
-/data/
-/vendor/
-/temp/
-errors.log
+vendor/
+data/
 ucrm.json
+.ucrm-plugin-running
+.ucrm-plugin-execution-requested
