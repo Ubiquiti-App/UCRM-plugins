@@ -405,7 +405,8 @@ class QuickBooksFacade
                 );
             }
 	    }
-
+            $pluginData->lastExportedPaymentID = $ucrmPayment['id'];
+            $this->optionsManager->update();
 		/* now look and see if part of the payment is applied to existing invoices */
 
                 foreach ($ucrmPayment['paymentCovers'] as $paymentCovers) {
@@ -471,8 +472,8 @@ class QuickBooksFacade
                 );
             }
 	    }
-        $pluginData->lastExportedPaymentID = $ucrmPayment['id'];
-        $this->optionsManager->update();
+            $pluginData->lastExportedPaymentID = $ucrmPayment['id'];
+            $this->optionsManager->update();
         }
     	}
 
