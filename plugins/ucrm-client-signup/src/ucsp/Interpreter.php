@@ -3,42 +3,117 @@ declare(strict_types=1);
 namespace Ucsp;
 
 class Interpreter {
-  private static $whiteListedGet = ['countries'];
-  private static $whiteListedPost = ['client'];
+  private static $whiteListedGet = ['countries' => ['second_level_ids' => ['states']]];
+  private static $whiteListedPost = ['clients' => []];
 
-  private static function validateGet($needle) {
-    return in_array($needle, self::$whiteListedGet);
+  private static function parseAndValidateEndpoint($endpoint, $whitelist) {
+    // # Remove backslash if at start of string
+    $endpoint = ltrim($endpoint, '/');
+
+    // # create array from URL
+    $endpoint_array = explode('/', $endpoint);
+
+    // # if first item is not in top level white list return false, else continue validation
+    if (!array_key_exists($endpoint_array[0], $whitelist)) {
+      return false;
+    } else {
+
+      // # if three levels deep continue validation
+      if (count($endpoint_array) == 3) {
+        
+        // # If third level endpoint uses "second level ids" return true
+        if (!empty($whitelist[$endpoint_array[0]]['second_level_ids'])) {
+          return in_array($endpoint_array[2], $whitelist[$endpoint_array[0]]['second_level_ids']);
+
+        // # If second level endpoint uses "third level ids" return true
+        } elseif (!empty($whitelist[$endpoint_array[0]]['third_level_ids'])) {
+          return in_array($endpoint_array[1], $whitelist[$endpoint_array[0]]['third_level_ids']);
+        } else {
+          return false;
+        }
+
+      // # if two levels deep continue validation
+      } elseif (count($endpoint_array) == 2) {
+        
+        if (in_array($endpoint_array[1], $whitelist[$endpoint_array[0]])) {
+          return true;
+        } else {
+          return false;
+        }
+
+      } elseif (count($endpoint_array) == 1) {
+        return true;
+      } else {
+        // # fail validations by default, must be whitelisted and a specific level deep
+        return false;
+      }
+
+    }
   }
 
-  private static function validatePost($needle) {
-    return in_array($needle, self::$whiteListedPost);
+  private static function validateGet($endpoint) {
+    return self::parseAndValidateEndpoint($endpoint, self::$whiteListedGet);
+  }
+
+  private static function validatePost($endpoint) {
+    return self::parseAndValidateEndpoint($endpoint, self::$whiteListedPost);
   }
 
   public function __construct() {
     $this->api = \Ubnt\UcrmPluginSdk\Service\UcrmApi::create();
   }
 
-  public function get($endpoint, $data) {
+  private function get($endpoint, $data) {
     if (self::validateGet($endpoint)) {
       return $this->api->get(
         $endpoint,
         $data
       );
     } else {
-      throw new \UnexpectedValueException('{"code":404,"message":"No route GET: '.$endpoint.'"}');
+      throw new \UnexpectedValueException('{"code":404,"message":"No route GET: '.$endpoint.'"}', 404);
     }
   }
 
-  public function post($endpoint, $data) {
+  private function post($endpoint, $data) {
     if (self::validatePost($endpoint)) {
       return $this->api->post(
         $endpoint,
         $data
       );
     } else {
-      throw new \UnexpectedValueException('{"code":404,"message":"No route POST: '.$endpoint.'"}');
+      throw new \UnexpectedValueException('{"code":404,"message":"No route POST: '.$endpoint.'"}', 404);
     }
   }
 
+  public function run($payload) {
+    if (empty($payload)) {
+      return false;
+    } else {
+
+      $payloadDecoded = json_decode($payload);
+
+      if (!empty($payloadDecoded->frontendKey)) {
+        if (!empty($payloadDecoded->apiGet)) {
+          if (empty($payloadDecoded->apiGet->endpoint)) {
+            throw new \UnexpectedValueException('endpoint was not set', 400);
+          }
+          $data = empty($payloadDecoded->apiGet->data) ? [] : (array)$payloadDecoded->apiGet->data;
+          return json_encode($this->get($payloadDecoded->apiGet->endpoint, $data));
+        } elseif (!empty($payloadDecoded->apiPost)) {
+          if (empty($payloadDecoded->apiPost->endpoint)) {
+            throw new \UnexpectedValueException('endpoint was not set', 400);
+          }
+          $data = empty($payloadDecoded->apiPost->data) ? [] : (array)$payloadDecoded->apiPost->data;
+          return json_encode($this->post($payloadDecoded->apiPost->endpoint, $data));
+        } else {
+          throw new \UnexpectedValueException('data is invalid', 400);
+        }
+      } else {
+        return false;
+      }
+
+    }
+
+  }
 
 }
