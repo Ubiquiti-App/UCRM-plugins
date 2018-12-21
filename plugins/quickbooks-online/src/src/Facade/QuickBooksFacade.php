@@ -236,7 +236,8 @@ class QuickBooksFacade
             return;
         }
 
-        foreach ($this->ucrmApi->query('invoices?direction=ASC') as $ucrmInvoice) {
+        $InvoicesFromDate=$pluginData->$InvoicesFromDate;
+        foreach ($this->ucrmApi->query('invoices?direction=ASC&createdDateFrom='.$InvoicesFromDate) as $ucrmInvoice) {
             if ($ucrmInvoice['id'] <= $pluginData->lastExportedInvoiceID) {
                 continue;
             }
@@ -349,7 +350,8 @@ class QuickBooksFacade
 
         $pluginData = $this->optionsManager->load();
         $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
-        $ucrmPayments = $this->ucrmApi->query('payments?direction=ASC');
+        $PaymentsFromDate=$pluginData->$PaymentsFromDate;
+        $ucrmPayments = $this->ucrmApi->query('payments?direction=ASC&createdDateFrom='.$PaymentsFromDate);
         usort(
             $ucrmPayments,
             function (array $a, array $b) {
