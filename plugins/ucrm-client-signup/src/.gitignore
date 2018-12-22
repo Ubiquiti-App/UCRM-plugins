@@ -1,5 +1,8 @@
 vendor/
 data/
+temp/
 ucrm.json
 .ucrm-plugin-running
 .ucrm-plugin-execution-requested
+errors.log
+ucrm.json

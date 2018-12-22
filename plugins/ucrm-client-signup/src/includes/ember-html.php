@@ -37,7 +37,7 @@
     <script type="text/javascript">
       <?php // ## UCRM requires file paths, Using PHP include instead of HTML tags to avoid relative URL ?>
       <?php include(PROJECT_PATH."/assets/vendor-2c628552e172e7331ad9cef9845edbd3.js"); ?>
-      <?php include(PROJECT_PATH."/assets/ucrm-client-signup-form-5e14dbc2e8831720246f55c7f2246b46.js"); ?>
+      <?php include(PROJECT_PATH."/assets/ucrm-client-signup-form-1203e7d52840a7fa255aec93c1355211.js"); ?>
     </script>
 
     <div id="ember-bootstrap-wormhole"></div>
