@@ -116,7 +116,7 @@ class Interpreter {
       if (!empty($payloadDecoded->frontendKey)) {
 
         if ($payloadDecoded->frontendKey != self::getFrontendKey()) {
-          throw new \UnexpectedValueException(self::getFrontendKey(), 400);
+          throw new \UnexpectedValueException('frontendKey is invalid', 400);
         }
 
         if (!empty($payloadDecoded->api)) {
