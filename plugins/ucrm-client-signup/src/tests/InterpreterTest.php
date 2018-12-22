@@ -57,6 +57,16 @@ class InterpreterTest extends TestCase {
   /**
   * @test
   * @expectedException UnexpectedValueException
+  * @expectedExceptionMessage frontendKey is invalid
+  **/
+  public function expectExceptionForInvalidKey() {
+    $payload = json_encode(["frontendKey" => "invalid_key", "api" => ["type" => "GET", "endpoint" => "countries", "data" => []]]);
+    $this->Interpreter->run($payload);
+  }
+
+  /**
+  * @test
+  * @expectedException UnexpectedValueException
   * @expectedExceptionMessage data is invalid
   * @expectedExceptionCode 400
   **/
