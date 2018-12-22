@@ -5,12 +5,7 @@ _Developed by [Charuwts, LLC](https://charuwts.com)_
 
 When installed onto UCRM the plugin public URL will display a form that anyone can enter valid info into to create a client or lead.
 
-#### *_Not ready for Production._*
-
-_Primarily because there hasn't been many unit tests. So technically if you want to use it in production it will work. But as a best practice in coding and for the sake maintainability, "Programmatically Testing" the code is strongly recommended. So this is a disclaimer in light of that having not been done yet._
-
-
-#### Note, version 1.1.0 is only compatable with 2.13.0-beta1 and beyond
+#### Note, only compatable with 2.13.0-beta1 and beyond
 
 ## Instructions
 
@@ -35,8 +30,10 @@ For more functionality, share your support by voting on these feature requests o
 
 ## Features in UCRM that will help make this plugin do more for you
 - [Customizable Plugin Public Url](https://community.ubnt.com/t5/UCRM-Feature-Requests/Customizable-Plugin-Public-URL/idi-p/2388893)
-- [Creating Subscriptions via API](https://community.ubnt.com/t5/UCRM-Feature-Requests/Creating-Subscriptions-via-API/idi-p/2342937)
-- [API Linked Subscriptions](https://community.ubnt.com/t5/UCRM-Feature-Requests/API-Linked-Subscriptions/idc-p/2341614#M1150)
 
 ## Form is built with Ember.js
 [UCRM Client Signup Form](https://github.com/charuwts/UCRM-Client-Signup-Form)
+
+## Tests
+
+After running `composer update` tests can be run from within /src by running ./vendor/bin/phpunit New tests should be added for any new features and any bugs that get resolved.
