@@ -5,6 +5,14 @@ namespace Ucsp;
 class Interpreter {
   private static $whiteListedGet = ['countries' => ['second_level_ids' => ['states']]];
   private static $whiteListedPost = ['clients' => []];
+  private static $frontendKey = 'test_key';
+
+  public static function setFrontendKey($key) {
+    self::$frontendKey = $key;
+  }
+  public static function getFrontendKey() {
+    return self::$frontendKey;
+  }
 
   private $response;
   private $code;
@@ -106,6 +114,11 @@ class Interpreter {
       $payloadDecoded = json_decode($payload);
 
       if (!empty($payloadDecoded->frontendKey)) {
+
+        if ($payloadDecoded->frontendKey != self::getFrontendKey()) {
+          throw new \UnexpectedValueException(self::getFrontendKey(), 400);
+        }
+
         if (!empty($payloadDecoded->api)) {
           if (empty($payloadDecoded->api->endpoint)) {
             throw new \UnexpectedValueException('endpoint is not set', 400);
@@ -128,9 +141,11 @@ class Interpreter {
             $this->response = json_encode($response);
             $this->ready = true;
           } catch (\GuzzleHttp\Exception\ClientException $e) {
+
             $this->response = $e->getResponse()->getBody()->getContents();
             $this->code = $e->getCode();
             $this->ready = true;
+
           }
         } else {
           throw new \UnexpectedValueException('data is invalid', 400);
