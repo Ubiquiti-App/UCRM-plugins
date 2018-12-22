@@ -6,6 +6,20 @@ class Interpreter {
   private static $whiteListedGet = ['countries' => ['second_level_ids' => ['states']]];
   private static $whiteListedPost = ['clients' => []];
 
+  private $response;
+  private $code;
+  private $ready = false;
+
+  public function isReady() {
+    return $this->ready;
+  }
+  public function getResponse() {
+    return $this->response;
+  }
+  public function getCode() {
+    return $this->code;
+  }
+
   private static function parseAndValidateEndpoint($endpoint, $whitelist) {
     // # Remove backslash if at start of string
     $endpoint = ltrim($endpoint, '/');
@@ -86,30 +100,41 @@ class Interpreter {
   }
 
   public function run($payload) {
-    if (empty($payload)) {
-      return false;
-    } else {
+
+    if (!empty($payload)) {
 
       $payloadDecoded = json_decode($payload);
 
       if (!empty($payloadDecoded->frontendKey)) {
-        if (!empty($payloadDecoded->apiGet)) {
-          if (empty($payloadDecoded->apiGet->endpoint)) {
-            throw new \UnexpectedValueException('endpoint was not set', 400);
+        if (!empty($payloadDecoded->api)) {
+          if (empty($payloadDecoded->api->endpoint)) {
+            throw new \UnexpectedValueException('endpoint is not set', 400);
           }
-          $data = empty($payloadDecoded->apiGet->data) ? [] : (array)$payloadDecoded->apiGet->data;
-          return json_encode($this->get($payloadDecoded->apiGet->endpoint, $data));
-        } elseif (!empty($payloadDecoded->apiPost)) {
-          if (empty($payloadDecoded->apiPost->endpoint)) {
-            throw new \UnexpectedValueException('endpoint was not set', 400);
+          if (empty($payloadDecoded->api->type)) {
+            throw new \UnexpectedValueException('type is not set', 400);
           }
-          $data = empty($payloadDecoded->apiPost->data) ? [] : (array)$payloadDecoded->apiPost->data;
-          return json_encode($this->post($payloadDecoded->apiPost->endpoint, $data));
+
+          try {
+            $data = empty($payloadDecoded->api->data) ? [] : (array)$payloadDecoded->api->data;
+            if ($payloadDecoded->api->type == 'GET') {
+              $response = $this->get($payloadDecoded->api->endpoint, $data);
+            } elseif ($payloadDecoded->api->type == 'POST') {
+              $response = $this->post($payloadDecoded->api->endpoint, $data);
+            } else {
+              throw new \UnexpectedValueException('type is invalid', 400);
+            }
+            
+            $this->code = 200;
+            $this->response = json_encode($response);
+            $this->ready = true;
+          } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->response = $e->getResponse()->getBody()->getContents();
+            $this->code = $e->getCode();
+            $this->ready = true;
+          }
         } else {
           throw new \UnexpectedValueException('data is invalid', 400);
         }
-      } else {
-        return false;
       }
 
     }

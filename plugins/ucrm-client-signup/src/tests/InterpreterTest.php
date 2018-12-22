@@ -18,8 +18,8 @@ class InterpreterTest extends TestCase {
   * @expectedException UnexpectedValueException
   * @expectedExceptionCode 404
   **/
-  public function expectExceptionOnGetThatIsNotWhiteListed() {
-    $payload = json_encode(["frontendKey" => "test_key", "apiGet" => ["endpoint" => "countries/22/states/invalid", "data" => "test"]]);
+  public function expectExceptionOnGetEndpointThatIsNotWhiteListed() {
+    $payload = json_encode(["frontendKey" => "test_key", "api" => ["type" => "GET", "endpoint" => "countries/22/states/invalid", "data" => "test"]]);
     $this->Interpreter->run($payload);
   }
 
@@ -29,8 +29,8 @@ class InterpreterTest extends TestCase {
   * @expectedException UnexpectedValueException
   * @expectedExceptionCode 404
   **/
-  public function expectExceptionOnPostThatIsNotWhiteListed() {
-    $payload = json_encode(["frontendKey" => "test_key", "apiGet" => ["endpoint" => "clients/1", "data" => "test"]]);
+  public function expectExceptionOnPostEndpointThatIsNotWhiteListed() {
+    $payload = json_encode(["frontendKey" => "test_key", "api" => ["type" => "POST", "endpoint" => "clients/1", "data" => "test"]]);
     $this->Interpreter->run($payload);
   }
 
@@ -39,9 +39,9 @@ class InterpreterTest extends TestCase {
   **/
   public function expectFalseOnEmptyPayload() {
     $payload = json_encode([]);
-    $result = $this->Interpreter->run($payload);
+    $this->Interpreter->run($payload);
 
-    $this->assertSame(false, $result);
+    $this->assertSame(false, $this->Interpreter->isReady());
   }
 
   /**
@@ -49,9 +49,9 @@ class InterpreterTest extends TestCase {
   **/
   public function expectFalseOnEmptyFrontendKey() {
     $payload = json_encode(["frontendKey" => ""]);
-    $result = $this->Interpreter->run($payload);
+    $this->Interpreter->run($payload);
 
-    $this->assertSame(false, $result);
+    $this->assertSame(false, $this->Interpreter->isReady());
   }
 
   /**
@@ -68,33 +68,71 @@ class InterpreterTest extends TestCase {
   /**
   * @test
   * @expectedException UnexpectedValueException
-  * @expectedExceptionMessage endpoint was not set
+  * @expectedExceptionMessage endpoint is not set
   * @expectedExceptionCode 400
   **/
   public function expectExceptionOnEmptyEndpoint() {
-    $payload = json_encode(["frontendKey" => "test_key", "apiGet" => ["data" => "test"]]);
+    $payload = json_encode(["frontendKey" => "test_key", "api" => ["type" => "GET", "data" => "test"]]);
+    $this->Interpreter->run($payload);
+  }
+  /**
+  * @test
+  * @expectedException UnexpectedValueException
+  * @expectedExceptionMessage type is not set
+  * @expectedExceptionCode 400
+  **/
+  public function expectExceptionOnEmptyType() {
+    $payload = json_encode(["frontendKey" => "test_key", "api" => ["endpoint" => "clients", "data" => "test"]]);
     $this->Interpreter->run($payload);
   }
 
   /**
   * @test
   **/
-  public function expectSuccessfullPayload() {
-    // $payload = json_encode(["frontendKey" => "test_key", "apiGet" => ["endpoint" => "countries"]]);
+  public function expectSuccessfullPayloadOnGet() {
+    // $payload = json_encode(["frontendKey" => "test_key", "api" => ["type" => "GET", "endpoint" => "countries"]]);
     // $response = json_decode($this->Interpreter->run($payload));
 
     // $this->assertSame($response[0]->code, 'AF');
 
-    // For documentation purposes, this test is self succeeding but can be actually run by going through the live interpreter above
-    $mockResult = [
-      [
-        'id' => 19,
-        'name' => 'Afghanistan',
-        'code' => 'AF'
-      ]
-    ];
+    $this->markTestSkipped('For documentation and speed of test suite, this test is skipped by default but can be actually run by going through the live interpreter above');
+  }
+  /**
+  * @test
+  **/
+  public function expectSuccessfullPayloadOnPost() {
+    // $payload = json_encode([
+    //   "frontendKey" => "test_key", 
+    //   "api" => [
+    //                 "type" => "POST", 
+    //                 "endpoint" => "clients", 
+    //                 "data" => [
+    //                   "clientType" => 1,
+    //                   "isLead" => true,
+    //                   "firstName" => "brandon",
+    //                   "lastName" => "lastname",
+    //                   "street1" => "street1",
+    //                   "street2" => "street2",
+    //                   "city" => "city",
+    //                   "countryId" => 19,
+    //                   "zipCode" => "55555",
+    //                   "username" => "brandon+testapi@charuwts.com",
+    //                   "contacts" => [
+    //                     [
+    //                       "email" => "brandon@charuwts.com", 
+    //                       "phone" => "2222222222", 
+    //                       "name" => "brandon lastname" 
+    //                     ]
+    //                   ],
+                      
+    //                 ]
+    //               ]
+    // ]);
+    // $this->Interpreter->run($payload);
 
-    $this->assertSame($mockResult[0]['code'], 'AF');
+    // $this->assertSame(200, $this->Interpreter->getCode());
+
+    $this->markTestSkipped('For documentation and speed of test suite, this test is skipped by default but can be actually run by going through the live interpreter above');
   }
 
 
