@@ -85,7 +85,7 @@ class Interpreter {
     $this->api = \Ubnt\UcrmPluginSdk\Service\UcrmApi::create();
   }
 
-  private function get($endpoint, $data) {
+  public function get($endpoint, $data) {
     if (self::validateGet($endpoint)) {
       return $this->api->get(
         $endpoint,
@@ -96,7 +96,7 @@ class Interpreter {
     }
   }
 
-  private function post($endpoint, $data) {
+  public function post($endpoint, $data) {
     if (self::validatePost($endpoint)) {
       return $this->api->post(
         $endpoint,

@@ -100,49 +100,62 @@ class InterpreterTest extends TestCase {
   * @test
   **/
   public function expectSuccessfullPayloadOnGet() {
-    // $payload = json_encode(["frontendKey" => "test_key", "api" => ["type" => "GET", "endpoint" => "countries"]]);
-    // $response = json_decode($this->Interpreter->run($payload));
+    // Mock Api Response
+    $mock_results = [['id' => 19, 'name' => 'Afghanistan', 'code' => 'AF']];
+    $mock = $this->getMockBuilder(Interpreter::class)
+                 ->setMethods(['get'])
+                 ->getMock();
+    $mock->method('get')->will($this->returnValue($mock_results));
 
-    // $this->assertSame($response[0]->code, 'AF');
+    // Pass in payload and run mock
+    $payload = json_encode(["frontendKey" => "test_key", "api" => ["type" => "GET", "endpoint" => "countries"]]);
+    $mock->run($payload);
 
-    $this->markTestSkipped('For documentation and speed of test suite, this test is skipped by default but can be actually run by going through the live interpreter above');
+    // Success
+    $this->assertSame($mock->getResponse(), json_encode($mock_results), 'Payload should return successfully');
   }
+
   /**
   * @test
   **/
   public function expectSuccessfullPayloadOnPost() {
-    // $payload = json_encode([
-    //   "frontendKey" => "test_key", 
-    //   "api" => [
-    //                 "type" => "POST", 
-    //                 "endpoint" => "clients", 
-    //                 "data" => [
-    //                   "clientType" => 1,
-    //                   "isLead" => true,
-    //                   "firstName" => "brandon",
-    //                   "lastName" => "lastname",
-    //                   "street1" => "street1",
-    //                   "street2" => "street2",
-    //                   "city" => "city",
-    //                   "countryId" => 19,
-    //                   "zipCode" => "55555",
-    //                   "username" => "brandon+testapi@charuwts.com",
-    //                   "contacts" => [
-    //                     [
-    //                       "email" => "brandon@charuwts.com", 
-    //                       "phone" => "2222222222", 
-    //                       "name" => "brandon lastname" 
-    //                     ]
-    //                   ],
+    // Mock Api Response
+    $mock = $this->getMockBuilder(Interpreter::class)
+                 ->setMethods(['post'])
+                 ->getMock();
+    $mock->method('post')->will($this->returnValue(null));
+
+    // Pass in payload and run mock
+    $payload = json_encode([
+      "frontendKey" => "test_key", 
+      "api" => [
+                    "type" => "POST", 
+                    "endpoint" => "clients", 
+                    "data" => [
+                      "clientType" => 1,
+                      "isLead" => true,
+                      "firstName" => "brandon",
+                      "lastName" => "lastname",
+                      "street1" => "street1",
+                      "street2" => "street2",
+                      "city" => "city",
+                      "countryId" => 19,
+                      "zipCode" => "55555",
+                      "username" => "brandon+testapi1@charuwts.com",
+                      "contacts" => [
+                        [
+                          "email" => "brandon@charuwts.com", 
+                          "phone" => "2222222222", 
+                          "name" => "brandon lastname" 
+                        ]
+                      ],
                       
-    //                 ]
-    //               ]
-    // ]);
-    // $this->Interpreter->run($payload);
+                    ]
+                  ]
+    ]);
+    $mock->run($payload);
 
-    // $this->assertSame(200, $this->Interpreter->getCode());
-
-    $this->markTestSkipped('For documentation and speed of test suite, this test is skipped by default but can be actually run by going through the live interpreter above');
+    $this->assertSame(200, $mock->getCode());
   }
 
 
