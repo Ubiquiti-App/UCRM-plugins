@@ -46,7 +46,7 @@
     {
       "key": "PaymentsFromDate",
       "label": "Date to start for Payment export",
-      "description": "Date in yyyy-mm-dd format",
+      "description": "Date in yyyy-mm-dd format ",
       "required": 1
     }
   ]
