@@ -134,19 +134,19 @@ class InterpreterTest extends TestCase {
                     "data" => [
                       "clientType" => 1,
                       "isLead" => true,
-                      "firstName" => "brandon",
+                      "firstName" => "test",
                       "lastName" => "lastname",
                       "street1" => "street1",
                       "street2" => "street2",
                       "city" => "city",
                       "countryId" => 19,
                       "zipCode" => "55555",
-                      "username" => "brandon+testapi1@charuwts.com",
+                      "username" => "test+testapi1@test.com",
                       "contacts" => [
                         [
-                          "email" => "brandon@charuwts.com", 
+                          "email" => "test@test.com", 
                           "phone" => "2222222222", 
-                          "name" => "brandon lastname" 
+                          "name" => "test lastname" 
                         ]
                       ],
                       
