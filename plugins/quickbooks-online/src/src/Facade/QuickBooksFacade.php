@@ -119,6 +119,10 @@ class QuickBooksFacade
                 continue;
             }
 
+            if ($ucrmClient['isLead']) {
+                continue;
+            }
+
             $entities = $dataService->Query(
                 sprintf('SELECT * FROM Customer WHERE DisplayName LIKE \'%%UCRMID-%d%%\'', $ucrmClient['id'])
             );
