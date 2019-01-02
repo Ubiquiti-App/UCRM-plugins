@@ -236,7 +236,7 @@ class QuickBooksFacade
             return;
         }
 
-        $InvoicesFromDate=$pluginData->$InvoicesFromDate;
+        $InvoicesFromDate=$pluginData->InvoicesFromDate;
         foreach ($this->ucrmApi->query('invoices?direction=ASC&createdDateFrom='.$InvoicesFromDate) as $ucrmInvoice) {
             if ($ucrmInvoice['id'] <= $pluginData->lastExportedInvoiceID) {
                 continue;
