@@ -8,10 +8,7 @@ $ucrm_json = json_decode($ucrm_string);
 define("UCRM_PUBLIC_URL", $ucrm_json->ucrmPublicUrl);
 define("UCRM_KEY", $ucrm_json->pluginAppKey);
 define("PLUGIN_PUBLIC_URL", $ucrm_json->pluginPublicUrl);
-$apiUrl = (property_exists($ucrm_json, 'ucrmLocalUrl') && $ucrm_json->ucrmLocalUrl)
-    ? $ucrm_json->ucrmLocalUrl
-    : $ucrm_json->ucrmPublicUrl;
-define("UCRM_API_URL", $apiUrl.'api/v1.0');
+define("UCRM_API_URL", UCRM_PUBLIC_URL.'api/v1.0');
 define("PLUGIN_FILES_DIR", PROJECT_PATH.'/data/files/');
 
 $config_path = PROJECT_PATH."/data/config.json";

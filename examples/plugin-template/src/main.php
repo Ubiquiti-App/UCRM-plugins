@@ -2,9 +2,8 @@
 
 chdir(__DIR__);
 
-require_once 'src/Logger.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
-(function () {
-    $logger = new \SampleLogger\Logger();
-    $logger->log('Finished');
-})();
+// Get UCRM log manager.
+$log = \Ubnt\UcrmPluginSdk\Service\PluginLogManager::create();
+$log->appendLog('Finished execution.');

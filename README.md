@@ -25,9 +25,10 @@ UCRM plugins are compatible with UCRM 2.10.0+
 | [Invoice CSV Export](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-csv-export) | Configurable export of invoices into CSV, can be used for a manual export to 3rd party accounting tools. |
 | [Revenue Report](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/revenue-report) | Revenue report grouped by products or services, shown under the Reporting main menu section. |
 
-## Plugins from other sources
+## Plugins / API scripts from other sources
 * [Client&nbsp;Signup Extended](https://www.charuwts.com/plugins/ucrm-signup) - Extended version of Client Signup Plugin
 * [Notification Plugin](https://community.ubnt.com/t5/UCRM-Plugins/Notification-Plugin/td-p/2541572) - Extended UCRM's notification system. More event-triggered emails sent to UCRM administrators.  
+* [UCRM FreeRadius](https://github.com/jhooper94/ucrm-freeradius-auth) - pulls the mac address and package from ucrm and push the information into free radius database
 
 ## How can I contribute?
 * These plugins are under MIT license enabling anyone to contribute any upgrades to existing plugins or create whole new ones.

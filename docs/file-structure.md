@@ -18,6 +18,14 @@ If this file is present, public URL will be generated for the plugin which will 
 All files placed in this directory will be publicly accessible without any authentication. It should be used for static assets (e.g. CSS, javascript, images) as the files will be served without any processing.  
 > Please note, that the directory will only work if the plugin has `public.php` file (see above).
 
+This directory should be placed in the plugin's root, next to the `public.php` file. Take a look at the following plugins to see example usage:
+- Revenue Report
+    - https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/revenue-report/src/public
+    - https://github.com/Ubiquiti-App/UCRM-plugins/blob/master/plugins/revenue-report/src/templates/form.php#L10
+- Invoice CSV export
+    - https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-csv-export/src/public
+    - https://github.com/Ubiquiti-App/UCRM-plugins/blob/master/plugins/invoice-csv-export/src/templates/form.php#L10
+
 ## Reserved files
 These files cannot be contained in the plugin archive as UCRM handles them and they would be overridden.
 
