@@ -10,8 +10,7 @@
     }
   },
   "require": {
-    "php-di/php-di": "^5.4",
-    "doctrine/cache": "^1.7",
-    "league/csv": "^9.1"
+    "league/csv": "^9.1",
+    "ubnt/ucrm-plugin-sdk": "~0.3"
   }
 }

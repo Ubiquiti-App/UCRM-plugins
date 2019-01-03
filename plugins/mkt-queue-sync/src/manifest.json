@@ -31,19 +31,19 @@
       "description": "Password de Mikrotik",
       "required": 1
     },
-	{
+    {
       "key": "burstThresholdPercentage",
       "label": "Burst Threshold Percentage",
       "description": "Burst Threshold Percentage/Porcentaje de Umbral de rafaga | Percentage of Max-Limit/Porcentaje del Max-Limit | (If not used configure 0/Si no se utiliza configurar en 0)",
       "required": 1
     },
-	{
+    {
       "key": "burstTime",
       "label": "Burst Time",
       "description": "Burst Time/Tiempo de Rafaga (If not used configure 0/Si no se utiliza configurar en 0)",
       "required": 1
     },
-	{
+    {
       "key": "addQueue",
       "label": "Add Queue?",
       "description": "Add queue simple in case it does not exist? (0 = NO / 1 = YES)",
