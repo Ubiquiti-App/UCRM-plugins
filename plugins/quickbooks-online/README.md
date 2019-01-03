@@ -38,6 +38,11 @@ This plugin handles import of your [UCRM](https://ucrm.ubnt.com/) customers, pay
 - You will now see the message `Exchange Authorization Code for Access Token succeeded.`.
 - Congratulations, UCRM and QuickBooks are now properly connected.
 
+#### 5) Update QuickBooks Online for discounts and sales tax collection
+- Be certain to update Account Settings -> Sales -> Sales Form Content -> Discounts -> On
+  The plugin will export discounts applied to services, but not discounts from a manually prepared invoice
+- If you collect sales tax be sure to update QBO Taxes -> Sales Tax Settings
+
 ## To be done in future version
 (Feel free to push your upgrades in this repo.)
 - Configurable date of the first payment or invoice to be imported. 
