@@ -2,15 +2,31 @@
 declare(strict_types=1);
 namespace Ucsp\Test;
 
+chdir(__DIR__);
+define("PROJECT_PATH", __DIR__);
+
 use PHPUnit\Framework\TestCase;
 use \Ucsp\Interpreter;
 
 class InterpreterTest extends TestCase {
   protected function setUp() {
+    Interpreter::setDataUrl(PROJECT_PATH.'/../data/');
+    Interpreter::setFrontendKey('test_key');
     $this->Interpreter = new Interpreter();
   }
   protected function tearDown() {
+    Interpreter::setDataUrl(null);
+    Interpreter::setFrontendKey(null);
     unset($this->Interpreter);
+  }
+
+  /**
+  * @test
+  * @covers Interpreter::getFrontendKey
+  **/
+  public function expectFrontendKey() {
+    $key = Interpreter::getFrontendKey();
+    $this->assertSame('test_key', $key);
   }
 
   /**
@@ -22,7 +38,6 @@ class InterpreterTest extends TestCase {
     $payload = json_encode(["frontendKey" => "test_key", "api" => ["type" => "GET", "endpoint" => "countries/22/states/invalid", "data" => "test"]]);
     $this->Interpreter->run($payload);
   }
-
   
   /**
   * @test
