@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace QBExport\Facade;
 
 
+use QBExport\Data\InvoiceStatus;
 use QBExport\Exception\QBAuthorizationException;
 use QBExport\Factory\DataServiceFactory;
 use QBExport\Service\Logger;
@@ -240,16 +241,22 @@ class QuickBooksFacade
             return;
         }
 
-        $InvoicesFromDate=$pluginData->InvoicesFromDate;
-        foreach ($this->ucrmApi->query('invoices?direction=ASC&createdDateFrom='.$InvoicesFromDate) as $ucrmInvoice) {
+        $query = 'invoices?direction=ASC';
+        if ($pluginData->invoicesFromDate) {
+            $query = sprintf('%s&createdDateFrom=%s', $query, $pluginData->invoicesFromDate);
+        }
+        foreach ($this->ucrmApi->query($query) as $ucrmInvoice) {
             if ($ucrmInvoice['id'] <= $pluginData->lastExportedInvoiceID) {
                 continue;
             }
-  
-            if ($ucrmInvoice['status'] < 1  || $ucrmInvoice['status'] > 3 || $ucrmInvoice['proforma'] == "true") {       // do not process DRAFT,VOID or PROFORMA invoices
+
+            // do not process DRAFT, VOID or PROFORMA invoices
+            if (
+                ($ucrmInvoice['proforma'] ?? false)
+                || in_array($ucrmInvoice['status'], [InvoiceStatus::DRAFT, InvoiceStatus::VOID], true)
+            ) {
                 continue;
             }
-
 
             $this->logger->info(sprintf('Export of invoice ID %s started.', $ucrmInvoice['id']));
 
@@ -356,11 +363,13 @@ class QuickBooksFacade
 
     public function exportPayments(): void
     {
-
         $pluginData = $this->optionsManager->load();
         $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
-        $PaymentsFromDate=$pluginData->$PaymentsFromDate;
-        $ucrmPayments = $this->ucrmApi->query('payments?direction=ASC&createdDateFrom='.$PaymentsFromDate);
+        $query = 'payments?direction=ASC';
+        if ($pluginData->paymentsFromDate) {
+            $query = sprintf('%s&createdDateFrom=%s', $query, $pluginData->paymentsFromDate);
+        }
+        $ucrmPayments = $this->ucrmApi->query($query);
         usort(
             $ucrmPayments,
             function (array $a, array $b) {
