@@ -119,6 +119,10 @@ class QuickBooksFacade
                 continue;
             }
 
+            if ($ucrmClient['isLead']) {
+                continue;
+            }
+
             $entities = $dataService->Query(
                 sprintf('SELECT * FROM Customer WHERE DisplayName LIKE \'%%UCRMID-%d%%\'', $ucrmClient['id'])
             );
@@ -241,6 +245,11 @@ class QuickBooksFacade
             if ($ucrmInvoice['id'] <= $pluginData->lastExportedInvoiceID) {
                 continue;
             }
+  
+            if ($ucrmInvoice['status'] < 1  || $ucrmInvoice['status'] > 3 || $ucrmInvoice['proforma'] == "true") {       // do not process DRAFT,VOID or PROFORMA invoices
+                continue;
+            }
+
 
             $this->logger->info(sprintf('Export of invoice ID %s started.', $ucrmInvoice['id']));
 
