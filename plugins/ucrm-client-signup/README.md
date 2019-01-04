@@ -5,7 +5,7 @@ _Developed by [Charuwts, LLC](https://charuwts.com)_
 
 When installed onto UCRM the plugin public URL will display a form that anyone can enter valid info into to create a client or lead.
 
-#### Note, only compatable with 2.13.0-beta1 and beyond
+#### Note, only compatable with 2.14.0 and beyond
 
 ## Instructions
 
