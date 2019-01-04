@@ -36,6 +36,18 @@
       "label": "Income account number",
       "description": "Income Account number from QuickBooks",
       "required": 1
+    },
+    {
+      "key": "InvoicesFromDate",
+      "label": "Date to start for Invoice export",
+      "description": "Date in yyyy-mm-dd format",
+      "required": 1
+    },
+    {
+      "key": "PaymentsFromDate",
+      "label": "Date to start for Payment export",
+      "description": "Date in yyyy-mm-dd format ",
+      "required": 1
     }
   ]
 }
