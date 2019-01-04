@@ -5,13 +5,26 @@ namespace Ucsp;
 class Interpreter {
   private static $whiteListedGet = ['countries' => ['second_level_ids' => ['states']]];
   private static $whiteListedPost = ['clients' => []];
-  private static $frontendKey = 'test_key';
+  private static $dataUrl = null;
+
+  public static function setDataUrl($dataUrl) {
+    self::$dataUrl = $dataUrl;
+  }
 
   public static function setFrontendKey($key) {
-    self::$frontendKey = $key;
+    if (!file_exists(self::$dataUrl.'frontendKey')) {
+      file_put_contents(self::$dataUrl.'frontendKey', $key, LOCK_EX);
+      return true;
+    } else {
+      return false;
+    }
   }
   public static function getFrontendKey() {
-    return self::$frontendKey;
+    if (file_exists(self::$dataUrl.'frontendKey')) {
+      return file_get_contents(self::$dataUrl.'frontendKey');
+    } else {
+      return false;
+    }
   }
 
   private $response;

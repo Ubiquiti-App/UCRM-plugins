@@ -7,7 +7,7 @@
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/ucrm-client-signup",
     "version": "1.2.0",
     "ucrmVersionCompliancy": {
-      "min": "2.13.0-beta1",
+      "min": "2.14.0",
       "max": null
     },
     "author": "Charuwts, LLC"
