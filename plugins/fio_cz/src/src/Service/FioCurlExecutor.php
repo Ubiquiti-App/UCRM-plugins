@@ -21,7 +21,7 @@ class FioCurlExecutor extends CurlExecutor
     /**
      * @throws CurlException
      */
-    public function curlQuery($url, array $headers = [], array $parameters = [])
+    public function curlQuery($url, array $headers = [], array $parameters = [], bool $verifySsl = true): array
     {
         $options = $this->optionsManager->loadOptions();
 
@@ -30,7 +30,7 @@ class FioCurlExecutor extends CurlExecutor
             throw new CurlException('Execution skipped, because last request was less than 30 seconds ago.');
         }
 
-        $response = parent::curlQuery($url, $headers, $parameters);
+        $response = parent::curlQuery($url, $headers, $parameters, $verifySsl);
 
         $options->lastProcessedTimestamp = time();
         $this->optionsManager->updateOptions();
