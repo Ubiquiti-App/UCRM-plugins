@@ -71,7 +71,7 @@ class Importer
             return;
         }
 
-        if (! is_numeric($optionsData->lastProcessedPayment)) {
+        if ($optionsData->lastProcessedPayment !== null && ! is_numeric($optionsData->lastProcessedPayment)) {
             $this->logger->warning(
                 'Last processed payment must be number',
                 [
