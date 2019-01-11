@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FioCz\FioCz;
 
 use FioCz\Service\FioCurlExecutor;
+use FioCz\Service\Logger;
 
 class FioCz
 {
@@ -13,9 +14,15 @@ class FioCz
      */
     private $fioCurlExecutor;
 
-    public function __construct(FioCurlExecutor $fioCurlExecutor)
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    public function __construct(FioCurlExecutor $fioCurlExecutor, Logger $logger)
     {
         $this->fioCurlExecutor = $fioCurlExecutor;
+        $this->logger = $logger;
     }
 
     /**
@@ -29,11 +36,15 @@ class FioCz
         ?int $lastProcessedPayment = null
     ): array {
         $transactions = $this->downloadTransactionsFromFio($token, $since, $until);
+        $this->logger->debug(sprintf('Transactions found: %d', count($transactions)));
         $transactions = $this->transformTransactionsData($transactions);
-        $transactions = $this->removeIncomingTransactions($transactions);
-
+        $transactions = $this->filterIncomingTransactions($transactions);
+        $this->logger->debug(sprintf('Incoming transactions: %d', count($transactions)));
         if ($lastProcessedPayment) {
             $transactions = $this->removePreviouslyProcessedTransactions($transactions, $lastProcessedPayment);
+            $this->logger->debug(sprintf('Previously unseen incoming transactions: %d', count($transactions)));
+        } else {
+            $this->logger->debug('No previously processed payments, using all.');
         }
 
         return $transactions;
@@ -42,7 +53,7 @@ class FioCz
     /**
      * @throws \FioCz\Exception\CurlException
      */
-    private function downloadTransactionsFromFio(string $token, \DateTimeImmutable $since, \DateTimeImmutable $until)
+    private function downloadTransactionsFromFio(string $token, \DateTimeImmutable $since, \DateTimeImmutable $until): array
     {
         $url = sprintf(
             'https://www.fio.cz/ib_api/rest/periods/%s/%s/%s/transactions.json',
@@ -86,7 +97,7 @@ class FioCz
         );
     }
 
-    private function removeIncomingTransactions(array $transactions): array
+    private function filterIncomingTransactions(array $transactions): array
     {
         return array_filter(
             $transactions,

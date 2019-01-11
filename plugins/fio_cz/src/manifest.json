@@ -40,11 +40,13 @@
     {
       "key": "lastProcessedPayment",
       "label": "Last processed payment",
+      "description": "Internal payment tracking to avoid duplicate processing of the same payment",
       "required": 0
     },
     {
       "key": "lastProcessedTimestamp",
       "label": "Last time the payment list was requested",
+      "description": "Internal timestamp tracking to politely avoid API request rate limits",
       "required": 0
     }
   ]

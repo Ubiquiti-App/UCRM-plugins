@@ -71,6 +71,12 @@ class Importer
             return;
         }
 
+        $this->logger->debug('Processing range: ', [
+            'startDate' => $startDate->format('Y-m-d H:i:s'),
+            'endDate' => $endDate->format('Y-m-d H:i:s'),
+        ]);
+
+
         if ($optionsData->lastProcessedPayment !== null && ! is_numeric($optionsData->lastProcessedPayment)) {
             $this->logger->warning(
                 'Last processed payment must be number',
@@ -89,9 +95,17 @@ class Importer
                 $endDate,
                 $optionsData->lastProcessedPayment === '' ? null : (int) $optionsData->lastProcessedPayment
             );
+            $this->logger->info(sprintf('New incoming transactions found: %d', count($transactions)));
+            $importedTransactions = 0;
+            $skippedTransactions = 0;
             foreach ($transactions as $transaction) {
-                $this->ucrmFacade->import($transaction);
+                if ($this->ucrmFacade->import($transaction)) {
+                    ++$importedTransactions;
+                } else {
+                    ++$skippedTransactions;
+                }
             }
+            $this->logger->info(sprintf('Finished: imported %d transactions, %d skipped', $importedTransactions, $skippedTransactions));
         } catch (Exception\CurlException $exception) {
             switch ($exception->getCode()) {
                 case 409:
