@@ -47,7 +47,7 @@ class FioCurlExecutor extends CurlExecutor
             ]
         );
 
-        $url_redacted = preg_replace('~periods/[a-zA-z0-9_=-]+/~', 'periods/[token-*****]/', $url);
+        $url_redacted = str_replace($options->token, '[*******]', $url);
         $this->logger->debug('Requesting from FIO API:', compact(
             'url_redacted', 'headers', 'parameters', 'verifySsl'
         ));
