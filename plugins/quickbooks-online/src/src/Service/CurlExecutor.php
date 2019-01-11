@@ -13,7 +13,7 @@ class CurlExecutor
     /**
      * @throws CurlException
      */
-    public function curlCommand($url, $method, array $headers = [], array $data = null, bool $verifySsl = true): void
+    public function curlCommand($url, $method, array $headers = [], $data = null, bool $verifySsl = true): void
     {
         $c = curl_init();
         curl_setopt($c, CURLOPT_URL, $url);
