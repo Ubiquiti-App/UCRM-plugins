@@ -36,7 +36,7 @@ class UcrmFacade
      * @throws \FioCz\Exception\CurlException
      * @throws \ReflectionException
      */
-    public function import(array $transaction): void
+    public function import(array $transaction): bool
     {
         $optionsData = $this->optionsManager->loadOptions();
 
@@ -46,14 +46,21 @@ class UcrmFacade
         if ($matched || $optionsData->importUnattached) {
             if ($matched) {
                 [$clientId, $invoiceId] = $matched;
+                $this->logger->info(sprintf('Matched to client %s, invoice %s', $clientId, $invoiceId));
+            } else {
+                $this->logger->info('Not matched, importing as unattached');
             }
-
             $this->sendPaymentToUcrm(
                 $this->transformTransactionToUcrmPayment($transaction, $clientId ?? null, $invoiceId ?? null)
             );
 
             $optionsData->lastProcessedPayment = $transaction['id'];
             $this->optionsManager->updateOptions();
+            $this->logger->debug(sprintf('lastProcessedPayment set to %s', $optionsData->lastProcessedPayment));
+            return true;
+        } else {
+            $this->logger->info('Not matched, skipping');
+            return false;
         }
     }
 
@@ -115,6 +122,9 @@ class UcrmFacade
         try {
             $date = new \DateTimeImmutable($transaction['date']);
         } catch (\Exception $e) {
+            $this->logger->warning('Cannot create date from value, using "now"', [
+                'dateValue' => $transaction['date']
+            ]);
             $date = new \DateTimeImmutable();
         }
         $note = '';
@@ -142,6 +152,7 @@ class UcrmFacade
      */
     private function sendPaymentToUcrm(array $payment): void
     {
+        $this->logger->debug('POST /api/v1.0/payments', $payment);
         $this->ucrmApi->command(
             'payments',
             'POST',
