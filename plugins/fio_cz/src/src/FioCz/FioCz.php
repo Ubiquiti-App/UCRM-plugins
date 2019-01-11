@@ -52,6 +52,7 @@ class FioCz
 
     /**
      * @throws \FioCz\Exception\CurlException
+     * @throws \ReflectionException
      */
     private function downloadTransactionsFromFio(string $token, \DateTimeImmutable $since, \DateTimeImmutable $until): array
     {
@@ -112,16 +113,29 @@ class FioCz
      */
     private function removePreviouslyProcessedTransactions(array $transactions, int $lastProcessedPayment): array
     {
-        while ($transactions && $transactions[0]['id'] !== $lastProcessedPayment) {
-            array_shift($transactions);
+        $unprocessedTransactions = [];
+        $unprocessed = false;
+
+        foreach ($transactions as $key => $transaction) {
+            // $lastProcessedPayment was already seen, copy the rest of the array
+            // else loop through transactions until $lastProcessedPayment is found
+            // this assumes that the order of already seen transactions is immutable
+            // (or at least that new transactions are inserted after those returned in previous invocations)
+            if ($unprocessed) {
+                $this->logger->debug('Unprocessed transaction ID:' . $transaction['id']);
+                $unprocessedTransactions[] = $transaction;
+            } elseif ($transaction['id'] === $lastProcessedPayment) {
+                $unprocessed = true;
+                $this->logger->debug('Last already processed payment found: ' . $transaction['id']);
+            } else {
+                $this->logger->debug('Already processed transaction ID:' . $transaction['id']);
+            }
         }
 
-        if (! $transactions) {
+        if (! $unprocessed) {
             throw new \Exception(sprintf('Could not find previously processed transaction %d.', $lastProcessedPayment));
         }
 
-        array_shift($transactions);
-
-        return $transactions;
+        return $unprocessedTransactions;
     }
 }
