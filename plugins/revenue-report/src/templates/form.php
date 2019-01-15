@@ -40,12 +40,12 @@
 
                                 <div class="col-3">
                                     <label class="mb-0" for="frm-since"><small>Since:</small></label>
-                                    <input type="date" name="since" id="frm-since" class="form-control form-control-sm" value="<?php echo htmlspecialchars($result['since'] ?? '', ENT_QUOTES); ?>">
+                                    <input type="date" name="since" id="frm-since" placeholder="YYYY-MM-DD" class="form-control form-control-sm" value="<?php echo htmlspecialchars($result['since'] ?? '', ENT_QUOTES); ?>">
                                 </div>
 
                                 <div class="col-3">
                                     <label class="mb-0" for="frm-until"><small>Until:</small></label>
-                                    <input type="date" name="until" id="frm-until" class="form-control form-control-sm" value="<?php echo htmlspecialchars($result['until'] ?? '', ENT_QUOTES); ?>">
+                                    <input type="date" name="until" id="frm-until" placeholder="YYYY-MM-DD" class="form-control form-control-sm" value="<?php echo htmlspecialchars($result['until'] ?? '', ENT_QUOTES); ?>">
                                 </div>
 
                                 <div class="col-auto ml-auto">

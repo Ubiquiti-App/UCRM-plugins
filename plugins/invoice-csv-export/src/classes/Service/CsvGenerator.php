@@ -118,13 +118,17 @@ class CsvGenerator
         );
     }
 
-    private function formatCountry(int $countryId, ?int $stateId)
+    private function formatCountry(?int $countryId, ?int $stateId): string
     {
-        if ($stateId !== null) {
-            return $this->stateMap[$stateId] . ', ' . $this->countryMap[$countryId];
+        if ($countryId === null) {
+            return '';
         }
 
-        return $this->countryMap[$countryId];
+        if ($stateId !== null) {
+            return ($this->stateMap[$stateId] ?? '') . ', ' . ($this->countryMap[$countryId] ?? '');
+        }
+
+        return $this->countryMap[$countryId] ?? '';
     }
 
     private function mapCountries(array $countries): array

@@ -31,6 +31,16 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
         'createdDateTo' => $_GET['until'],
     ];
 
+    // make sure the dates are in YYYY-MM-DD format
+    if ($parameters['createdDateFrom']) {
+        $parameters['createdDateFrom'] = new \DateTimeImmutable($parameters['createdDateFrom']);
+        $parameters['createdDateFrom'] = $parameters['createdDateFrom']->format('Y-m-d');
+    }
+    if ($parameters['createdDateTo']) {
+        $parameters['createdDateTo'] = new \DateTimeImmutable($parameters['createdDateTo']);
+        $parameters['createdDateTo'] = $parameters['createdDateTo']->format('Y-m-d');
+    }
+
     $countries = $api->get('countries');
     $states = array_merge(
         // Canada
