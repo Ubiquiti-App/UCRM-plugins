@@ -326,6 +326,6 @@ foreach ($pluginDirectories as $directory) {
 
 $errors += checkPluginsJson();
 
-printf('Found %d errors.' . PHP_EOL, $errors);
+printf('Found %d error%s.' . PHP_EOL, $errors, $errors === 1 ? '' : 's');
 
 exit($errors);
