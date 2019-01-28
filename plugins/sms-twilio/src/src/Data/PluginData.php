@@ -63,6 +63,11 @@ class PluginData extends UcrmData
     /**
      * @var string
      */
+    public $event_invoice_draft_approved;
+
+    /**
+     * @var string
+     */
     public $event_invoice_delete;
 
     /**
