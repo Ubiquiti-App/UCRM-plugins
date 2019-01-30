@@ -38,13 +38,16 @@ The following options are available:
 - `ucrmLocalUrl` - URL under which UCRM is locally accessible. This should be used to call UCRM API to prevent issues with self-signed certificates. Available since UCRM 2.14.0-beta3.
 - `pluginPublicUrl` - URL under which the `public.php` file is publicly accessible, this will be `null` if the plugin does not have `public.php` file or if the `Server domain name` or `Server IP` options are not configured in UCRM.
 - `pluginAppKey` - An App key automatically generated for the plugin (with write permissions), which can be used to access UCRM API.
+- `pluginId` - ID of the plugin in UCRM. Available since UCRM 2.15.0-beta6.
 
 Example of the `ucrm.json` file:
 ```json
 {
     "ucrmPublicUrl": "http://ucrm.example.com/",
+    "ucrmLocalUrl":"http://localhost/",
     "pluginPublicUrl": "http://ucrm.example.com/_plugin/dummy-plugin",
-    "pluginAppKey": "5YbpCSto7ffl/P/veJ/GK3U7K7zH6ZoHil7j5dorerSN8o+rlJJq6X/uFGZQF2WL"
+    "pluginAppKey": "5YbpCSto7ffl/P/veJ/GK3U7K7zH6ZoHil7j5dorerSN8o+rlJJq6X/uFGZQF2WL",
+    "pluginId": 1
 }
 ```
 
