@@ -1,0 +1,4 @@
+<Directory /var/SIRIUS/gestiontesting/afip/xmlgenerados>
+Order allow,deny
+Deny from all
+</Directory>

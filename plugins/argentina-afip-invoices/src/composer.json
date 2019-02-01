@@ -1,0 +1,17 @@
+{
+  "description": "This is a sample UCRM plugin showcasing a custom link in menu and security checks.",
+  "version": "1.0.1",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "App\\": [
+        "classes/"
+      ],
+	  "Argentinacae\\": "classes/Argentinacae"
+    }
+  },
+    "require": {
+        "php": ">=7.1",
+        "ubnt/ucrm-plugin-sdk": "~0.4"
+    }
+}
