@@ -4,8 +4,8 @@
     "name": "mkt-queue-sync",
     "displayName": "Mikrotik Queue Sync Plugin",
     "description": "Plugin para sincronizar simple queues con los limites de velocidad establecidos en Ucrm - Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https://wiki.mikrotik.com/wiki/Manual:Queue",
-    "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/mkt-queue-sync",
-    "version": "1.1.3",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
+    "version": "2.1.0",
     "ucrmVersionCompliancy": {
       "min": "2.10.0-beta1",
       "max": null
@@ -31,23 +31,24 @@
       "description": "Password de Mikrotik",
       "required": 1
     },
-    {
+	{
       "key": "burstThresholdPercentage",
       "label": "Burst Threshold Percentage",
       "description": "Burst Threshold Percentage/Porcentaje de Umbral de rafaga | Percentage of Max-Limit/Porcentaje del Max-Limit | (If not used configure 0/Si no se utiliza configurar en 0)",
       "required": 1
     },
-    {
+	{
       "key": "burstTime",
       "label": "Burst Time",
       "description": "Burst Time/Tiempo de Rafaga (If not used configure 0/Si no se utiliza configurar en 0)",
       "required": 1
     },
-    {
+	{
       "key": "addQueue",
       "label": "Add Queue?",
-      "description": "Add queue simple in case it does not exist? (0 = NO / 1 = YES)",
-      "required": 1
+      "description": "Add queue simple in case it does not exist?",
+      "required": 0,
+	  "type": "checkbox"
     }
   ]
 }
