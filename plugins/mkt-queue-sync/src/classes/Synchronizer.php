@@ -23,44 +23,9 @@ $GLOBALS['sumUploadVendido'] = 0;
 
 class Synchronizer
 {
-    /**
-     * @var OptionsManager
-     */
-   // private $optionsManager;
-
-    /**
-     * @var Logger
-     */
-    //private $logger;
-
-    /**
-     * @var UcrmApi
-     */
-    //private $ucrmApi;
-
-    /**
-     * @var \RouterosAPI
-     */
-    //private $routerosAPI;
-
-	
-
-    public function __construct(
-        /*OptionsManager $optionsManager,
-        Logger $logger,
-        UcrmApi $ucrmApi,*/
-       // \RouterosAPI $routerosAPI
-    ) {
-        /*$this->optionsManager = $optionsManager;
-        $this->logger = $logger;
-        $this->ucrmApi = $ucrmApi;*/
-      //  $this->routerosAPI = $routerosAPI;
+    public function __construct() {
     }
 
-    /**
-     * @throws \Exception
-     * @throws \ReflectionException
-     */
     public function sync(): void
     {
 		
@@ -245,9 +210,28 @@ class Synchronizer
         );
 		} else {
 			if($optionsData['addQueue'] == 1){
+
+			$clientInfo = $this->ucrmApi->get(sprintf('clients/%s', $ucrmService['clientId']));
+			/*echo "<pre>";
+			print_r($clientInfo);
+			echo "</pre>";
+			*/
+			var_dump($clientInfo['clientType']);
+			//$this->logger->appendLog($clientInfo[0]['clientType']);
+			if ($clientInfo['clientType'] == 1){
+				echo 'cliente normal';
+				$queueName = $clientInfo['firstName'] . ' ' . $clientInfo['lastName'] . ' - Service ID:' . $ucrmService['id'];
+			} else if ($clientInfo['clientType'] == 2){
+				echo 'cliente empresa';
+				$queueName = $clientInfo['companyName'] . ' - Service ID: ' . $ucrmService['id'];
+			} else {
+				$queueName = 'Service ID: ' . $ucrmService['id'];
+			}
+			
 			//Envio comando por API a Mikrotik - Sending API Commands to Mikrotik
 			$this->routerosAPI->write('/queue/simple/add', false);
 			$this->routerosAPI->write('=target=' . $ipAddress, false);
+			$this->routerosAPI->write('=name=' . $queueName, false);
 			$this->routerosAPI->write('=max-limit=' . $uploadQueue . '/' . $downloadQueue, false);
 			$this->routerosAPI->write('=burst-limit=' . $uploadBurst . '/' . $downloadBurst, false);
 			$this->routerosAPI->write('=burst-threshold=' . $uploadBurstThreshold . '/' . $downloadBurstThreshold, false);
