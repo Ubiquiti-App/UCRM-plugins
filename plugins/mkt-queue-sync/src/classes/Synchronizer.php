@@ -9,10 +9,6 @@ use Ubnt\UcrmPluginSdk\Service\UcrmApi;
 use Ubnt\UcrmPluginSdk\Service\UcrmOptionsManager;
 use Ubnt\UcrmPluginSdk\Service\PluginConfigManager;
 use Ubnt\UcrmPluginSdk\Service\PluginLogManager;
-//use Ubnt\UcrmPluginSdk\Service\UcrmSecurity;
-//use MikrotikQueueSync\Service\Logger;
-//use MikrotikQueueSync\Service\OptionsManager;
-//use MikrotikQueueSync\Service\UcrmApi;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -36,12 +32,6 @@ class Synchronizer
 		// Retrieve UCRM Config.
 		$pluginConfigManager = PluginConfigManager::create();
 		$optionsData = $pluginConfigManager->loadConfig();
-		//$this->optionsData = $optionsData;
-		echo "<pre>";
-		print_r($optionsData);
-		echo "</pre>";
-		
-		//$this->optionsManager = $pluginConfigManager;
 		
 		// Retrieve UCRM Logger.
 		$logger = PluginLogManager::create();
@@ -53,8 +43,7 @@ class Synchronizer
 		
 		
         $this->logger->appendLog('Synchronization started');
-        //$optionsData = $this->optionsManager->loadOptions();
-
+        
         if (DEBUG) {
             $this->logger->appendLog(
                 'Mikrotik Connect Data obtained in importer',
@@ -71,6 +60,7 @@ class Synchronizer
 				$servicePlans = $this->ucrmApi->get('service-plans'); //Get service Plans for Burst Management
                 foreach ($this->ucrmApi->get('clients/services') as $ucrmService) {
                 $this->synchronizeService($ucrmService, $servicePlans, $optionsData); //$servicePlans & $optionsData are for Burst Management
+				//break; //Just for testing
             }
         } else {
             $this->logger->appendLog('Connection failed');
@@ -99,14 +89,14 @@ class Synchronizer
 		{
 		
 		//Obtener y formatear Velocidad de UCRM - Obtain and format UCRM  Rate
-        $downloadQueue = $this->formatSpeedForMikrotik(($ucrmService['downloadSpeed']+1));
-        $uploadQueue = $this->formatSpeedForMikrotik(($ucrmService['uploadSpeed']+1));
-	$downloadLimitAtQueue = $this->formatSpeedForMikrotik(($ucrmService['downloadSpeed']*20/100));
-	$uploadLimitAtQueue = $this->formatSpeedForMikrotik(($ucrmService['uploadSpeed']*20/100));
-	$GLOBALS['sumDownloadLimitAt'] = $GLOBALS['sumDownloadLimitAt'] + ($ucrmService['downloadSpeed']*20/100);
-	$GLOBALS['sumUploadLimitAt'] = $GLOBALS['sumUploadLimitAt'] + ($ucrmService['downloadSpeed']*20/100);
-	$GLOBALS['sumDownloadVendido'] = $GLOBALS['sumDownloadVendido'] + ($ucrmService['downloadSpeed']);
-	$GLOBALS['sumUploadVendido'] = $GLOBALS['sumUploadVendido'] + ($ucrmService['downloadSpeed']);
+        $downloadQueue = $this->formatSpeedForMikrotik(($ucrmService['downloadSpeed']));
+        $uploadQueue = $this->formatSpeedForMikrotik(($ucrmService['uploadSpeed']));
+		$downloadLimitAtQueue = $this->formatSpeedForMikrotik(($ucrmService['downloadSpeed']*20/100));
+		$uploadLimitAtQueue = $this->formatSpeedForMikrotik(($ucrmService['uploadSpeed']*20/100));
+		$GLOBALS['sumDownloadLimitAt'] = $GLOBALS['sumDownloadLimitAt'] + ($ucrmService['downloadSpeed']*20/100);
+		$GLOBALS['sumUploadLimitAt'] = $GLOBALS['sumUploadLimitAt'] + ($ucrmService['downloadSpeed']*20/100);
+		$GLOBALS['sumDownloadVendido'] = $GLOBALS['sumDownloadVendido'] + ($ucrmService['downloadSpeed']);
+		$GLOBALS['sumUploadVendido'] = $GLOBALS['sumUploadVendido'] + ($ucrmService['downloadSpeed']);
 
 
         //Obtengo y formateo direccion IP del servicio - Obtaining and formatting service IP Address
@@ -125,6 +115,7 @@ class Synchronizer
         $this->logger->appendLog(sprintf('Speed will be set to %s/%s for IP: %s', $downloadQueue, $uploadQueue, $ipAddress));
 		}
 		
+		$servicePlanName = $servicePlans[$servicePlankey]['name'];
 		
 		if ($optionsData['burstThresholdPercentage'] != 0 && $optionsData['burstTime'] != 0)
 		{
@@ -134,9 +125,9 @@ class Synchronizer
 			
 			$priority = $servicePlans[$servicePlankey]['dataUsageLimit']; //Using Service DataUsageLimit as Priority
 			if ($priority < 1 || $priority > 8) $priority = '8';
-			$downloadBurst = $this->formatSpeedForMikrotik(($servicePlans[$servicePlankey]['downloadBurst']+1));
+			$downloadBurst = $this->formatSpeedForMikrotik(($servicePlans[$servicePlankey]['downloadBurst']));
 			if ($servicePlans[$servicePlankey]['downloadBurst'] < $ucrmService['downloadSpeed']) $downloadBurst = $downloadQueue; // If burst not configured or is less than max-limit, set same as max-limit
-			$uploadBurst = $this->formatSpeedForMikrotik(($servicePlans[$servicePlankey]['uploadBurst']+1));
+			$uploadBurst = $this->formatSpeedForMikrotik(($servicePlans[$servicePlankey]['uploadBurst']));
 			if ($servicePlans[$servicePlankey]['uploadBurst'] < $ucrmService['uploadSpeed']) $uploadBurst = $uploadQueue; // If burst not configured or is less than max-limit, set same as max-limit
 			if ($optionsData['burstThresholdPercentage'] < 1 || $optionsData['burstThresholdPercentage'] > 100) {
 				$optionsData['burstThresholdPercentage'] = 50; //If Burst-threshold is not between 1-100, we set 50%
@@ -208,21 +199,14 @@ class Synchronizer
 		$mktARRAY2 = $this->routerosAPI->parseResponse( /* necessary to clean buffer after a command */
             $this->routerosAPI->read(false)
         );
+		
 		} else {
-			if($optionsData['addQueue'] == 1){
+			if($optionsData['addQueue'] == true){
 
 			$clientInfo = $this->ucrmApi->get(sprintf('clients/%s', $ucrmService['clientId']));
-			/*echo "<pre>";
-			print_r($clientInfo);
-			echo "</pre>";
-			*/
-			var_dump($clientInfo['clientType']);
-			//$this->logger->appendLog($clientInfo[0]['clientType']);
 			if ($clientInfo['clientType'] == 1){
-				echo 'cliente normal';
 				$queueName = $clientInfo['firstName'] . ' ' . $clientInfo['lastName'] . ' - Service ID:' . $ucrmService['id'];
 			} else if ($clientInfo['clientType'] == 2){
-				echo 'cliente empresa';
 				$queueName = $clientInfo['companyName'] . ' - Service ID: ' . $ucrmService['id'];
 			} else {
 				$queueName = 'Service ID: ' . $ucrmService['id'];
@@ -241,6 +225,7 @@ class Synchronizer
 			$mktARRAY2 = $this->routerosAPI->parseResponse( /* necessary to clean buffer after a command */
             $this->routerosAPI->read(false)
 			);	
+			
 			}
 		}
 
