@@ -1,6 +1,19 @@
 {
     "plugins": [
         {
+            "name": "argentina-afip-invoices",
+            "displayName": "Facturas Argentina AFIP",
+            "description": "Plugin para obtener CAE (Facturacion electronica) en Argentina",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/argentina-afip-invoices",
+            "version": "1.0.0",
+            "ucrmVersionCompliancy": {
+                "min": "2.15.0-beta3",
+                "max": null
+            },
+            "author": "Franco Johan Gampel - franco@gampel.com.ar",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/argentina-afip-invoices\/argentina-afip-invoices.zip"
+        },
+        {
             "name": "fio_cz",
             "displayName": "Fio bank payment import",
             "description": "This plugin enables you to import payments from Fio bank to UCRM. See https:\/\/www.fio.cz\/bankovni-sluzby\/api-bankovnictvi",

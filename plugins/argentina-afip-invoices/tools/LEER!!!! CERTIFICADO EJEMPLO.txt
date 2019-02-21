@@ -1,0 +1,18 @@
+MODIFICAR EL ARCHIVO certificado.txt CON LA SIGUIENTE INFORMACION COMO EJEMPLO!!!
+ES MUY IMPORTANTE COLOCAR LA INFORMACION DE MANERA CORRECTA
+
+
+[ req ]
+default_bits        = 2048
+default_keyfile     = UCRM.key
+distinguished_name  = req_distinguished_name
+prompt              = no
+ 
+[ req_distinguished_name ]
+C            = AR
+ST           = Misiones (Modificar con Provincia)
+L            = Obera (Modificar con Ciudad)
+O            = UCRM
+serialNumber  = CUIT 20000000009 (Colocar su CUIT)
+OU            = Facturacion
+CN            = UCRM

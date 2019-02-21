@@ -1,0 +1,4 @@
+ACA VAN LOS CERTIFICADO Y LAS CLAVE PRIVADA OBTENIDOS EN LA AFIP.
+
+Vale aclarar que no es lo mismo Testing y Produccion, para este ultimo caso es necesario 
+volver a obtener el certificado y la clave privada.
