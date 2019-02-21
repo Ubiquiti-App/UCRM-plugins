@@ -1,0 +1,14 @@
+[ req ]
+default_bits        = 2048
+default_keyfile     = UCRM.key
+distinguished_name  = req_distinguished_name
+prompt              = no
+ 
+[ req_distinguished_name ]
+C            = AR
+ST           = Misiones
+L            = Obera
+O            = UCRM
+serialNumber  = CUIT 20000000009
+OU            = Facturacion
+CN            = UCRM

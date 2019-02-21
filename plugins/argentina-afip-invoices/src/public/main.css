@@ -1,0 +1,31 @@
+* {
+  font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+  position: relative;
+  background-color: #edf0f3;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  margin: 0;
+  color: #4c4c4c;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 300;
+}
+
+#header {
+  display: block;
+  margin: 0;
+  background: #fff;
+  box-shadow: 0 0 1px 0 rgba(0,0,0,.1);
+  padding: 15px 32px;
+}
+
+#content {
+  padding: 18px 32px 32px;
+}
