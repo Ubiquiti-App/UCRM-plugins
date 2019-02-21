@@ -2,8 +2,9 @@
 
 Plugin para la obtención de CAE para las facturas de AFIP Argentina.
 Actualmente se encuentra en su version inicial V1.0.0, por lo cual existen posibilidades de algunos fallos que no me haya percatado, por favor reportar cualquier inconveniente.
-
 Se pueden manejar hasta 3 organizaciones en simultaneo.
+
+[EN] This plugin is used for extending UCRM invoices. It creates CAE codes for every new invoices issued by UCRM and places this code into the invoice PDF.
 
 ## ¿Como funciona?
 * Descargar e instalar el plugin.
