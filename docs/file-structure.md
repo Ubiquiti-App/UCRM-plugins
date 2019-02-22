@@ -14,7 +14,7 @@ Main file of the plugin. This is what will be executed when the plugin is run by
 If this file is present, public URL will be generated for the plugin which will point to this file. When the URL is accessed, the file will be parsed as PHP script and executed.
 
 ### "public" directory
-*Available since UCRM 2.14.0-beta4.*  
+*Available since UCRM 2.14.0-beta4.*
 All files placed in this directory will be publicly accessible without any authentication. It should be used for static assets (e.g. CSS, javascript, images) as the files will be served without any processing.  
 > Please note, that the directory will only work if the plugin has `public.php` file (see above).
 
@@ -25,6 +25,16 @@ This directory should be placed in the plugin's root, next to the `public.php` f
 - Invoice CSV export
     - https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-csv-export/src/public
     - https://github.com/Ubiquiti-App/UCRM-plugins/blob/master/plugins/invoice-csv-export/src/templates/form.php#L10
+
+### hook_*.php files
+*Available since UCRM 2.16.0-beta1.*
+When the plugin is installed, updated, configured, enabled, disabled or removed, UCRM will call the respective hook file which you can use to setup database etc.
+- `hook_install.php`
+- `hook_update.php`
+- `hook_configure.php`
+- `hook_enable.php`
+- `hook_disable.php`
+- `hook_remove.php`
 
 ## Reserved files
 These files cannot be contained in the plugin archive as UCRM handles them and they would be overridden.
