@@ -28,7 +28,9 @@ This directory should be placed in the plugin's root, next to the `public.php` f
 
 ### hook_*.php files
 *Available since UCRM 2.16.0-beta1.*
-When the plugin is installed, updated, configured, enabled, disabled or removed, UCRM will call the respective hook file which you can use to setup database etc.
+When the plugin is installed, updated, configured, enabled, disabled or removed, UCRM will automatically call the respective hook file which you can use to execute any custom commands, e.g. run initial config queries, run migrations or setup database etc.
+
+These files should be placed in the plugin's root, next to the `public.php` file.
 - `hook_install.php`
 - `hook_update.php`
 - `hook_configure.php`
