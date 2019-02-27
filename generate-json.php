@@ -8,6 +8,7 @@ $pluginDirectories = new CallbackFilterIterator(
 );
 
 $plugins = [];
+/** @var SplFileInfo $directory */
 foreach ($pluginDirectories as $directory) {
     $file = $directory->getPathname() . '/src/manifest.json';
 
@@ -17,12 +18,13 @@ foreach ($pluginDirectories as $directory) {
         continue;
     }
     $plugin = $manifest['information'];
+    $plugin['name'] = $plugin['name'] ?? sprintf('(name missing in %s manifest)', $directory->getBaseName());
     $plugin['zipUrl'] = sprintf(
         'https://github.com/Ubiquiti-App/UCRM-plugins/raw/master/plugins/%s/%s.zip',
         $plugin['name'],
         $plugin['name']
     );
-    fwrite(STDERR, sprintf("\t%s\t%s\t\t%s\n", $plugin['version'], $plugin['name'], $plugin['url']));
+    fwrite(STDERR, sprintf("\t%s\t%s\t\t%s\n", $plugin['version'] ?? '(no version)', $plugin['name'], $plugin['url'] ?? '(URL missing)'));
 
     $plugins[$plugin['name']] = $plugin;
 }
