@@ -87,6 +87,8 @@ function validateManifest(string $file): int
 
     $errors += validateManifestData($manifest, $name);
 
+    $errors += validateManifestConfiguration($manifest, $name);
+
     return $errors;
 }
 
@@ -112,6 +114,40 @@ function validateManifestData(array $manifest, string $name): int
     $errors += ensureArrayKeyExists($manifest, 'information', 'ucrmVersionCompliancy');
     $errors += ensureArrayKeyExists($manifest, 'information', 'ucrmVersionCompliancy', 'min');
     $errors += ensureArrayKeyExists($manifest, 'information', 'author');
+
+    return $errors;
+}
+
+function validateManifestConfiguration(array $manifest, string $name): int
+{
+    if (! array_key_exists('configuration', $manifest)) {
+        return 0;
+    }
+
+    $errors = 0;
+
+    $configurationKeys = [];
+    foreach ($manifest['configuration'] as $configuration) {
+        if (ensureArrayKeyExists($configuration, 'key') === 1) {
+            ++$errors;
+
+            continue;
+        }
+
+        $errors += ensureArrayKeyExists($configuration, 'label');
+
+        if (in_array($configuration['key'], $configurationKeys, true)) {
+            printf(
+                'Manifest of "%s" plugin has duplicate configuration for item "%s".' . PHP_EOL,
+                $name,
+                $configuration['key']
+            );
+
+            ++$errors;
+        } else {
+            $configurationKeys[] = $configuration['key'];
+        }
+    }
 
     return $errors;
 }
