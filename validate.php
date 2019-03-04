@@ -252,13 +252,22 @@ function validateUrl(array $manifest, ?string $name): int
             ++$errors;
         }
 
-        if (strlen($url) > UCRM_MAX_PLUGIN_URL_LENGTH) {
+        if (string_length($url) > UCRM_MAX_PLUGIN_URL_LENGTH) {
             printf('Url for plugin "%s" should be at most %d characters long.' . PHP_EOL, $name, UCRM_MAX_PLUGIN_URL_LENGTH);
             ++$errors;
         }
     }
 
     return $errors;
+}
+
+function string_length(string $strig): int {
+    if (function_exists('mb_strlen')) {
+        return mb_strlen($strig,'UTF-8');
+    } else {
+        printf('Warning: missing extension: %s' . PHP_EOL, 'mbstring');
+        return strlen($strig);
+    }
 }
 
 function validatePlugin(SplFileInfo $pluginDirectory): int
