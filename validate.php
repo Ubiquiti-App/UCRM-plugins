@@ -252,7 +252,7 @@ function validateUrl(array $manifest, ?string $name): int
             ++$errors;
         }
 
-        if (string_length($url) > UCRM_MAX_PLUGIN_URL_LENGTH) {
+        if (stringLength($url) > UCRM_MAX_PLUGIN_URL_LENGTH) {
             printf('Url for plugin "%s" should be at most %d characters long.' . PHP_EOL, $name, UCRM_MAX_PLUGIN_URL_LENGTH);
             ++$errors;
         }
@@ -261,13 +261,14 @@ function validateUrl(array $manifest, ?string $name): int
     return $errors;
 }
 
-function string_length(string $string): int {
+function stringLength(string $string): int {
     if (function_exists('mb_strlen')) {
-        return mb_strlen($string,'UTF-8');
-    } else {
-        printf('Warning: missing extension: %s' . PHP_EOL, 'mbstring');
-        return strlen($string);
+        return mb_strlen($string, 'UTF-8');
     }
+
+    printf('Warning: missing extension: %s' . PHP_EOL, 'mbstring');
+
+    return strlen($string);
 }
 
 function validatePlugin(SplFileInfo $pluginDirectory): int
