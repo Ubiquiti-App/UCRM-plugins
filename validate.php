@@ -261,12 +261,12 @@ function validateUrl(array $manifest, ?string $name): int
     return $errors;
 }
 
-function string_length(string $strig): int {
+function string_length(string $string): int {
     if (function_exists('mb_strlen')) {
-        return mb_strlen($strig,'UTF-8');
+        return mb_strlen($string,'UTF-8');
     } else {
         printf('Warning: missing extension: %s' . PHP_EOL, 'mbstring');
-        return strlen($strig);
+        return strlen($string);
     }
 }
 
