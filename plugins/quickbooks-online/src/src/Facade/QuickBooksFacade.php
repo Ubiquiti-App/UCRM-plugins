@@ -54,7 +54,7 @@ class QuickBooksFacade
         $this->logger = $logger;
         $this->optionsManager = $optionsManager;
         $this->ucrmApi = $ucrmApi;
-        $this->qbApiDelay = 200*1000;
+        $this->qbApiDelay = 150*1000;
         $this->qbTaxesUS = 1;
         $this->qbTaxesCanadaQuebec = 0;
     }
@@ -232,7 +232,7 @@ class QuickBooksFacade
 	if($pluginData->qbBaseUrl == 'Development') {
 		$this->qbApiDelay = 200*1000;
 	} else {
-		$this->qbApiDelay = 200*1000;
+		$this->qbApiDelay = 150*1000;
 	}
         $this->logger->notice(sprintf('qbBaseUrl: %s qbApiDelay=%d', $pluginData->qbBaseUrl, $this->qbApiDelay));
     }
@@ -392,11 +392,23 @@ class QuickBooksFacade
                 }
             }
 
+            if ($ucrmInvoice['discount'] > 0) {
+                $lines[] = [
+                    'Amount' => $ucrmInvoice['subtotal'] * $ucrmInvoice['discount'] / 100,
+                    'DiscountLineDetail' => [
+                        'PercentBased' => 'true',
+                        'DiscountPercent' => $ucrmInvoice['discount'],
+                    ],
+                    'DetailType' => 'DiscountLineDetail',
+                    'Description' => $ucrmInvoice['discountLabel'],
+                ];
+            }
+
             try {
 	        $this->logger->info(sprintf('Invoice::create DocNumber=%s DueDate=%s Total=%s TaxCode=%s',
 			sprintf('%s/%s', $ucrmInvoice['number'], $ucrmInvoice['id']), $ucrmInvoice['dueDate'], $ucrmInvoice['total'], $TaxCode));
-	        //$this->logger->info(print_r($lines, true));
 	        //$this->logger->info(print_r($ucrmInvoice, true));
+	        //$this->logger->info(print_r($lines, true));
 	        usleep($this->qbApiDelay);
                 if($this->qbTaxesUS) {
                 $response = $dataService->Add(
@@ -488,7 +500,7 @@ class QuickBooksFacade
                 continue;
             }
 
-            $this->logger->info(sprintf('Payment ID: %s needs to be exported', $ucrmPayment['id']));
+            $this->logger->info(sprintf('Payment ID: %s needs to be exported, creditAmount=%s amount=%s createdDate=%s', $ucrmPayment['id'], $ucrmPayment['creditAmount'], $ucrmPayment['amount'], $ucrmPayment['createdDate']));
 
 	    usleep($this->qbApiDelay);
             $qbClient = $this->getQBClient($dataService, $ucrmPayment['clientId']);
@@ -497,10 +509,12 @@ class QuickBooksFacade
                 $this->logger->error(
                     sprintf('Client with Display name containing: UCRMID-%s is not found', $ucrmPayment['clientId'])
                 );
-                continue;
+                break;
             }
 
             $this->logger->info(sprintf('Client Id=%s DisplayName=%s', $qbClient->Id, $qbClient->DisplayName));
+
+	    //$this->logger->info(print_r($ucrmPayment, true));
 
             /* if there is a credit on the payment deal with it first */
             if ($ucrmPayment['creditAmount'] > 0) {
@@ -515,6 +529,7 @@ class QuickBooksFacade
                             ],
                             'TotalAmt' => $ucrmPayment['creditAmount'],
                             'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
+                            'PrivateNote' => sprintf('UCRMID-%s creditAmount', $ucrmPayment['id']),
                         ]
                     );
 	            usleep($this->qbApiDelay);
@@ -542,6 +557,7 @@ class QuickBooksFacade
                             $exception->getMessage()
                         )
                     );
+                    break;
                 }
             }
 
@@ -551,8 +567,18 @@ class QuickBooksFacade
                 $LineObj = null;
                 $lineArray = null;
 
-                $this->logger->info(sprintf('Payment covers invoiceId %d', $paymentCovers['invoiceId']));
+                $this->logger->info(sprintf('Payment covers invoiceId %d amount=%s', $paymentCovers['invoiceId'], $paymentCovers['amount']));
 
+                if ($paymentCovers['refundId']) {
+                    $this->logger->notice('Payment has refundId, not yet supported! XXX');
+                    $this->logger->info(print_r($ucrmPayment, true));
+                    continue;
+                }
+                if (($paymentCovers['invoiceId'] == '') && ($paymentCovers['amount'] == 0)) {
+                    $this->logger->notice(sprintf('Payment has empty invoiceId! XXX'));
+                    $this->logger->info(print_r($ucrmPayment, true));
+                    continue;
+                }
 	        usleep($this->qbApiDelay);
                 $invoices = $dataService->Query(
                     sprintf('SELECT * FROM INVOICE WHERE DOCNUMBER LIKE \'%%/%d\'', $paymentCovers['invoiceId'])
@@ -582,6 +608,7 @@ class QuickBooksFacade
                                 'TotalAmt' => $ucrmPayment['amount'],
                                 'Line' => $lineArray,
                                 'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
+                                'PrivateNote' => sprintf('UCRMID-%s covers invoiceId %d', $ucrmPayment['id'], $paymentCovers['invoiceId']),
                             ]
                         );
 
@@ -612,9 +639,12 @@ class QuickBooksFacade
                                 $exception->getMessage()
                             )
                         );
+                        return;
                     }
 		} else {
                     $this->logger->error(sprintf('Unable to find invoiceId %s covered by paymentID %s', $paymentCovers['invoiceId'], $ucrmPayment['id']));
+                    $this->logger->info(print_r($ucrmPayment, true));
+                    return;
                 }
             }
 
