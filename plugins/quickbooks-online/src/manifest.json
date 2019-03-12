@@ -32,10 +32,16 @@
       "required": 1
     },
     {
-      "key": "qbIncomeAccountNumber",
-      "label": "Income account number",
-      "description": "Income Account number from QuickBooks",
+      "key": "qbIncomeAccountName",
+      "label": "Income account name",
+      "description": "Income Account name from QuickBooks",
       "required": 1
+    },
+    {
+      "key": "itemNameFormat",
+      "label": "Item Name Format String",
+      "description": "Optional format string to generate QB item names derived from UCRM item type.",
+      "required": 0
     },
     {
       "key": "invoicesFromDate",
