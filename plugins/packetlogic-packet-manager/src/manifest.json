@@ -8,7 +8,7 @@
         "version": "1.0.3",
         "ucrmVersionCompliancy": {
             "min": "2.10.0-beta1",
-            "max": null
+            "max": "2.99"
         },
         "author": "Shaun Wilkinson"
     },
