@@ -8,7 +8,7 @@
     "version": "2.1.0",
     "ucrmVersionCompliancy": {
       "min": "2.10.0-beta1",
-      "max": "2.99"
+      "max": null
     },
     "author": "Franco Johan Gampel - franco@gampel.com.ar"
   },
