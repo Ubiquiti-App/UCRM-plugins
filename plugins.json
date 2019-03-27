@@ -11,7 +11,7 @@
                 "max": null
             },
             "unmsVersionCompliancy": {
-                "min": "1.0",
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Franco Johan Gampel - franco@gampel.com.ar",
@@ -28,7 +28,7 @@
                 "max": null
             },
             "unmsVersionCompliancy": {
-                "min": "1.0",
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Ubiquiti Networks, Inc.",
@@ -45,7 +45,7 @@
                 "max": null
             },
             "unmsVersionCompliancy": {
-                "min": "1.0",
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Ubiquiti Networks, Inc.",
@@ -62,7 +62,7 @@
                 "max": null
             },
             "unmsVersionCompliancy": {
-                "min": "1.0",
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Charuwts, LLC",
@@ -105,7 +105,7 @@
                 "max": null
             },
             "unmsVersionCompliancy": {
-                "min": "1.0",
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Ubiquiti Networks, Inc.",
@@ -122,7 +122,7 @@
                 "max": null
             },
             "unmsVersionCompliancy": {
-                "min": "1.0",
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Ubiquiti Networks, Inc.",
@@ -139,7 +139,7 @@
                 "max": null
             },
             "unmsVersionCompliancy": {
-                "min": "1.0",
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Shaun Wilkinson",
@@ -156,7 +156,7 @@
                 "max": null
             },
             "unmsVersionCompliancy": {
-                "min": "1.0",
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Ubiquiti Networks, Inc.",
@@ -173,7 +173,7 @@
                 "max": null
             },
             "unmsVersionCompliancy": {
-                "min": "1.0",
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Charuwts, LLC",
