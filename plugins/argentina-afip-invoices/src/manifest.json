@@ -11,7 +11,7 @@
             "max": null
         },
       "unmsVersionCompliancy": {
-        "min": "1.0",
+        "min": "1.0.0-dev.1",
         "max": null
       },
         "author": "Franco Johan Gampel - franco@gampel.com.ar"
