@@ -10,6 +10,10 @@
                 "min": "2.15.0-beta3",
                 "max": null
             },
+            "unmsVersionCompliancy": {
+                "min": "1.0.0-dev.1",
+                "max": null
+            },
             "author": "Franco Johan Gampel - franco@gampel.com.ar",
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/argentina-afip-invoices\/argentina-afip-invoices.zip"
         },
@@ -21,6 +25,10 @@
             "version": "1.1.4",
             "ucrmVersionCompliancy": {
                 "min": "2.10.0-beta1",
+                "max": null
+            },
+            "unmsVersionCompliancy": {
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Ubiquiti Networks, Inc.",
@@ -36,6 +44,10 @@
                 "min": "2.14.0-beta4",
                 "max": null
             },
+            "unmsVersionCompliancy": {
+                "min": "1.0.0-dev.1",
+                "max": null
+            },
             "author": "Ubiquiti Networks, Inc.",
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/invoice-csv-export\/invoice-csv-export.zip"
         },
@@ -47,6 +59,10 @@
             "version": "1.0.1",
             "ucrmVersionCompliancy": {
                 "min": "2.11.1",
+                "max": null
+            },
+            "unmsVersionCompliancy": {
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Charuwts, LLC",
@@ -88,6 +104,10 @@
                 "min": "2.10.0-beta1",
                 "max": null
             },
+            "unmsVersionCompliancy": {
+                "min": "1.0.0-dev.1",
+                "max": null
+            },
             "author": "Ubiquiti Networks, Inc.",
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/quickbooks-online\/quickbooks-online.zip"
         },
@@ -99,6 +119,10 @@
             "version": "1.1.1",
             "ucrmVersionCompliancy": {
                 "min": "2.14.0-beta4",
+                "max": null
+            },
+            "unmsVersionCompliancy": {
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Ubiquiti Networks, Inc.",
@@ -127,6 +151,10 @@
                 "min": "2.14.0-beta",
                 "max": null
             },
+            "unmsVersionCompliancy": {
+                "min": "1.0.0-dev.1",
+                "max": null
+            },
             "author": "Ubiquiti Networks, Inc.",
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/sms-twilio\/sms-twilio.zip"
         },
@@ -138,6 +166,10 @@
             "version": "1.2.0",
             "ucrmVersionCompliancy": {
                 "min": "2.14.0",
+                "max": null
+            },
+            "unmsVersionCompliancy": {
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Charuwts, LLC",
