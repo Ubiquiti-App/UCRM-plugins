@@ -10,6 +10,10 @@
       "min": "2.14.0-beta4",
       "max": null
     },
+    "unmsVersionCompliancy": {
+      "min": "1.0.0-dev.1",
+      "max": null
+    },
     "author": "Ubiquiti Networks, Inc."
   },
   "menu": [
