@@ -138,10 +138,6 @@
                 "min": "2.10.0-beta1",
                 "max": null
             },
-            "unmsVersionCompliancy": {
-                "min": "1.0.0-dev.1",
-                "max": null
-            },
             "author": "Shaun Wilkinson",
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/routeros-packet-manager\/routeros-packet-manager.zip"
         },
