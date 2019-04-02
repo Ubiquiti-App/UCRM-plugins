@@ -1,5 +1,7 @@
 <?php
 
+const UCRM_MAX_PLUGIN_URL_LENGTH = 255;
+
 function ensureFileExists(string $file): int
 {
     if (! file_exists($file)) {
@@ -70,19 +72,25 @@ function validateManifest(string $file): int
     $errors += ensureArrayKeyExists($manifest, 'information', 'name');
 
     $name = null;
+    $directory = dirname($file, 2);
+    $basename = pathinfo($directory, PATHINFO_BASENAME);
+
     if ($errors === 0) {
-        $name = $manifest['information']['name'];
-        $directory = dirname($file, 2);
+        $name = $manifest['information']['name'] ?? null;
         $zipFile = $directory . '/' . $name . '.zip';
         $errors += ensureFileExists($zipFile);
         $errors += ensureManifestMatches($zipFile, $manifest, $file);
-
-        $basename = pathinfo($directory, PATHINFO_BASENAME);
 
         if ($basename !== $name) {
             printf('Directory name "%s" doesn\'t match the plugin name "%s".' . PHP_EOL, $basename, $name);
             ++$errors;
         }
+    }
+
+    if (! $name) {
+        printf('Plugin name is required for "%s".' . PHP_EOL, $basename);
+        ++$errors;
+        return $errors;
     }
 
     $errors += validateManifestData($manifest, $name);
@@ -279,9 +287,24 @@ function validateUrl(array $manifest, ?string $name): int
             printf('Url for plugin "%s" should be "%s".' . PHP_EOL, $name, $correctUrl);
             ++$errors;
         }
+
+        if (stringLength($url) > UCRM_MAX_PLUGIN_URL_LENGTH) {
+            printf('Url for plugin "%s" should be at most %d characters long.' . PHP_EOL, $name, UCRM_MAX_PLUGIN_URL_LENGTH);
+            ++$errors;
+        }
     }
 
     return $errors;
+}
+
+function stringLength(string $string): int {
+    if (function_exists('mb_strlen')) {
+        return mb_strlen($string, 'UTF-8');
+    }
+
+    printf('Warning: missing extension: %s' . PHP_EOL, 'mbstring');
+
+    return strlen($string);
 }
 
 function validatePlugin(SplFileInfo $pluginDirectory): int
