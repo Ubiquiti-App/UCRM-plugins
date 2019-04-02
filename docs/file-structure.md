@@ -31,12 +31,12 @@ This directory should be placed in the plugin's root, next to the `public.php` f
 When the plugin is installed, updated, configured, enabled, disabled or removed, UCRM will automatically call the respective hook file which you can use to execute any custom commands, e.g. run initial config queries, run migrations or setup database etc.
 
 These files should be placed in the plugin's root, next to the `public.php` file.
-- `hook_install.php`
-- `hook_update.php`
-- `hook_configure.php`
-- `hook_enable.php`
-- `hook_disable.php`
-- `hook_remove.php`
+- `hook_install.php` - called right after the plugin is installed
+- `hook_update.php` - called when plugin's version changes
+- `hook_configure.php` - called when plugin's configuration is saved
+- `hook_enable.php` - called when plugin is enabled
+- `hook_disable.php` - called when plugin is disabled
+- `hook_remove.php` - called *after* the plugin's data are deleted from UCRM database, but *before* plugin's files are deleted
 
 ## Reserved files
 These files cannot be contained in the plugin archive as UCRM handles them and they would be overridden.
