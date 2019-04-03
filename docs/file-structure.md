@@ -32,10 +32,10 @@ When the plugin is installed, updated, configured, enabled, disabled or removed,
 
 These files should be placed in the plugin's root, next to the `public.php` file.
 - `hook_install.php` - called right after the plugin is installed
-- `hook_update.php` - called when plugin's version changes
-- `hook_configure.php` - called when plugin's configuration is saved
-- `hook_enable.php` - called when plugin is enabled
-- `hook_disable.php` - called when plugin is disabled
+- `hook_update.php` - called after plugin's version changes
+- `hook_configure.php` - called after plugin's configuration is saved
+- `hook_enable.php` - called after plugin is enabled
+- `hook_disable.php` - called after plugin is disabled
 - `hook_remove.php` - called *after* the plugin's data are deleted from UCRM database, but *before* plugin's files are deleted
 
 ## Reserved files
