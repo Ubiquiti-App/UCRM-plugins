@@ -1,0 +1,47 @@
+{
+  "version": "1",
+  "information": {
+    "name": "routeros",
+    "displayName": "Mikrotik RouterOS",
+    "description": "Plugin for handling RouterOS devices.",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/routeros",
+    "version": "1.0.0",
+    "ucrmVersionCompliancy": {
+      "min": null,
+      "max": null
+    },
+    "unmsVersionCompliancy": {
+      "min": "1.0.0-dev.1",
+      "max": null
+    },
+    "author": "Ubiquiti Networks, Inc."
+  },
+  "configuration": [
+    {
+      "key": "unmsApiToken",
+      "label": "UNMS API token",
+      "description": "API token created for this plugin in Network section of UNMS",
+      "required": 1,
+      "type": "text"
+    },
+    {
+      "key": "mikrotikIpAddress",
+      "label": "IP Address",
+      "description": "IP address of Mikrotik gateway",
+      "required": 1,
+      "type": "text"
+    },
+    {
+      "key": "mikrotikUserName",
+      "label": "User name",
+      "required": 1,
+      "type": "text"
+    },
+    {
+      "key": "mikrotikPassword",
+      "label": "Password",
+      "required": 1,
+      "type": "password"
+    }
+  ]
+}
