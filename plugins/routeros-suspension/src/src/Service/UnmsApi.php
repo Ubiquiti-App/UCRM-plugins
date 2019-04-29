@@ -47,16 +47,13 @@ class UnmsApi
             throw new ConfigurationException('UNMS API token is missing in plugin configuration.');
         }
 
-        $ucrmApiUrl = sprintf(
-            '%s/api/v2.1/',
-            preg_replace('~(crm\/?)\z~', 'nms', $ucrmUrl)
-        );
+        $unmsApiUrl = sprintf('%s/api/v2.1/', str_replace('crm/', 'nms', $ucrmUrl));
 
         $client = new Client(
             [
-                'base_uri' => $ucrmApiUrl,
+                'base_uri' => $unmsApiUrl,
                 // If the URL is localhost over HTTPS, do not verify SSL certificate.
-                'verify' => ! Helpers::isUrlSecureLocalhost($ucrmApiUrl),
+                'verify' => ! Helpers::isUrlSecureLocalhost($unmsApiUrl),
             ]
         );
 

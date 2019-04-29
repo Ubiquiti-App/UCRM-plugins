@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace UcrmRouterOs\Service;
 
-use Ds\Set;
 use Nette\Utils\Strings;
 use Ubnt\UcrmPluginSdk\Service\UcrmApi;
 
@@ -13,6 +12,8 @@ class Suspender
 {
     private const BLOCKED_USERS_LIST = 'BLOCKED_USERS';
     private const COMMENT_SIGNATURE = 'ucrm_';
+
+    private const SERVICE_STATUS_ACTIVE = 3;
 
     /**
      * @var UcrmApi
@@ -53,14 +54,14 @@ class Suspender
         return $this->ucrmApi->get(
             'clients/services',
             [
-                'statuses' => [3],
+                'statuses' => [self::SERVICE_STATUS_ACTIVE],
             ]
         );
     }
 
-    private function findIpsFromNetwork(array $clientSiteIds): Set
+    private function findIpsFromNetwork(array $clientSiteIds): array
     {
-        $ipAddressses = new Set();
+        $ipAddresses = [];
         foreach ($clientSiteIds as $clientSiteId) {
             $clientSiteIps = $this->unmsApi->get(
                 'devices/ips',
@@ -69,13 +70,15 @@ class Suspender
                 ]
             );
 
-            $ipAddressses->add(...$clientSiteIps);
+            foreach ($clientSiteIps as $clientSiteIp) {
+                $ipAddresses[] = $clientSiteIp;
+            }
         }
 
-        return $ipAddressses;
+        return $ipAddresses;
     }
 
-    private function setIpFirewallAddressList(Set $ipAddresses): void
+    private function setIpFirewallAddressList(array $ipAddresses): void
     {
         $attributes = ['list', 'address', 'comment'];
         $routerList = $this->createIndex($this->findAndFilterUcrmIpAddressListOnRouter(), $attributes);
@@ -116,7 +119,7 @@ class Suspender
         return $res;
     }
 
-    private function createCrmIpAddressLists(Set $ipAddresses): array
+    private function createCrmIpAddressLists(array $ipAddresses): array
     {
         $addressListRows = [];
         foreach ($ipAddresses as $ipAddress) {
