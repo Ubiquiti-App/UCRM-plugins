@@ -75,7 +75,7 @@ class Suspender
             }
         }
 
-        return $ipAddresses;
+        return array_unique($ipAddresses);
     }
 
     private function setIpFirewallAddressList(array $ipAddresses): void
