@@ -47,7 +47,7 @@ class UnmsApi
             throw new ConfigurationException('UNMS API token is missing in plugin configuration.');
         }
 
-        $unmsApiUrl = sprintf('%s/api/v2.1/', str_replace('crm/', 'nms', $ucrmUrl));
+        $unmsApiUrl = sprintf('%s/api/v2.1/', rtrim(str_replace('crm/', 'nms/', $ucrmUrl), '/'));
 
         $client = new Client(
             [
