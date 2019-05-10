@@ -72,7 +72,7 @@ class Suspender
 
         $rules = [];
 
-        //add jump rules
+        // add jump rules
         foreach ($natDstJumpRules as $jumpRule) {
             $rules[] = [
                 'chain' => 'dstnat',
