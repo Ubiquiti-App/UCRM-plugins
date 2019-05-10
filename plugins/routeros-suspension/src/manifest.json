@@ -7,7 +7,7 @@
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/routeros-suspension",
     "version": "1.0.0",
     "unmsVersionCompliancy": {
-      "min": "1.0.0-dev.1",
+      "min": "1.0.0-dev",
       "max": null
     },
     "author": "Ubiquiti Networks, Inc."
@@ -36,8 +36,20 @@
     {
       "key": "mikrotikPassword",
       "label": "Password",
-      "required": 1,
+      "required": 0,
       "type": "password"
+    },
+    {
+      "key": "suspensionPageIp",
+      "label": "Suspension page IP address",
+      "required": 1,
+      "type": "text"
+    },
+    {
+      "key": "suspensionPagePort",
+      "label": "Suspension page port",
+      "required": 1,
+      "type": "text"
     }
   ]
 }

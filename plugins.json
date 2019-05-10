@@ -148,7 +148,7 @@
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/routeros-suspension",
             "version": "1.0.0",
             "unmsVersionCompliancy": {
-                "min": "1.0.0-dev.1",
+                "min": "1.0.0-dev",
                 "max": null
             },
             "author": "Ubiquiti Networks, Inc.",
