@@ -6,6 +6,8 @@ declare(strict_types=1);
 namespace UcrmRouterOs\Service;
 
 use Nette\Utils\Strings;
+use Ubnt\UcrmPluginSdk\Exception\ConfigurationException;
+use Ubnt\UcrmPluginSdk\Service\PluginConfigManager;
 use Ubnt\UcrmPluginSdk\Service\UcrmApi;
 
 class Suspender
@@ -39,7 +41,157 @@ class Suspender
 
     public function suspend(): void
     {
+        $config = (new PluginConfigManager())->loadConfig();
+
+        if (! $this->validateConfig($config)) {
+            throw new ConfigurationException('Missing value in plugin configuration.');
+        }
+
+        $suspensionPageIp = $config['suspensionPageIp'];
+        $suspensionPagePort = $config['suspensionPagePort'];
+
+        $this->syncNatRules($suspensionPageIp, (int) $suspensionPagePort);
+        $this->syncFilterRules($suspensionPageIp);
+        $this->syncAddressList();
+    }
+
+    private function syncNatRules(string $suspensionPageIp, int $suspensionPagePort): void
+    {
+        $natDstJumpRules = [
+            'first_dstnat',
+            'general_dstnat',
+            'last_dstnat',
+        ];
+
+        $natSrcJumpRules = [
+            'first_srcnat',
+            'general_srcnat',
+            'range_srcnat',
+            'last_srcnat',
+        ];
+
+        $rules = [];
+
+        //add jump rules
+        foreach ($natDstJumpRules as $jumpRule) {
+            $rules[] = [
+                'chain' => 'dstnat',
+                'action' => 'jump',
+                'comment' => $jumpRule,
+                'jump-target' => sprintf('%s%s', self::COMMENT_SIGNATURE, $jumpRule),
+                'out-interface' => '',
+            ];
+        }
+        foreach ($natSrcJumpRules as $jumpRule) {
+            $rules[] = [
+                'chain' => 'srcnat',
+                'action' => 'jump',
+                'comment' => $jumpRule,
+                'jump-target' => sprintf('%s%s', self::COMMENT_SIGNATURE, $jumpRule),
+                'out-interface' => '',
+            ];
+        }
+
+        $rules[] = [
+            'chain' => sprintf('%s%s', self::COMMENT_SIGNATURE, 'first_dstnat'),
+            'action' => 'dst-nat',
+            'src-address-list' => self::BLOCKED_USERS_LIST,
+            'dst-port' => 80,
+            'to-ports' => $suspensionPagePort,
+            'protocol' => 'tcp',
+            'comment' => 'blocked_user_redirect',
+            'to-addresses' => $suspensionPageIp,
+            'out-interface' => '',
+        ];
+
+        $this->setNat($rules);
+    }
+
+    private function syncFilterRules(string $serverIp): void
+    {
+        $rules = [
+            [
+                'chain' => 'input',
+                'src-address' => $serverIp,
+                'comment' => 'accept_input',
+                'action' => 'accept',
+                'dst-port' => '',
+                'protocol' => '',
+                'src-address-list' => '',
+                'dst-address' => '',
+            ],
+            [
+                'chain' => 'forward',
+                'src-address' => $serverIp,
+                'comment' => 'accept_forward',
+                'action' => 'accept',
+                'dst-port' => '',
+                'protocol' => '',
+                'src-address-list' => '',
+                'dst-address' => '',
+            ],
+
+            [
+                'chain' => 'forward',
+                'comment' => 'forward_first',
+                'jump-target' => 'ucrm_forward_first',
+                'action' => 'jump',
+                'dst-port' => '',
+                'protocol' => '',
+                'src-address-list' => '',
+                'dst-address' => '',
+            ],
+
+            [
+                'chain' => 'forward',
+                'comment' => 'forward_general',
+                'jump-target' => 'ucrm_forward_general',
+                'action' => 'jump',
+                'dst-port' => '',
+                'protocol' => '',
+                'src-address-list' => '',
+                'dst-address' => '',
+            ],
+
+            [
+                'chain' => 'forward',
+                'comment' => 'forward_drop',
+                'jump-target' => 'ucrm_forward_drop',
+                'action' => 'jump',
+                'dst-port' => '',
+                'protocol' => '',
+                'src-address-list' => '',
+                'dst-address' => '',
+            ],
+            [
+                'chain' => 'ucrm_forward_general',
+                'comment' => 'blocked_users_allow_dns',
+                'protocol' => 'udp',
+                'dst-port' => 53,
+                'src-address-list' => self::BLOCKED_USERS_LIST,
+                'action' => 'accept',
+                'src-address' => '',
+                'dst-address' => '',
+            ],
+            [
+                'chain' => 'ucrm_forward_drop',
+                'comment' => 'blocked_users_drop',
+                'src-address-list' => self::BLOCKED_USERS_LIST,
+                'dst-address' => '!' . $serverIp,
+                'action' => 'drop',
+                'src-address' => '',
+                'dst-port' => '',
+                'protocol' => '',
+            ],
+        ];
+
+        $this->setFilterRules($rules);
+    }
+
+    private function syncAddressList(): void
+    {
         $clientSiteIds = [];
+
         foreach ($this->findServicesToSuspend() as $service) {
             if ($service['unmsClientSiteId'] ?? false) {
                 $clientSiteIds[] = $service['unmsClientSiteId'];
@@ -47,6 +199,58 @@ class Suspender
         }
 
         $this->setIpFirewallAddressList($this->findIpsFromNetwork($clientSiteIds));
+    }
+
+    private function setNat(array $content): void
+    {
+        $section = '/ip/firewall/nat';
+
+        $attrs = [
+            'chain',
+            'action',
+            'comment',
+            'jump-target',
+            'dst-address',
+            'src-address',
+            'to-addresses',
+            'to-ports',
+            'out-interface',
+        ];
+
+        $remoteSectionList = $this->getSectionList($section, $attrs);
+
+        $remoteList = $this->createIndex($remoteSectionList, $attrs);
+        $localList = $this->createIndex($content, $attrs);
+        $toRemove = array_diff_key($remoteList, $localList);
+        $toAdd = array_diff_key($localList, $remoteList);
+
+        $this->routerOsApi->remove($section, array_column($toRemove, '.id'));
+        $this->routerOsApi->add($section, $toAdd);
+    }
+
+
+    private function setFilterRules(array $content): void
+    {
+        $section = '/ip/firewall/filter';
+        $attrs = [
+            'chain',
+            'comment',
+            'src-address-list',
+            'dst-address',
+            'action',
+            'src-address',
+            'dst-port',
+            'protocol',
+        ];
+
+        $remoteList = $this->createIndex($this->getSectionList($section, $attrs), $attrs);
+        $localList = $this->createIndex($content, $attrs);
+
+        $toRemove = array_diff_key($remoteList, $localList);
+        $toAdd = array_diff_key($localList, $remoteList);
+
+        $this->routerOsApi->remove($section, array_column($toRemove, '.id'));
+        $this->routerOsApi->add($section, $toAdd);
     }
 
     private function findServicesToSuspend(): array
@@ -123,7 +327,6 @@ class Suspender
     {
         $addressListRows = [];
         foreach ($ipAddresses as $ipAddress) {
-            //for each ip address => create address list row
             $addressListRows[] = [
                 'list' => self::BLOCKED_USERS_LIST,
                 'address' => $ipAddress,
@@ -144,15 +347,53 @@ class Suspender
             ) {
                 $address['comment'] = substr($address['comment'], strlen(self::COMMENT_SIGNATURE));
                 $filtered[] = $address;
-            } elseif (
-                array_key_exists('name', $address)
-                && Strings::startsWith($address['name'], self::COMMENT_SIGNATURE)
-            ) {
-                //some sections doesn't have comment attribute, ucrm uses name attribute instead
-                $filtered[] = $address;
             }
         }
 
         return $filtered;
+    }
+
+    private function getSectionList(string $section, array $attributes): array
+    {
+        $data = $this->getRawSectionList($section, $attributes);
+
+        $filtered = [];
+        foreach ($data as $row) {
+            if (array_key_exists('comment', $row) && Strings::startsWith($row['comment'], self::COMMENT_SIGNATURE)) {
+                $row['comment'] = substr($row['comment'], strlen(self::COMMENT_SIGNATURE));
+                $filtered[] = $row;
+            }
+        }
+
+        return $filtered;
+    }
+
+    private function getRawSectionList(string $section, array $attributes = []): array
+    {
+        $result = $this->routerOsApi->print(
+            $section,
+            empty($attributes) ? [] : ['.proplist' => sprintf('.id,%s', implode(',', $attributes))]
+        );
+
+        return is_array($result) ? $result : [];
+    }
+
+    private function validateConfig(array $config): bool
+    {
+        $configAttributes = [
+            'mikrotikIpAddress',
+            'mikrotikUserName',
+            'mikrotikPassword',
+            'suspensionPageIp',
+            'suspensionPagePort',
+        ];
+
+        foreach ($configAttributes as $configAttribute) {
+            if (! array_key_exists($configAttribute, $config)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

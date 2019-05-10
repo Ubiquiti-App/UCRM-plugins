@@ -7,7 +7,6 @@ namespace UcrmRouterOs\Service;
 
 use RouterOS\Client;
 use RouterOS\Query;
-use Ubnt\UcrmPluginSdk\Exception\ConfigurationException;
 use Ubnt\UcrmPluginSdk\Service\PluginConfigManager;
 
 class RouterOsApi
@@ -26,19 +25,11 @@ class RouterOsApi
     {
         $config = (new PluginConfigManager())->loadConfig();
 
-        if (
-            ! array_key_exists('mikrotikIpAddress', $config)
-            || ! array_key_exists('mikrotikUserName', $config)
-            || ! array_key_exists('mikrotikPassword', $config)
-        ) {
-            throw new ConfigurationException('Missing value in plugin configuration.');
-        }
-
         $client = new Client(
             [
                 'host' => $config['mikrotikIpAddress'],
                 'user' => $config['mikrotikUserName'],
-                'pass' => $config['mikrotikPassword'],
+                'pass' => (string) $config['mikrotikPassword'],
             ]
         );
 
@@ -64,21 +55,21 @@ class RouterOsApi
         return $this->getClient()->write($query)->read();
     }
 
-    public function add(string $endpoint, array $values, string $commentPrefix = 'ucrm_'): void
+    public function add(string $endpoint, array $sentences, string $commentPrefix = 'ucrm_'): void
     {
-        foreach ($values as $value) {
-            array_filter($value);
+        foreach ($sentences as $sentence) {
+            $sentence = array_filter($sentence);
 
             if (
                 $commentPrefix
-                && $value['comment'] ?? false
+                && $sentence['comment'] ?? false
             ) {
-                $value['comment'] = sprintf('%s%s', $commentPrefix, $value['comment']);
+                $sentence['comment'] = sprintf('%s%s', $commentPrefix, $sentence['comment']);
             }
 
             $query = new Query(sprintf('%s/add', $endpoint));
 
-            foreach ($value as $key => $item) {
+            foreach ($sentence as $key => $item) {
                 $query->add(sprintf('=%s=%s', $key, $item));
             }
 
