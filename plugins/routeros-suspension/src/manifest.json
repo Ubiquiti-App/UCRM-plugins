@@ -1,0 +1,55 @@
+{
+  "version": "1",
+  "information": {
+    "name": "routeros-suspension",
+    "displayName": "Mikrotik RouterOS - suspension",
+    "description": "Plugin for handling suspension on RouterOS devices.",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/routeros-suspension",
+    "version": "1.0.0",
+    "unmsVersionCompliancy": {
+      "min": "1.0.0-dev",
+      "max": null
+    },
+    "author": "Ubiquiti Networks, Inc."
+  },
+  "configuration": [
+    {
+      "key": "unmsApiToken",
+      "label": "UNMS API token",
+      "description": "API token created for this plugin in Network section of UNMS",
+      "required": 1,
+      "type": "text"
+    },
+    {
+      "key": "mikrotikIpAddress",
+      "label": "IP Address",
+      "description": "IP address of Mikrotik gateway",
+      "required": 1,
+      "type": "text"
+    },
+    {
+      "key": "mikrotikUserName",
+      "label": "User name",
+      "required": 1,
+      "type": "text"
+    },
+    {
+      "key": "mikrotikPassword",
+      "label": "Password",
+      "required": 0,
+      "type": "password"
+    },
+    {
+      "key": "suspensionPageIp",
+      "label": "Suspension page IP address",
+      "required": 1,
+      "type": "text"
+    },
+    {
+      "key": "suspensionPagePort",
+      "label": "Suspension page port",
+      "required": 1,
+      "type": "text"
+    }
+  ]
+}

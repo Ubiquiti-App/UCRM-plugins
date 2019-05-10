@@ -142,6 +142,19 @@
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/routeros-packet-manager\/routeros-packet-manager.zip"
         },
         {
+            "name": "routeros-suspension",
+            "displayName": "Mikrotik RouterOS - suspension",
+            "description": "Plugin for handling suspension on RouterOS devices.",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/routeros-suspension",
+            "version": "1.0.0",
+            "unmsVersionCompliancy": {
+                "min": "1.0.0-dev",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc.",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/routeros-suspension\/routeros-suspension.zip"
+        },
+        {
             "name": "sms-twilio",
             "displayName": "SMS notifications via Twilio",
             "description": "This plugin sends SMS notifications via Twilio. NOTE: only phone numbers in the international format can be used, e.g. +155 555 1234",
