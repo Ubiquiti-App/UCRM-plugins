@@ -125,9 +125,17 @@ class Synchronizer
 			
 			$priority = $servicePlans[$servicePlankey]['dataUsageLimit']; //Using Service DataUsageLimit as Priority
 			if ($priority < 1 || $priority > 8) $priority = '8';
+			if (($servicePlans[$servicePlankey]['downloadBurst']) != null ){
 			$downloadBurst = $this->formatSpeedForMikrotik(($servicePlans[$servicePlankey]['downloadBurst']));
+			} else {
+				$downloadBurst = 0;
+			}
 			if ($servicePlans[$servicePlankey]['downloadBurst'] < $ucrmService['downloadSpeed']) $downloadBurst = $downloadQueue; // If burst not configured or is less than max-limit, set same as max-limit
+			if (($servicePlans[$servicePlankey]['uploadBurst']) != null ){
 			$uploadBurst = $this->formatSpeedForMikrotik(($servicePlans[$servicePlankey]['uploadBurst']));
+			} else {
+				$uploadBurst = 	0;
+			}
 			if ($servicePlans[$servicePlankey]['uploadBurst'] < $ucrmService['uploadSpeed']) $uploadBurst = $uploadQueue; // If burst not configured or is less than max-limit, set same as max-limit
 			if ($optionsData['burstThresholdPercentage'] < 1 || $optionsData['burstThresholdPercentage'] > 100) {
 				$optionsData['burstThresholdPercentage'] = 50; //If Burst-threshold is not between 1-100, we set 50%
@@ -152,6 +160,7 @@ class Synchronizer
 			$burstTime = 0;
 			$downloadBurstThreshold = 0;
 			$uploadBurstThreshold = 0;
+			$priority = 8;
 		}
 		
 			if (DEBUG) {
@@ -163,6 +172,7 @@ class Synchronizer
 					'Upload Burst' => $uploadBurst,
 					'Upload Burst-Threshold' => $uploadBurstThreshold,
                     'Burst-Time' => $burstTime,
+					'Priority' => $priority,
                 ]
             );
         }		
@@ -184,22 +194,57 @@ class Synchronizer
                 ]
             );
         }
-
-        if($id != NULL)
-		{
-		//Envio comando por API a Mikrotik - Sending API Commands to Mikrotik
-        $this->routerosAPI->write('/queue/simple/set', false);
-        $this->routerosAPI->write('=.id=' . $id, false);
-        $this->routerosAPI->write('=max-limit=' . $uploadQueue . '/' . $downloadQueue, false);
-		$this->routerosAPI->write('=burst-limit=' . $uploadBurst . '/' . $downloadBurst, false);
-		$this->routerosAPI->write('=burst-threshold=' . $uploadBurstThreshold . '/' . $downloadBurstThreshold, false);
-		$this->routerosAPI->write('=limit-at=' . $uploadLimitAtQueue . '/' . $downloadLimitAtQueue, false);
-		$this->routerosAPI->write('=priority=' . $priority . '/' . $priority, false);
-		$this->routerosAPI->write('=burst-time=' . $burstTime . '/' . $burstTime, true);
-		$mktARRAY2 = $this->routerosAPI->parseResponse( /* necessary to clean buffer after a command */
-            $this->routerosAPI->read(false)
-        );
 		
+		if($id != NULL)
+		{
+			if($ucrmService['status'] != 2){
+				//Envio comando por API a Mikrotik - Sending API Commands to Mikrotik
+				$this->routerosAPI->write('/queue/simple/set', false);
+				$this->routerosAPI->write('=.id=' . $id, false);
+				$this->routerosAPI->write('=max-limit=' . $uploadQueue . '/' . $downloadQueue, false);
+				$this->routerosAPI->write('=burst-limit=' . $uploadBurst . '/' . $downloadBurst, false);
+				$this->routerosAPI->write('=burst-threshold=' . $uploadBurstThreshold . '/' . $downloadBurstThreshold, false);
+				$this->routerosAPI->write('=limit-at=' . $uploadLimitAtQueue . '/' . $downloadLimitAtQueue, false);
+				$this->routerosAPI->write('=priority=' . $priority . '/' . $priority, false);
+				$this->routerosAPI->write('=burst-time=' . $burstTime . '/' . $burstTime, true);
+				$mktARRAY2 = $this->routerosAPI->parseResponse( /* necessary to clean buffer after a command */
+					$this->routerosAPI->read(false)
+				);
+				
+				//Envio comando por API para Address List -- Create addressList with Service IP's and Service Plan Name
+				if($optionsData['addAddressList'] == true){
+					$this->routerosAPI->write('/ip/firewall/address-list/print',false);
+					$this->routerosAPI->write('?address=' . $ucrmService['ipRanges'][0],true);
+					$mktARRAY2 = $this->routerosAPI->parseResponse( // necessary to clean buffer after a command 
+						$this->routerosAPI->read(false)
+					);
+					if ($mktARRAY2 != null) {
+						$this->routerosAPI->write('/ip/firewall/address-list/set',false);
+						$this->routerosAPI->write('=.id=' . $mktARRAY2[0]['.id'], false);
+						$this->routerosAPI->write('=list=' . $servicePlanName, true);
+						$mktARRAY2 = $this->routerosAPI->parseResponse( // necessary to clean buffer after a command
+							$this->routerosAPI->read(false)
+							);
+					} else {
+						$this->routerosAPI->write('/ip/firewall/address-list/add',false);
+						$this->routerosAPI->write('=address=' . $ucrmService['ipRanges'][0], false);
+						$this->routerosAPI->write('=list=' . $servicePlanName, true);
+						$mktARRAY2 = $this->routerosAPI->parseResponse( // necessary to clean buffer after a command 
+							$this->routerosAPI->read(false)
+							);
+					}
+					
+				}
+			} else {
+				if ($optionsData['removeTerminated'] == true){
+				//Envio comando por API a Mikrotik - Sending API Commands to Mikrotik
+				$this->routerosAPI->write('/queue/simple/remove', false);
+				$this->routerosAPI->write('=.id=' . $id, true);
+				$mktARRAY2 = $this->routerosAPI->parseResponse( // necessary to clean buffer after a command 
+							$this->routerosAPI->read(false)
+							);
+				}
+			}
 		} else {
 			if($optionsData['addQueue'] == true){
 
@@ -225,6 +270,30 @@ class Synchronizer
 			$mktARRAY2 = $this->routerosAPI->parseResponse( /* necessary to clean buffer after a command */
             $this->routerosAPI->read(false)
 			);	
+			
+			//Envio comando por API para Address List -- Create addressList with Service IP's and Service Plan Name
+			if($optionsData['addAddressList'] == true){
+			$this->routerosAPI->write('/ip/firewall/address-list/print',false);
+			$this->routerosAPI->write('?address=' . $ucrmService['ipRanges'][0],true);
+			$mktARRAY2 = $this->routerosAPI->parseResponse( // necessary to clean buffer after a command
+				$this->routerosAPI->read(false)
+			);
+			if ($mktARRAY2 != null) {
+				$this->routerosAPI->write('/ip/firewall/address-list/set',false);
+				$this->routerosAPI->write('=.id=' . $mktARRAY2[0]['.id'], false);
+				$this->routerosAPI->write('=list=' . $servicePlanName, true);
+				$mktARRAY2 = $this->routerosAPI->parseResponse( // necessary to clean buffer after a command
+					$this->routerosAPI->read(false)
+					);
+			} else {
+				$this->routerosAPI->write('/ip/firewall/address-list/add',false);
+				$this->routerosAPI->write('=address=' . $ucrmService['ipRanges'][0], false);
+				$this->routerosAPI->write('=list=' . $servicePlanName, true);
+				$mktARRAY2 = $this->routerosAPI->parseResponse( // necessary to clean buffer after a command
+					$this->routerosAPI->read(false)
+					);
+			}
+			}
 			
 			}
 		}

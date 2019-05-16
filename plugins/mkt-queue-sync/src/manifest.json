@@ -5,7 +5,7 @@
     "displayName": "Mikrotik Queue Sync Plugin",
     "description": "Plugin para sincronizar simple queues con los limites de velocidad establecidos en Ucrm - Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https://wiki.mikrotik.com/wiki/Manual:Queue",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/mkt-queue-sync",
-    "version": "2.1.0",
+    "version": "2.3.0",
     "ucrmVersionCompliancy": {
       "min": "2.10.0-beta1",
       "max": null
@@ -47,6 +47,20 @@
       "key": "addQueue",
       "label": "Add Queue?",
       "description": "Add queue simple in case it does not exist?",
+      "required": 0,
+	  "type": "checkbox"
+    },
+	{
+      "key": "addAddressList",
+      "label": "Add Address List?",
+      "description": "Add/Update an address list with service ip and service plan name? - ¿Agregar/Actualizar un adress-list con la ip del servicio y el nombre del plan?",
+      "required": 0,
+	  "type": "checkbox"
+    },
+	{
+      "key": "removeTerminated",
+      "label": "Remove Terminated?",
+      "description": "Remove queue of terminated service? - ¿Remover colas de servicios terminados?",
       "required": 0,
 	  "type": "checkbox"
     }

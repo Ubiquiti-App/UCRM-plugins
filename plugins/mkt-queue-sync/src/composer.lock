@@ -733,16 +733,16 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v4.2.3",
+            "version": "v4.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "7c16ebc2629827d4ec915a52ac809768d060a4ee"
+                "reference": "e16b9e471703b2c60b95f14d31c1239f68f11601"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/7c16ebc2629827d4ec915a52ac809768d060a4ee",
-                "reference": "7c16ebc2629827d4ec915a52ac809768d060a4ee",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/e16b9e471703b2c60b95f14d31c1239f68f11601",
+                "reference": "e16b9e471703b2c60b95f14d31c1239f68f11601",
                 "shasum": ""
             },
             "require": {
@@ -779,20 +779,20 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2019-01-16T20:35:37+00:00"
+            "time": "2019-02-07T11:40:08+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.10.0",
+            "version": "v1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "e3d826245268269cd66f8326bd8bc066687b4a19"
+                "reference": "82ebae02209c21113908c229e9883c419720738a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/e3d826245268269cd66f8326bd8bc066687b4a19",
-                "reference": "e3d826245268269cd66f8326bd8bc066687b4a19",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/82ebae02209c21113908c229e9883c419720738a",
+                "reference": "82ebae02209c21113908c229e9883c419720738a",
                 "shasum": ""
             },
             "require": {
@@ -804,7 +804,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9-dev"
+                    "dev-master": "1.11-dev"
                 }
             },
             "autoload": {
@@ -837,20 +837,20 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2018-08-06T14:22:27+00:00"
+            "time": "2019-02-06T07:57:58+00:00"
         },
         {
             "name": "ubnt/ucrm-plugin-sdk",
-            "version": "0.4.1",
+            "version": "0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ubiquiti-App/UCRM-Plugin-SDK.git",
-                "reference": "d680c9a123b898018331f2b7f55f4ccfd66eaf68"
+                "reference": "3fa4954849f89c7fce935d867a67dd69686bead2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ubiquiti-App/UCRM-Plugin-SDK/zipball/d680c9a123b898018331f2b7f55f4ccfd66eaf68",
-                "reference": "d680c9a123b898018331f2b7f55f4ccfd66eaf68",
+                "url": "https://api.github.com/repos/Ubiquiti-App/UCRM-Plugin-SDK/zipball/3fa4954849f89c7fce935d867a67dd69686bead2",
+                "reference": "3fa4954849f89c7fce935d867a67dd69686bead2",
                 "shasum": ""
             },
             "require": {
@@ -891,7 +891,7 @@
                 "sdk",
                 "ucrm"
             ],
-            "time": "2018-11-20T12:20:24+00:00"
+            "time": "2019-05-06T12:08:44+00:00"
         }
     ],
     "packages-dev": [],
