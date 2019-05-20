@@ -82,6 +82,23 @@ The `manifest.json` file contains all needed information about the plugin and is
                 "hook": "main"
             }
         }
+    ],
+    "widgets": [
+        {
+            "position": "dashboard",
+            "iframeHeight": 300,
+            "iframeUrlParameters": {
+                "foo": "bar",
+                "foo2": "bar2"
+            }
+        },
+        {
+            "position": "client/overview",
+            "iframeHeight": 300,
+            "iframeUrlParameters": {
+                "hook": "client"
+            }
+        }
     ]
 }
 ```
@@ -136,11 +153,30 @@ Contains an array of items. Each item is defined as follows:
   - `"blank"` - The link will lead simply to the target page
   - `"iframe"` - The link will lead to special page within UCRM which will show the target page in an iframe
 - `key` - Menu category to insert the link into (optional)\*
-- `label` - Label of the link (optional, default value is plugin name)
-- `parameters` - Array of parameters for the link (optional)\*\*
+- `label` - label of the link (optional, default value is plugin name)
+- `parameters` - array of parameters for the link (optional)\*\*
 
 \*) If `type` is `"admin"` then `"Billing"`, `"Network"`, `"Reports"` or `"System"` can be used to add the link under these existing categories in UCRM menu. In other cases a new item will be added to the menu.
 
 \*\*) For example if `parameters` are `{"hook": "main"},` then link is `/_plugins/<plugin-name>/public.php?hook=main`.
+
+Note: The target pages should typically be protected to be available only to authorized clients or admins. Read [this](security.md)  for details.
+
+### widgets
+*Note: This feature is available since UNMS 1.0.0-beta7
+
+Adds iframe widgets showing the plugin's public page to specified positions.
+
+Contains an array of items. Each item is defined as follows:
+- `position` - required, determines where to display the widget, can have these values:
+  - `"dashboard"` - CRM dashboard
+  - `"client/overview"` - client detail
+  - `"client/service"` - client service detail
+  - `"client-zone/dashboard"` - Client Zone - dashboard
+  - `"client-zone/service"` - Client Zone - service detail
+- `iframeHeight` - required, height of the widget iframe in px
+- `iframeUrlParameters` - array of parameters for the link (optional)\*
+
+\*) See `parameters` in the [`menu section`](manifest.md#menu)
 
 Note: The target pages should typically be protected to be available only to authorized clients or admins. Read [this](security.md)  for details.
