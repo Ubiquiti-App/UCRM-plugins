@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "02d2f6d32bfcaa5547d5c5e72bbd8a7f",
+    "content-hash": "a0c5c3941b3b1749c2866be1855af25f",
     "packages": [
         {
             "name": "BenMenking/routeros-api",
