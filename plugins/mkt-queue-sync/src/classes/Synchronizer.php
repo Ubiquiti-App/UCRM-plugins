@@ -152,6 +152,7 @@ class Synchronizer
 			$burstTime = 0;
 			$downloadBurstThreshold = 0;
 			$uploadBurstThreshold = 0;
+			$priority = 8;
 		}
 		
 			if (DEBUG) {
