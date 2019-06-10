@@ -15,6 +15,10 @@ The `manifest.json` file contains all needed information about the plugin and is
             "min": "2.13.0-beta1",
             "max": null
         },
+        "unmsVersionCompliancy": {
+            "min": "1.0.0-alpha.1",
+            "max": null
+        },
         "author": "Ubiquiti Networks, Inc."
     },
     "configuration": [
@@ -95,7 +99,10 @@ Contains information describing the plugin.
 - `url` - link to the plugin page
 - `version` - version of the plugin as displayed on UCRM frontend
 - `ucrmVersionCompliancy` - defines minimum and maximum version of UCRM this plugin supports, minimum must be always defined, maximum can be `null`
+- `unmsVersionCompliancy` - works the same as `ucrmVersionCompliancy` and is required for plugins to work since UNMS 1.0 (integrated version)\*
 - `author` - author of the plugin as displayed on UCRM frontend
+
+\*) If you want to support both UCRM 2.x and UNMS 1.x, you can include both `ucrmVersionCompliancy` and `unmsVersionCompliancy` in your manifest. If you want to support only UNMS 1.0 (integrated version), do **not** include `ucrmVersionCompliancy` in your manifest.
 
 ### configuration
 Determines configuration keys of the plugin. Frontend configuration form is generated from this and the values are then saved to [`data/config.json`](file-structure.md#dataconfigjson) file.
