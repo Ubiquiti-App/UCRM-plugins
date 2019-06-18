@@ -5,6 +5,11 @@ The `public.php` file can be used to provide a customized public page or even mo
 
 However you might want to restrict some or all of these pages to only be available to the admins of the UCRM installation and/or to the clients. Since the plugin is running on the same domain as UCRM itself, it will also receive the UCRM cookies. In this case you can use the `PHPSESSID` cookie to ask UCRM about the current session. This is done by calling the `/current-user` URL and forwarding the `PHPSESSID` cookie.
 
+> *Note that, the URL and the required cookies changed in UNMS 1.0 (integrated version).*  
+> The new URL is `/crm/current-user`.  
+> The required cookies are `nms-crm-php-session-id` and `nms-session`.  
+> You can use [UCRM Plugin SDK](https://github.com/Ubiquiti-App/UCRM-Plugin-SDK), which supports the new way since version 0.5.1.
+
 You can use the received information to:
 - determine if the user can access the page
 - check if they should be somehow limited (for example that they only have read access)
