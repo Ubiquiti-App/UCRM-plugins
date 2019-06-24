@@ -37,8 +37,8 @@ class UnmsApi
     {
         $options = (new UcrmOptionsManager())->loadOptions();
 
-        $ucrmUrl = ($options->ucrmLocalUrl ?: $options->ucrmPublicUrl) ?? '';
-        if (! $ucrmUrl) {
+        $unmsUrl = ($options->unmsLocalUrl ?: $options->ucrmPublicUrl) ?? '';
+        if (! $unmsUrl) {
             throw new ConfigurationException('UCRM URL is missing in plugin configuration.');
         }
 
@@ -47,13 +47,15 @@ class UnmsApi
             throw new ConfigurationException('UNMS API token is missing in plugin configuration.');
         }
 
-        $unmsApiUrl = sprintf('%s/api/v2.1/', rtrim(str_replace('crm/', 'nms/', $ucrmUrl), '/'));
+        $unmsApiUrl = sprintf('%s/api/v2.1/', rtrim(str_replace('crm/', 'nms/', $unmsUrl), '/'));
 
         $client = new Client(
             [
                 'base_uri' => $unmsApiUrl,
                 // If the URL is localhost over HTTPS, do not verify SSL certificate.
-                'verify' => ! Helpers::isUrlSecureLocalhost($unmsApiUrl),
+                'verify' => $options->unmsLocalUrl !== null
+                    ? false
+                    : ! Helpers::isUrlSecureLocalhost($unmsApiUrl),
             ]
         );
 
