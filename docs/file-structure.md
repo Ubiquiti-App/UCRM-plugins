@@ -48,6 +48,7 @@ The configuration is automatically refreshed, when changes are made in UCRM sett
 The following options are available:
 - `ucrmPublicUrl` - URL under which UCRM is publicly accessible, this will be `null` if the `Server domain name` or `Server IP` options are not configured in UCRM.
 - `ucrmLocalUrl` - URL under which UCRM is locally accessible. This should be used to call UCRM API to prevent issues with self-signed certificates. Available since UCRM 2.14.0-beta3.
+- `unmsLocalUrl` - URL under which UNMS is locally accessible. This should be used to call UNMS API to prevent issues with self-signed certificates. Available since UNMS 1.0.0-beta.2.
 - `pluginPublicUrl` - URL under which the `public.php` file is publicly accessible, this will be `null` if the plugin does not have `public.php` file or if the `Server domain name` or `Server IP` options are not configured in UCRM.
 - `pluginAppKey` - An App key automatically generated for the plugin (with write permissions), which can be used to access UCRM API.
 - `pluginId` - ID of the plugin in UCRM. Available since UCRM 2.15.0-beta6.
@@ -57,6 +58,7 @@ Example of the `ucrm.json` file:
 {
     "ucrmPublicUrl": "http://ucrm.example.com/",
     "ucrmLocalUrl":"http://localhost/",
+    "unmsLocalUrl":"http://unms:8081/",
     "pluginPublicUrl": "http://ucrm.example.com/_plugin/dummy-plugin",
     "pluginAppKey": "5YbpCSto7ffl/P/veJ/GK3U7K7zH6ZoHil7j5dorerSN8o+rlJJq6X/uFGZQF2WL",
     "pluginId": 1
