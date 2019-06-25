@@ -47,6 +47,10 @@ The manifest should look like this, after your change:
             "min": "2.14.0",
             "max": null
         },
+        "unmsVersionCompliancy": {
+            "min": "1.0.0-alpha.1",
+            "max": null
+        },
         "author": "Your Name"
     }
 }
