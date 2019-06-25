@@ -146,7 +146,7 @@
             "displayName": "Mikrotik RouterOS - suspension",
             "description": "Plugin for handling suspension on RouterOS devices.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/routeros-suspension",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "ucrmVersionCompliancy": {
                 "min": "2.99.99",
                 "max": null
