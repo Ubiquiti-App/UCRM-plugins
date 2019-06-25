@@ -8,7 +8,7 @@
       ]
     }
   },
-  "repositories": [
+  "repositories":[
     {
       "type": "vcs",
       "url": "https://github.com/BenMenking/routeros-api"
