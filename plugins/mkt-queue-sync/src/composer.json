@@ -15,11 +15,11 @@
     }
   ],
   "require": {
-	"php-di/php-di": "^5.4",
+    "php-di/php-di": "^5.4",
     "katzgrau/klogger": "^1.2",
     "doctrine/cache": "^1.7",
     "benmenking/routeros-api": "^1.6",
-	"php": ">=7.1",
-    "ubnt/ucrm-plugin-sdk": "~0.4"
+    "php": ">=7.1",
+    "ubnt/ucrm-plugin-sdk": "~0.5"
   }
 }
