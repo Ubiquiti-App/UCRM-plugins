@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e11733bff03a2985f1c341d95012412a",
+    "content-hash": "0b414089be6df406bdc65c1cae2de2a9",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -389,16 +389,16 @@
         },
         {
             "name": "ubnt/ucrm-plugin-sdk",
-            "version": "0.4.1",
+            "version": "0.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ubiquiti-App/UCRM-Plugin-SDK.git",
-                "reference": "d680c9a123b898018331f2b7f55f4ccfd66eaf68"
+                "reference": "601cb1256e02bf54aff170aaf45d0470f2aaa8a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ubiquiti-App/UCRM-Plugin-SDK/zipball/d680c9a123b898018331f2b7f55f4ccfd66eaf68",
-                "reference": "d680c9a123b898018331f2b7f55f4ccfd66eaf68",
+                "url": "https://api.github.com/repos/Ubiquiti-App/UCRM-Plugin-SDK/zipball/601cb1256e02bf54aff170aaf45d0470f2aaa8a2",
+                "reference": "601cb1256e02bf54aff170aaf45d0470f2aaa8a2",
                 "shasum": ""
             },
             "require": {
@@ -439,7 +439,7 @@
                 "sdk",
                 "ucrm"
             ],
-            "time": "2018-11-20T12:20:24+00:00"
+            "time": "2019-06-24T12:06:31+00:00"
         }
     ],
     "packages-dev": [
