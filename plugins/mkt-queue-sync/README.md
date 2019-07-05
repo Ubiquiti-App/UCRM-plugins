@@ -34,4 +34,7 @@ For example for a limit-At 20% for upload and 50% for download, setting should b
 
 ** When using UNMS V1 or later, it's necesary to creat an API password in UNMS -> Settings -> Users, and this passwords should be set in the plugin config.
 
+***Si te gusto mi trabajo o te ha sido de utilidad y crees que me merezco un cafea https://www.paypal.me/fgampel***
+***If you like the script or it helped you out and think I deserve a coffee https://www.paypal.me/fgampel***
+
 [Mikrotik Queue Wiki](https://wiki.mikrotik.com/wiki/Manual:Queue)
