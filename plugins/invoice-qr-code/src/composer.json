@@ -1,0 +1,20 @@
+{
+    "require": {
+        "ubnt/ucrm-plugin-sdk": "^0.5.2",
+        "rikudou/czqrpayment": "^4.0",
+        "endroid/qrcode": "^3.6",
+        "rikudou/skqrpayment": "^2.4",
+        "rikudou/euqrpayment": "^1.1",
+        "symfony/http-foundation": "^4.3"
+    },
+    "require-dev": {
+        "tracy/tracy": "^2.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": [
+                "classes/"
+            ]
+        }
+    }
+}

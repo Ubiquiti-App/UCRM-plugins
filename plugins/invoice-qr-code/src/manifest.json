@@ -1,0 +1,15 @@
+{
+  "version": "1",
+  "information": {
+    "name": "invoice-qr-code",
+    "displayName": "Invoice QR code",
+    "description": "This plugin allows you to create invoices with QR codes containing payment information. It will help your customers pay you easily.",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
+    "version": "1.0.0",
+    "ucrmVersionCompliancy": {
+      "min": "2.14.0-beta4",
+      "max": null
+    },
+    "author": "Jiri Travnicek"
+  }
+}
