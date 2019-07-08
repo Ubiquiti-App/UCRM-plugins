@@ -5,9 +5,13 @@
     "displayName": "Mikrotik Queue Sync Plugin",
     "description": "Plugin para sincronizar simple queues con los limites de velocidad establecidos en Ucrm - Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https://wiki.mikrotik.com/wiki/Manual:Queue",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/mkt-queue-sync",
-    "version": "2.1.3",
+    "version": "2.2.0",
     "ucrmVersionCompliancy": {
-      "min": "2.10.0-beta1",
+      "min": "2.15.0-beta3",
+      "max": null
+    },
+	"unmsVersionCompliancy": {
+      "min": "1.0.0-beta2",
       "max": null
     },
     "author": "Franco Johan Gampel - franco@gampel.com.ar"
@@ -18,6 +22,12 @@
       "label": "Mikrotik IP Address",
       "description": "Direccion IP de Mikrotik",
       "required": 1
+    },
+	{
+      "key": "apiport",
+      "label": "Mikrotik API PORT",
+      "description": "Mikrotik API PORT, leave blank if using default",
+      "required": 0
     },
     {
       "key": "mktusr",
@@ -32,15 +42,21 @@
       "required": 1
     },
 	{
-      "key": "burstThresholdPercentage",
-      "label": "Burst Threshold Percentage",
-      "description": "Burst Threshold Percentage/Porcentaje de Umbral de rafaga | Percentage of Max-Limit/Porcentaje del Max-Limit | (If not used configure 0/Si no se utiliza configurar en 0)",
+      "key": "burstLimitPercentage",
+      "label": "Burst Limit Percentage",
+      "description": "Burst Limit Percentage calculated over service Max-Limit / Porcentaje de limite de rafaga calculado sobre el limite maximo del servicio | (If not used configure 0/Si no se utiliza configurar en 0) / Formato de Carga UU/DD (U=Upload D=Download)",
       "required": 1
     },
 	{
       "key": "burstTime",
       "label": "Burst Time",
-      "description": "Burst Time/Tiempo de Rafaga (If not used configure 0/Si no se utiliza configurar en 0)",
+      "description": "Burst Time/Tiempo de Rafaga (If not used configure 1/Si no se utiliza configurar en 1) / Formato de Carga UU/DD (U=Upload D=Download)",
+      "required": 1
+    },
+	{
+      "key": "limitAtPercentage",
+      "label": "Limit At %",
+      "description": "Limit at percentage calculated over the max limit Values 1-99 | Porcentaje de Limit At calculado sobre el max-limit valores 1-99 / Formato de Carga UU/DD (U=Upload D=Download)",
       "required": 1
     },
 	{
@@ -49,6 +65,24 @@
       "description": "Add queue simple in case it does not exist?",
       "required": 0,
 	  "type": "checkbox"
+    },
+	{
+      "key": "unmsApiToken",
+      "label": "UNMS API token",
+      "description": "API token created for this plugin in Network section of UNMS only needed when using UNMS v1 | Token API creado para este plugin en la seccion Network de UNMS, solo necesario cuando se utiliza UNMS v1",
+      "required": 0,
+      "type": "text"
     }
-  ]
+  ],
+  "menu": [
+        {
+		"key": "MikrotikSync",
+        "label": "Reset Plugin Log",
+        "type": "admin",
+        "target": "iframe",
+		"parameters": {
+		"option": "reset-log"
+		}
+        }
+    ]
 }

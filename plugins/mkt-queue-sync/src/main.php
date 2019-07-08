@@ -1,22 +1,14 @@
 <?php
 
-chdir(__DIR__);
+use MikrotikQueueSync\Synchronizer;
+use Ubnt\UcrmPluginSdk\Service\PluginLogManager;
 
-require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
-(function ($debug) {
-    define('DEBUG', $debug);
-    $builder = new \DI\ContainerBuilder();
-    $builder->setDefinitionCache(new \Doctrine\Common\Cache\ApcuCache());
-    $container = $builder->build();
-    try {
-        $synchronizer = $container->get(\MikrotikQueueSync\Synchronizer::class);
-        $synchronizer->sync();
-    } catch (Exception $e) {
-        $logger = new \MikrotikQueueSync\Service\Logger($debug);
-        echo $e->getMessage();
-        $logger->error($e->getMessage());
-    }
+(static function () {
+		
+	// Ensure that user is logged in and has permission to view invoices.
+	(new Synchronizer())->sync();
 
-    echo '\n';
-})(($argv[1] ?? '') === '--verbose');
+})();
+http_response_code(200); //Response OK when it's called by a webhook.
