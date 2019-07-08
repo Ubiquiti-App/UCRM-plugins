@@ -19,8 +19,8 @@ class CountryConverter
 
     public function convertUcrmIdToISO(int $urmCountryId): ?string
     {
-        $countriesCollection = $this->countriesCollectionCache ?? $this->ucrmApi->get('countries');
-        foreach ($countriesCollection as $country) {
+        $this->countriesCollectionCache = $this->countriesCollectionCache ?? $this->ucrmApi->get('countries');
+        foreach ($this->countriesCollectionCache as $country) {
             if ((int)$country['id'] === $urmCountryId) {
                 return $country['code'];
             }
