@@ -140,4 +140,8 @@ class PluginData extends UcrmData
      */
     public $event_invoice_overdue;
 
+    /**
+     * @var string Comma separated values
+     */
+    public $contactTypeFilter;
 }

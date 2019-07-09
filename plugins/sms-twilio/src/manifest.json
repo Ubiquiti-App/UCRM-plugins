@@ -166,6 +166,12 @@
       "label": "service.suspend",
       "description": "Example: Suspended service %%service.name%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
       "required": 0
+    },
+    {
+      "key": "contactTypeFilter",
+      "label": "Contact type filter",
+      "description": "Only defined contact types will be used for SMS plugin. If no contact type is defined, all contacts will be used. Format: comma separated values, case insensitive; Example: billing,devops",
+      "required": 0
     }
   ]
 }
