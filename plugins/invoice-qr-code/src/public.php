@@ -27,6 +27,7 @@ if ($user === null || !$user->hasViewPermission(Security\PermissionNames::BILLIN
 
 // load invoice from UCRM API
 try {
+    $invoiceId = $api->get("invoices?number={$invoiceId}")[0]['id']; // TODO remove this single line when invoice.id become available in invoice templates
     $invoice = $api->get("invoices/{$invoiceId}");
 } catch (RequestException $exception) {
     $pluginLogManager->appendLog("Failed to load data for invoice {$invoiceId}.");
