@@ -6,10 +6,8 @@ This plugin allows you to create invoices with QR codes containing payment infor
 
 This plugin requires you to manually extend your invoice template and add `<img>` tag pointing to public URL of this plugin.
 
-1. go to `System > Plugins`
-2. find `Invoice QR code` plugin and open `See details` link
-3. copy `Public URL` - it looks like `https://ucrm.example.com/_plugins/invoice-csv-export/public.php`  
-4. go to `System > Customization > Invoices`
-5. find your current template - it should be called `Default` if you haven't changed your invoice template yet
-6. click `Clone` icon on the right side and place
-7. new template will be created and you can place `<img src="https://ucrm.example.com/_plugins/invoice-csv-export/public.php?invoiceId={{ invoice.number }}">` anywhere you want in your template 
+1. Go to `System > Plugins > Invoice QR code > See details` and copy `Public URL` which should look like `https://ucrm.example.com/_plugins/invoice-csv-export/public.php`.
+2. Go to `System > Customization > Invoices`, find your current template and click on the `Edit` button. If you haven't extended the template yet you have to clone the `Default` template using the `Clone` button.
+3. Place the `<img src="pluginsPublicUrlPlaceholder?invoiceId={{ invoice.id }}">` tag anywhere you want in your template. Don't forget to replace `pluginsPublicUrlPlaceholder` with the URL you have copied in the first step.
+
+It's necessary to enable showing bank account on invoices. Otherwise, the plugin will not be working at all. You can do that under `System > Organizations > Your Company, Inc. > Edit > Invoice template` where you can find `Include bank account` toggle.
