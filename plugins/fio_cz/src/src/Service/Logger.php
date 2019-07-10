@@ -15,7 +15,7 @@ class Logger extends \Katzgrau\KLogger\Logger
         $this->debugLogger = (bool)$debug;
         parent::__construct(
             'data',
-            LogLevel::DEBUG,
+            $this->debugLogger ? LogLevel::DEBUG : LogLevel::INFO,
             [
                 'extension' => 'log',
                 'filename' => 'plugin',

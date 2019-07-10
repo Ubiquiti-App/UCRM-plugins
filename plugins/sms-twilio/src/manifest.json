@@ -5,9 +5,13 @@
     "displayName": "SMS notifications via Twilio",
     "description": "This plugin sends SMS notifications via Twilio. NOTE: only phone numbers in the international format can be used, e.g. +155 555 1234",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/sms-twilio",
-    "version": "1.0.4",
+    "version": "1.0.8",
     "ucrmVersionCompliancy": {
       "min": "2.14.0-beta",
+      "max": null
+    },
+    "unmsVersionCompliancy": {
+      "min": "1.0.0-dev.1",
       "max": null
     },
     "author": "Ubiquiti Networks, Inc."
@@ -64,7 +68,13 @@
     {
       "key": "event_invoice_add_draft",
       "label": "invoice.add_draft",
-      "description": "Example: Created draft of invoice for %%invoice.total%% %%invoice.currencyCode%%  for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "description": "Example: Created draft of invoice for %%invoice.total%% %%invoice.currencyCode%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_invoice_draft_approved",
+      "label": "invoice.draft_approved",
+      "description": "Example: Created invoice %%invoice.number%% for %%invoice.total%% %%invoice.currencyCode%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
       "required": 0
     },
     {
@@ -113,12 +123,6 @@
       "key": "event_payment_unmatch",
       "label": "payment.unmatch",
       "description": "Example: Unmatched payment for %%payment.amount%% %%payment.currencyCode%% from client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
-      "required": 0
-    },
-    {
-      "key": "event_service_activate",
-      "label": "service.activate",
-      "description": "Example: Activated service %%service.name%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
       "required": 0
     },
     {

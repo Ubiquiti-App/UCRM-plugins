@@ -41,6 +41,16 @@ if (
         'status' => [1, 2, 3], // 1 = Unpaid, 2 = Partially paid, 3 = Paid
     ];
 
+    // make sure the dates are in YYYY-MM-DD format
+    if ($parameters['createdDateFrom']) {
+        $parameters['createdDateFrom'] = new \DateTimeImmutable($parameters['createdDateFrom']);
+        $parameters['createdDateFrom'] = $parameters['createdDateFrom']->format('Y-m-d');
+    }
+    if ($parameters['createdDateTo']) {
+        $parameters['createdDateTo'] = new \DateTimeImmutable($parameters['createdDateTo']);
+        $parameters['createdDateTo'] = $parameters['createdDateTo']->format('Y-m-d');
+    }
+
     $organization = $api->get('organizations/' . $_GET['organization']);
     $currency = $api->get('currencies/' . $organization['currencyId']);
     $invoices = $api->get('invoices', $parameters);

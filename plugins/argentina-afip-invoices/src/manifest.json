@@ -1,0 +1,85 @@
+{
+    "version": "1",
+    "information": {
+        "name": "argentina-afip-invoices",
+        "displayName": "Facturas Argentina AFIP",
+        "description": "Plugin para obtener CAE (Facturacion electronica) en Argentina",
+        "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/argentina-afip-invoices",
+        "version": "1.0.1",
+        "ucrmVersionCompliancy": {
+            "min": "2.15.0-beta3",
+            "max": null
+        },
+      "unmsVersionCompliancy": {
+        "min": "1.0.0-dev.1",
+        "max": null
+      },
+        "author": "Franco Johan Gampel - franco@gampel.com.ar"
+    },
+     "configuration": [
+    {
+      "key": "startDate",
+      "label": "Fecha de inicio",
+      "description": "Fecha a partir de la cual se consideran las facturas existentes en UCRM para solicitar CAE",
+      "required": 1,
+      "type": "date"
+    },
+    {
+      "key": "isTesting",
+      "label": "Usar certificados de prueba, TESTING?",
+      "description": "Seleccione este item para utilizar certificados de prueba TESTING en AFIP (Las facturas no seran reales, sino que seran emitidas con resultados de prueba)",
+      "required": 0,
+      "type": "checkbox"
+    },
+    {
+      "key": "salesPoint",
+      "label": "Empresa, Punto de Venta, Fecha de inicio de actividades",
+      "description": "Numero de punto de venta a ser utilizado en AFIP, ingresar en el siguiente formato NOMBRE DE EMPRESA1,PVENTA EMPRESA1,FECHA INICIO ACTIVIDADES EMPRESA1;NOMBRE DE EMPRESA2,PVENTA EMPRESA2,FECHA INICIO ACTIVIDADES EMPRESA2;Mi Empresa,0001,01/01/1990",
+      "required": 1,
+      "type": "text"
+    },
+    {
+      "key": "cwcert1",
+      "label": "Archivo de certificado .crt EMPRESA 1",
+      "required": 0,
+      "type": "file"
+    },
+    {
+      "key": "cwkey1",
+      "label": "Archivo PRIVATEKEY .key EMPRESA 1",
+      "required": 0,
+      "type": "file"
+    },
+    {
+      "key": "cwcert2",
+      "label": "Archivo de certificado .crt EMPRESA 2",
+      "required": 0,
+      "type": "file"
+    },
+    {
+      "key": "cwkey2",
+      "label": "Archivo PRIVATEKEY .key EMPRESA 2",
+      "required": 0,
+      "type": "file"
+    },
+    {
+      "key": "cwcert3",
+      "label": "Archivo de certificado .crt EMPRESA 3",
+      "required": 0,
+      "type": "file"
+    },
+    {
+      "key": "cwkey3",
+      "label": "Archivo PRIVATEKEY .key EMPRESA 3",
+      "required": 0,
+      "type": "file"
+    }
+  ],
+  "menu": [
+        {
+        "label": "Facturas Argentina AFIP",
+        "type": "admin",
+        "target": "iframe"
+        }
+    ]
+}

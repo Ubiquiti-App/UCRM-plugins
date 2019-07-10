@@ -14,7 +14,7 @@ Main file of the plugin. This is what will be executed when the plugin is run by
 If this file is present, public URL will be generated for the plugin which will point to this file. When the URL is accessed, the file will be parsed as PHP script and executed.
 
 ### "public" directory
-*Available since UCRM 2.14.0-beta4.*  
+*Available since UCRM 2.14.0-beta4.*
 All files placed in this directory will be publicly accessible without any authentication. It should be used for static assets (e.g. CSS, javascript, images) as the files will be served without any processing.  
 > Please note, that the directory will only work if the plugin has `public.php` file (see above).
 
@@ -26,6 +26,18 @@ This directory should be placed in the plugin's root, next to the `public.php` f
     - https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-csv-export/src/public
     - https://github.com/Ubiquiti-App/UCRM-plugins/blob/master/plugins/invoice-csv-export/src/templates/form.php#L10
 
+### hook_*.php files
+*Available since UCRM 2.16.0-beta1.*
+When the plugin is installed, updated, configured, enabled, disabled or removed, UCRM will automatically call the respective hook file which you can use to execute any custom commands, e.g. run initial config queries, run migrations or setup database etc.
+
+These files should be placed in the plugin's root, next to the `public.php` file.
+- `hook_install.php` - called right after the plugin is installed
+- `hook_update.php` - called after plugin's version changes
+- `hook_configure.php` - called after plugin's configuration is saved
+- `hook_enable.php` - called after plugin is enabled
+- `hook_disable.php` - called after plugin is disabled
+- `hook_remove.php` - called *after* the plugin's data are deleted from UCRM database, but *before* plugin's files are deleted
+
 ## Reserved files
 These files cannot be contained in the plugin archive as UCRM handles them and they would be overridden.
 
@@ -36,15 +48,20 @@ The configuration is automatically refreshed, when changes are made in UCRM sett
 The following options are available:
 - `ucrmPublicUrl` - URL under which UCRM is publicly accessible, this will be `null` if the `Server domain name` or `Server IP` options are not configured in UCRM.
 - `ucrmLocalUrl` - URL under which UCRM is locally accessible. This should be used to call UCRM API to prevent issues with self-signed certificates. Available since UCRM 2.14.0-beta3.
+- `unmsLocalUrl` - URL under which UNMS is locally accessible. This should be used to call UNMS API to prevent issues with self-signed certificates. Available since UNMS 1.0.0-beta.2.
 - `pluginPublicUrl` - URL under which the `public.php` file is publicly accessible, this will be `null` if the plugin does not have `public.php` file or if the `Server domain name` or `Server IP` options are not configured in UCRM.
 - `pluginAppKey` - An App key automatically generated for the plugin (with write permissions), which can be used to access UCRM API.
+- `pluginId` - ID of the plugin in UCRM. Available since UCRM 2.15.0-beta6.
 
 Example of the `ucrm.json` file:
 ```json
 {
     "ucrmPublicUrl": "http://ucrm.example.com/",
+    "ucrmLocalUrl":"http://localhost/",
+    "unmsLocalUrl":"http://unms:8081/",
     "pluginPublicUrl": "http://ucrm.example.com/_plugin/dummy-plugin",
-    "pluginAppKey": "5YbpCSto7ffl/P/veJ/GK3U7K7zH6ZoHil7j5dorerSN8o+rlJJq6X/uFGZQF2WL"
+    "pluginAppKey": "5YbpCSto7ffl/P/veJ/GK3U7K7zH6ZoHil7j5dorerSN8o+rlJJq6X/uFGZQF2WL",
+    "pluginId": 1
 }
 ```
 

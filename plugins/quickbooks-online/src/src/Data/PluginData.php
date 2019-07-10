@@ -87,4 +87,14 @@ class PluginData extends UcrmData
      * @var string
      */
     public $displayedErrors;
+
+    /**
+     * @var string|null
+     */
+    public $invoicesFromDate;
+
+    /**
+     * @var string|null
+     */
+    public $paymentsFromDate;
 }

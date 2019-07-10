@@ -47,3 +47,8 @@ This plugin handles import of your [UCRM](https://ucrm.ubnt.com/) customers, pay
 (Feel free to push your upgrades in this repo.)
 - Configurable date of the first payment or invoice to be imported. 
 - Remove entity from QB when the related entity is deleted in UCRM.
+
+## Changelog
+### 1.1.3 (2019-01-04)
+- draft, void and proforma invoices are no longer exported ([#100](https://github.com/Ubiquiti-App/UCRM-plugins/pull/100))
+- added options to limit exported invoices and payments by start date ([#94](https://github.com/Ubiquiti-App/UCRM-plugins/pull/94), [#95](https://github.com/Ubiquiti-App/UCRM-plugins/pull/95), [#96](https://github.com/Ubiquiti-App/UCRM-plugins/pull/96))

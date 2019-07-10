@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b6243128a4c5c618996367aa8e07614",
+    "content-hash": "6ef30ecec19c934cc6b29d5dd65f75a3",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -414,16 +414,16 @@
         },
         {
             "name": "ubnt/ucrm-plugin-sdk",
-            "version": "0.3.0",
+            "version": "0.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ubiquiti-App/UCRM-Plugin-SDK.git",
-                "reference": "e4750d8e33876bad4470eb456c276a0325b0eb02"
+                "reference": "601cb1256e02bf54aff170aaf45d0470f2aaa8a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ubiquiti-App/UCRM-Plugin-SDK/zipball/e4750d8e33876bad4470eb456c276a0325b0eb02",
-                "reference": "e4750d8e33876bad4470eb456c276a0325b0eb02",
+                "url": "https://api.github.com/repos/Ubiquiti-App/UCRM-Plugin-SDK/zipball/601cb1256e02bf54aff170aaf45d0470f2aaa8a2",
+                "reference": "601cb1256e02bf54aff170aaf45d0470f2aaa8a2",
                 "shasum": ""
             },
             "require": {
@@ -442,6 +442,12 @@
                 "phpunit/phpunit": "^7.4",
                 "symplify/easy-coding-standard": "^5.2"
             },
+            "suggest": {
+                "ext-zip": "Needed for pack-plugin script."
+            },
+            "bin": [
+                "bin/pack-plugin"
+            ],
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -458,7 +464,7 @@
                 "sdk",
                 "ucrm"
             ],
-            "time": "2018-11-19T12:23:17+00:00"
+            "time": "2019-06-24T12:06:31+00:00"
         }
     ],
     "packages-dev": [],
