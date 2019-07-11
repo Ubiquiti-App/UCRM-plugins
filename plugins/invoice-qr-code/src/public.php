@@ -53,8 +53,10 @@ try {
     );
 
     // set correct headers and write image to output
-    header('Content-Type: ' . $qrCode->getContentType());
-    echo $qrCode->writeString();
+    $imageString = $qrCode->writeString();
+    header('content-type: ' . $qrCode->getContentType());
+    header('content-length: ' . strlen($imageString));
+    echo $imageString;
 } catch (Exception $exception) {
     $pluginLogManager->appendLog("Failed to generate QR code for invoice {$invoiceId} - {$exception->getMessage()}.");
 
