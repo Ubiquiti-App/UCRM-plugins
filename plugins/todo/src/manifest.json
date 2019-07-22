@@ -1,0 +1,22 @@
+{
+    "version": "1",
+    "information": {
+        "name": "ubiquiti-ucrm-todo",
+        "displayName": "ToDo",
+        "description": "Todo list",
+        "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
+        "version": "1.0.0",
+        "ucrmVersionCompliancy": {
+            "min": "2.14.0",
+            "max": null
+        },
+        "author": "Tomas Palider"
+    },
+    "menu": [
+        {
+            "label": "ToDo",
+            "type": "admin",
+            "target": "iframe"
+        }
+    ]    
+}
