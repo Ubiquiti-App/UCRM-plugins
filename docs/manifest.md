@@ -170,10 +170,10 @@ Adds iframe widgets showing the plugin's public page to specified positions.
 Contains an array of items. Each item is defined as follows:
 - `position` - required, determines where to display the widget, can have these values:
   - `"dashboard"` - CRM dashboard
-  - `"client/overview"` - client detail
-  - `"client/service"` - client service detail
-  - `"client-zone/dashboard"` - Client Zone - dashboard
-  - `"client-zone/service"` - Client Zone - service detail
+  - `"client/overview"` - client detail, adds `_clientId` parameter to iframe URL
+  - `"client/service"` - client service detail, adds `_serviceId` parameter to iframe URL
+  - `"client-zone/dashboard"` - Client Zone - dashboard, adds `_clientId` parameter to iframe URL
+  - `"client-zone/service"` - Client Zone - service detail, adds `_serviceId` parameter to iframe URL
 - `iframeHeight` - required, height of the widget iframe in px
 - `iframeUrlParameters` - array of parameters for the link (optional)\*
 
