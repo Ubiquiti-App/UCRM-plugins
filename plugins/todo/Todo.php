@@ -21,7 +21,7 @@ class Todo {
     const DONE = 3;
 
     public function __construct() {
-        $this->db = new Database('data\todo-list.db');
+        $this->db = new Database();
         $security = \Ubnt\UcrmPluginSdk\Service\UcrmSecurity::create();
         $this->user = $security->getUser();
     }

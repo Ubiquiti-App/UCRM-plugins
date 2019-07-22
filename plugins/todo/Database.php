@@ -1,37 +1,28 @@
 <?php
+
 class Database {
+
     private $db;
-    
-    public function __construct(string $fileName) {
-        // create folder structure if not exists (first run)
-        if (!file_exists(dirname($fileName))) {
-            mkdir(dirname($fileName), null, true);
-        }
-        // check if there is db file
-        $firstRun = !file_exists($fileName);
-        $this->db = new PDO('sqlite:' . $fileName . '.sqlite3');
+    const DB_FILE = 'data\todo-list.db';
+
+    public function __construct() {
+        $this->db = new PDO('sqlite:' . self::DB_FILE . '.sqlite3');
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        if ($firstRun) {
-            $this->firstRun();
-        }
     }
-    
-    /**
-     * Create table if not exists
-     */
-    private function firstRun() {
-//        $query1 = $this->db->prepare('DROP TABLE IF EXISTS todo');
-//        $query1->execute();
-        $query2 = $this->db->prepare('CREATE TABLE IF NOT EXISTS todo (
+
+    public static function install() {
+        // create db file
+        $db = new PDO('sqlite:' . self::DB_FILE . '.sqlite3');
+        // create basic todo table
+        $db->exec('CREATE TABLE IF NOT EXISTS todo (
             todo_id INTEGER PRIMARY KEY AUTOINCREMENT,
             todo_created_timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             todo_owner INTEGER NOT NULL,
             todo_status INTEGER DEFAULT 1,
             todo_description TEXT DEFAULT \'\'
         );');
-        $query2->execute();
     }
-    
+
     /**
      * Create new task
      * 
@@ -55,7 +46,7 @@ class Database {
         }
         return $this->db->lastInsertId();
     }
-    
+
     /**
      * Load tasks from user based on their statuses
      * 
@@ -75,7 +66,7 @@ class Database {
         }
         return $stmt->fetchAll();
     }
-    
+
     /**
      * Load task
      * 
@@ -94,7 +85,7 @@ class Database {
         }
         return $stmt->fetch();
     }
-    
+
     /**
      * Update status or description of task
      * 
@@ -114,7 +105,6 @@ class Database {
             $sqlA[] = 'todo_description = :description ';
         }
         // ...prepared to add more columns to edit
-        
         // at least one of optional parameters must be filled
         if (!count($sqlA)) {
             throw new Exception('No fields to edit');
@@ -134,4 +124,5 @@ class Database {
         }
         return $result;
     }
+
 }
