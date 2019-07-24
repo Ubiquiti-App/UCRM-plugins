@@ -36,7 +36,10 @@ class UcrmFacade
      * @throws \FioCz\Exception\CurlException
      * @throws \ReflectionException
      */
-    public function import(array $transaction): bool
+    public function import(
+        array $transaction,
+        string $methodId
+    ): bool
     {
         $optionsData = $this->optionsManager->loadOptions();
 
@@ -51,7 +54,12 @@ class UcrmFacade
                 $this->logger->info('Not matched, importing as unattached');
             }
             $this->sendPaymentToUcrm(
-                $this->transformTransactionToUcrmPayment($transaction, $clientId ?? null, $invoiceId ?? null)
+                $this->transformTransactionToUcrmPayment(
+                    $transaction,
+                    $methodId,
+                    $clientId ?? null,
+                    $invoiceId ?? null
+                )
             );
 
             $optionsData->lastProcessedPayment = $transaction['id'];
@@ -116,6 +124,7 @@ class UcrmFacade
 
     private function transformTransactionToUcrmPayment(
         array $transaction,
+        string $methodId,
         ?int $clientId = null,
         ?int $invoiceId = null
     ): array {
@@ -134,7 +143,7 @@ class UcrmFacade
 
         return [
             'clientId' => $clientId,
-            'method' => 3, // bank transfer
+            'methodId' => $methodId,
             'amount' => $transaction['amount'],
             'currencyCode' => $transaction['currency'],
             'note' => $note,
@@ -160,5 +169,15 @@ class UcrmFacade
         );
 
         $this->logger->info('Payment created');
+    }
+
+    public function getPaymentMethod($methodName): ?string
+    {
+        foreach ($this->ucrmApi->query('payment-methods') as $paymentMethod) {
+            if (isset($paymentMethod['name']) && isset($paymentMethod['id']) && strtolower($paymentMethod['name']) === $methodName) {
+                return $paymentMethod['id'];
+            }
+        }
+        return null;
     }
 }
