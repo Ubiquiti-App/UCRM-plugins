@@ -94,6 +94,11 @@ class Importer
         }
 
         try {
+            $methodId = $this->ucrmFacade->getPaymentMethod('bank transfer'); // find ID by name
+            if (! $methodId) {
+                $this->logger->error('Cannot find a payment method from API');
+                return;
+            }
             $transactions = $this->fioCz->getTransactions(
                 $optionsData->token,
                 $startDate,
@@ -104,12 +109,13 @@ class Importer
             $importedTransactions = 0;
             $skippedTransactions = 0;
             foreach ($transactions as $transaction) {
-                if ($this->ucrmFacade->import($transaction)) {
+                if ($this->ucrmFacade->import($transaction, $methodId)) {
                     ++$importedTransactions;
                 } else {
                     ++$skippedTransactions;
                 }
             }
+            unset($transactions);
             $this->logger->info(sprintf('Finished: imported %d transactions, %d skipped', $importedTransactions, $skippedTransactions));
         } catch (Exception\CurlException $exception) {
             switch ($exception->getCode()) {
