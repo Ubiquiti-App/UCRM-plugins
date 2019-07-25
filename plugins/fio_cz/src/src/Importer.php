@@ -94,11 +94,8 @@ class Importer
         }
 
         try {
-            $methodId = $this->ucrmFacade->getPaymentMethod('bank transfer'); // find ID by name
-            if (! $methodId) {
-                $this->logger->error('Cannot find a payment method from API');
-                return;
-            }
+            $methodId = $this->ucrmFacade->getPaymentMethod();
+
             $transactions = $this->fioCz->getTransactions(
                 $optionsData->token,
                 $startDate,

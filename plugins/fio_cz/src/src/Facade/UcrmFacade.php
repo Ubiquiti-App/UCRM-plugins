@@ -152,10 +152,10 @@ class UcrmFacade
             'providerPaymentTime' => $date->format('Y-m-d\TH:i:sO'),
             'applyToInvoicesAutomatically' => ! $invoiceId,
         ];
-        if ($this->getVersion() === 2) {
-            $newPaymentData['method'] = (int) $methodId;
-        } else {
+        if ($this->getVersion() > 2) {
             $newPaymentData['methodId'] = $methodId;
+        } else {
+            $newPaymentData['method'] = (int) $methodId;
         }
         return $newPaymentData;
     }
@@ -176,24 +176,18 @@ class UcrmFacade
         $this->logger->info('Payment created');
     }
 
-    public function getPaymentMethod($methodName): ?string
+    public function getPaymentMethod(): string
     {
-        if ($this->getVersion() <= 2) {
+        if ($this->getVersion() > 2) {
+            return "4145b5f5-3bbc-45e3-8fc5-9cda970c62fb"; // no need to query methods, as this one is built-in
+        } else {
             return "3"; // hard-coded backwards compat for 'bank transfer'
         }
-        foreach ($this->ucrmApi->query('payment-methods') as $paymentMethod) {
-            if (isset($paymentMethod['name']) && isset($paymentMethod['id']) && strtolower($paymentMethod['name']) === $methodName) {
-                return $paymentMethod['id'];
-            }
-        }
-        return null;
     }
 
     private function getVersion(): int {
-        $optionsData = $this->optionsManager->loadOptions();
-        if (isset($optionsData->unmsLocalUrl) && $optionsData->unmsLocalUrl !== null) {
-            return 3;
-        }
-        return 2;
+        return ($this->optionsManager->loadOptions()->unmsLocalUrl ?? null)
+            ? 3
+            : 2;
     }
 }
