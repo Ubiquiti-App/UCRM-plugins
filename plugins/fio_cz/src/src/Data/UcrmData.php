@@ -17,10 +17,25 @@ class UcrmData
     /**
      * @var string
      */
+    public $pluginPublicUrl;
+
+    /**
+     * @var int|null
+     */
+    public $pluginId;
+
+    /**
+     * @var string
+     */
     public $ucrmPublicUrl;
 
     /**
      * @var string|null
      */
     public $ucrmLocalUrl;
+
+    /**
+     * @var string|null
+     */
+    public $unmsLocalUrl;
 }
