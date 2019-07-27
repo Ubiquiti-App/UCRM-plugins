@@ -1,5 +1,5 @@
 # Plugin manifest
-The `manifest.json` file contains all needed information about the plugin and is required by UCRM.
+The `manifest.json` file contains all needed information about the plugin and is required by CRM.
 
 ## Example
 ```json
@@ -82,7 +82,30 @@ The `manifest.json` file contains all needed information about the plugin and is
                 "hook": "main"
             }
         }
-    ]
+    ],
+    "widgets": [
+        {
+            "position": "dashboard",
+            "iframeHeight": 300,
+            "iframeUrlParameters": {
+                "foo": "bar",
+                "foo2": "bar2"
+            }
+        },
+        {
+            "position": "client/overview",
+            "iframeHeight": 300,
+            "iframeUrlParameters": {
+                "hook": "client"
+            }
+        }
+    ],
+    "paymentButton": {
+        "label": "My Gateway",
+        "urlParameters": {
+            "foo": "bar"
+        }
+    }
 }
 ```
 
@@ -94,24 +117,24 @@ Determines version of the configuration file, for now the only possible value is
 ### information _(required)_
 Contains information describing the plugin.
 - `name` - lowercase name of the plugin (can contain alphanumeric characters, dashes `-` and underscores `_`), plugin folder name is determined by this
-- `displayName` - name of the plugin as displayed on UCRM frontend
+- `displayName` - name of the plugin as displayed on CRM frontend
 - `description` - longer description of the plugin (e.g. what it does)
 - `url` - link to the plugin page
-- `version` - version of the plugin as displayed on UCRM frontend
+- `version` - version of the plugin as displayed on CRM frontend
 - `ucrmVersionCompliancy` - defines minimum and maximum version of UCRM this plugin supports, minimum must be always defined, maximum can be `null`
 - `unmsVersionCompliancy` - works the same as `ucrmVersionCompliancy` and is required for plugins to work since UNMS 1.0 (integrated version)
     - If you want to support both UCRM 2.x and UNMS 1.x, you can include both `ucrmVersionCompliancy` and `unmsVersionCompliancy` in your manifest. If you want to support only UNMS 1.0 (integrated version), do **not** include `ucrmVersionCompliancy` in your manifest.
-- `author` - author of the plugin as displayed on UCRM frontend
+- `author` - author of the plugin as displayed on CRM frontend
 
 ### configuration
 Determines configuration keys of the plugin. Frontend configuration form is generated from this and the values are then saved to [`data/config.json`](file-structure.md#dataconfigjson) file.
 
 Contains an array of items. Each item is defined as follows:
 - `key` - property key
-- `label` - label of the property as displayed in UCRM
-- `description` (optional) - description of the property, displayed under the form input in UCRM
+- `label` - label of the property as displayed in CRM
+- `description` (optional) - description of the property, displayed under the form input in CRM
 - `required` (optional, default: `1`) - whether the property is required or optional, configuration cannot be saved without required properties
-- `type` (optional, default: `text`) - type of the configuration item, will render appropriate form input in UCRM
+- `type` (optional, default: `text`) - type of the configuration item, will render appropriate form input in CRM
     - available as of UCRM 2.13.0-beta1
     - possible values are:
         - `text` - standard text input
@@ -124,9 +147,9 @@ Contains an array of items. Each item is defined as follows:
 - `choices` (optional) - defines possible options for `choice` type (see manifest example above)
 
 ### menu
-*Note: This feature is available since UCRM 2.14.0-beta1
+*Note: This feature is available since UCRM 2.14.0-beta1*
 
-Adds link(s) to the plugin into UCRM menu.
+Adds link(s) to the plugin into CRM menu.
 
 Contains an array of items. Each item is defined as follows:
 - `type` - required, can have these values:
@@ -134,13 +157,42 @@ Contains an array of items. Each item is defined as follows:
   - `"client"` - the link will show in client zone
 - `target` - required, can have these values:
   - `"blank"` - The link will lead simply to the target page
-  - `"iframe"` - The link will lead to special page within UCRM which will show the target page in an iframe
-- `key` - Menu category to insert the link into (optional)\*
-- `label` - Label of the link (optional, default value is plugin name)
-- `parameters` - Array of parameters for the link (optional)\*\*
+  - `"iframe"` - The link will lead to special page within CRM which will show the target page in an iframe
+- `key` - Menu category to insert the link into (optional) <sup>[1]</sup>
+- `label` - label of the link (optional, default value is plugin name)
+- `parameters` - array of parameters for the link (optional) <sup>[2]</sup>
 
-\*) If `type` is `"admin"` then `"Billing"`, `"Network"`, `"Reports"` or `"System"` can be used to add the link under these existing categories in UCRM menu. In other cases a new item will be added to the menu.
+<sup>1. If `type` is `"admin"` then `"Billing"`, `"Network"`, `"Reports"` or `"System"` can be used to add the link under these existing categories in CRM menu. In other cases a new item will be added to the menu.</sup>  
+<sup>2. For example if `parameters` are `{"hook": "main"},` then link is `/_plugins/<plugin-name>/public.php?hook=main`.</sup>
 
-\*\*) For example if `parameters` are `{"hook": "main"},` then link is `/_plugins/<plugin-name>/public.php?hook=main`.
+*Note: The target pages should typically be protected to be available only to authorized clients or admins. Read [this](security.md)  for details.*
 
-Note: The target pages should typically be protected to be available only to authorized clients or admins. Read [this](security.md)  for details.
+### widgets
+*Note: This feature is available since UNMS 1.0.0-beta7*
+
+Adds iframe widgets showing the plugin's public page to specified positions.
+
+Contains an array of items. Each item is defined as follows:
+- `position` - required, determines where to display the widget, can have these values:
+  - `"dashboard"` - CRM dashboard
+  - `"client/overview"` - client detail, adds `_clientId` parameter to iframe URL
+  - `"client/service"` - client service detail, adds `_serviceId` parameter to iframe URL
+  - `"client-zone/dashboard"` - Client Zone - dashboard, adds `_clientId` parameter to iframe URL
+  - `"client-zone/service"` - Client Zone - service detail, adds `_serviceId` parameter to iframe URL
+- `iframeHeight` - required, height of the widget iframe in px
+- `iframeUrlParameters` - array of parameters for the link (optional) <sup>[1]</sup>
+
+<sup>1. See `parameters` in the [`menu section`](manifest.md#menu)</sup>
+
+*Note: The target pages should typically be protected to be available only to authorized clients or admins. Read [this](security.md)  for details.*
+
+### paymentButton
+*Note: This feature is available since UNMS 1.0.0-beta7*
+
+Add payment button to one-time online payment page.
+- `label` - required, label of the payment button <sup>[1]</sup>
+- `urlParameters` - array of parameters for the link (optional) <sup>[2]</sup>
+    - parameter `_token` is always present, you can use `GET /payment-tokens/{token}` API call to retrieve all needed information from the token
+
+<sup>1. Visible only if there are multiple payment gateways and prefixed with "Pay with". For example for label `My Gateway`, the final label would be `Pay with My Gateway`. In case of single payment gateway, the label will be `Pay online`.</sup>  
+<sup>2. See `parameters` in the [`menu section`](manifest.md#menu)</sup>
