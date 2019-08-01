@@ -56,11 +56,11 @@ class Synchronizer
         $this->ucrmApi = UcrmApi::create();
 		$this->logger = PluginLogManager::create();
 		$this->pluginConfigManager = PluginConfigManager::create();
-        if (!(substr(($this->ucrmApi->get('version')['version']),0,-strlen($this->ucrmApi->get('version')['version'])+1) == 2)){
-			$this->unmsApi = UnmsApi::create($this->logger); //Enable only for UNMS v1	
-			$this->ucrmVersion = 3;
+        if ((new UcrmOptionsManager())->loadOptions()->unmsLocalUrl !== null) {
+		$this->unmsApi = UnmsApi::create($this->logger); //Enable only for UNMS v1
+		$this->ucrmVersion = 3;
 		} else {
-			$this->ucrmVersion = 2;
+		$this->ucrmVersion = 2;// UCRM v2
 		}
 		$this->routerOsApi = RouterOsApi::create($this->logger);
 		//$this->syncAddressList = SyncAddressList::create($this->routerOsApi);
