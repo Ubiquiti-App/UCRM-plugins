@@ -31,6 +31,11 @@ class Importer
      */
     private $ucrmFacade;
 
+    /**
+     * @var string
+     */
+    private $dateFormat = 'Y-m-d H:i:s';
+
     public function __construct(FioCz $fioCz, OptionsManager $optionsManager, Logger $logger, UcrmFacade $ucrmFacade)
     {
         $this->fioCz = $fioCz;
@@ -55,16 +60,16 @@ class Importer
         } catch (\Exception $e) {
             $startDate = new \DateTimeImmutable('midnight first day of this month');
             $this->logger->notice(
-                sprintf('Payments start date is not valid. Using "%s" instead.', $startDate->format('Y-m-d H:i:s'))
+                sprintf('Payments start date is not valid. Using "%s" instead.', $startDate->format($this->dateFormat))
             );
         }
 
         if ($endDate <= $startDate) {
-            $this->logger->warning(
+            $this->logger->error(
                 'Start date is equal or greater than end date',
                 [
-                    'startDate' => $startDate->format('Y-m-d H:i:s'),
-                    'endDate' => $endDate->format('Y-m-d H:i:s'),
+                    'startDate' => $startDate->format($this->dateFormat),
+                    'endDate' => $endDate->format($this->dateFormat),
                 ]
             );
 
@@ -72,14 +77,14 @@ class Importer
         }
 
         $this->logger->debug('Processing range: ', [
-            'startDate' => $startDate->format('Y-m-d H:i:s'),
-            'endDate' => $endDate->format('Y-m-d H:i:s'),
+            'startDate' => $startDate->format($this->dateFormat),
+            'endDate' => $endDate->format($this->dateFormat),
         ]);
 
 
         if ($optionsData->lastProcessedPayment !== null && ! is_numeric($optionsData->lastProcessedPayment)) {
-            $this->logger->warning(
-                'Last processed payment must be number',
+            $this->logger->error(
+                'Last processed payment must be empty or a number',
                 [
                     'lastProcessedPayment' => $optionsData->lastProcessedPayment,
                 ]
@@ -89,6 +94,8 @@ class Importer
         }
 
         try {
+            $methodId = $this->ucrmFacade->getPaymentMethod();
+
             $transactions = $this->fioCz->getTransactions(
                 $optionsData->token,
                 $startDate,
@@ -99,12 +106,13 @@ class Importer
             $importedTransactions = 0;
             $skippedTransactions = 0;
             foreach ($transactions as $transaction) {
-                if ($this->ucrmFacade->import($transaction)) {
+                if ($this->ucrmFacade->import($transaction, $methodId)) {
                     ++$importedTransactions;
                 } else {
                     ++$skippedTransactions;
                 }
             }
+            unset($transactions);
             $this->logger->info(sprintf('Finished: imported %d transactions, %d skipped', $importedTransactions, $skippedTransactions));
         } catch (Exception\CurlException $exception) {
             switch ($exception->getCode()) {
@@ -116,7 +124,7 @@ class Importer
                 case 500:
                     $optionsData->lastProcessedTimestamp = time();
                     $this->optionsManager->updateOptions();
-                    $this->logger->warning('HTTP Error 500 returned - is token valid and not expired?');
+                    $this->logger->error('HTTP Error 500 returned - is token valid and not expired?');
                     break;
                 default:
                     throw $exception;
