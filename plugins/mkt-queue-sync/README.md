@@ -3,8 +3,6 @@
 Plugin para sincronizar velocidades configuradas en planes de servicios de UCRM a colas simples en Mikrotik.
 Plugin to do traffic shaping in Mikrotik, synchronizing UCRM service plan speed with simple queues.
 
-Se pueden manejar hasta 3 organizaciones en simultaneo.
-
 ## ¿Como funciona?
 * Descargar e instalar el plugin. / Download and install de plugin
 * Configurar el plugin / Config the plugin
@@ -30,11 +28,15 @@ Por ejemplo para limit At 20% de Subida y 50% de Bajada, la configuracion seria:
 * The values settings for Burst Limit Percentage, Burst Time y Limit At %, should be set in format UU/DD (Where UU is the Upload value and DD is Download)
 For example for a limit-At 20% for upload and 50% for download, setting should be: 20/50
 
+
 ** Al usar UNMS V1 o superior, se debe de crear una clave API en UNMS -> Settings -> Users, esta clave API debera ser cargada en la configuracion del plugin.
+Tambien debe ser cargada su rango de red en la seccion Network del UNMS.
 
 ** When using UNMS V1 or later, it's necesary to creat an API password in UNMS -> Settings -> Users, and this passwords should be set in the plugin config.
+Also your network should be loaded in the UNMS Network section.
 
-***Si te gusto mi trabajo o te ha sido de utilidad y crees que me merezco un cafea https://www.paypal.me/fgampel***
+***Si te gusto mi trabajo o te ha sido de utilidad y crees que me merezco un cafe https://www.paypal.me/fgampel*** 
+
 ***If you like the script or it helped you out and think I deserve a coffee https://www.paypal.me/fgampel***
 
 [Mikrotik Queue Wiki](https://wiki.mikrotik.com/wiki/Manual:Queue)
