@@ -47,10 +47,8 @@ class RouterOsApi
             return [];
         }
 
-        $query = new Query(sprintf('%s/remove', $endpoint));
-        foreach ($ids as $id) {
-            $query->add(sprintf('=.id=%s', $id));
-        }
+        $query = (new Query(sprintf('%s/remove', $endpoint)))
+            ->add(sprintf('=.id=%s', implode(',', $ids)));
 
         return $this->getClient()->write($query)->read();
     }
