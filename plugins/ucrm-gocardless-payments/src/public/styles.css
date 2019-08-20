@@ -1,0 +1,67 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,400i,700");
+.fit-image {
+  display: block;
+  max-width: 100%; }
+
+.center-image {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto; }
+
+.no-events {
+  pointer-events: none; }
+
+body {
+  font-family: 'helvetica';
+  background-color: #EEE; }
+
+h1, h2, h3, h4 {
+  font-weight: 300;
+  font-family: "Lato", sans-serif; }
+
+.ugpp {
+  background-color: white; }
+  .ugpp .code-block {
+    overflow: auto;
+    width: 100%;
+    white-space: nowrap;
+    background-color: #EEE;
+    padding: 1rem; }
+  .ugpp .logo-image {
+    width: 400px; }
+  .ugpp .plugin-name {
+    font-weight: 700;
+    color: #333;
+    font-size: 2rem;
+    line-height: 2rem;
+    padding-top: 1rem;
+    padding-right: 1rem; }
+  .ugpp .main-menu .navbar {
+    border-bottom: 1px solid #00A2D9; }
+    .ugpp .main-menu .navbar ul {
+      padding: 0; }
+  .ugpp .service-selection .btn.active {
+    background-color: #FFA33A; }
+
+#ucrm-menu {
+  background-color: white; }
+  #ucrm-menu h1 {
+    padding: 1rem;
+    font-size: 1.4rem;
+    font-weight: 300; }
+    #ucrm-menu h1 a {
+      color: #333; }
+  #ucrm-menu .menu-items li {
+    list-style: none;
+    display: inline-block;
+    margin: 0.2rem 0.6rem;
+    padding: 0.2rem 0.6rem; }
+    #ucrm-menu .menu-items li a {
+      color: #AAA;
+      padding-bottom: 0.6rem; }
+      #ucrm-menu .menu-items li a:hover {
+        color: #000;
+        text-decoration: none;
+        border-bottom: 2px solid #AAA; }
+
+/*# sourceMappingURL=styles.css.map */

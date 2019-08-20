@@ -1,0 +1,6 @@
+ember-admin/node_modules/
+ember-admin/vendor/
+ember-admin/tmp/
+ember-admin/dist/
+ucrm-gocardless-payments-plugin-*.zip
+test/
