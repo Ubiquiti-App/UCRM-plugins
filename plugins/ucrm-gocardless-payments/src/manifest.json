@@ -1,8 +1,8 @@
 {
     "version": "1",
     "information": {
-        "name": "ucrm-gocardless-payments-plugin",
-        "displayName": "UCRM GoCardless Payments Plugin",
+        "name": "ucrm-gocardless-payments",
+        "displayName": "UCRM GoCardless Payments",
         "description": "Add GoCardless payments to Client zone or via an admin page.",
         "url": "https://www.charuwts.com/plugins",
         "version": "1.1.1-alpha",
