@@ -195,6 +195,23 @@
             },
             "author": "Charuwts, LLC",
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/ucrm-client-signup\/ucrm-client-signup.zip"
+        },
+        {
+            "name": "ucrm-gocardless-payments",
+            "displayName": "UCRM GoCardless Payments",
+            "description": "Add GoCardless payments to Client zone or via an admin page.",
+            "url": "https:\/\/www.charuwts.com\/plugins",
+            "version": "1.1.1-alpha",
+            "ucrmVersionCompliancy": {
+                "min": "2.16.0",
+                "max": null
+            },
+            "unmsVersionCompliancy": {
+                "min": "1.0.0-dev.1",
+                "max": null
+            },
+            "author": "Charuwts, LLC",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/ucrm-gocardless-payments\/ucrm-gocardless-payments.zip"
         }
     ]
 }
