@@ -200,7 +200,7 @@
             "name": "ucrm-gocardless-payments",
             "displayName": "UCRM GoCardless Payments",
             "description": "Add GoCardless payments to Client zone or via an admin page.",
-            "url": "https:\/\/www.charuwts.com\/plugins",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/ucrm-gocardless-payments",
             "version": "1.1.1-alpha",
             "ucrmVersionCompliancy": {
                 "min": "2.16.0",
