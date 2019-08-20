@@ -2,3 +2,4 @@ composer.phar
 /vendor/
 /ucrm.json
 /data/
+.ucrm*
