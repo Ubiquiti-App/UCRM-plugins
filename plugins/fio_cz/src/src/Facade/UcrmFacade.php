@@ -39,8 +39,7 @@ class UcrmFacade
     public function import(
         array $transaction,
         string $methodId
-    ): bool
-    {
+    ): bool {
         $optionsData = $this->optionsManager->loadOptions();
 
         $this->logger->info(sprintf('Processing transaction %s.', $transaction['id']));
@@ -49,9 +48,9 @@ class UcrmFacade
         if ($matched || $optionsData->importUnattached) {
             if ($matched) {
                 [$clientId, $invoiceId] = $matched;
-                $this->logger->info(sprintf('Matched to client %s, invoice %s', $clientId, $invoiceId));
+                $this->logger->info(sprintf('Matched transaction %s to client %s, invoice %s', $transaction['id'], $clientId, $invoiceId));
             } else {
-                $this->logger->info('Not matched, importing as unattached');
+                $this->logger->info(sprintf('Not matched transaction %s, importing as unattached', $transaction['id']));
             }
             $this->sendPaymentToUcrm(
                 $this->transformTransactionToUcrmPayment(
@@ -65,11 +64,13 @@ class UcrmFacade
             $optionsData->lastProcessedPayment = $transaction['id'];
             $this->optionsManager->updateOptions();
             $this->logger->debug(sprintf('lastProcessedPayment set to %s', $optionsData->lastProcessedPayment));
+
             return true;
-        } else {
-            $this->logger->info('Not matched, skipping');
-            return false;
         }
+        $this->logger->warning(sprintf('Not matched, skipping transaction %s', $transaction['id']));
+        $this->logger->info('To import unmatched payments, enable "Import all payments" in plugin\'s settings.)');
+
+        return false;
     }
 
     /**
@@ -132,7 +133,7 @@ class UcrmFacade
             $date = new \DateTimeImmutable($transaction['date']);
         } catch (\Exception $e) {
             $this->logger->warning('Cannot create date from value, using "now"', [
-                'dateValue' => $transaction['date']
+                'dateValue' => $transaction['date'],
             ]);
             $date = new \DateTimeImmutable();
         }
@@ -157,6 +158,7 @@ class UcrmFacade
         } else {
             $newPaymentData['method'] = (int) $methodId;
         }
+
         return $newPaymentData;
     }
 
@@ -179,13 +181,14 @@ class UcrmFacade
     public function getPaymentMethod(): string
     {
         if ($this->getVersion() > 2) {
-            return "4145b5f5-3bbc-45e3-8fc5-9cda970c62fb"; // no need to query methods, as this one is built-in
-        } else {
-            return "3"; // hard-coded backwards compat for 'bank transfer'
+            return '4145b5f5-3bbc-45e3-8fc5-9cda970c62fb'; // no need to query methods, as this UUID is built-in
         }
+
+        return '3'; // hard-coded backwards compatibility for 'bank transfer'
     }
 
-    private function getVersion(): int {
+    private function getVersion(): int
+    {
         return ($this->optionsManager->loadOptions()->unmsLocalUrl ?? null)
             ? 3
             : 2;
