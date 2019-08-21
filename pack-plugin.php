@@ -43,6 +43,13 @@ if ($zip->open($zipFile, ZipArchive::CREATE) !== true) {
     exit(1);
 }
 
+// add README, if present
+$readmeFilename = $directory . '/../README.md';
+$readme = new SplFileInfo($readmeFilename);
+if ($readme->isReadable()) {
+    @$zip->addFile($readme->getPathname(), $readme->getBasename());
+}
+
 $files = new CallbackFilterIterator(
     new \RecursiveIteratorIterator(
         new \RecursiveDirectoryIterator($directory)
