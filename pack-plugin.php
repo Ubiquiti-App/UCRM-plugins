@@ -28,7 +28,7 @@ chdir($directory);
 
 if (file_exists($directory . '/composer.json')) {
     shell_exec('composer validate --no-check-publish --no-interaction');
-    shell_exec('composer install --classmap-authoritative --no-dev --no-interaction --no-suggest');
+    system('composer install --classmap-authoritative --no-dev --no-interaction --no-suggest') or exit(1);
 }
 
 $zipFile = $directory . '/../' . $plugin . '.zip';
