@@ -5,14 +5,14 @@ if (! class_exists(ZipArchive::class)) {
     exit(1);
 }
 
-$plugin = $argv[1] ?? null;
-
-$directory = __DIR__ . '/plugins/' . $plugin . '/src';
+$plugin = rtrim($argv[1] ?? '', '/');
 
 if (! $plugin || ! preg_match('~^(?:[a-z-_]++)$~', $plugin)) {
     echo 'Plugin name was not specified or is invalid.' . PHP_EOL;
     exit(1);
 }
+
+$directory = __DIR__ . '/plugins/' . $plugin . '/src';
 
 if (! is_dir($directory)) {
     $directory = __DIR__ . '/examples/' . $plugin . '/src';
