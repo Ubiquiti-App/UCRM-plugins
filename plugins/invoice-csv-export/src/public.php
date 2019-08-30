@@ -44,9 +44,9 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
     $countries = $api->get('countries');
     $states = array_merge(
         // Canada
-        $api->get('countries/54/states'),
+        $api->get('countries/states?countryId=54'),
         // USA
-        $api->get('countries/249/states')
+        $api->get('countries/states?countryId=249')
     );
 
     $csvGenerator = new CsvGenerator($countries, $states);
