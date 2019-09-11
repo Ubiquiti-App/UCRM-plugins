@@ -5,14 +5,14 @@ if (! class_exists(ZipArchive::class)) {
     exit(1);
 }
 
-$plugin = $argv[1] ?? null;
-
-$directory = __DIR__ . '/plugins/' . $plugin . '/src';
+$plugin = rtrim($argv[1] ?? '', '/');
 
 if (! $plugin || ! preg_match('~^(?:[a-z-_]++)$~', $plugin)) {
     echo 'Plugin name was not specified or is invalid.' . PHP_EOL;
     exit(1);
 }
+
+$directory = __DIR__ . '/plugins/' . $plugin . '/src';
 
 if (! is_dir($directory)) {
     $directory = __DIR__ . '/examples/' . $plugin . '/src';
@@ -27,7 +27,8 @@ if (! is_dir($directory)) {
 chdir($directory);
 
 if (file_exists($directory . '/composer.json')) {
-    shell_exec('composer install --classmap-authoritative --no-dev --no-interaction');
+    shell_exec('composer validate --no-check-publish --no-interaction');
+    system('composer install --classmap-authoritative --no-dev --no-interaction --no-suggest') or exit(1);
 }
 
 $zipFile = $directory . '/../' . $plugin . '.zip';
@@ -41,6 +42,13 @@ $zip = new ZipArchive();
 if ($zip->open($zipFile, ZipArchive::CREATE) !== true) {
     echo 'Can\'t open zip file.' . PHP_EOL;
     exit(1);
+}
+
+// add README, if present
+$readmeFilename = $directory . '/../README.md';
+$readme = new SplFileInfo($readmeFilename);
+if ($readme->isReadable()) {
+    @$zip->addFile($readme->getPathname(), $readme->getBasename());
 }
 
 $files = new CallbackFilterIterator(
