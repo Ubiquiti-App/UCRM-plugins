@@ -27,7 +27,7 @@ function ensureComposerLockExists(string $path): int
     return 0;
 }
 
-function ensureArrayKeyExists(array $array, string... $keys): int
+function ensureArrayKeyExists(array $array, string ...$keys): int
 {
     $count = count($keys);
     $i = 1;
@@ -90,6 +90,7 @@ function validateManifest(string $file): int
     if (! $name) {
         printf('Plugin name is required for "%s".' . PHP_EOL, $basename);
         ++$errors;
+
         return $errors;
     }
 
@@ -245,7 +246,7 @@ function arrayRecursiveDiff(array $aArray1, array $aArray2, int $depth = 0): arr
                 if (count($aRecursiveDiff)) {
                     $aReturn[$mKey] = $aRecursiveDiff;
                 }
-            } else if ($mValue !== $aArray2[$mKey]) {
+            } elseif ($mValue !== $aArray2[$mKey]) {
                 $aReturn[$mKey] = $mValue;
             }
         } else {
@@ -259,7 +260,7 @@ function arrayRecursiveDiff(array $aArray1, array $aArray2, int $depth = 0): arr
                 if (count($aRecursiveDiff)) {
                     $aReturn[$mKey] = $aRecursiveDiff;
                 }
-            } else if ($mValue !== $aArray1[$mKey]) {
+            } elseif ($mValue !== $aArray1[$mKey]) {
                 $aReturn[$mKey] = $mValue;
             }
         } else {
@@ -297,7 +298,8 @@ function validateUrl(array $manifest, ?string $name): int
     return $errors;
 }
 
-function stringLength(string $string): int {
+function stringLength(string $string): int
+{
     if (function_exists('mb_strlen')) {
         return mb_strlen($string, 'UTF-8');
     }
@@ -328,12 +330,14 @@ function checkPluginsJson(): int
     require __DIR__ . '/generate-json.php';
     $correctJson = ob_get_clean();
 
-    $currentJson = file_get_contents(__DIR__ . '/plugins.json');
+    $pluginsFile = __DIR__ . '/plugins.json';
+    if (ensureFileExists($pluginsFile) === 0) {
+        $currentJson = file_get_contents($pluginsFile);
 
-    if (json_decode($currentJson, true) === json_decode($correctJson, true)) {
-        return 0;
+        if (json_decode($currentJson, true) === json_decode($correctJson, true)) {
+            return 0;
+        }
     }
-
     printf(
         'The "plugins.json" file is not up to date. Run `php generate-json.php > plugins.json` to update it.' . PHP_EOL
     );
@@ -364,11 +368,11 @@ function validatePhp(string $path): int
             $result
         );
         if ($result !== 0) {
-            $errors++;
+            ++$errors;
         }
     }
-    return $errors;
 
+    return $errors;
 }
 
 $pluginDirectories = new CallbackFilterIterator(
