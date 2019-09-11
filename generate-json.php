@@ -2,7 +2,7 @@
 
 $pluginDirectories = new CallbackFilterIterator(
     new DirectoryIterator(__DIR__ . '/plugins'),
-    function (DirectoryIterator $fileInfo) {
+    static function (DirectoryIterator $fileInfo) {
         return $fileInfo->isDir() && ! $fileInfo->isDot();
     }
 );
@@ -11,6 +11,11 @@ $plugins = [];
 /** @var SplFileInfo $directory */
 foreach ($pluginDirectories as $directory) {
     $file = $directory->getPathname() . '/src/manifest.json';
+
+    if (!is_readable($file)) {
+        fwrite(STDERR, sprintf('Cannot access manifest "%s"' . PHP_EOL, $file));
+        continue;
+    }
 
     $manifest = json_decode(file_get_contents($file), true, 50);
     if (json_last_error() !== JSON_ERROR_NONE) {

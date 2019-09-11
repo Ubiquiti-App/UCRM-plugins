@@ -27,8 +27,16 @@ if (! is_dir($directory)) {
 chdir($directory);
 
 if (file_exists($directory . '/composer.json')) {
-    shell_exec('composer validate --no-check-publish --no-interaction');
-    system('composer install --classmap-authoritative --no-dev --no-interaction --no-suggest') or exit(1);
+    exec('composer validate --no-check-publish --no-interaction', $result, $exitCode);
+    echo implode(PHP_EOL, $result);
+    if ($exitCode !== 0) {
+        exit($exitCode);
+    }
+    exec('composer install --classmap-authoritative --no-dev --no-interaction --no-suggest', $result, $exitCode);
+    echo implode(PHP_EOL, $result);
+    if ($exitCode !== 0) {
+        exit($exitCode);
+    }
 }
 
 $zipFile = $directory . '/../' . $plugin . '.zip';
@@ -55,7 +63,7 @@ $files = new CallbackFilterIterator(
     new \RecursiveIteratorIterator(
         new \RecursiveDirectoryIterator($directory)
     ),
-    function (SplFileInfo $fileInfo) {
+    static function (SplFileInfo $fileInfo) {
         return ! $fileInfo->isDir();
     }
 );
@@ -70,7 +78,7 @@ $reservedFiles = [
 foreach ($files as $fileInfo) {
     $filename = substr(str_replace('\\', '/', $fileInfo->getPathname()), strlen($directory));
 
-    if (in_array($filename, $reservedFiles, true) || substr($filename, 0, 6) === '/data/') {
+    if (in_array($filename, $reservedFiles, true) || strpos($filename, '/data/') === 0) {
         echo sprintf('Skipping reserved file "%s".', $filename) . PHP_EOL;
         continue;
     }
