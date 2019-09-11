@@ -12,6 +12,11 @@ $plugins = [];
 foreach ($pluginDirectories as $directory) {
     $file = $directory->getPathname() . '/src/manifest.json';
 
+    if (!is_readable($file)) {
+        fwrite(STDERR, sprintf('Cannot access manifest "%s"' . PHP_EOL, $file));
+        continue;
+    }
+
     $manifest = json_decode(file_get_contents($file), true, 50);
     if (json_last_error() !== JSON_ERROR_NONE) {
         fwrite(STDERR, sprintf('Skipped file "%s": %s' . PHP_EOL, $file, json_last_error_msg()));
