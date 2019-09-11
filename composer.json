@@ -3,6 +3,7 @@
     "friendsofphp/php-cs-fixer": "^2.15"
   },
   "require": {
-    "ext-zip": "*"
+    "ext-zip": "*",
+    "ext-json": "*"
   }
 }
