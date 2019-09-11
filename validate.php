@@ -331,7 +331,7 @@ function checkPluginsJson(): int
     $correctJson = ob_get_clean();
 
     $pluginsFile = __DIR__ . '/plugins.json';
-    if (ensureFileExists($pluginsFile)) {
+    if (ensureFileExists($pluginsFile) === 0) {
         $currentJson = file_get_contents($pluginsFile);
 
         if (json_decode($currentJson, true) === json_decode($correctJson, true)) {
