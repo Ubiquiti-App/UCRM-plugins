@@ -12,6 +12,6 @@ composer validate --no-check-publish --no-interaction --quiet
 composer check --no-interaction
 HAS_WARNINGS="$(composer install --no-interaction --no-suggest --ansi |& tee /dev/stderr | grep -ci Warning || true)"
 if [[ "$HAS_WARNINGS" -gt 0 ]]; then
-  echo "composer check failed" > /dev/stderr
+  echo "composer check failed" >/dev/stderr
 fi
 exit "$HAS_WARNINGS"
