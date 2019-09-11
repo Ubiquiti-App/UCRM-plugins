@@ -2,7 +2,7 @@
 
 $pluginDirectories = new CallbackFilterIterator(
     new DirectoryIterator(__DIR__ . '/plugins'),
-    function (DirectoryIterator $fileInfo) {
+    static function (DirectoryIterator $fileInfo) {
         return $fileInfo->isDir() && ! $fileInfo->isDot();
     }
 );
