@@ -330,12 +330,14 @@ function checkPluginsJson(): int
     require __DIR__ . '/generate-json.php';
     $correctJson = ob_get_clean();
 
-    $currentJson = file_get_contents(__DIR__ . '/plugins.json');
+    $pluginsFile = __DIR__ . '/plugins.json';
+    if (ensureFileExists($pluginsFile)) {
+        $currentJson = file_get_contents($pluginsFile);
 
-    if (json_decode($currentJson, true) === json_decode($correctJson, true)) {
-        return 0;
+        if (json_decode($currentJson, true) === json_decode($correctJson, true)) {
+            return 0;
+        }
     }
-
     printf(
         'The "plugins.json" file is not up to date. Run `php generate-json.php > plugins.json` to update it.' . PHP_EOL
     );
