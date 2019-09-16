@@ -1,4 +1,5 @@
 {
+  "name": "ucrm-plugins/fio-cz",
   "description": "UCRM plugin for import Fio.cz bank payments",
   "license": "MIT",
   "autoload": {
