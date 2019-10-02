@@ -4,7 +4,7 @@ This is a step by step guide for creating your first simple UCRM plugin.
 
 ## 1) Get your environment ready
 First step is to prepare your development environment. You should have the following software installed:
-- PHP 7.2 - https://secure.php.net/downloads.php
+- PHP 7.3 - https://secure.php.net/downloads.php
 - Git - https://git-scm.com/
 - Composer - https://getcomposer.org/
 
