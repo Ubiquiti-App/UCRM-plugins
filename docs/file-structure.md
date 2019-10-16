@@ -30,7 +30,6 @@ This directory should be placed in the plugin's root, next to the `public.php` f
 *Note: This feature is available since UNMS 1.1.0-beta2*
 
 If this file exists, it will be automatically loaded on every admin zone page in UCRM.
-Use the `window.location` object to determine the URL.
 
 ### public/client-zone.js
 *Note: This feature is available since UNMS 1.1.0-beta2*
