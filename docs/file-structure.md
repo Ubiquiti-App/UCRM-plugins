@@ -29,7 +29,7 @@ This directory should be placed in the plugin's root, next to the `public.php` f
 ### public/admin-zone.js
 *Note: This feature is available since UNMS 1.1.0-beta2*
 
-If this file exists, it will be automatically loaded on every admin zone page in UCRM.
+If this file exists, it will be automatically loaded on every admin zone page in CRM.
 
 ### public/client-zone.js
 *Note: This feature is available since UNMS 1.1.0-beta2*
