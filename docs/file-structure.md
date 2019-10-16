@@ -26,6 +26,18 @@ This directory should be placed in the plugin's root, next to the `public.php` f
     - https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-csv-export/src/public
     - https://github.com/Ubiquiti-App/UCRM-plugins/blob/master/plugins/invoice-csv-export/src/templates/form.php#L10
 
+### public/admin-zone.js
+*Note: This feature is available since UNMS 1.1.0-beta2*
+
+If this file exists, it will be automatically loaded on every admin zone page in UCRM.
+Use the `window.location` object to determine the URL.
+
+### public/client-zone.js
+*Note: This feature is available since UNMS 1.1.0-beta2*
+
+If this file exists, it will be automatically loaded on every client zone page in UCRM.
+Use the `window.location` object to determine the URL.
+
 ### hook_*.php files
 *Available since UCRM 2.16.0-beta1.*
 When the plugin is installed, updated, configured, enabled, disabled or removed, UCRM will automatically call the respective hook file which you can use to execute any custom commands, e.g. run initial config queries, run migrations or setup database etc.
