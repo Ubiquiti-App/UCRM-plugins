@@ -35,7 +35,6 @@ If this file exists, it will be automatically loaded on every admin zone page in
 *Note: This feature is available since UNMS 1.1.0-beta2*
 
 If this file exists, it will be automatically loaded on every client zone page in UCRM.
-Use the `window.location` object to determine the URL.
 
 ### hook_*.php files
 *Available since UCRM 2.16.0-beta1.*
