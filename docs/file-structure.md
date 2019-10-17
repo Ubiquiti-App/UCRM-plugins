@@ -27,7 +27,7 @@ This directory should be placed in the plugin's root, next to the `public.php` f
     - https://github.com/Ubiquiti-App/UCRM-plugins/blob/master/plugins/invoice-csv-export/src/templates/form.php#L10
 
 ### public/admin-zone.js
-*Note: This feature is available since UNMS 1.1.0-beta2*
+*Available since UNMS 1.1.0-beta2.*
 
 If this file exists, it will be automatically loaded on every admin zone page in CRM.
 
