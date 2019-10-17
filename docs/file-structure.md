@@ -15,6 +15,7 @@ If this file is present, public URL will be generated for the plugin which will 
 
 ### "public" directory
 *Available since UCRM 2.14.0-beta4.*
+
 All files placed in this directory will be publicly accessible without any authentication. It should be used for static assets (e.g. CSS, javascript, images) as the files will be served without any processing.  
 > Please note, that the directory will only work if the plugin has `public.php` file (see above).
 
@@ -38,6 +39,7 @@ If this file exists, it will be automatically loaded on every client zone page i
 
 ### hook_*.php files
 *Available since UCRM 2.16.0-beta1.*
+
 When the plugin is installed, updated, configured, enabled, disabled or removed, UCRM will automatically call the respective hook file which you can use to execute any custom commands, e.g. run initial config queries, run migrations or setup database etc.
 
 These files should be placed in the plugin's root, next to the `public.php` file.
