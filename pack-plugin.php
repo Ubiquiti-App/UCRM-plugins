@@ -78,7 +78,7 @@ $reservedFiles = [
 foreach ($files as $fileInfo) {
     $filename = substr(str_replace('\\', '/', $fileInfo->getPathname()), strlen($directory));
 
-    if (in_array($filename, $reservedFiles, true) || strpos($filename, '/data/') === 0) {
+    if (in_array($filename, $reservedFiles, true)) {
         echo sprintf('Skipping reserved file "%s".', $filename) . PHP_EOL;
         continue;
     }
