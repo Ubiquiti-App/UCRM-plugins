@@ -120,8 +120,6 @@ function validateManifestData(array $manifest, string $name): int
     $errors += ensureArrayKeyExists($manifest, 'information', 'description');
     $errors += validateUrl($manifest, $name);
     $errors += ensureArrayKeyExists($manifest, 'information', 'version');
-    $errors += ensureArrayKeyExists($manifest, 'information', 'ucrmVersionCompliancy');
-    $errors += ensureArrayKeyExists($manifest, 'information', 'ucrmVersionCompliancy', 'min');
     $errors += ensureArrayKeyExists($manifest, 'information', 'author');
 
     return $errors;
