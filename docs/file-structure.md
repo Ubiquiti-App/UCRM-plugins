@@ -82,7 +82,7 @@ Example of the `ucrm.json` file:
 {
     "ucrmPublicUrl": "http://ucrm.example.com/",
     "ucrmLocalUrl":"http://localhost/",
-    "unmsLocalUrl":"http://unms:8081/",
+    "unmsLocalUrl":"http://unms:8081/nms/",
     "pluginPublicUrl": "http://ucrm.example.com/_plugin/dummy-plugin",
     "pluginAppKey": "5YbpCSto7ffl/P/veJ/GK3U7K7zH6ZoHil7j5dorerSN8o+rlJJq6X/uFGZQF2WL",
     "pluginId": 1
