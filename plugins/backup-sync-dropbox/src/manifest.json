@@ -1,0 +1,29 @@
+{
+    "version": "1",
+    "information": {
+        "name": "backup-sync-dropbox",
+        "displayName": "Backup synchronization - Dropbox",
+        "description": "This plugin handles synchronization of your UNMS backups to a Dropbox folder.",
+        "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/backup-sync-dropbox",
+        "version": "1.0.0",
+        "unmsVersionCompliancy": {
+            "min": "1.0.0",
+            "max": null
+        },
+        "author": "Ubiquiti Inc."
+    },
+    "configuration": [
+        {
+            "key": "unmsApiToken",
+            "label": "UNMS API token",
+            "description": "You can create UNMS API token in Network -> Settings -> Users.",
+            "required": 1
+        },
+        {
+            "key": "dropboxAccessToken",
+            "label": "Dropbox access token",
+            "description": "You can get Dropbox access token in the Dropbox App console, see readme for more information.",
+            "required": 1
+        }
+    ]
+}
