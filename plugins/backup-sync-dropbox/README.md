@@ -19,3 +19,6 @@ To generate an access token:
 5. Enter any name you want for the app, e.g. "UNMS backups".
 6. Submit the "Create app" form.
 7. You will be redirected to the app info page. Scroll to the "Generated Access Token", click "Generate" and copy the value into the plugin configuration.
+![Dropbox Api](docs/images/dropbox-token.png)
+The backups will then appear in the app folder, if you open you dropbox files, go to "Apps" and then to a folder named after your application:
+![Dropbox Api](docs/images/dropbox-apps.png)
