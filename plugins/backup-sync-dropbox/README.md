@@ -14,7 +14,7 @@ To generate an access token:
 1. Go to the Dropbox App console - https://www.dropbox.com/developers/apps
 2. Click the "Create app" button.
 3. Choose the "Dropbox API" option.
-![Dropbox Api](doc/images/dropbox-api.png)
+![Dropbox Api](docs/images/dropbox-api.png)
 4. Choose the "App folder" access type.
 5. Enter any name you want for the app, e.g. "UNMS backups".
 6. Submit the "Create app" form.
