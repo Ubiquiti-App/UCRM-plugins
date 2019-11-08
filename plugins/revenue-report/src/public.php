@@ -76,6 +76,9 @@ if (
             if ($invoiceItem['type'] === 'service' && isset($invoiceItem['serviceId']) && isset($servicesMap[$invoiceItem['serviceId']])) {
                 $servicePlanId = $servicesMap[$invoiceItem['serviceId']];
                 $price = $invoiceItem['total'] + $invoiceItem['discountTotal'];
+                if ($price <= 0) {
+                    continue;
+                }
                 $servicePlansMap[$servicePlanId]['totalIssued'] += $price;
                 if ($invoice['status'] === 3) {
                     $servicePlansMap[$servicePlanId]['totalPaid'] += $price;
