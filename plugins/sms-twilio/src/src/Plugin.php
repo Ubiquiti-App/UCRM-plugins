@@ -2,15 +2,13 @@
 
 declare(strict_types=1);
 
-
 namespace SmsNotifier;
-
 
 use SmsNotifier\Facade\TwilioNotifierFacade;
 use SmsNotifier\Factory\NotificationDataFactory;
+use SmsNotifier\Service\Logger;
 use SmsNotifier\Service\OptionsManager;
 use SmsNotifier\Service\PluginDataValidator;
-use SmsNotifier\Service\Logger;
 
 class Plugin
 {
@@ -62,6 +60,7 @@ class Plugin
             $this->logger->info('Twilio SMS over CLI started');
             $this->processCli();
         } else {
+            $this->logger->error('Unknown PHP_SAPI type: ' . PHP_SAPI);
             throw new \UnexpectedValueException('Unknown PHP_SAPI type: ' . PHP_SAPI);
         }
     }
@@ -71,6 +70,13 @@ class Plugin
         if ($this->pluginDataValidator->validate()) {
             $this->logger->info('Validating config');
             $this->optionsManager->load();
+            $numbers = $this->notifierFacade->getTwilioClient()->availablePhoneNumbers->read();
+            if (! count($numbers)) {
+                $this->logger->warning('No phone numbers available for your account; check https://www.twilio.com/console/sms/dashboard');
+            }
+            foreach ($numbers as $availablePhoneNumberCountryInstance) {
+                $this->logger->debug(var_export($availablePhoneNumberCountryInstance->toArray(), true));
+            }
             $this->logger->info('CLI process ended.');
         }
     }
@@ -89,6 +95,7 @@ class Plugin
                 }
                 if (! $notification->clientId) {
                     $this->logger->warning('No client specified, cannot notify them.');
+
                     return;
                 }
                 try {

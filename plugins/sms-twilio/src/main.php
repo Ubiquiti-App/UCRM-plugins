@@ -1,12 +1,15 @@
 <?php
 
+use DI\ContainerBuilder;
+use Doctrine\Common\Cache\ApcuCache;
+
 chdir(__DIR__);
 
-require 'vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
-(function () {
-    $builder = new \DI\ContainerBuilder();
-    $builder->setDefinitionCache(new \Doctrine\Common\Cache\ApcuCache());
+(static function () {
+    $builder = new ContainerBuilder();
+    $builder->setDefinitionCache(new ApcuCache());
     $container = $builder->build();
     $plugin = $container->get(\SmsNotifier\Plugin::class);
     try {
