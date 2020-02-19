@@ -7,7 +7,7 @@ if (! class_exists(ZipArchive::class)) {
 
 $plugin = rtrim($argv[1] ?? '', '/');
 
-if (! $plugin || ! preg_match('~^(?:[a-z-_]++)$~', $plugin)) {
+if ($plugin === '' || preg_match('~^(?:[a-z-_]++)$~', $plugin) === false) {
     echo 'Plugin name was not specified or is invalid.' . PHP_EOL;
     exit(1);
 }
@@ -28,11 +28,13 @@ chdir($directory);
 
 if (file_exists($directory . '/composer.json')) {
     exec('composer validate --no-check-publish --no-interaction', $result, $exitCode);
+    assert(is_array($result));
     echo implode(PHP_EOL, $result);
     if ($exitCode !== 0) {
         exit($exitCode);
     }
     exec('composer install --classmap-authoritative --no-dev --no-interaction --no-suggest', $result, $exitCode);
+    assert(is_array($result));
     echo implode(PHP_EOL, $result);
     if ($exitCode !== 0) {
         exit($exitCode);
@@ -63,7 +65,7 @@ $files = new CallbackFilterIterator(
     new \RecursiveIteratorIterator(
         new \RecursiveDirectoryIterator($directory)
     ),
-    static function (SplFileInfo $fileInfo) {
+    static function (SplFileInfo $fileInfo): bool {
         return ! $fileInfo->isDir();
     }
 );

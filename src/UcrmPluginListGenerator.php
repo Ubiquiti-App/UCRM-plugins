@@ -20,12 +20,15 @@ class UcrmPluginListGenerator
                         array_filter(
                             $this->getList()
                         )
-                    )
+                    ),
                 ],
-                JSON_PRETTY_PRINT
+                JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR
             );
     }
 
+    /**
+     * @return string[]
+     */
     public function getList(): array
     {
         $plugins = [];
@@ -33,18 +36,22 @@ class UcrmPluginListGenerator
         foreach ($this->pluginDirectories as $directory) {
             $file = $directory->getPathname() . '/src/manifest.json';
 
-            if (! is_readable($file)) {
+            if (
+                ! is_readable($file)
+                || ($fileContent = file_get_contents($file)) === false
+            ) {
                 $this->log(sprintf('Cannot access manifest "%s"' . PHP_EOL, $file));
                 continue;
             }
 
-            $manifest = json_decode(file_get_contents($file), true, 50);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                $this->log(sprintf('Skipped file "%s": %s' . PHP_EOL, $file, json_last_error_msg()));
+            try {
+                $manifest = json_decode($fileContent, true, 50, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $exception) {
+                $this->log(sprintf('Skipped file "%s": %s' . PHP_EOL, $file, $exception->getMessage()));
                 continue;
             }
             $plugin = $manifest['information'];
-            $plugin['name'] = $plugin['name'] ?? sprintf('(name missing in %s manifest)', $directory->getBaseName());
+            $plugin['name'] = $plugin['name'] ?? sprintf('(name missing in %s manifest)', $directory->getBasename());
             $plugin['zipUrl'] = sprintf(
                 'https://github.com/Ubiquiti-App/UCRM-plugins/raw/master/plugins/%s/%s.zip',
                 $plugin['name'],
@@ -63,10 +70,11 @@ class UcrmPluginListGenerator
         ksort($plugins);
 
         $this->log('Plugins found: ' . count($plugins) . "\n");
+
         return $plugins;
     }
 
-    private function log($text): void
+    private function log(string $text): void
     {
         fwrite(STDERR, $text);
     }

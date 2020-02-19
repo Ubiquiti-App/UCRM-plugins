@@ -5,7 +5,7 @@ require_once(__DIR__ . '/src/UcrmPluginValidator.php');
 
 $pluginDirectories = new CallbackFilterIterator(
     new DirectoryIterator(__DIR__ . '/plugins'),
-    static function (DirectoryIterator $fileInfo) {
+    static function (DirectoryIterator $fileInfo): bool {
         return $fileInfo->isDir() && ! $fileInfo->isDot();
     }
 );

@@ -56,6 +56,9 @@ class UcrmPluginValidator
         return 0;
     }
 
+    /**
+     * @param mixed[] $array
+     */
     private function ensureArrayKeyExists(array $array, string ...$keys): int
     {
         $count = count($keys);
@@ -84,13 +87,12 @@ class UcrmPluginValidator
 
         $errors += $this->ensureFileExists($file);
 
-        if ($errors) {
+        if ($errors > 0) {
             return $errors;
         }
 
         $manifestData = file_get_contents($file);
-        $manifest = $this->parseManifest($manifestData);
-        if (! $manifest) {
+        if ($manifestData === false || ($manifest = $this->parseManifest($manifestData)) === null) {
             printf('File "%s" is not a valid JSON.' . PHP_EOL, $file);
             ++$errors;
 
@@ -130,17 +132,24 @@ class UcrmPluginValidator
         return $errors;
     }
 
+    /**
+     * @param string $manifestString
+     * @return mixed[]|null
+     */
     private function parseManifest(string $manifestString): ?array
     {
-        $manifest = json_decode($manifestString, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        try {
+            $manifest = json_decode($manifestString, true, 10, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
             return null;
         }
 
         return $manifest;
     }
 
+    /**
+     * @param mixed[] $manifest
+     */
     private function validateManifestData(array $manifest, string $name): int
     {
         $errors = 0;
@@ -154,6 +163,9 @@ class UcrmPluginValidator
         return $errors;
     }
 
+    /**
+     * @param mixed[] $manifest
+     */
     private function validateManifestConfiguration(array $manifest, string $name): int
     {
         if (! array_key_exists('configuration', $manifest)) {
@@ -188,25 +200,30 @@ class UcrmPluginValidator
         return $errors;
     }
 
+    /**
+     * @param mixed[] $manifest
+     */
     private function ensureManifestMatches(string $zipFile, array $manifest, string $manifestFile): int
     {
+        $zipFile = realpath($zipFile);
         $zipArchive = new ZipArchive();
-        if (! $zipArchive->open(realpath($zipFile))) {
+        if ($zipFile === false || $zipArchive->open($zipFile) !== true) {
             printf('Could not open zipfile - invalid format: "%s"' . PHP_EOL, $zipFile);
 
             return 1;
         }
 
         $manifestZipString = $zipArchive->getFromName('manifest.json');
+        $zipArchive->close();
         unset($zipArchive);
 
-        if (! $manifestZipString) {
+        if ($manifestZipString === false) {
             printf('Could not read manifest.json from zipfile "%s"' . PHP_EOL, $zipFile);
 
             return 1;
         }
         $manifestZip = $this->parseManifest($manifestZipString);
-        if (! $manifestZip) {
+        if ($manifestZip === null) {
             printf('Could not parse manifest.json from zipfile "%s"' . PHP_EOL, $zipFile);
 
             return 1;
@@ -227,6 +244,11 @@ class UcrmPluginValidator
         return 0;
     }
 
+    /**
+     * @param string[] $arrayDifference
+     * @param mixed[] $manifest
+     * @param mixed[] $manifestZip
+     */
     private function printArrayRecursiveDiff(string $keyPrefix, array $arrayDifference, array $manifest, array $manifestZip, int $depth = 0): void
     {
         ++$depth;
@@ -262,6 +284,11 @@ class UcrmPluginValidator
         }
     }
 
+    /**
+     * @param string[]|string[][] $aArray1
+     * @param string[]|string[][] $aArray2
+     * @return string[]
+     */
     private function arrayRecursiveDiff(array $aArray1, array $aArray2, int $depth = 0): array
     {
         $aReturn = [];
@@ -277,13 +304,19 @@ class UcrmPluginValidator
         return $aReturn;
     }
 
+    /**
+     * @param string[]|string[][]|mixed[] $aArray1
+     * @param string[]|string[][]|mixed[] $aArray2
+     * @param string[] $aReturn
+     * @return string[]
+     */
     private function arrayDiffOneWay(array $aArray1, array $aArray2, int $depth, array $aReturn): array
     {
         foreach ($aArray1 as $mKey => $mValue) {
             if (array_key_exists($mKey, $aArray2)) {
                 if (is_array($mValue)) {
                     $aRecursiveDiff = $this->arrayRecursiveDiff($mValue, $aArray2[$mKey], $depth);
-                    if (count($aRecursiveDiff)) {
+                    if (count($aRecursiveDiff) > 0) {
                         $aReturn[$mKey] = $aRecursiveDiff;
                     }
                 } elseif ($mValue !== $aArray2[$mKey]) {
@@ -297,6 +330,9 @@ class UcrmPluginValidator
         return $aReturn;
     }
 
+    /**
+     * @param mixed[] $manifest
+     */
     private function validateUrl(array $manifest, ?string $name): int
     {
         $errors = 0;
@@ -358,7 +394,7 @@ class UcrmPluginValidator
         if ($this->ensureFileExists($this->pluginsFile) === 0) {
             $currentJson = file_get_contents($this->pluginsFile);
 
-            if (json_decode($currentJson, true, 10) === json_decode($correctJson, true, 10)) {
+            if ($currentJson !== false && json_decode($currentJson, true, 10, JSON_THROW_ON_ERROR) === json_decode($correctJson, true, 10, JSON_THROW_ON_ERROR)) {
                 return 0;
             }
         }
@@ -376,7 +412,7 @@ class UcrmPluginValidator
             new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($path)
             ),
-            static function (SplFileInfo $fileInfo) {
+            static function (SplFileInfo $fileInfo): bool {
                 return (! $fileInfo->isDir())
                     && (stripos($fileInfo->getBasename(), '.php') === strlen($fileInfo->getBasename()) - 4)
                     && (strpos($fileInfo->getPathname(), '/src/vendor/') === false);
@@ -384,18 +420,26 @@ class UcrmPluginValidator
         );
         /** @var SplFileInfo $file */
         foreach ($files as $file) {
-            $output = [];
-            $result = null;
-            exec(
-                escapeshellcmd(PHP_BINARY) . ' -l ' . escapeshellarg($file->getPathname()),
-                $output,
-                $result
-            );
-            if ($result !== 0) {
+            if ($this->checkFile($file) !== 0) {
                 ++$errors;
             }
         }
 
         return $errors;
+    }
+
+    /**
+     * @param SplFileInfo $file
+     */
+    private function checkFile(SplFileInfo $file): int
+    {
+        $output = [];
+        $result = null;
+        exec(
+            escapeshellcmd(PHP_BINARY) . ' -l ' . escapeshellarg($file->getPathname()),
+            $output,
+            $result
+        );
+        return $result;
     }
 }
