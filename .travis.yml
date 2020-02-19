@@ -7,4 +7,5 @@ script:
     - shellcheck *.sh
     - bash composer-check.sh
     - bash php-cs-check.sh
+    - bash phpstan
     - php validate.php
