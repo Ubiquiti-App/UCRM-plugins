@@ -4,6 +4,28 @@ class UcrmPluginValidator
 {
     private const UCRM_MAX_PLUGIN_URL_LENGTH = 255;
 
+    /**
+     * @var CallbackFilterIterator
+     */
+    private $pluginDirectories;
+
+    public function __construct(CallbackFilterIterator $pluginDirectories)
+    {
+        $this->pluginDirectories = $pluginDirectories;
+    }
+
+    public function getErrors(): int
+    {
+        $errors = 0;
+        foreach ($this->pluginDirectories as $directory) {
+            $errors += $this->validatePlugin($directory);
+        }
+
+        $errors += $this->checkPluginsJson();
+
+        return $errors;
+    }
+
     private function ensureFileExists(string $file): int
     {
         if (! file_exists($file)) {
@@ -370,18 +392,6 @@ class UcrmPluginValidator
                 ++$errors;
             }
         }
-
-        return $errors;
-    }
-
-    public function getErrors(CallbackFilterIterator $pluginDirectories): int
-    {
-        $errors = 0;
-        foreach ($pluginDirectories as $directory) {
-            $errors += $this->validatePlugin($directory);
-        }
-
-        $errors += $this->checkPluginsJson();
 
         return $errors;
     }

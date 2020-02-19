@@ -8,8 +8,9 @@ $pluginDirectories = new CallbackFilterIterator(
         return $fileInfo->isDir() && ! $fileInfo->isDot();
     }
 );
-$validator = new UcrmPluginValidator();
-$errors = $validator->getErrors($pluginDirectories);
+
+$validator = new UcrmPluginValidator($pluginDirectories);
+$errors = $validator->getErrors();
 
 printf('Found %d error%s.' . PHP_EOL, $errors, $errors === 1 ? '' : 's');
 
