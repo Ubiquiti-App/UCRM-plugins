@@ -8,10 +8,15 @@ class UcrmPluginValidator
      * @var CallbackFilterIterator
      */
     private $pluginDirectories;
+    /**
+     * @var string
+     */
+    private $pluginsFile;
 
-    public function __construct(CallbackFilterIterator $pluginDirectories)
+    public function __construct(CallbackFilterIterator $pluginDirectories, string $pluginsFile)
     {
         $this->pluginDirectories = $pluginDirectories;
+        $this->pluginsFile = $pluginsFile;
     }
 
     public function getErrors(): int
@@ -350,9 +355,8 @@ class UcrmPluginValidator
         $listGenerator = new UcrmPluginListGenerator($this->pluginDirectories);
         $correctJson = $listGenerator->getJson();
 
-        $pluginsFile = __DIR__ . '/plugins.json';
-        if ($this->ensureFileExists($pluginsFile) === 0) {
-            $currentJson = file_get_contents($pluginsFile);
+        if ($this->ensureFileExists($this->pluginsFile) === 0) {
+            $currentJson = file_get_contents($this->pluginsFile);
 
             if (json_decode($currentJson, true, 10) === json_decode($correctJson, true, 10)) {
                 return 0;

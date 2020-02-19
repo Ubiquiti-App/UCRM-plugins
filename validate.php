@@ -10,9 +10,16 @@ $pluginDirectories = new CallbackFilterIterator(
     }
 );
 
-$validator = new UcrmPluginValidator($pluginDirectories);
+$validator = new UcrmPluginValidator(
+    $pluginDirectories,
+    __DIR__ . '/plugins.json'
+);
 $errors = $validator->getErrors();
 
-printf('Found %d error%s.' . PHP_EOL, $errors, $errors === 1 ? '' : 's');
+printf(
+    'Found %d error%s.' . PHP_EOL,
+    $errors,
+    $errors === 1 ? '' : 's'
+);
 
 exit($errors);
