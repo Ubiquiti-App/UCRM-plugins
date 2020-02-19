@@ -347,15 +347,14 @@ class UcrmPluginValidator
 
     private function checkPluginsJson(): int
     {
-        ob_start();
-        require __DIR__ . '/generate-json.php';
-        $correctJson = ob_get_clean();
+        $listGenerator = new UcrmPluginListGenerator($this->pluginDirectories);
+        $correctJson = $listGenerator->getJson();
 
         $pluginsFile = __DIR__ . '/plugins.json';
         if ($this->ensureFileExists($pluginsFile) === 0) {
             $currentJson = file_get_contents($pluginsFile);
 
-            if (json_decode($currentJson, true) === json_decode($correctJson, true)) {
+            if (json_decode($currentJson, true, 10) === json_decode($correctJson, true, 10)) {
                 return 0;
             }
         }

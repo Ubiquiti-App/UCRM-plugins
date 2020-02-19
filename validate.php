@@ -1,5 +1,6 @@
 <?php
 
+require_once(__DIR__ . '/src/UcrmPluginListGenerator.php');
 require_once(__DIR__ . '/src/UcrmPluginValidator.php');
 
 $pluginDirectories = new CallbackFilterIterator(
