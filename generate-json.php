@@ -12,7 +12,7 @@ $plugins = [];
 foreach ($pluginDirectories as $directory) {
     $file = $directory->getPathname() . '/src/manifest.json';
 
-    if (!is_readable($file)) {
+    if (! is_readable($file)) {
         fwrite(STDERR, sprintf('Cannot access manifest "%s"' . PHP_EOL, $file));
         continue;
     }
