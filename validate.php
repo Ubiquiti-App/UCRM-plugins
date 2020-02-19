@@ -214,15 +214,20 @@ function printArrayRecursiveDiff(string $keyPrefix, array $arrayDifference, arra
                 $depth
             );
         } else {
+            $manifestValue = $manifest['key'] ?? '(none)';
+            if (is_array($manifestValue)) {
+                $manifestValue = 'Array';
+            }
+            $manifestZipValue = $manifestZip['key'] ?? '(none)';
+            if (is_array($manifestZipValue)) {
+                $manifestZipValue = 'Array';
+            }
             printf(
                 "\t%s%s%s\t\t file: %s%s\t\t zip:  %s%s",
                 $keyPrefix,
-                $key,
-                PHP_EOL,
-                array_key_exists($key, $manifest) ? (is_array($manifest[$key]) ? 'Array' : $manifest[$key]) : '(none)',
-                PHP_EOL,
-                array_key_exists($key, $manifestZip) ? (is_array($manifestZip[$key]) ? 'Array' : $manifestZip[$key]) : '(none)',
-                PHP_EOL
+                $key, PHP_EOL,
+                $manifestValue, PHP_EOL,
+                $manifestZipValue, PHP_EOL
             );
         }
     }
@@ -237,6 +242,14 @@ function arrayRecursiveDiff(array $aArray1, array $aArray2, int $depth = 0): arr
     }
 
     // as per @mhitza at https://stackoverflow.com/a/3877494/19746
+    $aReturn = arrayDiffOneWay($aArray1, $aArray2, $depth, $aReturn);
+    $aReturn = arrayDiffOneWay($aArray2, $aArray1, $depth, $aReturn);
+
+    return $aReturn;
+}
+
+function arrayDiffOneWay(array $aArray1, array $aArray2, int $depth, array $aReturn): array
+{
     foreach ($aArray1 as $mKey => $mValue) {
         if (array_key_exists($mKey, $aArray2)) {
             if (is_array($mValue)) {
@@ -245,20 +258,6 @@ function arrayRecursiveDiff(array $aArray1, array $aArray2, int $depth = 0): arr
                     $aReturn[$mKey] = $aRecursiveDiff;
                 }
             } elseif ($mValue !== $aArray2[$mKey]) {
-                $aReturn[$mKey] = $mValue;
-            }
-        } else {
-            $aReturn[$mKey] = $mValue;
-        }
-    }
-    foreach ($aArray2 as $mKey => $mValue) {
-        if (array_key_exists($mKey, $aArray1)) {
-            if (is_array($mValue)) {
-                $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray1[$mKey], $depth);
-                if (count($aRecursiveDiff)) {
-                    $aReturn[$mKey] = $aRecursiveDiff;
-                }
-            } elseif ($mValue !== $aArray1[$mKey]) {
                 $aReturn[$mKey] = $mValue;
             }
         } else {
@@ -373,19 +372,25 @@ function validatePhp(string $path): int
     return $errors;
 }
 
+function getErrors(CallbackFilterIterator $pluginDirectories): int
+{
+    $errors = 0;
+    foreach ($pluginDirectories as $directory) {
+        $errors += validatePlugin($directory);
+    }
+
+    $errors += checkPluginsJson();
+
+    return $errors;
+}
+
 $pluginDirectories = new CallbackFilterIterator(
     new DirectoryIterator(__DIR__ . '/plugins'),
-    function (DirectoryIterator $fileInfo) {
+    static function (DirectoryIterator $fileInfo) {
         return $fileInfo->isDir() && ! $fileInfo->isDot();
     }
 );
-
-$errors = 0;
-foreach ($pluginDirectories as $directory) {
-    $errors += validatePlugin($directory);
-}
-
-$errors += checkPluginsJson();
+$errors = getErrors($pluginDirectories);
 
 printf('Found %d error%s.' . PHP_EOL, $errors, $errors === 1 ? '' : 's');
 
