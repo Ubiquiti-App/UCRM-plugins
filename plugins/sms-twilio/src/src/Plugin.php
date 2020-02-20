@@ -55,10 +55,12 @@ class Plugin
     {
         if (PHP_SAPI === 'fpm-fcgi') {
             $this->logger->info('Twilio SMS over HTTP started');
-            $this->processHttpRequest();
+            $this->processHttpRequest(file_get_contents('php://input') ?: '', $_SERVER['REMOTE_ADDR']);
+            $this->logger->info('HTTP request processing ended.');
         } elseif (PHP_SAPI === 'cli') {
             $this->logger->info('Twilio SMS over CLI started');
             $this->processCli();
+            $this->logger->info('CLI process ended.');
         } else {
             $this->logger->error('Unknown PHP_SAPI type: ' . PHP_SAPI);
             throw new \UnexpectedValueException('Unknown PHP_SAPI type: ' . PHP_SAPI);
@@ -77,19 +79,17 @@ class Plugin
             foreach ($numbers as $availablePhoneNumberCountryInstance) {
                 $this->logger->debug(var_export($availablePhoneNumberCountryInstance->toArray(), true));
             }
-            $this->logger->info('CLI process ended.');
         }
     }
 
-    private function processHttpRequest(): void
+    private function processHttpRequest(string $userInput, string $ipAddress): void
     {
-        $userInput = file_get_contents('php://input');
         if ($userInput) {
             $jsonData = @json_decode($userInput, true, 10);
             if (isset($jsonData['uuid'])) {
                 $notification = $this->notificationDataFactory->getObject($jsonData);
                 if ($notification->changeType === 'test') {
-                    $this->logger->info('Webhook test successful.');
+                    $this->logger->info('Webhook test: the plugin has successfully received a test webhook event from ' . $ipAddress);
 
                     return;
                 }
