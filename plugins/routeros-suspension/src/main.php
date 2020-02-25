@@ -10,7 +10,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
     $ipAddresses = array_map('trim', explode(PHP_EOL, $config['mikrotikIpAddress']));
     $userNames = array_map('trim', explode(PHP_EOL, $config['mikrotikUserName']));
-    $passwords = $config['mikrotikPassword']
+    $passwords = array_map('trim', explode(PHP_EOL, $config['mikrotikPassword'] ?? ''));
         ? array_map('trim', explode(PHP_EOL, $config['mikrotikPassword']))
         : [];
 
