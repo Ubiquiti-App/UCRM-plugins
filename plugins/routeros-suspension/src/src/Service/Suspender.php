@@ -7,7 +7,6 @@ namespace UcrmRouterOs\Service;
 
 use Nette\Utils\Strings;
 use Ubnt\UcrmPluginSdk\Exception\ConfigurationException;
-use Ubnt\UcrmPluginSdk\Service\PluginConfigManager;
 use Ubnt\UcrmPluginSdk\Service\UcrmApi;
 
 class Suspender
@@ -32,23 +31,28 @@ class Suspender
      */
     private $routerOsApi;
 
-    public function __construct()
+    /**
+     * @var string[]
+     */
+    private $config;
+
+    public function __construct(array $config)
     {
+        $this->config = $config;
         $this->ucrmApi = UcrmApi::create();
-        $this->unmsApi = UnmsApi::create();
-        $this->routerOsApi = RouterOsApi::create();
+        $this->unmsApi = UnmsApi::create($config);
+        $this->routerOsApi = RouterOsApi::create($config);
+
     }
 
     public function suspend(): void
     {
-        $config = (new PluginConfigManager())->loadConfig();
-
-        if (! $this->validateConfig($config)) {
+        if (! $this->validateConfig($this->config)) {
             throw new ConfigurationException('Missing value in plugin configuration.');
         }
 
-        $suspensionPageIp = $config['suspensionPageIp'];
-        $suspensionPagePort = $config['suspensionPagePort'];
+        $suspensionPageIp = $this->config['suspensionPageIp'];
+        $suspensionPagePort = $this->config['suspensionPagePort'];
 
         $this->syncNatRules($suspensionPageIp, (int) $suspensionPagePort);
         $this->syncFilterRules($suspensionPageIp);
