@@ -17,7 +17,7 @@ require_once __DIR__ . '/vendor/autoload.php';
     $passwords = array_map('trim', explode(PHP_EOL, $config['mikrotikPassword'] ?? ''));
 
     if (count($ipAddresses) !== count($userNames)) {
-        $log->appendLog(sprintf('Number of rows in IP Address and User name fields does not match.'));
+        $log->appendLog('Number of rows in IP Address and User name fields does not match.');
         exit(1);
     }
 
