@@ -47,24 +47,27 @@ $orgSelected = 0;
 
 //Retrieve actual Custom Attributes, if necesary one that doesn't exist, it will be created
 $customattributes = $api->get('custom-attributes');
-verifyCustomAttributes($customattributes,'Requiere CAE?','requiereCae','client');
-verifyCustomAttributes($customattributes,'Tipo Factura?','tipoFactura','client');
-verifyCustomAttributes($customattributes,'Tipo Cliente?','tipoCliente','client');
-verifyCustomAttributes($customattributes,'Numero de documento?','numeroDeDocumento','client');
-verifyCustomAttributes($customattributes,'Cuando hacer Factura?','cuandoHacerFactura','client');
-verifyCustomAttributes($customattributes,'Cae Numero:','caeNumero','invoice');
-verifyCustomAttributes($customattributes,'Cae Fecha:','caeFecha','invoice');
-verifyCustomAttributes($customattributes,'Numero Factura AFIP:','numeroFacturaAfip','invoice');
-verifyCustomAttributes($customattributes,'Concepto Factura?','conceptoFactura','invoice');
-verifyCustomAttributes($customattributes,'Inicio de Actividades - Comercio?','inicioDeActividadesComercio','invoice');
-verifyCustomAttributes($customattributes,'Letra Factura','letraFactura','invoice');
-verifyCustomAttributes($customattributes,'Tipo Cliente Factura','tipoClienteFactura','invoice');
-verifyCustomAttributes($customattributes,'Tipo Comprobante','tipoComprobante','invoice');
-verifyCustomAttributes($customattributes,'Fecha Comprobante Afip','fechaComprobanteAfip','invoice');
+verifyCustomAttributes($customattributes,'Requiere CAE?','requiereCae','client',false);
+verifyCustomAttributes($customattributes,'Tipo Factura?','tipoFactura','client',false);
+verifyCustomAttributes($customattributes,'Tipo Cliente?','tipoCliente','client',false);
+verifyCustomAttributes($customattributes,'Numero de documento?','numeroDeDocumento','client',true);
+verifyCustomAttributes($customattributes,'Cuando hacer Factura?','cuandoHacerFactura','client',false);
+verifyCustomAttributes($customattributes,'Enviar factura automaticamente?','enviarFacturaAutomaticamente','client',false);
+verifyCustomAttributes($customattributes,'Cae Numero:','caeNumero','invoice',true);
+verifyCustomAttributes($customattributes,'Cae Fecha:','caeFecha','invoice',true);
+verifyCustomAttributes($customattributes,'Numero Factura AFIP:','numeroFacturaAfip','invoice',false);
+verifyCustomAttributes($customattributes,'Concepto Factura?','conceptoFactura','invoice',false);
+verifyCustomAttributes($customattributes,'Inicio de Actividades - Comercio?','inicioDeActividadesComercio','invoice',false);
+verifyCustomAttributes($customattributes,'Letra Factura','letraFactura','invoice',false);
+verifyCustomAttributes($customattributes,'Tipo Cliente Factura','tipoClienteFactura','invoice',false);
+verifyCustomAttributes($customattributes,'Tipo Comprobante','tipoComprobante','invoice',false);
+verifyCustomAttributes($customattributes,'Fecha Comprobante Afip','fechaComprobanteAfip','invoice',false);
 
 //update de $customattributes array in case it was modified
 $customattributes = $api->get('custom-attributes');
 
+//Retrieve Invoice Template Id
+$templateId = getInvoiceTemplateId($config['invoiceTemplateId']);
 	
 //Retrieve all clients with requiereCae custom attribute === 1
 $clients = $api->get(
@@ -109,7 +112,7 @@ foreach ($clients as $client){
 	} elseif ($tipoFC === 'C' || $tipoFC === 'c'){
 		$tipocbte = '11';
 	} else {
-		echo '<br> Cliente sin tipo de factura asignado <br>';
+		echo '<br> Cliente '. $client['id'] .' sin tipo de factura asignado / O mal asignado, recuerde los valores validos son A,B,C <br>';
 		$verifyClientOk = false;
 	}
 	
@@ -145,22 +148,23 @@ foreach ($clients as $client){
 	
 	// Verify if CAE is retrieved when invoice is PAID cuandoHacerFactura === paid || pago or when is UNPAID cuandoHacerFactura === unpaid || impaga
 	$cuandoHacerFactura = getCustomAttributeValue($client['attributes'],'cuandoHacerFactura');
-	if($cuandoHacerFactura === 'paid' || $cuandoHacerFactura === 'paga'){
+	if($cuandoHacerFactura === 'paid' || $cuandoHacerFactura === 'paga' || $cuandoHacerFactura === 'PAID' || $cuandoHacerFactura === 'PAGA'){
 		if (DEBUG) echo 'Cliente es paid <br>';
 		$invoicestatus = 3;
-	} elseif($cuandoHacerFactura === 'unpaid' || $cuandoHacerFactura === 'impaga'){
+	} elseif($cuandoHacerFactura === 'unpaid' || $cuandoHacerFactura === 'impaga' || $cuandoHacerFactura === 'UNPAID' || $cuandoHacerFactura === 'IMPAGA'){
 		if (DEBUG) echo 'Cliente es unpaid <br>';
 		$invoicestatus = 1;
 	} else {
 		echo '<br> El cliente no posee correctamente especificado algun atributo, recuerde que \"Cuando Hacer Factura?\", tiene valores validos: paga | paid | impaga | unpaid ';
 		$verifyClientOk = false;
 	}
-	
+		
 	if($verifyClientOk){
 		foreach ($api->get('invoices',[
 			'clientId'  => $client['id'],
 			'statuses[0]'  => $invoicestatus,
 			'createdDateFrom' => $config['startDate'],
+			//'proforma' => false,
 			]) as $invoice){
 		// Verify identification number for invoice
 		// search for caeNumero Value
@@ -168,10 +172,10 @@ foreach ($clients as $client){
 		$actualCaeNum = getCustomAttributeValue($invoice['attributes'],'caeNumero');
 		if(is_null($actualCaeNum)){			//Verify that invoice has not CAE number already
 			$startOk = true;
-			if($regfac['tipodocumento'] === 96 && $invoice['total'] < 999.99 && $regfac['numerodocumento']==0){ 
+			if($regfac['tipodocumento'] === 96 && $invoice['total'] < 7689.99 && $regfac['numerodocumento']==0){ 
 			$regfac['tipodocumento'] = 99;
-			} elseif ($regfac['tipodocumento'] === 96 && $invoice['total'] > 999.99 && $regfac['numerodocumento']==0){//Final customers with no DNI associated can not have any invoice with ammount over $1000
-				echo '<br> Factura consumidor final no debe exceder los $1000 sin tener DNI <br>';
+			} elseif ($regfac['tipodocumento'] === 96 && $invoice['total'] > 7689.99 && $regfac['numerodocumento']==0){//Final customers with no DNI associated can not have any invoice with ammount over $7690
+				echo '<br> Factura consumidor final no debe exceder los $7690.00 sin tener DNI <br>';
 				$startOk = false; //Don't Start the invoice if it not has Document number
 			}
 		if ($startOk){//Process Start
@@ -179,37 +183,100 @@ foreach ($clients as $client){
 		// Verify invoice attribute for concept of invoice (1- Supplies, 2- Services, 3-Both
 		$conceptoMalEstablecido = false; 
 		//Search for key where conceptoFactura is
-		$attributeconceptoFactura = array_search('conceptoFactura', array_column($invoice['attributes'], 'key'));
+		//$attributeconceptoFactura = array_search('conceptoFactura', array_column($invoice['attributes'], 'key')); //Disable for test AUTO CONCEPT DETECTION
 		// search for conceptoFactura Value
-		if(!(gettype($attributeconceptoFactura)=='boolean' && $attributeconceptoFactura == false)){
+		
+		$conceptoFactura = getInvoiceConcept($invoice['items']); //NEW AUTO CONCEPT DETECTION METHOD
+		if($conceptoFactura == 1 || $conceptoFactura == 2 || $conceptoFactura == 3){//NEW AUTO CONCEPT DETECTION METHOD
+		//if(!(gettype($attributeconceptoFactura)=='boolean' && $attributeconceptoFactura == false)){  //Disable for test AUTO CONCEPT DETECTION
 		//if(!is_null($attributeconceptoFactura)){
-		$conceptoFactura = $invoice['attributes'][$attributeconceptoFactura]['value'];
+		
+		//$conceptoFactura = $invoice['attributes'][$attributeconceptoFactura]['value']; //Disable for test AUTO CONCEPT DETECTION
 		if ($conceptoFactura === 1 || $conceptoFactura === 'Bienes' || $conceptoFactura === 'bienes' || $conceptoFactura === 'BIENES' ){
 		$regfac['concepto'] = 1;
+		$api->patch(
+				'invoices/' . $invoice['id'],
+				[
+					'attributes' => [
+						[
+							'customAttributeId' => getCustomAttributesId($customattributes,'conceptoFactura'),
+							'value' => "Bienes",
+						]
+					],
+					
+				]
+		);
 		} else if ($conceptoFactura === 2 || $conceptoFactura === 'Servicios' || $conceptoFactura === 'servicios' || $conceptoFactura === 'SERVICIOS' ){
 		$regfac['concepto'] = 2;
 		$regfac['FchServDesde'] = date('Ym01');
 		$regfac['FchServHasta'] = date('Ymt');
+		$api->patch(
+				'invoices/' . $invoice['id'],
+				[
+					'attributes' => [
+						[
+							'customAttributeId' => getCustomAttributesId($customattributes,'conceptoFactura'),
+							'value' => "Servicios",
+						]
+					],
+					
+				]
+			);
 		} else if ($conceptoFactura === 3 || $conceptoFactura === 'Ambos' || $conceptoFactura === 'ambos' || $conceptoFactura === 'AMBOS' ){
 		$regfac['concepto'] = 3;
 		$regfac['FchServDesde'] = date('Ym01');
 		$regfac['FchServHasta'] = date('Ymt');
+		$api->patch(
+				'invoices/' . $invoice['id'],
+				[
+					'attributes' => [
+						[
+							'customAttributeId' => getCustomAttributesId($customattributes,'conceptoFactura'),
+							'value' => "Ambos (Bienes + Servicios)",
+						]
+					],
+					
+				]
+			);
 		} else {
 			$regfac['concepto'] = 2; // As default "Services"
 			$regfac['FchServDesde'] = date('Ym01');
 			$regfac['FchServHasta'] = date('Ymt');
-			$conceptoMalEstablecido = true; 
+			$conceptoMalEstablecido = true;
+			$api->patch(
+				'invoices/' . $invoice['id'],
+				[
+					'attributes' => [
+						[
+							'customAttributeId' => getCustomAttributesId($customattributes,'conceptoFactura'),
+							'value' => "Servicios (Seleccion Default)",
+						]
+					],
+					
+				]
+			);			
 		}
 		} else {
 			$regfac['concepto'] = 2; // As default "Services"
 			$regfac['FchServDesde'] = date('Ym01');
 			$regfac['FchServHasta'] = date('Ymt');
 			$conceptoMalEstablecido = true;
+			$api->patch(
+				'invoices/' . $invoice['id'],
+				[
+					'attributes' => [
+						[
+							'customAttributeId' => getCustomAttributesId($customattributes,'conceptoFactura'),
+							'value' => "Servicios (Seleccion Default)",
+						]
+					],
+					
+				]
+			);	
 		}
 		
 		$regfac['importetotal'] = $invoice['total']; //invoice Total
 		$regfac['importeneto'] = $invoice['subtotal']-($invoice['subtotal']*$invoice['discount']/100); //invoice subtotal
-		
 		//Taxes
 		$taxTotal = 0;
 		foreach ($invoice['taxes'] as $tax){
@@ -234,12 +301,13 @@ foreach ($clients as $client){
 		//runCae();
 		if (DEBUG){ echo '<pre>'; print_r($caeResultrunCae); echo '</pre>';}
 		if ($caeResultrunCae['resultado'] === 'A'){
-			echo '<br> Solicitando CAE para factura numero ' . $invoice['number'] . ' del cliente ' . $client['firstName'] . ' ' . $client['lastName'] . $client['companyName'] . ' Resultado OK <br>';
+			$numeroFacturaAfip = $salesPoint . '-' . sprintf("%'.08d", $caeResultrunCae['cbtenumero']);
+			echo '<br> Solicitando CAE para factura id: ' . $invoice['id'] . ' numero: ' . $tipoFC . '-' . $numeroFacturaAfip . ' del cliente ' . $client['firstName'] . ' ' . $client['lastName'] . $client['companyName'] . ' => Resultado OK <br>';
 			if ($conceptoMalEstablecido) echo '<br> CONCEPTO DE FACTURA MAL ESTABLECIDO, SE CONSIDERA SERVICIOS POR DEFAULT <br>';
 			$fechaVtoCae = new DateTime($caeResultrunCae['caefechavto']);
 			
 			//Patch invoice with new values if aproved
-			$numeroFacturaAfip = $salesPoint . '-' . sprintf("%'.08d", $caeResultrunCae['cbtenumero']);
+			
 			$api->patch(
 				'invoices/' . $invoice['id'],
 				[
@@ -274,6 +342,12 @@ foreach ($clients as $client){
 						]
 					],
 
+				]
+		);
+		$api->patch(
+				'invoices/' . $invoice['id'],
+				[
+					'number' => $tipoFC . '-' . $numeroFacturaAfip,
 				]
 		);
 		$api->patch(
@@ -337,14 +411,31 @@ foreach ($clients as $client){
 				]
 		);
 		$api->patch(
-				'invoices/' . $invoice['id'] .'/regenerate-pdf'
+				'invoices/' . $invoice['id'],
+				[
+				'proforma' => false,
+				]
 		);
 		$api->patch(
-				'invoices/' . $invoice['id'] .'/send'
+				'invoices/' . $invoice['id'],
+				[
+				'invoiceTemplateId' => $templateId,
+				]
 		);
+		$api->patch(
+				'invoices/' . $invoice['id'] .'/regenerate-pdf'
+		);
+		$enviarFactura = getCustomAttributeValue($client['attributes'],'enviarFacturaAutomaticamente');
+		if (!is_null($enviarFactura)){
+			if ($enviarFactura == 1 || $enviarFactura == 'si' || $enviarFactura == 'SI'){
+				$api->patch(
+				'invoices/' . $invoice['id'] .'/send'
+				);
+			}
+		}
 		
 		} else if ($caeResultrunCae['resultado'] === 'R'){
-		echo '<br> Solicitando CAE para factura numero ' . $invoice['number'] . ' del cliente ' . $client['firstName'] . ' ' . $client['lastName'] . $client['companyName'] . ' Resultado ERROR, verifique detalles a continuacion: <br>';
+		echo '<br> Solicitando CAE para factura id: ' . $invoice['id'] . ' del cliente ' . $client['firstName'] . ' ' . $client['lastName'] . $client['companyName'] . ' => Resultado ERROR, verifique detalles a continuacion: <br>';
 		if ($conceptoMalEstablecido) echo 'CONCEPTO DE FACTURA MAL ESTABLECIDO, SE CONSIDERA SERVICIOS POR DEFAULT <br>';
 		echo '<pre>'; print_r($caeResultrunCae['obs']); echo '</pre>';
 		} else {

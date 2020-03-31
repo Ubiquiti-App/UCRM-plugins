@@ -14,21 +14,22 @@ function runCae ($ptovta,$tipofactura,$tipocbte,$regfac,$cuitSolicitante,$orgSel
 
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 if (date_default_timezone_get()) {
-    echo 'date_default_timezone_set: ' . date_default_timezone_get() . '<br />';
+    //echo 'date_default_timezone_set: ' . date_default_timezone_get() . '<br />';
 }
 
 if (ini_get('date.timezone')) {
     echo 'date.timezone: ' . ini_get('date.timezone');
 }
 
-if($wsaa->get_expiration($orgSelected) < date("Y-m-d H:m:i")) {
-  if ($wsaa->generar_TA($orgSelected)) {
+$cert_expiration = date('Y-m-d H:m:i', strtotime($wsaa->get_expiration($orgSelected)));
+if($cert_expiration < date("Y-m-d H:m:i")) {
+ if ($wsaa->generar_TA($orgSelected)) {
     echo 'Obtenido nuevo TA<br>';
   } else {
     echo 'error al obtener el TA';
   }
 } else {
-  if (DEBUG) echo 'Fecha de Vencimiento: '.$wsaa->get_expiration($orgSelected).'<br>';  
+  if (DEBUG) echo 'Fecha de Vencimiento: '.$cert_expiration.'<br>';  
 };
 
 $wsfev1 = new WSFEv1('./',$orgSelected);

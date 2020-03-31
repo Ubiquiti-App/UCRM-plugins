@@ -6,9 +6,9 @@ namespace App\Argentinacae;
 class WSFEv1{
   //const CUIT = "20353246322";                 # CUIT del emisor de las facturas // PREVIAMENTE AUTORIZADO EN AFIP
   //const TA   = "classes/Argentinacae/xmlgenerados/TA.xml";         # Archivo con el Token y Sign
-  public const PASSPHRASE = "";                      # The passphrase (if any) to sign
-  public const PROXY_ENABLE = false;
-  public const LOG_XMLS = false;                     
+  const PASSPHRASE = "";                      # The passphrase (if any) to sign
+  const PROXY_ENABLE = false;
+  const LOG_XMLS = false;                     
 # TESTING
   //const WSDL = "classes/Argentinacae/wsfev1test.wsdl";             # WSDL TESTING
   //const WSFEURL = "https://wswhomo.afip.gov.ar/wsfev1/service.asmx"; // testing
@@ -288,13 +288,18 @@ class WSFEv1{
                 'ImpOpEx' => 0.00,
                 'ImpTrib' => 0.00,
                 'ImpIVA' => $renglon['importeiva'],
-                'FchServDesde' => $renglon['FchServDesde'], 
-                'FchServHasta' => $renglon['FchServHasta'],
-                'FchVtoPago' => $renglon['fecha_venc_pago'], 
+                //'FchServDesde' => $renglon['FchServDesde'], 
+                //'FchServHasta' => $renglon['FchServHasta'],
+                //if($renglon['concepto'] != 1) 'FchVtoPago' => $renglon['fecha_venc_pago'], 
                 'MonId' => "PES",
                 'MonCotiz' => "1.00",
                 'Iva' => $detalleiva
             );
+			if($renglon['concepto'] != 1){
+				$FECAEDetRequest['FchVtoPago'] = $renglon['fecha_venc_pago'];
+				$FECAEDetRequest['FchServDesde'] = $renglon['FchServDesde']; 
+                $FECAEDetRequest['FchServHasta'] = $renglon['FchServHasta']; 			 
+			}
         }else{
             $FECAEDetRequest = array
                 (
@@ -310,13 +315,19 @@ class WSFEv1{
                 'ImpOpEx' => 0.00,
                 'ImpTrib' => 0.00,
                 'ImpIVA' => $renglon['importeiva'],
-                'FchServDesde' => $renglon['FchServDesde'], 
-                'FchServHasta' => $renglon['FchServHasta'], 
-                'FchVtoPago' => $renglon['fecha_venc_pago'],
+                //'FchServDesde' => $renglon['FchServDesde'], 
+                //'FchServHasta' => $renglon['FchServHasta'], 
+                //if($renglon['concepto'] != 1) 'FchVtoPago' => $renglon['fecha_venc_pago'],
                 'MonId' => 'PES',
                 'MonCotiz' => 1
             );
-        }	
+			if($renglon['concepto'] != 1){
+				$FECAEDetRequest['FchVtoPago'] = $renglon['fecha_venc_pago'];
+				$FECAEDetRequest['FchServDesde'] = $renglon['FchServDesde']; 
+                $FECAEDetRequest['FchServHasta'] = $renglon['FchServHasta']; 			 
+			}
+			
+        }	//var_dump($FECAEDetRequest);
         $fedetreq = array('FECAEDetRequest' => $FECAEDetRequest);
         $params = array
             (

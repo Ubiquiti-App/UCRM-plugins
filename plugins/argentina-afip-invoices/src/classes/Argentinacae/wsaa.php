@@ -9,8 +9,8 @@ class WSAA {
 
 
   //const TA   = "classes/Argentinacae/xmlgenerados/TA.xml";    # Archivo con el Token y Sign
-  public const PASSPHRASE = "";         		 # The passphrase (if any) to sign
-  public const PROXY_ENABLE = false;
+  const PASSPHRASE = "";         		 # The passphrase (if any) to sign
+  const PROXY_ENABLE = false;
  
 # TESTING
 //  const CERT = "data/files/cwcert.crt";      # The X.509 certificate in PEM format
@@ -210,9 +210,12 @@ $orgSelected = 0;
       if($TA_file) {
         $TA_xml = '';
         for($i=0; $i < sizeof($TA_file); $i++)
-          $TA_xml.= $TA_file[$i];        
+          $TA_xml.= $TA_file[$i];   
+		
         $this->TA = $this->xml2Array($TA_xml);
-        $r = $this->TA['header']['expirationTime'];
+        
+		$r = $this->TA['header']['expirationTime'];
+		
       } else {
         $r = false;
       }      
