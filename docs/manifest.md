@@ -70,7 +70,7 @@ The `manifest.json` file contains all needed information about the plugin and is
             "label": "Check this if you want it to be true.",
             "required": 0,
             "type": "checkbox"
-        },
+        }
     ],
     "menu": [
         {

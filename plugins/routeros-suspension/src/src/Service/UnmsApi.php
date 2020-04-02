@@ -8,7 +8,6 @@ namespace UcrmRouterOs\Service;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Ubnt\UcrmPluginSdk\Exception\ConfigurationException;
-use Ubnt\UcrmPluginSdk\Service\PluginConfigManager;
 use Ubnt\UcrmPluginSdk\Service\UcrmOptionsManager;
 use Ubnt\UcrmPluginSdk\Util\Helpers;
 use Ubnt\UcrmPluginSdk\Util\Json;
@@ -33,7 +32,7 @@ class UnmsApi
         $this->token = $token;
     }
 
-    public static function create(): self
+    public static function create(array $config): self
     {
         $options = (new UcrmOptionsManager())->loadOptions();
 
@@ -42,7 +41,6 @@ class UnmsApi
             throw new ConfigurationException('UCRM URL is missing in plugin configuration.');
         }
 
-        $config = (new PluginConfigManager())->loadConfig();
         if (! ($config['unmsApiToken'] ?? false)) {
             throw new ConfigurationException('UNMS API token is missing in plugin configuration.');
         }
