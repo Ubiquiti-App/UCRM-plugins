@@ -5,7 +5,7 @@
     "displayName": "Mikrotik RouterOS - suspension",
     "description": "Plugin for handling suspension on RouterOS devices.",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/routeros-suspension",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "ucrmVersionCompliancy": {
       "min": "2.99.99",
       "max": null
@@ -14,7 +14,7 @@
       "min": "1.0.0-dev",
       "max": null
     },
-    "author": "Ubiquiti Networks, Inc."
+    "author": "Ubiquiti Inc."
   },
   "configuration": [
     {
@@ -27,21 +27,21 @@
     {
       "key": "mikrotikIpAddress",
       "label": "IP Address",
-      "description": "IP address of Mikrotik gateway",
+      "description": "IP address of Mikrotik gateway. For more gateways you can use multiple configuration values in IP Address, User name and Password fields. Just put each value on a new line. The number and order of rows must be consistent in all filled fields.",
       "required": 1,
-      "type": "text"
+      "type": "textarea"
     },
     {
       "key": "mikrotikUserName",
       "label": "User name",
       "required": 1,
-      "type": "text"
+      "type": "textarea"
     },
     {
       "key": "mikrotikPassword",
       "label": "Password",
       "required": 0,
-      "type": "password"
+      "type": "textarea"
     },
     {
       "key": "suspensionPageIp",

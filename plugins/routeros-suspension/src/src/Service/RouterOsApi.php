@@ -7,7 +7,6 @@ namespace UcrmRouterOs\Service;
 
 use RouterOS\Client;
 use RouterOS\Query;
-use Ubnt\UcrmPluginSdk\Service\PluginConfigManager;
 
 class RouterOsApi
 {
@@ -21,10 +20,8 @@ class RouterOsApi
         $this->client = $client;
     }
 
-    public static function create(): self
+    public static function create(array $config): self
     {
-        $config = (new PluginConfigManager())->loadConfig();
-
         $client = new Client(
             [
                 'host' => $config['mikrotikIpAddress'],
