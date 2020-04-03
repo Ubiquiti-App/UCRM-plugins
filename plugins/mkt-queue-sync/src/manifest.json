@@ -80,5 +80,25 @@
       "required": 0,
 	  "type": "checkbox"
     }
-  ]  
+  ],
+	"menu": [
+        {
+		"key": "MikrotikSync",
+        "label": "Sync",
+        "type": "admin",
+        "target": "iframe",
+		"parameters": {
+		"option": "Sync"
+		}
+        },
+		{
+		"key": "MikrotikSync",
+        "label": "Reset Plugin Log",
+        "type": "admin",
+        "target": "iframe",
+		"parameters": {
+		"option": "reset-log"
+		}
+        }
+    ]  
 }
