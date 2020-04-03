@@ -24,13 +24,6 @@ if (DEBUG) echo getcwd() . "\n";
 // Retrieve API connection.
 $api = UcrmApi::create();
 
-// Ensure that user is logged in and has permission to view invoices.
-$security = UcrmSecurity::create();
-$user = $security->getUser();
-if (! $user || $user->isClient || ! $user->hasViewPermission(PermissionNames::BILLING_INVOICES)) {
-    \App\Http::forbidden();
-}
-
 //Retrieve actual Custom Attributes, if necesary one that doesn't exist, it will be created
 $customattributes = $api->get('custom-attributes');
 verifyCustomAttributes($customattributes,'Requiere CAE?','requiereCae','client',false);
