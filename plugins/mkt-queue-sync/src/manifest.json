@@ -5,7 +5,7 @@
     "displayName": "Mikrotik Queue Sync Plugin",
     "description": "Plugin para sincronizar simple queues con los limites de velocidad establecidos en Ucrm - Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https://wiki.mikrotik.com/wiki/Manual:Queue",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/mkt-queue-sync",
-    "version": "2.2.1",
+    "version": "2.3.0",
     "ucrmVersionCompliancy": {
       "min": "2.15.0-beta3",
       "max": null
@@ -72,17 +72,13 @@
       "description": "API token created for this plugin in Network section of UNMS only needed when using UNMS v1 | Token API creado para este plugin en la seccion Network de UNMS, solo necesario cuando se utiliza UNMS v1",
       "required": 0,
       "type": "text"
+    },
+	{
+      "key": "debugMode",
+      "label": "Debug Mode?",
+      "description": "More detailed log info - Informacion de log mas detallada",
+      "required": 0,
+	  "type": "checkbox"
     }
-  ],
-  "menu": [
-        {
-		"key": "MikrotikSync",
-        "label": "Reset Plugin Log",
-        "type": "admin",
-        "target": "iframe",
-		"parameters": {
-		"option": "reset-log"
-		}
-        }
-    ]
+  ]  
 }

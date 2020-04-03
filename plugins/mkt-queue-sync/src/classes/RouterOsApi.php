@@ -18,50 +18,69 @@ class RouterOsApi
      */
     private $client;
 
-    public function __construct(Client $client)
+    /*public function __construct(Client $client)
     {
         $this->client = $client;
+    }*/
+	
+	public function __construct($clients)
+    {
+		$countConstruct = 0;
+		foreach($clients as $client){
+		//echo '<pre>'; var_dump($client); echo '</pre>';
+		$this->client[$countConstruct] = $client;
+		$countConstruct++;
+		}
+		
+		foreach ($this->client as $test){
+		//	echo '<pre>'; var_dump($test); echo '</pre>';
+		}
     }
 
-    public static function create($logger): self
+    public static function create($logger, ?int $devQty): self
     {
-        $config = (new PluginConfigManager())->loadConfig();
+		$config = (new PluginConfigManager())->loadConfig();
 		isset($config['apiport']) ?  [] : $config['apiport'] = (int) 8728;
+		foreach(explode(',',$config['mktip']) as $mktIp){
 		try {
-		$client = new Client(
+		$client[$devQty] = new Client(
             [
-                'host' => $config['mktip'],
+                'host' => $mktIp,
                 'user' => $config['mktusr'],
                 'pass' => (string) $config['mktpass'],
 				'port' => (int) $config['apiport'],
 			]
         );
+				
 		} catch (Exception | ConfigException | ClientException $e) {
-        echo "<br> ERROR EN LA CONEXION A MIKROTIK <br>";
+        echo "<br> ERROR EN LA CONEXION A MIKROTIK IP: " . $mktIp . "<br>";
 		echo $e->getMessage();
-		echo "<br> EL PROGRAMA NO CONTINUARA <br>";
-		$logger->appendLog("ERROR EN LA CONEXION A MIKROTIK");
+		//echo "<br> EL PROGRAMA NO CONTINUARA <br>";
+		$logger->appendLog("ERROR EN LA CONEXION A MIKROTIK IP: " . $mktIp);
         $logger->appendLog($e->getMessage());
-		$logger->appendLog("EL PROGRAMA NO CONTINUARA!!!");
+		//$logger->appendLog("EL PROGRAMA NO CONTINUARA!!!");
+		}
 		}
         
 
         return new self($client);
     }
 
-    public function wr(string $endpoint, $attrs = NULL): array
+    public function wr(int $deviceNum, string $endpoint, $attrs = NULL): array
     {
-        is_null($attrs) ? $response = $this->getClient()->wr([$endpoint]) : $response = $this->getClient()->wr([$endpoint, $attrs]);
+        is_null($attrs) ? $response = $this->getClient($deviceNum)->wr([$endpoint]) : $response = $this->getClient($deviceNum)->wr([$endpoint, $attrs]);
 		return $response;
 	}
 	
-	public function print(string $endpoint): array
+	public function print(int $deviceNum, string $endpoint): array
     {
-        return $this->getClient()->write(new Query(sprintf('%s/print', $endpoint)))->read();
+		//$deviceNum = 0;
+        return $this->getClient($deviceNum)->write(new Query(sprintf('%s/print', $endpoint)))->read();
 	}
 
-    public function remove(string $endpoint, array $ids): array
+    public function remove(int $deviceNum, string $endpoint, array $ids): array
     {
+		//$deviceNum = 1;
         if (! $ids) {
             return [];
         }
@@ -69,14 +88,15 @@ class RouterOsApi
         $query = new Query(sprintf('%s/remove', $endpoint));
         foreach ($ids as $id) {
             $query->add(sprintf('=.id=%s', $id));
-        $result = $this->getClient()->write($query)->read();
+        $result = $this->getClient($deviceNum)->write($query)->read();
 		}
 		//var_dump($query);
         return $result;
     }
 
-    public function add(string $endpoint, array $sentences): void
+    public function add(int $deviceNum, string $endpoint, array $sentences): void
     {
+		//$deviceNum = 1;
         foreach ($sentences as $sentence) {
             $sentence = array_filter($sentence);
 			
@@ -87,13 +107,14 @@ class RouterOsApi
 			
             }
 			
-			$this->getClient()->write($query)->read();
+			$this->getClient($deviceNum)->write($query)->read();
 			
         }
     }
 	
-	 public function addAddressList(string $endpoint, array $sentences, string $commentPrefix = 'ucrm_mktsync_'): void
+	 public function addAddressList(int $deviceNum, string $endpoint, array $sentences, string $commentPrefix = 'ucrm_mktsync_'): void
     {
+		//$deviceNum = 1;
         foreach ($sentences as $sentence) {
             $sentence = array_filter($sentence);
 
@@ -110,12 +131,13 @@ class RouterOsApi
                 $query->add(sprintf('=%s=%s', $key, $item));
             }
 
-            $this->getClient()->write($query)->read();
+            $this->getClient($deviceNum)->write($query)->read();
         }
     }
 	
-	public function set(string $endpoint, array $sentences): void
+	public function set(int $deviceNum, string $endpoint, array $sentences): void
     {
+		//$deviceNum = 1;
 		foreach ($sentences as $sentence) {
             $query = new Query(sprintf('%s/set',$endpoint));
 			$sentence = array_filter($sentence);
@@ -124,14 +146,14 @@ class RouterOsApi
 			    $query->add(sprintf('=%s=%s', $key, $item));
             }
 			
-			$this->getClient()->write($query)->read();
+			$this->getClient($deviceNum)->write($query)->read();
 			
 			
         }
 	}
 
-    public function getClient(): Client
+    public function getClient($deviceNum): Client
     {
-        return $this->client;
+        return $this->client[$deviceNum];
     }
 }
