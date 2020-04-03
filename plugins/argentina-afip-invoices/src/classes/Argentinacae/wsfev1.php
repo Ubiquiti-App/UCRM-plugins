@@ -288,13 +288,18 @@ class WSFEv1{
                 'ImpOpEx' => 0.00,
                 'ImpTrib' => 0.00,
                 'ImpIVA' => $renglon['importeiva'],
-                'FchServDesde' => $renglon['FchServDesde'], 
-                'FchServHasta' => $renglon['FchServHasta'],
-                'FchVtoPago' => $renglon['fecha_venc_pago'], 
+                //'FchServDesde' => $renglon['FchServDesde'], 
+                //'FchServHasta' => $renglon['FchServHasta'],
+                //if($renglon['concepto'] != 1) 'FchVtoPago' => $renglon['fecha_venc_pago'], 
                 'MonId' => "PES",
                 'MonCotiz' => "1.00",
                 'Iva' => $detalleiva
             );
+			if($renglon['concepto'] != 1){
+				$FECAEDetRequest['FchVtoPago'] = $renglon['fecha_venc_pago'];
+				$FECAEDetRequest['FchServDesde'] = $renglon['FchServDesde']; 
+                $FECAEDetRequest['FchServHasta'] = $renglon['FchServHasta']; 			 
+			}
         }else{
             $FECAEDetRequest = array
                 (
@@ -310,13 +315,19 @@ class WSFEv1{
                 'ImpOpEx' => 0.00,
                 'ImpTrib' => 0.00,
                 'ImpIVA' => $renglon['importeiva'],
-                'FchServDesde' => $renglon['FchServDesde'], 
-                'FchServHasta' => $renglon['FchServHasta'], 
-                'FchVtoPago' => $renglon['fecha_venc_pago'],
+                //'FchServDesde' => $renglon['FchServDesde'], 
+                //'FchServHasta' => $renglon['FchServHasta'], 
+                //if($renglon['concepto'] != 1) 'FchVtoPago' => $renglon['fecha_venc_pago'],
                 'MonId' => 'PES',
                 'MonCotiz' => 1
             );
-        }	
+			if($renglon['concepto'] != 1){
+				$FECAEDetRequest['FchVtoPago'] = $renglon['fecha_venc_pago'];
+				$FECAEDetRequest['FchServDesde'] = $renglon['FchServDesde']; 
+                $FECAEDetRequest['FchServHasta'] = $renglon['FchServHasta']; 			 
+			}
+			
+        }	//var_dump($FECAEDetRequest);
         $fedetreq = array('FECAEDetRequest' => $FECAEDetRequest);
         $params = array
             (

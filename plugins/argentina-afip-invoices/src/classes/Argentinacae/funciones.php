@@ -5,7 +5,7 @@ use Ubnt\UcrmPluginSdk\Service\UcrmApi;
 
 
 
-function verifyCustomAttributes($customattributesarray,$attributename,$attributerealname,$typeofattribute):void {
+function verifyCustomAttributes($customattributesarray,$attributename,$attributerealname,$typeofattribute,$clientZoneVisible):void {
 // Retrieve API connection.
 $api2 = UcrmApi::create();
 if (array_search($attributerealname, array_column($customattributesarray, 'key')) === false){
@@ -15,6 +15,7 @@ if (array_search($attributerealname, array_column($customattributesarray, 'key')
 			[
 			'name'  => $attributename,
 			'attributeType'  => $typeofattribute,
+			'clientZoneVisible' => $clientZoneVisible,
 			]
 		);
 	if(DEBUG) echo $attributerealname . ' custom attribute created <br>';
@@ -51,6 +52,47 @@ if (!(gettype(array_search($attributerealname, array_column($customattributesarr
 	if(DEBUG) echo $attributerealname . ' custom attribute NOT found <br>';
 	return(null);
 	}
+}
+
+function getInvoiceTemplateId($invoiceTemplateName):int {
+$api3 = UcrmApi::create();
+$invoiceTemplates = $api3->get(
+		'invoice-templates',
+			[
+			]
+		);
+if (!(gettype(array_search($invoiceTemplateName, array_column($invoiceTemplates, 'name')))=='boolean' && array_search($invoiceTemplateName, array_column($invoiceTemplates, 'name')) == false)){
+
+	if(DEBUG) echo '<br>' . $invoiceTemplateName .' custom attribute found <br>';
+	//Search for key where $invoiceTemplateName is
+	$templateKey = array_search($invoiceTemplateName, array_column($invoiceTemplates, 'name'));
+	// search for Id Value
+	$nameValue= $invoiceTemplates[$templateKey]['id'];	
+	//$attributeValueString = (string)$nameValue;
+	if (DEBUG) echo 'valor en funcion getAttribute para requerimiento ' .$invoiceTemplateName . ' : ' . $nameValue . '<br>';
+	return($nameValue);
+	} else {
+	if(DEBUG) echo $invoiceTemplateName . ' custom attribute NOT found <br>';
+	echo '<br><br><br>¡¡¡Atencion, Plantilla personalizada para las facturas AFIP no encontrada, asegurese de tenerla importada y correctamente configurada!!! <br><br><br>';
+	return(1);
+	}
+}
+
+function getInvoiceConcept($invoiceItems):int {
+	$serviceItem = $productItem = 0;
+	foreach ($invoiceItems as $item){
+		if ($productItem == 0){
+			if($item['type'] == "product"){
+				$productItem = 1;
+			}
+		}
+		if ($serviceItem == 0){
+			if($item['type'] == "service" || $item['type'] == "fee" || $item['type'] == "surcharge" || $item['type'] == "other"){
+				$serviceItem = 2;
+			}
+		}
+	}
+	return($serviceItem + $productItem);
 }
 
 ?>
