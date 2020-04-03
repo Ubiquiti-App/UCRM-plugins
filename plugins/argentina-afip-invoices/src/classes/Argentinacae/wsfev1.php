@@ -6,9 +6,9 @@ namespace App\Argentinacae;
 class WSFEv1{
   //const CUIT = "20353246322";                 # CUIT del emisor de las facturas // PREVIAMENTE AUTORIZADO EN AFIP
   //const TA   = "classes/Argentinacae/xmlgenerados/TA.xml";         # Archivo con el Token y Sign
-  const PASSPHRASE = "";                      # The passphrase (if any) to sign
-  const PROXY_ENABLE = false;
-  const LOG_XMLS = false;                     
+  public const PASSPHRASE = "";                      # The passphrase (if any) to sign
+  public const PROXY_ENABLE = false;
+  public const LOG_XMLS = false;                     
 # TESTING
   //const WSDL = "classes/Argentinacae/wsfev1test.wsdl";             # WSDL TESTING
   //const WSFEURL = "https://wswhomo.afip.gov.ar/wsfev1/service.asmx"; // testing

@@ -9,8 +9,8 @@ class WSAA {
 
 
   //const TA   = "classes/Argentinacae/xmlgenerados/TA.xml";    # Archivo con el Token y Sign
-  const PASSPHRASE = "";         		 # The passphrase (if any) to sign
-  const PROXY_ENABLE = false;
+  public const PASSPHRASE = "";         		 # The passphrase (if any) to sign
+  public const PROXY_ENABLE = false;
  
 # TESTING
 //  const CERT = "data/files/cwcert.crt";      # The X.509 certificate in PEM format
