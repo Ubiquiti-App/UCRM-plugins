@@ -210,9 +210,12 @@ $orgSelected = 0;
       if($TA_file) {
         $TA_xml = '';
         for($i=0; $i < sizeof($TA_file); $i++)
-          $TA_xml.= $TA_file[$i];        
+          $TA_xml.= $TA_file[$i];   
+		
         $this->TA = $this->xml2Array($TA_xml);
-        $r = $this->TA['header']['expirationTime'];
+        
+		$r = $this->TA['header']['expirationTime'];
+		
       } else {
         $r = false;
       }      
