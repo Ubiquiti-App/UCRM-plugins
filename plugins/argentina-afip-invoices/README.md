@@ -2,14 +2,14 @@
 
 Plugin para la obtención de CAE para las facturas de AFIP Argentina.
 Actualmente se encuentra en su version inicial V1.0.0, por lo cual existen posibilidades de algunos fallos que no me haya percatado, por favor reportar cualquier inconveniente.
-Se pueden manejar hasta 3 organizaciones en simultaneo.
 
-[EN] This plugin is used for extending UCRM invoices. It creates CAE codes for every new invoices issued by UCRM and places this code into the invoice PDF.
+Se pueden manejar hasta 3 organizaciones en simultaneo.
 
 ## ¿Como funciona?
 * Descargar e instalar el plugin.
 * Descargar e instalar la plantilla de factura template-argentina-afip, la cual posee un modelo basico de factura para Argentina y setear este modelo como plantilla por defecto en la organización.
 * Ejecutar el plugin desde el menu de UCRM donde aparecerá "Facturas Argentina AFIP", seleccionar la empresa deseada y luego click en "Obtener CAE"
+* Si todo es correcto, el Plugin obtendra el valor CAE y lo actualizara en la factura, en caso de que la factura sea "Proforma", la misma sera convertida a Factura.
 
 ## Configuraciones a realizar previamente para un correcto funcionamiento.
 ## Ajustes de Plugin
@@ -19,6 +19,7 @@ Se pueden manejar hasta 3 organizaciones en simultaneo.
 | Fecha de inicio | Fecha a partir de la cual buscar facturas para obtener CAE. |
 | Usar certificados de prueba, TESTING | Al activarse se utilizaran certificados de prueba en AFIP, obteniendo datos ficticios a efectos de probar el plugin |
 | Empresa, Punto de venta, Fecha de inicio de Actividades | Bloque de datos donde se define la cantidad de empresas y datos de las mismas, observar ejemplo mas abajo ** |
+|Plantilla para facturas AFIP|Nombre de la plantilla personalizada a utilizar para las facturas con CAE recibido, de no configurarse se utilizara la plantilla por default de UCRM|
 | Archivos de certificado y PRIVATEKEY | Certificados digitales creados y autorizados por AFIP para la facturacion correcta de la empresa |
 
 * Ejemplo de Empresa, Punto de Venta, Frecha de inicio de actividades:
@@ -45,7 +46,7 @@ Ademas de los datos convencionales de un cliente, necesitamos cargar datos adici
 | Numero de Documento? | Numero del documento a considerar para la obtencion de la factura CUIT para empresas o Monotributistas, DNI para consumidores finales |
 | Tipo Documento? | Valores validos: DNI o CUIT |
 | Tipo Cliente? | Valores validos: RI, RM, EX, CF siendo los mismos Responsable Inscripto, Responsable Monotributo, Exento, Consumidor Final |
-
+|Enviar factura automaticamente?|Una vez obtenido el CAE enviar la factura automaticamente al cliente?, valores validos = 1 , si, SI|
 
 ## Creación de certificados de AFIP
 En google se pueden encontrar varios tutoriales de como crear los certificados de AFIP y autorizarlos.
@@ -56,6 +57,11 @@ Asi como tambien pueden utilizar el archivo GenerarClavePrivada.bat modificando 
 ## Como puedo contribuir?
 * Los plugins son de codigo abierto con licencia MIT, lo que permite a cualquier contribuir con cualquier actualizacion al plugin existente.
 * Al margen de ser de codigo abierto y libre uso, este codigo requirio muchisimo tiempo de trabajo y sudor frente al teclado, por lo cual si te fue util sentite libre de colaborar con lo que te parezca adecuado haciendo click y escanenado el codigo QR [aqui](https://drive.google.com/file/d/17cMo9HaJVNHIu3eEQsV-hmJLH9o0Azpw/view?usp=sharing)
+
+## Problemas conocidos 
+Debido a una limitacion de UCRM en el calculo de los valores para las facturas, al momento de generar una factura A, la misma no tiene discriminado la alicuota de IVA por cada itema.
+Debido a una limitacion de UCRM en el calculo de los valores para las facturas, al momento de generar una factura B, los valores descriptos para cada item individual no incluyen IVA.
+Para ambos casos anteriores ya se esta trabajando en busqueda de una solucion, se actualizara apenas Ubiquiti nos brinde soporte en la materia.
 
 ## Descargo de responsabilidad 
 Este software se provee "como esta", sin ningun tipo de garantia. Lea mas en [Licencia](https://github.com/Ubiquiti-App/UCRM-plugins/blob/master/LICENSE)
