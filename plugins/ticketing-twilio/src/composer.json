@@ -1,0 +1,19 @@
+{
+  "description": "UCRM plugin for Ticketing, powered by Twilio",
+  "version": "1.0.0",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "TicketingTwilio\\": [
+        "src/"
+      ]
+    }
+  },
+  "require": {
+    "twilio/sdk": "^6.3",
+    "php": "^7.3.9",
+    "ubnt/ucrm-plugin-sdk": "^0.8.0",
+    "katzgrau/klogger": "^1.2",
+    "php-di/php-di": "^6.1"
+  }
+}
