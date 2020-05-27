@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace MikrotikQueueSync;
 
+use Nette\Utils\Strings;
 use Ubnt\UcrmPluginSdk\Service\UcrmApi;
 use Ubnt\UcrmPluginSdk\Service\UcrmOptionsManager;
 use Ubnt\UcrmPluginSdk\Service\PluginConfigManager;
 use Ubnt\UcrmPluginSdk\Service\PluginLogManager;
 use Ubnt\UcrmPluginSdk\Exception\ConfigurationException;
+use DateTime;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -44,12 +46,12 @@ class Synchronizer
 	/**
      * @var SyncAddressList
      */
-    //private $syncAddressList;
+    private $syncAddressList;
 
 	/**
      * @var RemoveEnded
      */
-    //private $removeEnded;
+    private $removeEnded;
 
     public function __construct()
     {
@@ -62,19 +64,25 @@ class Synchronizer
 		} else {
 		$this->ucrmVersion = 2;// UCRM v2
 		}
-		$this->routerOsApi = RouterOsApi::create($this->logger);
-		//$this->syncAddressList = SyncAddressList::create($this->routerOsApi);
-		//$this->removeEnded = RemoveEnded::create($this->routerOsApi);
+		$config = (new PluginConfigManager())->loadConfig();
+		$this->ip_in_range = Ip_In_Range::create();
+		$this->mktDevices = 0;
+		$this->routerOsApi = RouterOsApi::create($this->logger, $this->mktDevices);
 		$this->sumDownloadLimitAt = $this->sumUploadLimitAt = $this->sumDownloadVendido = $this->sumUploadVendido = 0;
+		$this->timeStamp =  new DateTime();
+		
     }
     
     public function sync(): void
     {
-		//echo "<br> Version: " . $this->ucrmVersion . '<br>';
+		$this->logger->appendLog('Running Plugin ' . $this->timeStamp->format('d-m-Y H:i:s'));
+		$this->mktDevices = 1;
+		$deviceNum = 0;
+		do 
+		{
 		// Retrieve UCRM Config.
 		$this->optionsData = $this->pluginConfigManager->loadConfig();
-		//$this->debug = $this->optionsData['debugMode'];
-		$this->debug = false;
+		$this->debug = $this->optionsData['debugMode'];
 		
 		
         if (! $this->validateConfig($this->optionsData)[0]) {
@@ -100,6 +108,9 @@ class Synchronizer
 		
 		$this->servicePlans = $this->ucrmApi->get('service-plans'); //Get service Plans for Burst Management
 		
+		/*------------------ GET MIKROTIK ADDRESS-LIST SYNC LIST --------------------*/
+		$syncList = $this->findAndFilterNetworksToSyncOnRouter($deviceNum);
+		
 		/*------------------------ GET MIKROTIK QUEUE LIST --------------------------*/
 		
 		$attrsmktQueueList = [
@@ -112,7 +123,7 @@ class Synchronizer
 			'burst-time',
 			];
 		
-		$mktQueueList =  $this->createIndex($this->getSectionList('/queue/simple',$attrsmktQueueList), $attrsmktQueueList);
+		$mktQueueList =  $this->createIndex($this->getSectionList($deviceNum, '/queue/simple',$attrsmktQueueList), $attrsmktQueueList);
 
 		/*------------------------ GET UCRM SERVICES LIST --------------------------*/
 		
@@ -131,18 +142,21 @@ class Synchronizer
 		$queueAddOrModifyList = $this->createIndex($remoteLocalDiffList,$attrsForAddOrModifyList);
 		
 		/*--------------------- GET ARRAY WITH QUEUES TO ADD ----------------------*/
-		$queueAddList = array_diff_key($queueAddOrModifyList, $this->createIndex($this->getSectionList('/queue/simple',$attrsForAddOrModifyList),$attrsForAddOrModifyList));
-		
+		$queueAddList = array_diff_key($queueAddOrModifyList, $this->createIndex($this->getSectionList($deviceNum,'/queue/simple',$attrsForAddOrModifyList),$attrsForAddOrModifyList));
+		if (!empty($syncList)){
+			$queueAddList = $this->filterQueueAddListWithSyncList($queueAddList,$syncList); 				
+		}
+				
 		empty(!$queueAddList) ? $preparedQueueAddList = $this->prepareArrayToAdd($queueAddList) : [] ;
 		
-		(isset ($preparedQueueAddList) && $this->optionsData['addQueue']) ? $this->routerOsApi->add('/queue/simple', $preparedQueueAddList) : [];
+		(isset ($preparedQueueAddList) && $this->optionsData['addQueue']) ? $this->routerOsApi->add($deviceNum,'/queue/simple', $preparedQueueAddList) : [];
 		
 		/*--------------------- GET ARRAY WITH QUEUES TO SET ----------------------*/
 		$queueSetList = array_diff_key($queueAddOrModifyList, $queueAddList);
 		
-		empty(!$queueSetList) ? $preparedQueueSetList = $this->prepareArrayToSet($queueSetList) : [];
+		empty(!$queueSetList) ? $preparedQueueSetList = $this->prepareArrayToSet($deviceNum, $queueSetList) : [];
 		
-		isset ($preparedQueueSetList) ? $this->routerOsApi->set('/queue/simple', $preparedQueueSetList) : [];
+		isset ($preparedQueueSetList) ? $this->routerOsApi->set($deviceNum,'/queue/simple', $preparedQueueSetList) : [];
 		
 		/******************************************************************************
 		*                            FINAL OF THE CODE                                *
@@ -153,7 +167,11 @@ class Synchronizer
 		$this->logger->appendLog(sprintf('Sumatoria de Upload LimitAt: %s', $this->formatSpeedForStats($this->sumUploadLimitAt)));
 		$this->logger->appendLog(sprintf('Sumatoria de DownloadVendido: %s', $this->formatSpeedForStats($this->sumDownloadVendido)));
 		$this->logger->appendLog(sprintf('Sumatoria de UploadVendido: %s', $this->formatSpeedForStats($this->sumUploadVendido)));
-	}
+		
+		//Incremet to move on the next device (If exists)
+		$deviceNum++;
+	} while ($deviceNum < $this->mktDevices);
+}
 
 	private function getUcrmServiceList($attrs): array
     {
@@ -290,7 +308,7 @@ class Synchronizer
 		return $readyToAddList;
 	}
 	
-	private function prepareArrayToSet($setList): array
+	private function prepareArrayToSet($deviceNum, $setList): array
     {
 
 		
@@ -305,7 +323,7 @@ class Synchronizer
 		
 				
 		foreach ($setList as $setListRow){
-			$toSetRow['.id'] = $this->getQueueId($setListRow['target']);
+			$toSetRow['.id'] = $this->getQueueId($deviceNum, $setListRow['target']);
 			$toSetRow['name'] = $this->getQueueNameFromUcrm($setListRow['clientId'],$setListRow['id']);
 			foreach ($attrs as $attribute){
 				$toSetRow[$attribute] = $setListRow[$attribute];
@@ -372,9 +390,9 @@ class Synchronizer
         return $res;
     }
 	
-	    private function getSectionList(string $section, array $attributes): array
+	    private function getSectionList(int $devNumber, string $section, array $attributes): array
     {
-        $data = $this->getRawSectionList($section, $attributes);
+        $data = $this->getRawSectionList($devNumber, $section, $attributes);
 
 		$filtered = [];
         foreach ($data as $row) {
@@ -383,9 +401,10 @@ class Synchronizer
 		return $filtered;
     }
 
-    private function getRawSectionList(string $section, array $attributes = []): array
+    private function getRawSectionList(int $devNumber, string $section, array $attributes = []): array
     {
         $result = $this->routerOsApi->print(
+			$devNumber,
             $section,
             empty($attributes) ? [] : ['.proplist' => sprintf('.id,%s', implode(',', $attributes))]
 		);
@@ -393,9 +412,9 @@ class Synchronizer
         return is_array($result) ? $result : [];
     }
 	
-	private function getQueueId(string $ipAddress): string
+	private function getQueueId(int $deviceNum, string $ipAddress): string
     {
-		$result = $this->routerOsApi->wr('/queue/simple/print','?target='.$ipAddress
+		$result = $this->routerOsApi->wr($deviceNum, '/queue/simple/print','?target='.$ipAddress
 		);
 		if(empty($result)){
 			return 'NaN';
@@ -471,5 +490,34 @@ class Synchronizer
 		}
 		
         return $valid;
+    }
+	
+	private function findAndFilterNetworksToSyncOnRouter(int $deviceNum): array
+    {
+        $filtered = [];
+        foreach ($this->routerOsApi->print($deviceNum, '/ip/firewall/address-list') as $address) {
+            if (
+                array_key_exists('list', $address)
+                && Strings::startsWith($address['list'], 'sync_with_ucrm')
+            ) {
+			    $filtered[] = $address['address'];
+            }
+        }
+		return $filtered;
+    }
+
+	private function filterQueueAddListWithSyncList(array $queueToAdd, array $syncList): array
+    {
+        $filtered = [];
+        foreach ($syncList as $syncRange){
+		
+			(strpos($syncRange,'/')) ? [] : $syncRange = $syncRange . '/32';
+			foreach ($queueToAdd as $queue){
+				if($this->ip_in_range->ip_in_range(substr($queue['address'],0,-3),$syncRange)){
+				$filtered[]=$queue;
+				}
+			}
+		}
+		return $filtered;
     }
 }
