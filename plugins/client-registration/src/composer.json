@@ -1,0 +1,6 @@
+{
+    "require": {
+        "ubnt/ucrm-plugin-sdk": "^0.8",
+        "nette/forms": "^3.0"
+    }
+}
