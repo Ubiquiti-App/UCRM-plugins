@@ -7,16 +7,27 @@ use Ubnt\UcrmPluginSdk\Service\UcrmApi;
 
 $ucrmApi = UcrmApi::create();
 
-$servicePlans = array_filter(
-    $ucrmApi->get('service-plans'),
-    function (array $servicePlan): bool {
-        return $servicePlan['public'];
-    }
-);
+$servicePlans = $ucrmApi->get('service-plans');
 
 $servicePlanItems = [];
+$servicePlanDetails = [];
 foreach ($servicePlans as $servicePlan) {
-    $servicePlanItems[$servicePlan['id']] = $servicePlan['name'];
+    if (! $servicePlan['public']) {
+        continue;
+    }
+
+    foreach ($servicePlan['periods'] as $period) {
+        if ($period['enabled']) {
+            $servicePlanItems[$servicePlan['id']] = $servicePlan['name'];
+            $servicePlanDetails[$servicePlan['id']] = [
+                'servicePlanPeriodId' => $period['id'],
+                'setupFeePrice' => $servicePlan['setupFee'],
+                'earlyTerminationFeePrice' => $servicePlan['earlyTerminationFee'],
+                'minimumContractLengthMonths' => $servicePlan['minimumContractLengthMonths'],
+            ];
+            break;
+        }
+    }
 }
 
 $form = new Form();
@@ -29,7 +40,7 @@ $form->addText('address', 'Address');
 
 if ($servicePlanItems !== []) {
     $form->addSelect(
-        'tariff',
+        'servicePlan',
         'Service Plan',
         $servicePlanItems,
     );
@@ -42,7 +53,7 @@ if ($form->isSuccess()) {
 
     $values = $form->getValues();
 
-    $ucrmApi->post(
+    $client = $ucrmApi->post(
         'clients',
         [
             'isLead' => true,
@@ -50,11 +61,28 @@ if ($form->isSuccess()) {
             'lastName' => $values['lastName'],
             'fullAddress' => $values['address'],
             'contacts' => [
-                'email' => $values['email'],
-                'phone' => $values['phone'],
-            ]
+                [
+                    'email' => $values['email'],
+                    'phone' => $values['phone'],
+                ],
+            ],
         ]
     );
+
+    if ($values['servicePlan'] !== null) {
+        $ucrmApi->post(
+            'clients/services',
+            array_merge(
+                $servicePlanDetails[$values['servicePlan']],
+                [
+                    'clientId' => $client['id'],
+                    'servicePlanId' => $values['servicePlan'],
+                    'isQuoted' => true,
+                ]
+            )
+        );
+    }
 } else {
     echo $form;
 }
+
