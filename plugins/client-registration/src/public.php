@@ -10,7 +10,7 @@ $ucrmApi = UcrmApi::create();
 $servicePlans = $ucrmApi->get('service-plans');
 
 $servicePlanItems = [];
-$servicePlanDetails = [];
+$servicePlanPeriods = [];
 foreach ($servicePlans as $servicePlan) {
     if (! $servicePlan['public']) {
         continue;
@@ -19,12 +19,7 @@ foreach ($servicePlans as $servicePlan) {
     foreach ($servicePlan['periods'] as $period) {
         if ($period['enabled']) {
             $servicePlanItems[$servicePlan['id']] = $servicePlan['name'];
-            $servicePlanDetails[$servicePlan['id']] = [
-                'servicePlanPeriodId' => $period['id'],
-                'setupFeePrice' => $servicePlan['setupFee'],
-                'earlyTerminationFeePrice' => $servicePlan['earlyTerminationFee'],
-                'minimumContractLengthMonths' => $servicePlan['minimumContractLengthMonths'],
-            ];
+            $servicePlanPeriods[$servicePlan['id']] = $period['id'];
             break;
         }
     }
@@ -71,15 +66,11 @@ if ($form->isSuccess()) {
 
     if ($values['servicePlan'] !== null) {
         $ucrmApi->post(
-            'clients/services',
-            array_merge(
-                $servicePlanDetails[$values['servicePlan']],
-                [
-                    'clientId' => $client['id'],
-                    'servicePlanId' => $values['servicePlan'],
-                    'isQuoted' => true,
-                ]
-            )
+            'clients/' . $client['id'] . '/services',
+            [
+                'servicePlanPeriodId' => $servicePlanPeriods[$values['servicePlan']],
+                'isQuoted' => true,
+            ]
         );
     }
 } else {
