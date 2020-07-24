@@ -37,7 +37,7 @@ if ($servicePlanItems !== []) {
     $form->addSelect(
         'servicePlan',
         'Service Plan',
-        $servicePlanItems,
+        $servicePlanItems
     );
 }
 
