@@ -30,6 +30,7 @@ UCRM plugins are compatible with UCRM 2.10.0+
 * [Client&nbsp;Signup Extended](https://www.charuwts.com/plugins/ucrm-signup) - Extended version of Client Signup Plugin
 * [Notification Plugin](https://community.ubnt.com/t5/UCRM-Plugins/Notification-Plugin/td-p/2541572) - Extended UCRM's notification system. More event-triggered emails sent to UCRM administrators.  
 * [UCRM FreeRadius](https://github.com/jhooper94/ucrm-freeradius-auth) - pulls the mac address and package from ucrm and push the information into free radius database
+* [unms-ros-sync](https://github.com/cykyy/unms-ros-sync) - Syncronizes UCRM clients with Mikrotik routerOS.
 
 ## How can I contribute?
 * These plugins are under MIT license enabling anyone to contribute any upgrades to existing plugins or create whole new ones.
