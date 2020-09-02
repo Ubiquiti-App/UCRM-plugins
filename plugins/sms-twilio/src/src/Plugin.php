@@ -93,6 +93,7 @@ class Plugin
                 }
                 try {
                     $this->notifierFacade->notify($notification);
+                    $this->logger->info('HTTP request processing ended.');
                 } catch (\Exception $ex) {
                     $this->logger->error($ex->getMessage());
                     $this->logger->warning($ex->getTraceAsString());
