@@ -70,9 +70,6 @@ $files = new CallbackFilterIterator(
 
 $reservedFiles = [
     '/ucrm.json',
-    '/data/config.json',
-    '/data/plugin.json',
-    '/data/plugin.log',
     '/.ucrm-plugin-running',
     '/.ucrm-plugin-execution-requested',
 ];
@@ -83,11 +80,6 @@ foreach ($files as $fileInfo) {
 
     if (in_array($filename, $reservedFiles, true)) {
         echo sprintf('Skipping reserved file "%s".', $filename) . PHP_EOL;
-        continue;
-    }
-
-    if (strpos($filename, '/.') === 0) {
-        echo sprintf('Skipping hidden file "%s".', $filename) . PHP_EOL;
         continue;
     }
 
