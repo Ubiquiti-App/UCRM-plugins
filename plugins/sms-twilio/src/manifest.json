@@ -166,6 +166,12 @@
       "label": "service.suspend",
       "description": "Example: Suspended service %%service.name%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
       "required": 0
+    },
+    {
+      "key": "logging_level",
+      "label": "set logging level",
+      "description": "Make the plugin more or less verbose. Available levels: emergency, alert, critical, error, warning, notice, info (default), debug",
+      "required": 0
     }
   ]
 }

@@ -140,4 +140,9 @@ class PluginData extends UcrmData
      */
     public $event_invoice_overdue;
 
+    /**
+     * @var string
+     */
+    public $logging_level;
+
 }

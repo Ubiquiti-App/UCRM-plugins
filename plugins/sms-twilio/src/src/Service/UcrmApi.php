@@ -81,6 +81,6 @@ class UcrmApi
 
     private function getApiUrl(PluginData $optionsData): string
     {
-        return ($optionsData->ucrmLocalUrl ?? false) ?: $optionsData->ucrmPublicUrl;
+        return ($optionsData->ucrmLocalUrl ?? '') ?: $optionsData->ucrmPublicUrl;
     }
 }
