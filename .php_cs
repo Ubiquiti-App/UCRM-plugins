@@ -6,6 +6,7 @@ return PhpCsFixer\Config::create()
     ->setRules(
         [
             '@PHP73Migration' => true,
+            '@Symfony' => true,
             'array_syntax' => [
                 'syntax' => 'short',
             ],
