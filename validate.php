@@ -219,13 +219,22 @@ function printArrayRecursiveDiff(string $keyPrefix, array $arrayDifference, arra
                 $keyPrefix,
                 $key,
                 PHP_EOL,
-                array_key_exists($key, $manifest) ? (is_array($manifest[$key]) ? 'Array' : $manifest[$key]) : '(none)',
+                stringify($key, $manifest),
                 PHP_EOL,
-                array_key_exists($key, $manifestZip) ? (is_array($manifestZip[$key]) ? 'Array' : $manifestZip[$key]) : '(none)',
+                stringify($key, $manifestZip),
                 PHP_EOL
             );
         }
     }
+}
+
+function stringify(int $key, array $manifest)
+{
+    if (! array_key_exists($key, $manifest)) {
+        return '(none)';
+    }
+
+    return is_array($manifest[$key]) ? 'Array' : $manifest[$key];
 }
 
 function arrayRecursiveDiff(array $aArray1, array $aArray2, int $depth = 0): array
@@ -350,7 +359,7 @@ function validatePhp(string $path): int
         new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($path)
         ),
-        function (SplFileInfo $fileInfo) {
+        static function (SplFileInfo $fileInfo) {
             return (! $fileInfo->isDir())
                 && (stripos($fileInfo->getBasename(), '.php') === strlen($fileInfo->getBasename()) - 4)
                 && (strpos($fileInfo->getPathname(), '/src/vendor/') === false);
@@ -375,7 +384,7 @@ function validatePhp(string $path): int
 
 $pluginDirectories = new CallbackFilterIterator(
     new DirectoryIterator(__DIR__ . '/plugins'),
-    function (DirectoryIterator $fileInfo) {
+    static function (DirectoryIterator $fileInfo) {
         return $fileInfo->isDir() && ! $fileInfo->isDot();
     }
 );
