@@ -67,6 +67,10 @@ class TwilioNotifierFacade extends AbstractMessageNotifierFacade {
         );
 
         $this->logger->debug((string) $messageInstance);
+        $this->logger->info(sprintf('Twilio status: %s',$messageInstance->status));
+        if ($messageInstance->errorCode) {
+            $this->logger->warning(sprintf('Twilio error: %s %s', $messageInstance->errorCode, $messageInstance->errorMessage));
+        }
     }
 
     /*

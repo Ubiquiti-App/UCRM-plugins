@@ -14,6 +14,6 @@ require 'vendor/autoload.php';
     } catch (Exception $e) {
         $logger = new \SmsNotifier\Service\Logger();
         $logger->error($e->getMessage());
-        $logger->warning($e->getTraceAsString());
+        $logger->debug($e->getTraceAsString());
     }
 })();
