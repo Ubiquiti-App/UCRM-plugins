@@ -26,4 +26,8 @@ return PhpCsFixer\Config::create()
             'single_line_throw' => false,
             'heredoc_indentation' => false,
         ]
+    )->setFinder(
+        PhpCsFixer\Finder::create()
+            ->in(__DIR__)
+            ->notPath('vendor')
     );
