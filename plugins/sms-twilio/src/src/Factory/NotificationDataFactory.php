@@ -4,15 +4,11 @@
  * @see https://www.ubnt.com/
  */
 
-
 declare(strict_types=1);
-
 
 namespace SmsNotifier\Factory;
 
-
 use SmsNotifier\Data\NotificationData;
-use SmsNotifier\Service\Logger;
 use SmsNotifier\Service\UcrmApi;
 
 class NotificationDataFactory
@@ -28,7 +24,8 @@ class NotificationDataFactory
         $this->ucrmApi = $ucrmApi;
     }
 
-    public function getObject($jsonData): NotificationData {
+    public function getObject($jsonData): NotificationData
+    {
         $notificationData = new NotificationData();
         $notificationData->uuid = $jsonData['uuid'];
         $notificationData->changeType = $jsonData['changeType'];
@@ -42,7 +39,7 @@ class NotificationDataFactory
 
     private function resolveUcrmData(NotificationData $notificationData): void
     {
-        switch($notificationData->entity) {
+        switch ($notificationData->entity) {
             case 'client':
                 $notificationData->clientId = $notificationData->entityId;
                 break;
@@ -61,31 +58,39 @@ class NotificationDataFactory
         }
     }
 
-    private function getClientData(NotificationData $notificationData) {
+    private function getClientData(NotificationData $notificationData)
+    {
         if (empty($notificationData->clientData) && $notificationData->clientId) {
             $notificationData->clientData = $this->ucrmApi->query('clients/' . $notificationData->clientId);
         }
+
         return $notificationData->clientData;
     }
 
-    private function getPaymentData(NotificationData $notificationData) {
+    private function getPaymentData(NotificationData $notificationData)
+    {
         if (empty($notificationData->paymentData) && $notificationData->entityId) {
             $notificationData->paymentData = $this->ucrmApi->query('payments/' . $notificationData->entityId);
         }
+
         return $notificationData->paymentData;
     }
-    
-    private function getInvoiceData(NotificationData $notificationData) {
+
+    private function getInvoiceData(NotificationData $notificationData)
+    {
         if (empty($notificationData->invoiceData) && $notificationData->entityId) {
             $notificationData->invoiceData = $this->ucrmApi->query('invoices/' . $notificationData->entityId);
         }
+
         return $notificationData->invoiceData;
     }
 
-    private function getServiceData(NotificationData $notificationData) {
+    private function getServiceData(NotificationData $notificationData)
+    {
         if (empty($notificationData->serviceData) && $notificationData->entityId) {
             $notificationData->serviceData = $this->ucrmApi->query('clients/services/' . $notificationData->entityId);
         }
+
         return $notificationData->serviceData;
     }
 }

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace UcrmRouterOs\Service;
 
 use Nette\Utils\Strings;
@@ -42,7 +41,6 @@ class Suspender
         $this->ucrmApi = UcrmApi::create();
         $this->unmsApi = UnmsApi::create($config);
         $this->routerOsApi = RouterOsApi::create($config);
-
     }
 
     public function suspend(): void
@@ -231,7 +229,6 @@ class Suspender
         $this->routerOsApi->remove($section, array_column($toRemove, '.id'));
         $this->routerOsApi->add($section, $toAdd);
     }
-
 
     private function setFilterRules(array $content): void
     {

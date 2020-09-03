@@ -4,9 +4,7 @@
  * @see https://www.ubnt.com/
  */
 
-
 declare(strict_types=1);
-
 
 namespace SmsNotifier\Data;
 

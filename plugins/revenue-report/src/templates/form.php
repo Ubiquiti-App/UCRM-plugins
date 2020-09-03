@@ -63,7 +63,7 @@
 
         <?php
             if ($result) {
-                require_once(__DIR__ . '/result.php');
+                require_once __DIR__ . '/result.php';
             }
         ?>
     </div>

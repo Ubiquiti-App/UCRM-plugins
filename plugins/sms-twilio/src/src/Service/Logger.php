@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace SmsNotifier\Service;
 
 use Psr\Log\LogLevel;
@@ -21,13 +20,12 @@ class Logger extends \Katzgrau\KLogger\Logger
         );
     }
 
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
-        if (!is_string($message)) {
-            $message = var_export($message,true);
+        if (! is_string($message)) {
+            $message = var_export($message, true);
         }
+
         return parent::log($level, $message, $context);
     }
-
-
 }

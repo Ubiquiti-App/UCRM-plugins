@@ -1,9 +1,9 @@
 <?php
 chdir(__DIR__);
 
-define("PROJECT_PATH", __DIR__);
+define('PROJECT_PATH', __DIR__);
 
-require_once(PROJECT_PATH.'/includes/initialize.php');
+require_once PROJECT_PATH . '/includes/initialize.php';
 
 ?>
 
@@ -20,20 +20,20 @@ require_once(PROJECT_PATH.'/includes/initialize.php');
   </head>
   <body>
     <div id="aside">
-      <?php if (!empty(\KMZMap\Config::$LOGO_URL)) { ?>
+      <?php if (! empty(\KMZMap\Config::$LOGO_URL)) { ?>
         <img src="<?php echo \KMZMap\Config::$LOGO_URL; ?>" class="logo">
       <?php } ?>
       <div id="description">
-        <?php if (!empty(\KMZMap\Config::$FORM_DESCRIPTION)) { ?>
+        <?php if (! empty(\KMZMap\Config::$FORM_DESCRIPTION)) { ?>
           <div class="form-description">
             <?php echo \KMZMap\Config::$FORM_DESCRIPTION; ?>
           </div>
         <?php } ?>
         <div class="buttons">
-          <?php if (!empty(\KMZMap\Config::$LINK_ONE[0])) { ?>
+          <?php if (! empty(\KMZMap\Config::$LINK_ONE[0])) { ?>
             <a href="<?php echo \KMZMap\Config::$LINK_ONE[0]; ?>" class="btn" style="background-color: #28a745;"><?php echo \KMZMap\Config::$LINK_ONE[1]; ?></a>
           <?php } ?>
-          <?php if (!empty(\KMZMap\Config::$LINK_TWO[0])) { ?>
+          <?php if (! empty(\KMZMap\Config::$LINK_TWO[0])) { ?>
             <a href="<?php echo \KMZMap\Config::$LINK_TWO[0]; ?>" class="btn" style="background-color: #007bff;"><?php echo \KMZMap\Config::$LINK_TWO[1]; ?></a>
           <?php } ?>
         </div>

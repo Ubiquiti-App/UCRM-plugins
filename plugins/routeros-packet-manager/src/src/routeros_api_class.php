@@ -1,5 +1,5 @@
 <?php
-    
+
     /*****************************
      *
      * RouterOS PHP API class v1.6
@@ -15,14 +15,14 @@
      * http://wiki.mikrotik.com/wiki/API_PHP_class
      *
      ******************************/
-    
+
     class RouterosAPI
     {
         public $debug = false; //  Show debug information
 
         public $connected = false; //  Connection state
 
-        public $port = "8728";  //  Port to connect to (default 8729 for ssl)
+        public $port = '8728';  //  Port to connect to (default 8729 for ssl)
 
         public $ssl = false; //  Connect using SSL (must enable api-ssl in IP/Services)
 
@@ -37,7 +37,7 @@
         public $error_no;          //  Variable for storing connection error number, if any
 
         public $error_str;         //  Variable for storing connection error text, if any
-        
+
         /* Check, can be var used in foreach  */
         public function isIterable($var)
         {
@@ -48,11 +48,11 @@
                 || $var instanceof IteratorAggregate
                 );
         }
-        
+
         /**
          * Print text for debug purposes
          *
-         * @param string      $text       Text to print
+         * @param string $text Text to print
          *
          * @return void
          */
@@ -62,12 +62,9 @@
                 echo $text . "\n";
             }
         }
-        
-        
+
         /**
-         *
-         *
-         * @param string        $length
+         * @param string $length
          *
          * @return void
          */
@@ -87,34 +84,33 @@
             } elseif ($length >= 0x10000000) {
                 $length = chr(0xF0) . chr(($length >> 24) & 0xFF) . chr(($length >> 16) & 0xFF) . chr(($length >> 8) & 0xFF) . chr($length & 0xFF);
             }
-            
+
             return $length;
         }
-        
-        
+
         /**
          * Login to RouterOS
          *
-         * @param string      $ip         Hostname (IP or domain) of the RouterOS server
-         * @param string      $login      The RouterOS username
-         * @param string      $password   The RouterOS password
+         * @param string $ip       Hostname (IP or domain) of the RouterOS server
+         * @param string $login    The RouterOS username
+         * @param string $password The RouterOS password
          *
-         * @return boolean                If we are connected or not
+         * @return bool If we are connected or not
          */
         public function connect($ip, $login, $password)
         {
-            for ($ATTEMPT = 1; $ATTEMPT <= $this->attempts; $ATTEMPT++) {
+            for ($ATTEMPT = 1; $ATTEMPT <= $this->attempts; ++$ATTEMPT) {
                 $this->connected = false;
-                $PROTOCOL = ($this->ssl ? 'ssl://' : '' );
-                $context = stream_context_create(array('ssl' => array('ciphers' => 'ADH:ALL', 'verify_peer' => false, 'verify_peer_name' => false)));
+                $PROTOCOL = ($this->ssl ? 'ssl://' : '');
+                $context = stream_context_create(['ssl' => ['ciphers' => 'ADH:ALL', 'verify_peer' => false, 'verify_peer_name' => false]]);
                 $this->debug('Connection attempt #' . $ATTEMPT . ' to ' . $PROTOCOL . $ip . ':' . $this->port . '...');
-                $this->socket = @stream_socket_client($PROTOCOL . $ip.':'. $this->port, $this->error_no, $this->error_str, $this->timeout, STREAM_CLIENT_CONNECT,$context);
+                $this->socket = @stream_socket_client($PROTOCOL . $ip . ':' . $this->port, $this->error_no, $this->error_str, $this->timeout, STREAM_CLIENT_CONNECT, $context);
                 if ($this->socket) {
                     socket_set_timeout($this->socket, $this->timeout);
                     $this->write('/login');
                     $RESPONSE = $this->read(false);
                     if (isset($RESPONSE[0]) && $RESPONSE[0] == '!done') {
-                        $MATCHES = array();
+                        $MATCHES = [];
                         if (preg_match_all('/[^=]+/i', $RESPONSE[1], $MATCHES)) {
                             if ($MATCHES[0][0] == 'ret' && strlen($MATCHES[0][1]) == 32) {
                                 $this->write('/login', false);
@@ -132,16 +128,16 @@
                 }
                 sleep($this->delay);
             }
-            
+
             if ($this->connected) {
                 $this->debug('Connected...');
             } else {
                 $this->debug('Error...');
             }
+
             return $this->connected;
         }
-        
-        
+
         /**
          * Disconnect from RouterOS
          *
@@ -150,36 +146,35 @@
         public function disconnect()
         {
             // let's make sure this socket is still valid.  it may have been closed by something else
-            if( is_resource($this->socket) ) {
+            if (is_resource($this->socket)) {
                 fclose($this->socket);
             }
             $this->connected = false;
             $this->debug('Disconnected...');
         }
-        
-        
+
         /**
          * Parse response from Router OS
          *
-         * @param array       $response   Response data
+         * @param array $response Response data
          *
-         * @return array                  Array with parsed data
+         * @return array Array with parsed data
          */
         public function parseResponse($response)
         {
             if (is_array($response)) {
-                $PARSED      = array();
-                $CURRENT     = null;
+                $PARSED = [];
+                $CURRENT = null;
                 $singlevalue = null;
                 foreach ($response as $x) {
-                    if (in_array($x, array('!fatal','!re','!trap'))) {
+                    if (in_array($x, ['!fatal', '!re', '!trap'])) {
                         if ($x == '!re') {
-                            $CURRENT =& $PARSED[];
+                            $CURRENT = &$PARSED[];
                         } else {
-                            $CURRENT =& $PARSED[$x][];
+                            $CURRENT = &$PARSED[$x][];
                         }
                     } elseif ($x != '!done') {
-                        $MATCHES = array();
+                        $MATCHES = [];
                         if (preg_match_all('/[^=]+/i', $x, $MATCHES)) {
                             if ($MATCHES[0][0] == 'ret') {
                                 $singlevalue = $MATCHES[0][1];
@@ -188,40 +183,39 @@
                         }
                     }
                 }
-                
-                if (empty($PARSED) && !is_null($singlevalue)) {
+
+                if (empty($PARSED) && ! is_null($singlevalue)) {
                     $PARSED = $singlevalue;
                 }
-                
+
                 return $PARSED;
-            } else {
-                return array();
             }
+
+            return [];
         }
-        
-        
+
         /**
          * Parse response from Router OS
          *
-         * @param array       $response   Response data
+         * @param array $response Response data
          *
-         * @return array                  Array with parsed data
+         * @return array Array with parsed data
          */
         public function parseResponse4Smarty($response)
         {
             if (is_array($response)) {
-                $PARSED      = array();
-                $CURRENT     = null;
+                $PARSED = [];
+                $CURRENT = null;
                 $singlevalue = null;
                 foreach ($response as $x) {
-                    if (in_array($x, array('!fatal','!re','!trap'))) {
+                    if (in_array($x, ['!fatal', '!re', '!trap'])) {
                         if ($x == '!re') {
-                            $CURRENT =& $PARSED[];
+                            $CURRENT = &$PARSED[];
                         } else {
-                            $CURRENT =& $PARSED[$x][];
+                            $CURRENT = &$PARSED[$x][];
                         }
                     } elseif ($x != '!done') {
-                        $MATCHES = array();
+                        $MATCHES = [];
                         if (preg_match_all('/[^=]+/i', $x, $MATCHES)) {
                             if ($MATCHES[0][0] == 'ret') {
                                 $singlevalue = $MATCHES[0][1];
@@ -233,57 +227,57 @@
                 foreach ($PARSED as $key => $value) {
                     $PARSED[$key] = $this->arrayChangeKeyName($value);
                 }
+
                 return $PARSED;
-                if (empty($PARSED) && !is_null($singlevalue)) {
+                if (empty($PARSED) && ! is_null($singlevalue)) {
                     $PARSED = $singlevalue;
                 }
             } else {
-                return array();
+                return [];
             }
         }
-        
-        
+
         /**
          * Change "-" and "/" from array key to "_"
          *
-         * @param array       $array      Input array
+         * @param array $array Input array
          *
-         * @return array                  Array with changed key names
+         * @return array Array with changed key names
          */
         public function arrayChangeKeyName(&$array)
         {
             if (is_array($array)) {
                 foreach ($array as $k => $v) {
-                    $tmp = str_replace("-", "_", $k);
-                    $tmp = str_replace("/", "_", $tmp);
+                    $tmp = str_replace('-', '_', $k);
+                    $tmp = str_replace('/', '_', $tmp);
                     if ($tmp) {
                         $array_new[$tmp] = $v;
                     } else {
                         $array_new[$k] = $v;
                     }
                 }
+
                 return $array_new;
-            } else {
-                return $array;
             }
+
+            return $array;
         }
-        
-        
+
         /**
          * Read data from Router OS
          *
-         * @param boolean     $parse      Parse the data? default: true
+         * @param bool $parse Parse the data? default: true
          *
-         * @return array                  Array with parsed or unparsed data
+         * @return array Array with parsed or unparsed data
          */
         public function read($parse = true)
         {
-            $RESPONSE     = array();
+            $RESPONSE = [];
             $receiveddone = false;
             while (true) {
                 // Read the first byte of input which gives us some or all of the length
                 // of the remaining reply.
-                $BYTE   = ord(fread($this->socket, 1));
+                $BYTE = ord(fread($this->socket, 1));
                 $LENGTH = 0;
                 // If the first bit is set then we need to remove the first four bits, shift left 8
                 // and then read another byte in.
@@ -313,12 +307,12 @@
                 } else {
                     $LENGTH = $BYTE;
                 }
-                
-                $_ = "";
-                
+
+                $_ = '';
+
                 // If we have got more characters to read, read them in.
                 if ($LENGTH > 0) {
-                    $_      = "";
+                    $_ = '';
                     $retlen = 0;
                     while ($retlen < $LENGTH) {
                         $toread = $LENGTH - $retlen;
@@ -328,40 +322,39 @@
                     $RESPONSE[] = $_;
                     $this->debug('>>> [' . $retlen . '/' . $LENGTH . '] bytes read.');
                 }
-                
+
                 // If we get a !done, make a note of it.
-                if ($_ == "!done") {
+                if ($_ == '!done') {
                     $receiveddone = true;
                 }
-                
+
                 $STATUS = socket_get_status($this->socket);
                 if ($LENGTH > 0) {
                     $this->debug('>>> [' . $LENGTH . ', ' . $STATUS['unread_bytes'] . ']' . $_);
                 }
-                
-                if ((!$this->connected && !$STATUS['unread_bytes']) || ($this->connected && !$STATUS['unread_bytes'] && $receiveddone)) {
+
+                if ((! $this->connected && ! $STATUS['unread_bytes']) || ($this->connected && ! $STATUS['unread_bytes'] && $receiveddone)) {
                     break;
                 }
             }
-            
+
             if ($parse) {
                 $RESPONSE = $this->parseResponse($RESPONSE);
             }
-            
+
             return $RESPONSE;
         }
-        
-        
+
         /**
          * Write (send) data to Router OS
          *
-         * @param string      $command    A string with the command to send
-         * @param mixed       $param2     If we set an integer, the command will send this data as a "tag"
-         *                                If we set it to boolean true, the funcion will send the comand and finish
-         *                                If we set it to boolean false, the funcion will send the comand and wait for next command
-         *                                Default: true
+         * @param string $command A string with the command to send
+         * @param mixed  $param2  If we set an integer, the command will send this data as a "tag"
+         *                        If we set it to boolean true, the funcion will send the comand and finish
+         *                        If we set it to boolean false, the funcion will send the comand and wait for next command
+         *                        Default: true
          *
-         * @return boolean                Return false if no command especified
+         * @return bool Return false if no command especified
          */
         public function write($command, $param2 = true)
         {
@@ -372,56 +365,55 @@
                     fwrite($this->socket, $this->encodeLength(strlen($com)) . $com);
                     $this->debug('<<< [' . strlen($com) . '] ' . $com);
                 }
-                
+
                 if (gettype($param2) == 'integer') {
                     fwrite($this->socket, $this->encodeLength(strlen('.tag=' . $param2)) . '.tag=' . $param2 . chr(0));
                     $this->debug('<<< [' . strlen('.tag=' . $param2) . '] .tag=' . $param2);
                 } elseif (gettype($param2) == 'boolean') {
                     fwrite($this->socket, ($param2 ? chr(0) : ''));
                 }
-                
+
                 return true;
-            } else {
-                return false;
             }
+
+            return false;
         }
-        
-        
+
         /**
          * Write (send) data to Router OS
          *
-         * @param string      $com        A string with the command to send
-         * @param array       $arr        An array with arguments or queries
+         * @param string $com A string with the command to send
+         * @param array  $arr An array with arguments or queries
          *
-         * @return array                  Array with parsed
+         * @return array Array with parsed
          */
-        public function comm($com, $arr = array())
+        public function comm($com, $arr = [])
         {
             $count = count($arr);
-            $this->write($com, !$arr);
+            $this->write($com, ! $arr);
             $i = 0;
             if ($this->isIterable($arr)) {
                 foreach ($arr as $k => $v) {
                     switch ($k[0]) {
-                        case "?":
+                        case '?':
                             $el = "$k=$v";
                             break;
-                        case "~":
+                        case '~':
                             $el = "$k~$v";
                             break;
                         default:
                             $el = "=$k=$v";
                             break;
                     }
-                    
+
                     $last = ($i++ == $count - 1);
                     $this->write($el, $last);
                 }
             }
-            
+
             return $this->read();
         }
-        
+
         /**
          * Standard destructor
          *

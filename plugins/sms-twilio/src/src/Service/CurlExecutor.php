@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace SmsNotifier\Service;
-
 
 use SmsNotifier\Exception\CurlException;
 

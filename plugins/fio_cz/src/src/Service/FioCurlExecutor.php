@@ -43,7 +43,7 @@ class FioCurlExecutor extends CurlExecutor
         }
         $this->logger->debug('Last processed at: ',
             [
-                $lastProcessedTimestamp => $lastProcessedTimestamp ? $date : 'never'
+                $lastProcessedTimestamp => $lastProcessedTimestamp ? $date : 'never',
             ]
         );
 

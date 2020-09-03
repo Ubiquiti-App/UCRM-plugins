@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace QBExport\Facade;
-
 
 use QBExport\Data\InvoiceStatus;
 use QBExport\Exception\QBAuthorizationException;
@@ -19,8 +17,8 @@ use QuickBooksOnline\API\Exception\ServiceException;
 use QuickBooksOnline\API\Facades\Customer;
 use QuickBooksOnline\API\Facades\Invoice;
 use QuickBooksOnline\API\Facades\Item;
-use QuickBooksOnline\API\Facades\Payment;
 use QuickBooksOnline\API\Facades\Line;
+use QuickBooksOnline\API\Facades\Payment;
 
 class QuickBooksFacade
 {
@@ -104,7 +102,6 @@ class QuickBooksFacade
                     $accountsString
                 )
             );
-
         } catch (ServiceException $exception) {
             $this->invalidateTokens();
         }
@@ -421,7 +418,6 @@ class QuickBooksFacade
                         throw $response;
                     }
                     $this->handleErrorResponse($dataService);
-
                 } catch (\Exception $exception) {
                     $this->logger->error(
                         sprintf(
@@ -435,7 +431,6 @@ class QuickBooksFacade
 
             /* now look and see if part of the payment is applied to existing invoices */
             foreach ($ucrmPayment['paymentCovers'] as $paymentCovers) {
-
                 $LineObj = null;
                 $lineArray = null;
 
@@ -470,7 +465,6 @@ class QuickBooksFacade
                                 'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
                             ]
                         );
-
 
                         $response = $dataService->Add($theResourceObj);
                         if ($response instanceof IPPIntuitEntity) {
@@ -575,7 +569,6 @@ class QuickBooksFacade
                     $message ?? sprintf('Unexpected XML response: %s', $error->getResponseBody()),
                     $error->getHttpStatusCode()
                 );
-
             } catch (QBAuthorizationException $exception) {
                 throw new QBAuthorizationException($exception->getMessage());
             } catch (\Exception $exception) {
@@ -605,7 +598,6 @@ class QuickBooksFacade
 
                 $activeAccounts[$account->Id] = $account;
             }
-
         } catch (\Exception $exception) {
             $this->logger->error(
                 sprintf('Account: Getting all Accounts failed with error %s.', $exception->getMessage())

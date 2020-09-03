@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace QBExport\Service;
 
 use QBExport\Data\PluginData;

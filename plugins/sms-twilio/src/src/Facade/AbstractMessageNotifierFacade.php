@@ -38,18 +38,14 @@ abstract class AbstractMessageNotifierFacade
 
     /**
      * implement in subclass with the specific messaging provider
-     * @see TwilioNotifierFacade::sendMessage()
      *
-     * @param NotificationData $notificationData
-     * @param string $clientSmsNumber
-     * @param string $messageBody
+     * @see TwilioNotifierFacade::sendMessage()
      */
     abstract protected function sendMessage(
         NotificationData $notificationData,
         string $clientSmsNumber,
         string $messageBody
     ): void;
-
 
     /*
      * sets up the body and uses the implementation's sendMessage() to send
@@ -59,19 +55,20 @@ abstract class AbstractMessageNotifierFacade
         $clientSmsNumber = $this->smsNumberProvider->getUcrmClientNumber($notificationData);
         if (empty($clientSmsNumber)) {
             $this->logger->warning('No SMS number found for client: ' . $notificationData->clientId);
+
             return;
         }
         $messageBody = $this->messageTextFactory->createBody($notificationData);
-        if (!$messageBody) {
+        if (! $messageBody) {
             $this->logger->info('No text configured for event: ' . $notificationData->eventName);
+
             return;
         }
 
         try {
             $this->sendMessage($notificationData, $clientSmsNumber, $messageBody);
         } catch (HttpException $httpException) {
-            $this->logger->error($httpException->getCode().' '.$httpException->getMessage());
+            $this->logger->error($httpException->getCode() . ' ' . $httpException->getMessage());
         }
     }
-
 }

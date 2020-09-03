@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace UcrmRouterOs\Service;
 
 use GuzzleHttp\Client;
@@ -72,7 +71,6 @@ class UnmsApi
 
         return Json::decode((string) $response->getBody());
     }
-
 
     private function request(string $method, string $endpoint, array $options = []): Response
     {

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace QBExport\Service;
 
 class PluginDataValidator
@@ -54,6 +53,7 @@ class PluginDataValidator
         }
 
         $this->logErrors();
+
         return $valid;
     }
 

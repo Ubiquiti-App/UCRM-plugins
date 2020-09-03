@@ -6,7 +6,7 @@ namespace SmsNotifier\Service;
 
 class PluginDataValidator
 {
-     /**
+    /**
      * @var Logger
      */
     private $logger;
@@ -42,6 +42,7 @@ class PluginDataValidator
         }
 
         $this->logErrors();
+
         return $valid;
     }
 

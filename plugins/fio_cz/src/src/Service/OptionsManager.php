@@ -46,7 +46,7 @@ class OptionsManager
     {
         $oldData = $this->getDataFromJson(self::CONFIG_JSON);
         $newData = (array) $this->optionsData;
-        
+
         file_put_contents(self::CONFIG_JSON, json_encode(array_intersect_key($newData, $oldData)));
     }
 

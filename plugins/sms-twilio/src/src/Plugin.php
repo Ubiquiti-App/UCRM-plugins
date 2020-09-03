@@ -2,15 +2,13 @@
 
 declare(strict_types=1);
 
-
 namespace SmsNotifier;
-
 
 use SmsNotifier\Facade\TwilioNotifierFacade;
 use SmsNotifier\Factory\NotificationDataFactory;
+use SmsNotifier\Service\Logger;
 use SmsNotifier\Service\OptionsManager;
 use SmsNotifier\Service\PluginDataValidator;
-use SmsNotifier\Service\Logger;
 
 class Plugin
 {
@@ -89,6 +87,7 @@ class Plugin
                 }
                 if (! $notification->clientId) {
                     $this->logger->warning('No client specified, cannot notify them.');
+
                     return;
                 }
                 try {

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace SmsNotifier\Data;
 
 /*
@@ -139,5 +138,4 @@ class PluginData extends UcrmData
      * @var string
      */
     public $event_invoice_overdue;
-
 }

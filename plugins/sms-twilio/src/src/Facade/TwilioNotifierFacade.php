@@ -12,8 +12,8 @@ use SmsNotifier\Service\OptionsManager;
 use SmsNotifier\Service\SmsNumberProvider;
 use Twilio\Rest\Client;
 
-class TwilioNotifierFacade extends AbstractMessageNotifierFacade {
-
+class TwilioNotifierFacade extends AbstractMessageNotifierFacade
+{
     /** @var Client */
     private $twilioClient;
 
@@ -25,25 +25,24 @@ class TwilioNotifierFacade extends AbstractMessageNotifierFacade {
         MessageTextFactory $messageTextFactory,
         SmsNumberProvider $smsNumberProvider,
         OptionsManager $optionsManager
-    )
-    {
+    ) {
         parent::__construct($logger, $messageTextFactory, $smsNumberProvider);
         // load config data
         $this->pluginData = $optionsManager->load();
     }
-
 
     /*
      * Get Twilio SMS API object (unless it's already initialized)
      */
     public function getTwilioClient(): Client
     {
-        if (!$this->twilioClient) {
+        if (! $this->twilioClient) {
             $this->twilioClient = new Client(
                 $this->pluginData->twilioAccountSid,
                 $this->pluginData->twilioAuthToken
             );
         }
+
         return $this->twilioClient;
     }
 
@@ -54,14 +53,13 @@ class TwilioNotifierFacade extends AbstractMessageNotifierFacade {
         NotificationData $notificationData,
         string $clientSmsNumber,
         string $messageBody
-    ): void
-    {
+    ): void {
         $this->getTwilioClient()->messages->create(
             $clientSmsNumber,
-            array(
+            [
                 'from' => $this->getSenderNumber(),
-                'body' => $messageBody
-            )
+                'body' => $messageBody,
+            ]
         );
     }
 

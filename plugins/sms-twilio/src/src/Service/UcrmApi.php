@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace SmsNotifier\Service;
-
 
 use SmsNotifier\Data\PluginData;
 use SmsNotifier\Exception\CurlException;
@@ -55,7 +53,7 @@ class UcrmApi
                 'Content-Type: application/json',
                 'X-Auth-App-Key: ' . $optionsData->pluginAppKey,
             ],
-            json_encode((object)$data),
+            json_encode((object) $data),
             $this->verifyUcrmApiConnection
         );
     }
