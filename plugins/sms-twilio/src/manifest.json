@@ -169,8 +169,9 @@
     },
     {
       "key": "logging_level",
-      "label": "set logging level",
-      "description": "Make the plugin more or less verbose. Available levels: emergency, alert, critical, error, warning, notice, info (default), debug",
+      "label": "enable debug logs",
+      "description": "Make the plugin more verbose.",
+      "type": "checkbox",
       "required": 0
     }
   ]

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace SmsNotifier;
 
 
+use Psr\Log\LogLevel;
 use SmsNotifier\Facade\TwilioNotifierFacade;
 use SmsNotifier\Factory\NotificationDataFactory;
 use SmsNotifier\Service\OptionsManager;
@@ -80,7 +81,9 @@ class Plugin
     private function processHttpRequest(): void
     {
         $pluginData = $this->optionsManager->load();
-        $this->logger->setLogLevelThreshold($pluginData->logging_level);
+        if ($pluginData->logging_level) {
+            $this->logger->setLogLevelThreshold(LogLevel::DEBUG);
+        }
 
         $userInput = file_get_contents('php://input');
         if (! $userInput) {
