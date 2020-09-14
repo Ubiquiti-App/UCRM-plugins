@@ -56,13 +56,21 @@ class TwilioNotifierFacade extends AbstractMessageNotifierFacade {
         string $messageBody
     ): void
     {
-        $this->getTwilioClient()->messages->create(
+        $this->logger->debug(sprintf('Sending: %s', $messageBody));
+
+        $messageInstance = $this->getTwilioClient()->messages->create(
             $clientSmsNumber,
             array(
                 'from' => $this->getSenderNumber(),
                 'body' => $messageBody
             )
         );
+
+        $this->logger->debug((string) $messageInstance);
+        $this->logger->info(sprintf('Twilio status: %s, message id: %s',$messageInstance->status, $messageInstance->sid));
+        if ($messageInstance->errorCode) {
+            $this->logger->warning(sprintf('Twilio error: %s %s', $messageInstance->errorCode, $messageInstance->errorMessage));
+        }
     }
 
     /*
