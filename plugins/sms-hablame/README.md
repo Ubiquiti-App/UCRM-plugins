@@ -1,3 +1,5 @@
+#Extensión derivada del SMS Twilio para adaptarla a la API del servicio Háblame para Colombia y demás territorios donde aplique
+#
 # SMS Notificaciones - Hablame Colombia
 
 * Este complemento envía notificaciones por SMS a los clientes.
