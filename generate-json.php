@@ -24,6 +24,9 @@ foreach ($pluginDirectories as $directory) {
     }
     $plugin = $manifest['information'];
     $plugin['name'] = $plugin['name'] ?? sprintf('(name missing in %s manifest)', $directory->getBaseName());
+    if (in_array($plugin['name'], ['mkt-queue-sync', 'routeros-packet-manager', 'routeros-suspension'], true)) {
+        continue;
+    }
     $plugin['zipUrl'] = sprintf(
         'https://github.com/Ubiquiti-App/UCRM-plugins/raw/master/plugins/%s/%s.zip',
         $plugin['name'],
