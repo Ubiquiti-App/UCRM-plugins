@@ -161,6 +161,23 @@
             },
             "author": "Charuwts, LLC",
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/ucrm-client-signup\/ucrm-client-signup.zip"
+        },
+        {
+            "name": "ucrm-esignature-platform",
+            "displayName": "eSignature Platform - 07INTERNET.RO",
+            "description": "You can visualize and sign your contract directly on the platform.",
+            "url": "https:\/\/github.com\/matei1337\/ucrm-esignature-platform",
+            "version": "1.0.0",
+            "ucrmVersionCompliancy": {
+                "min": "2.14.0",
+                "max": null
+            },
+            "unmsVersionCompliancy": {
+                "min": "1.0.0-alpha.1",
+                "max": null
+            },
+            "author": "Matei Nicolae - Daniel",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/ucrm-esignature-platform\/ucrm-esignature-platform.zip"
         }
     ]
 }
