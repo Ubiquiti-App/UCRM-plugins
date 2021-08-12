@@ -6,10 +6,6 @@
         "description": "You can visualize and sign your contract directly on the platform.",
         "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/ucrm-esignature-platform",
         "version": "1.0.0",
-        "ucrmVersionCompliancy": {
-            "min": "2.14.0",
-            "max": null
-        },
         "unmsVersionCompliancy": {
             "min": "1.0.0-alpha.1",
             "max": null
