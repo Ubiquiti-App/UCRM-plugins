@@ -5,7 +5,7 @@
     "displayName": "Mikrotik Queue Sync Plugin",
     "description": "Plugin para sincronizar simple queues con los limites de velocidad establecidos en Ucrm - Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https://wiki.mikrotik.com/wiki/Manual:Queue",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/mkt-queue-sync",
-    "version": "2.3.0",
+    "version": "2.3.1",
     "ucrmVersionCompliancy": {
       "min": "2.15.0-beta3",
       "max": null
@@ -14,7 +14,7 @@
       "min": "1.0.0-beta2",
       "max": null
     },
-    "author": "Franco Johan Gampel - franco@gampel.com.ar"
+    "author": "Franco Gampel - plugins@franco.com.ar"
   },
   "configuration": [
     {
@@ -44,13 +44,13 @@
 	{
       "key": "burstLimitPercentage",
       "label": "Burst Limit Percentage",
-      "description": "Burst Limit Percentage calculated over service Max-Limit / Porcentaje de limite de rafaga calculado sobre el limite maximo del servicio | (If not used configure 0/Si no se utiliza configurar en 0) / Formato de Carga UU/DD (U=Upload D=Download)",
+      "description": "Burst Limit Percentage calculated over service Max-Limit / Porcentaje de limite de rafaga calculado sobre el limite maximo del servicio | (If not used configure 0/0 /Si no se utiliza configurar en 0/0) / Formato de Carga UU/DD (U=Upload D=Download)",
       "required": 1
     },
 	{
       "key": "burstTime",
       "label": "Burst Time",
-      "description": "Burst Time/Tiempo de Rafaga (If not used configure 1/Si no se utiliza configurar en 1) / Formato de Carga UU/DD (U=Upload D=Download)",
+      "description": "Burst Time/Tiempo de Rafaga (If not used configure 1/1 / Si no se utiliza configurar en 1/1) / Formato de Carga UU/DD (U=Upload D=Download)",
       "required": 1
     },
 	{

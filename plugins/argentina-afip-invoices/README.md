@@ -1,3 +1,5 @@
+# Proyecto abandonado y sin soporte por el momento
+
 # Argentina AFIP invoices
 
 Plugin para la obtención de CAE para las facturas de AFIP Argentina.

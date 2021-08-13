@@ -70,6 +70,7 @@ class Synchronizer
 		$this->routerOsApi = RouterOsApi::create($this->logger, $this->mktDevices);
 		$this->sumDownloadLimitAt = $this->sumUploadLimitAt = $this->sumDownloadVendido = $this->sumUploadVendido = 0;
 		$this->timeStamp =  new DateTime();
+		$this->ucrmUri = (new UcrmOptionsManager())->loadOptions()->ucrmPublicUrl;
 		
     }
     
@@ -213,7 +214,8 @@ class Synchronizer
 					$ucrmFormatedList[] = $ucrmService;
 					
 				} else {
-					$this->logger->appendLog('Service ID: '. $ucrmService['id'] . ' has no ip address set');
+					$checkServiceString = $this->ucrmUri . 'client/service/'. $service['id'];
+					$this->logger->appendLog('Service ID: '. $ucrmService['id'] . ' has no ip address set, check on ' . $checkServiceString);
 				}
 				}
 			}
@@ -224,7 +226,9 @@ class Synchronizer
 	private function formatUcrmListMaxLimit($ucrmServiceList): array
     {
 		foreach ($ucrmServiceList as $ucrmService){
-			$ucrmService['max-limit'] = $this->formatSpeedForMikrotik(($ucrmService['uploadSpeed'])) . '/' . $this->formatSpeedForMikrotik(($ucrmService['downloadSpeed']));
+			(isset($ucrmService['uploadSpeed'])) ? $serviceUploadSpeed = $this->formatSpeedForMikrotik(($ucrmService['uploadSpeed'])) : $serviceUploadSpeed = 0 ; //If upload speed is set use it otherwise set as 0 = unlimited
+			(isset($ucrmService['downloadSpeed'])) ? $serviceDownloadSpeed = $this->formatSpeedForMikrotik(($ucrmService['downloadSpeed'])) : $serviceDownloadSpeed = 0 ; //If download speed is set use it otherwise set as 0 = unlimited
+			$ucrmService['max-limit'] = $serviceUploadSpeed . '/' . $serviceDownloadSpeed;
 			$this->sumUploadVendido += $this->formatSpeedForMikrotik(($ucrmService['uploadSpeed']));
 			$this->sumDownloadVendido += $this->formatSpeedForMikrotik(($ucrmService['downloadSpeed']));
 			$ucrmFormatedList[] = $ucrmService;
