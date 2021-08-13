@@ -17,6 +17,23 @@
             "author": "Franco Gampel - plugins@franco.com.ar",
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/argentina-afip-invoices\/argentina-afip-invoices.zip"
         },
+		{
+           "name": "mkt-queue-sync",
+			"displayName": "Mikrotik Queue Sync Plugin",
+			"description": "Plugin para sincronizar simple queues con los limites de velocidad establecidos en Ucrm - Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https://wiki.mikrotik.com/wiki/Manual:Queue",
+			"url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/mkt-queue-sync",
+			"version": "2.3.1",
+			"ucrmVersionCompliancy": {
+			  "min": "2.15.0-beta3",
+			  "max": null
+			},
+			"unmsVersionCompliancy": {
+			  "min": "1.0.0-beta2",
+			  "max": null
+			},
+			"author": "Franco Gampel - plugins@franco.com.ar"
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/blob\/master\/plugins\/mkt-queue-sync\/mkt-queue-sync.zip"
+        },
         {
             "name": "backup-sync-dropbox",
             "displayName": "Backup synchronization - Dropbox",
