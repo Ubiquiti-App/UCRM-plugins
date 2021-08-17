@@ -1,14 +1,16 @@
 <?php
 
 use BackupSyncDropbox\Handler\BackupHandler;
+use BackupSyncDropbox\TokenProvider\DropboxTokenProvider;
 use BackupSyncDropbox\Utility\LogCleaner;
 use BackupSyncDropbox\Utility\Logger;
 use BackupSyncDropbox\Utility\NmsSettings;
+use BackupSyncDropbox\Utility\Strings;
 use DI\ContainerBuilder;
 use League\Flysystem\Filesystem;
 use Psr\Log\LoggerInterface;
-use Srmklive\Dropbox\Adapter\DropboxAdapter;
-use Srmklive\Dropbox\Client\DropboxClient;
+use Spatie\Dropbox\Client;
+use Spatie\FlysystemDropbox\DropboxAdapter;
 use Ubnt\UcrmPluginSdk\Service\PluginConfigManager;
 use Ubnt\UcrmPluginSdk\Service\PluginLogManager;
 use Ubnt\UcrmPluginSdk\Service\UcrmApi;
@@ -20,43 +22,40 @@ $pluginLogManager = PluginLogManager::create();
 $logger = new Logger($pluginLogManager);
 
 $configManager = PluginConfigManager::create();
-$config = $configManager->loadConfig();
 
-$dropboxAccessToken = $config['dropboxAccessToken'] ?? null;
-if (! is_string($dropboxAccessToken)) {
-    $logger->error('Provided Dropbox access token is invalid.');
-
-    exit(1);
-}
-
-$unmsApiToken = $config['unmsApiToken'] ?? null;
+$unmsApiToken = Strings::trimNonEmpty($configManager->loadConfig()['unmsApiToken'] ?? null);
 if (! is_string($unmsApiToken)) {
     $logger->error('Provided UNMS API token is invalid.');
 
     exit(1);
 }
 
-$client = new DropboxClient($config['dropboxAccessToken']);
-$adapter = new DropboxAdapter($client);
-$filesystem = new Filesystem($adapter, ['case_sensitive' => false]);
+try {
+    $client = new Client(new DropboxTokenProvider($pluginLogManager, $configManager));
 
-$builder = new ContainerBuilder();
-$builder->addDefinitions(
-    [
-        Filesystem::class => $filesystem,
-        UnmsApi::class => UnmsApi::create($unmsApiToken),
-        UcrmApi::class => UcrmApi::create(),
-        PluginLogManager::class => $pluginLogManager,
-        LoggerInterface::class => $logger,
-    ]
-);
-$container = $builder->build();
+    $adapter = new DropboxAdapter($client);
+    $filesystem = new Filesystem($adapter, ['case_sensitive' => false]);
 
-// set default timezone based on UNMS settings
-date_default_timezone_set($container->get(NmsSettings::class)->getTimeZone()->getName());
+    $builder = new ContainerBuilder();
+    $builder->addDefinitions(
+        [
+            Filesystem::class => $filesystem,
+            UnmsApi::class => UnmsApi::create($unmsApiToken),
+            UcrmApi::class => UcrmApi::create(),
+            PluginLogManager::class => $pluginLogManager,
+            LoggerInterface::class => $logger,
+        ]
+    );
+    $container = $builder->build();
 
-// cleanup plugin log
-$container->get(LogCleaner::class)->clean();
+    // set default timezone based on UNMS settings
+    date_default_timezone_set($container->get(NmsSettings::class)->getTimeZone()->getName());
 
-// initiate sync
-$container->get(BackupHandler::class)->sync();
+    // cleanup plugin log
+    $container->get(LogCleaner::class)->clean();
+
+    // initiate sync
+    $container->get(BackupHandler::class)->sync();
+} catch (\Throwable $throwable) {
+    $logger->error($throwable->getMessage());
+}
