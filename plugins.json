@@ -22,7 +22,7 @@
             "displayName": "Backup synchronization - Dropbox",
             "description": "This plugin handles synchronization of your UNMS backups to a Dropbox folder.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/backup-sync-dropbox",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "unmsVersionCompliancy": {
                 "min": "1.0.0",
                 "max": null
@@ -82,23 +82,6 @@
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/kmz-map\/kmz-map.zip"
         },
         {
-            "name": "mkt-queue-sync",
-            "displayName": "Mikrotik Queue Sync Plugin",
-            "description": "Plugin para sincronizar simple queues con los limites de velocidad establecidos en Ucrm - Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https:\/\/wiki.mikrotik.com\/wiki\/Manual:Queue",
-            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/mkt-queue-sync",
-            "version": "2.2.1",
-            "ucrmVersionCompliancy": {
-                "min": "2.15.0-beta3",
-                "max": null
-            },
-            "unmsVersionCompliancy": {
-                "min": "1.0.0-beta2",
-                "max": null
-            },
-            "author": "Franco Johan Gampel - franco@gampel.com.ar",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/mkt-queue-sync\/mkt-queue-sync.zip"
-        },
-        {
             "name": "packetlogic-packet-manager",
             "displayName": "PacketLogic Packet Manager",
             "description": "UCRM Plugin that synchronizes customers with Procera Networks PacketLogic system.",
@@ -133,7 +116,7 @@
             "displayName": "Revenue report",
             "description": "Grids and charts showing organization's revenue grouped by products or services. Shown in the Reporting main menu section.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/revenue-report",
-            "version": "1.1.3",
+            "version": "1.1.4",
             "ucrmVersionCompliancy": {
                 "min": "2.14.0-beta4",
                 "max": null
@@ -146,41 +129,11 @@
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/revenue-report\/revenue-report.zip"
         },
         {
-            "name": "routeros-packet-manager",
-            "displayName": "RouterOS Packet Manager",
-            "description": "This plugin allows using Mikrotik as a packet manager",
-            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/routeros-packet-manager",
-            "version": "1.0.8",
-            "ucrmVersionCompliancy": {
-                "min": "2.10.0-beta1",
-                "max": null
-            },
-            "author": "Shaun Wilkinson",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/routeros-packet-manager\/routeros-packet-manager.zip"
-        },
-        {
-            "name": "routeros-suspension",
-            "displayName": "Mikrotik RouterOS - suspension",
-            "description": "Plugin for handling suspension on RouterOS devices.",
-            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/routeros-suspension",
-            "version": "1.1.0",
-            "ucrmVersionCompliancy": {
-                "min": "2.99.99",
-                "max": null
-            },
-            "unmsVersionCompliancy": {
-                "min": "1.0.0-dev",
-                "max": null
-            },
-            "author": "Ubiquiti Inc.",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/routeros-suspension\/routeros-suspension.zip"
-        },
-        {
             "name": "sms-twilio",
             "displayName": "SMS notifications via Twilio",
             "description": "This plugin sends SMS notifications via Twilio. NOTE: only phone numbers in the international format can be used, e.g. +155 555 1234",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/sms-twilio",
-            "version": "1.0.8",
+            "version": "1.0.10",
             "ucrmVersionCompliancy": {
                 "min": "2.14.0-beta",
                 "max": null

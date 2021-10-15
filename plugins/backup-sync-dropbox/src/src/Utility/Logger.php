@@ -34,7 +34,7 @@ final class Logger implements LoggerInterface
                 '%s%s (%s)',
                 $level,
                 $message,
-                (new \DateTimeImmutable())->format(\DateTimeImmutable::ATOM)
+                (new \DateTimeImmutable())->format(\DateTimeInterface::ATOM)
             )
         );
     }

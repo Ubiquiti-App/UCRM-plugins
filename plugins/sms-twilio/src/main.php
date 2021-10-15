@@ -4,7 +4,7 @@ chdir(__DIR__);
 
 require 'vendor/autoload.php';
 
-(function () {
+(static function () {
     $builder = new \DI\ContainerBuilder();
     $builder->setDefinitionCache(new \Doctrine\Common\Cache\ApcuCache());
     $container = $builder->build();
@@ -14,6 +14,6 @@ require 'vendor/autoload.php';
     } catch (Exception $e) {
         $logger = new \SmsNotifier\Service\Logger();
         $logger->error($e->getMessage());
-        $logger->warning($e->getTraceAsString());
+        $logger->debug($e->getTraceAsString());
     }
 })();

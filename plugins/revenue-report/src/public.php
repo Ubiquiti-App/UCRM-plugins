@@ -34,19 +34,26 @@ if (
     && array_key_exists('until', $_GET)
     && is_string($_GET['until'])
 ) {
+    $trimNonEmpty = static function (string $value): ?string {
+        $value = trim($value);
+
+        return $value === '' ? null : $value;
+    };
+
     $parameters = [
-        'organizationId' => $_GET['organization'],
-        'createdDateFrom' => $_GET['since'],
-        'createdDateTo' => $_GET['until'],
+        'organizationId' => $trimNonEmpty((string) $_GET['organization']),
+        'createdDateFrom' => $trimNonEmpty((string) $_GET['since']),
+        'createdDateTo' => $trimNonEmpty((string) $_GET['until']),
         'status' => [1, 2, 3], // 1 = Unpaid, 2 = Partially paid, 3 = Paid
     ];
+    $parameters = array_filter($parameters);
 
     // make sure the dates are in YYYY-MM-DD format
-    if ($parameters['createdDateFrom']) {
+    if (($parameters['createdDateFrom'] ?? null) !== null) {
         $parameters['createdDateFrom'] = new \DateTimeImmutable($parameters['createdDateFrom']);
         $parameters['createdDateFrom'] = $parameters['createdDateFrom']->format('Y-m-d');
     }
-    if ($parameters['createdDateTo']) {
+    if (($parameters['createdDateTo'] ?? null) !== null) {
         $parameters['createdDateTo'] = new \DateTimeImmutable($parameters['createdDateTo']);
         $parameters['createdDateTo'] = $parameters['createdDateTo']->format('Y-m-d');
     }
@@ -90,9 +97,9 @@ if (
     $result = [
         'servicePlans' => array_values($servicePlansMap),
         'currency' => $currency['code'],
-        'organization' => $parameters['organizationId'],
-        'since' => $parameters['createdDateFrom'],
-        'until' => $parameters['createdDateTo'],
+        'organization' => $parameters['organizationId'] ?? null,
+        'since' => $parameters['createdDateFrom'] ?? null,
+        'until' => $parameters['createdDateTo'] ?? null,
     ];
 }
 

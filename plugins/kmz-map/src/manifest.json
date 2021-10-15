@@ -44,13 +44,13 @@
     {
         "key": "HYPER_LINK_LINK_ONE",
         "label": "Link One",
-        "description": "Display a button on the left. Syntax is Link|Title And you can use | in the Title after the first |. Example: https://www.charuwts.com/plugins | Signup Now!",
+        "description": "Display a button on the left. Syntax is Link|Title And you can use | in the Title after the first",
         "required": 0
     },
     {
         "key": "HYPER_LINK_LINK_TWO",
         "label": "Link Two",
-        "description": "Display a button on the right. Syntax is Link|Title And you can use | in the Title after the first |. Example: https://www.charuwts.com/contact | Request for your area!",
+        "description": "Display a button on the right. Syntax is Link|Title And you can use | in the Title after the first",
         "required": 0
     }
   ]

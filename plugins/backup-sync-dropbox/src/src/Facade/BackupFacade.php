@@ -35,20 +35,20 @@ final class BackupFacade
 
     public function upload(UnmsBackup $unmsBackup): void
     {
-        if ($this->filesystem->has($unmsBackup->filename)) {
+        if ($this->filesystem->fileExists($unmsBackup->filename)) {
             $this->logger->info(sprintf('Skipping file "%s", already exists.', $unmsBackup->filename));
 
             return;
         }
 
-        $this->filesystem->put($unmsBackup->filename, $this->unmsApi->get(sprintf('nms/backups/%s', $unmsBackup->id)));
+        $this->filesystem->write($unmsBackup->filename, $this->unmsApi->get(sprintf('nms/backups/%s', $unmsBackup->id)));
 
         $this->logger->info(sprintf('Uploaded file "%s".', $unmsBackup->filename));
     }
 
     public function deleteExcept(array $filenames): void
     {
-        $existing = $this->filesystem->listContents();
+        $existing = $this->filesystem->listContents('');
 
         foreach ($existing as $item) {
             if (

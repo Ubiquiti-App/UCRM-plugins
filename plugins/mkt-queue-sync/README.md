@@ -28,6 +28,15 @@ Por ejemplo para limit At 20% de Subida y 50% de Bajada, la configuracion seria:
 * The values settings for Burst Limit Percentage, Burst Time y Limit At %, should be set in format UU/DD (Where UU is the Upload value and DD is Download)
 For example for a limit-At 20% for upload and 50% for download, setting should be: 20/50
 
+** This version handles multiple devices / Esta version puede manejar multiples dispositivos:
+* Para hacer una sincronizacion selectiva (IP xxx sincronizar con Mikrotik yyy) se debe generar un address list llamado sync_with_ucrm, conteniendo todas las ip's o rangos de IP que se desean sincronizar con este equipo.
+* To do a selective sync (IP xxx sync with Mikrotik yyy) you must create an address-list called sync_with_ucrm, which should contain the ip's or ip ranges to sync with that Mikrotik
+
+* This version could be automatically executed by webhooks, you should create a webhook with url: http://localhost/crm/_plugins/mkt-queue-sync/public.php and Webhook event type: service.edit
+* Esta version es compatible con ejecucion automatica a traves de webhooks, se debe crear un webhook con url: http://localhost/crm/_plugins/mkt-queue-sync/public.php y tipo de eventos webhook: service.edit
+
+** Existe una version PRO del complemento disponible a demanda, la cual maneja suspension, eliminacion automatica de colas/address-list relacionadas a servicios finalizados y creacion de address-list relacionadas a los planes de servicios (Solo contactame!!)
+** A PRO version of the plugin is available on demand which handles Suspend feature for multiple devices, autoremove feature to remove queues/address-list for terminated services and creation of address-list with service-plans. (Just contact me!!)
 
 ** Al usar UNMS V1 o superior, se debe de crear una clave API en UNMS -> Settings -> Users, esta clave API debera ser cargada en la configuracion del plugin.
 Tambien debe ser cargada su rango de red en la seccion Network del UNMS.
@@ -37,6 +46,6 @@ Also your network should be loaded in the UNMS Network section.
 
 ***Si te gusto mi trabajo o te ha sido de utilidad y crees que me merezco un cafe https://www.paypal.me/fgampel*** 
 
-***If you like the script or it helped you out and think I deserve a coffee https://www.paypal.me/fgampel***
+***If you like the script or it helped you out and you think I deserve a coffee https://www.paypal.me/fgampel***
 
 [Mikrotik Queue Wiki](https://wiki.mikrotik.com/wiki/Manual:Queue)

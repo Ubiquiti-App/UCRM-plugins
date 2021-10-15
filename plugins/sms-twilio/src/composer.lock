@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3a2de50c9efbc0034e3f2353eca8f74c",
+    "content-hash": "3e0fde262922cbd6ec84826015fbc8d4",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -35,6 +35,7 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
+            "abandoned": "psr/container",
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
