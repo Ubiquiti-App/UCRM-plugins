@@ -5,7 +5,7 @@
         "displayName": "Backup synchronization - Dropbox",
         "description": "This plugin handles synchronization of your UNMS backups to a Dropbox folder.",
         "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/backup-sync-dropbox",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "unmsVersionCompliancy": {
             "min": "1.0.0",
             "max": null
@@ -20,10 +20,34 @@
             "required": 1
         },
         {
+            "key": "dropboxAppKey",
+            "label": "Dropbox App key",
+            "description": "You can get Dropbox App key in the Dropbox App console, see readme for more information.",
+            "required": 0
+        },
+        {
+            "key": "dropboxAppSecret",
+            "label": "Dropbox App secret",
+            "description": "You can get Dropbox App secret in the Dropbox App console, see readme for more information.",
+            "required": 0
+        },
+        {
+            "key": "dropboxAccessCode",
+            "label": "Dropbox Access Code",
+            "description": "After the plugin runs for the first time, you will get a setup URL in the plugin log. To finish setup, you must go to the URL, allow access to the application and enter the generated Access Code into this field.",
+            "required": 0
+        },
+        {
+            "key": "dropboxRefreshToken",
+            "label": "Dropbox refresh token",
+            "description": "Refresh token will be loaded automatically after you enter the Access Code and the execute the plugin. You don't need to provide it.",
+            "required": 0
+        },
+        {
             "key": "dropboxAccessToken",
-            "label": "Dropbox access token",
-            "description": "You can get Dropbox access token in the Dropbox App console, see readme for more information.",
-            "required": 1
+            "label": "Dropbox access token (legacy)",
+            "description": "Long-lived access tokens are deprecated and will stop working at some point. See readme for migration instructions.",
+            "required": 0
         }
     ]
 }
