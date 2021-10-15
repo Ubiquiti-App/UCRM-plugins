@@ -122,8 +122,8 @@ Contains information describing the plugin.
 - `url` - link to the plugin page
 - `version` - version of the plugin as displayed on CRM frontend
 - `ucrmVersionCompliancy` - defines minimum and maximum version of UCRM this plugin supports, minimum must be always defined, maximum can be `null`
-- `unmsVersionCompliancy` - works the same as `ucrmVersionCompliancy` and is required for plugins to work since UNMS 1.0 (integrated version)
-    - If you want to support both UCRM 2.x and UNMS 1.x, you can include both `ucrmVersionCompliancy` and `unmsVersionCompliancy` in your manifest. If you want to support only UNMS 1.0 (integrated version), do **not** include `ucrmVersionCompliancy` in your manifest.
+- `unmsVersionCompliancy` - works the same as `ucrmVersionCompliancy` and is required for plugins to work since UISP 1.0 (formerly UNMS integrated version)
+    - If you want to support both UCRM 2.x and UISP 1.x, you can include both `ucrmVersionCompliancy` and `unmsVersionCompliancy` in your manifest. If you want to support only UISP 1.0 (integrated version), do **not** include `ucrmVersionCompliancy` in your manifest.
 - `author` - author of the plugin as displayed on CRM frontend
 
 ### configuration
@@ -168,7 +168,7 @@ Contains an array of items. Each item is defined as follows:
 *Note: The target pages should typically be protected to be available only to authorized clients or admins. Read [this](security.md)  for details.*
 
 ### widgets
-*Note: This feature is available since UNMS 1.0.0-beta7*
+*Note: This feature is available since UISP (formerly UNMS) 1.0.0-beta7*
 
 Adds iframe widgets showing the plugin's public page to specified positions.
 
@@ -187,7 +187,7 @@ Contains an array of items. Each item is defined as follows:
 *Note: The target pages should typically be protected to be available only to authorized clients or admins. Read [this](security.md)  for details.*
 
 ### paymentButton
-*Note: This feature is available since UNMS 1.0.0-beta7*
+*Note: This feature is available since UISP (formerly UNMS) 1.0.0-beta7*
 
 Add payment button to one-time online payment page.
 - `label` - required, label of the payment button <sup>[1]</sup>
