@@ -1,7 +1,7 @@
 # KMZ Map
 A [UCRM plugin](https://github.com/Ubiquiti-App/UCRM-plugins) that provides a frontend Google Map for clients to view tower coverage.
 
-_Developed by Charuwts, LLC
+_Developed by Charuwts, LLC_
 
 When installed onto UCRM the plugin public URL will display a Map and two optional links.
 
@@ -19,5 +19,3 @@ If you use a UBNT device you can generate a KMZ file using the airLink simulatio
 - *Form Description:* Displayed below logo. (Can contain HTML)
 - *Link 1:* Display a button on the left. Syntax is Link|Title And you can use | in the Title after the first
 - *Link 2:* Display a button on the right. Syntax is Link|Title And you can use | in the Title after the first
-
-### Screenshot:
