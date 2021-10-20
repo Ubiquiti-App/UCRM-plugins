@@ -27,6 +27,9 @@ class NotificationData
     /** @var int|null */
     public $entityId;
 
+    /** @var string|null */
+    public $message;
+
     /** @var int|null */
     public $clientId;
 

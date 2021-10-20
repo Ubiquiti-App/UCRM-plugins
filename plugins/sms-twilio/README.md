@@ -87,6 +87,7 @@ Client variables are replaced always; payment invoice and service only with the 
 * `%%client.avatarColor%%` => '#e53935'
 * `%%client.addressGpsLat%%` => 37.401482000001
 * `%%client.addressGpsLon%%` => -121.966545
+*`%%client.message%%` => 'This is an example message sent from the Messaging feature.'
 
 ### Invoice variables
 * `%%invoice.id%%` => 4

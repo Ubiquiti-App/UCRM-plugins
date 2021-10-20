@@ -170,7 +170,7 @@
     {
       "key": "event_client_message",
       "label": "client.message",
-      "description": "Example: Message for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "description": "Example: Message for client %%client.companyName%%%%client.firstName%% %%client.lastName%%: %%client.message%%.",
       "required": 0
     },
     {
