@@ -26,7 +26,7 @@ class PluginData extends UcrmData
     /**
      * @var string
      */
-    public $qbIncomeAccountNumber;
+    public $qbIncomeAccountName;
 
     /**
      * @var string
@@ -87,6 +87,11 @@ class PluginData extends UcrmData
      * @var string
      */
     public $displayedErrors;
+
+    /**
+     * @var string|null
+     */
+    public $itemNameFormat;
 
     /**
      * @var string|null
