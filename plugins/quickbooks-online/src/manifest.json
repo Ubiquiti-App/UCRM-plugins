@@ -36,15 +36,21 @@
       "required": 1
     },
     {
+      "key": "qbIncomeAccountNumber",
+      "label": "Income account ID",
+      "description": "Income Account ID from QuickBooks. Enter 0 here if you are using \"Income account name\" below",
+      "required": 1
+    },
+    {
       "key": "qbIncomeAccountName",
       "label": "Income account name",
-      "description": "Income Account name from QuickBooks",
-      "required": 1
+      "description": "Income Account name from QuickBooks. This will only be used if \"Income account number\" above is 0",
+      "required": 0
     },
     {
       "key": "itemNameFormat",
       "label": "Item Name Format String",
-      "description": "Optional format string to generate QB item names derived from UCRM item type.",
+      "description": "Optional format string to generate QB item names derived from UCRM item type. Can be typically set to something like \"YourWisp %s\" or \"UCRM %s\" to end up with items named \"UCRM service\", \"UCRM product\" etc..",
       "required": 0
     },
     {

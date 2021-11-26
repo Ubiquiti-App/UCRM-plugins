@@ -26,6 +26,11 @@ class PluginData extends UcrmData
     /**
      * @var string
      */
+    public $qbIncomeAccountNumber;
+
+    /**
+     * @var string
+     */
     public $qbIncomeAccountName;
 
     /**

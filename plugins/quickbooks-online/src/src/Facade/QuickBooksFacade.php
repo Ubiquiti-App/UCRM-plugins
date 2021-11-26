@@ -242,42 +242,23 @@ class QuickBooksFacade
         $pluginData = $this->optionsManager->load();
         $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
 
+		if ($pluginData->qbIncomeAccountNumber == 0)
+            $query = sprintf('SELECT * FROM Account WHERE AccountType = \'Income\' AND Name = \'%s\'', $pluginData->qbIncomeAccountName);
+        else
+            $query = sprintf('SELECT * FROM Account WHERE AccountType = \'Income\' AND Id = \'%s\'', $pluginData->qbIncomeAccountNumber);
+            
 	usleep($this->qbApiDelay);
-        $account = $dataService->Query(
-            sprintf('SELECT * FROM Account WHERE AccountType = \'Income\' AND Name = \'%s\'', $pluginData->qbIncomeAccountName)
-        );
+        $account = $dataService->Query($query);
         if ($account) {
-            $ACCOUNT = json_decode(json_encode($account), true);
-            $qbIncomeAccountNumber = $ACCOUNT[0]['Id'];
+            $ACCOUNT = json_decode(json_encode($account),true);
+            $qbIncomeAccountId = $ACCOUNT[0]['Id'];
+            $qbIncomeAccountName = $ACCOUNT[0]['Name'];
 
-            $this->logger->info(sprintf('Found Income account "%s" (number %s) set in the plugin config', $pluginData->qbIncomeAccountName, $qbIncomeAccountNumber));
+            $this->logger->info("Found Income account \"$qbIncomeAccountName\" (ID $qbIncomeAccountId) set in the plugin config");
         } else {
-            $qbIncomeAccountNumber = -1;
-            $this->logger->error(sprintf('Unable to find Income account "%s" set in the plugin config', $pluginData->qbIncomeAccountName));
+            $this->logger->error("Unable to find Income account (ID {$pluginData->qbIncomeAccountNumber}, Name {$pluginData->qbIncomeAccountName}) set in the plugin config");
             return;
-	}
-
-/*
-        $activeAccounts = $this->getAccounts();
-
-        if (! array_key_exists((int) $qbIncomeAccountNumber, $activeAccounts)) {
-            $accountsString = '';
-            foreach ($activeAccounts as $account) {
-                $accountsString .= 'Account:' . $account->Name . ' ID: ' . $account->Id . PHP_EOL;
-            }
-
-            $this->logger->info(
-                sprintf(
-                    'Income account "%s" (number %s) set in the plugin config does not exist in QB or is not active. Active accounts:\n %s',
-                    $pluginData->qbIncomeAccountName,
-                    $qbIncomeAccountNumber,
-                    $accountsString
-                )
-            );
-
-            return;
-        }
-*/
+	    }
 
 	if($this->qbTaxesCanadaQuebec) {
 	        usleep($this->qbApiDelay);
@@ -343,7 +324,7 @@ class QuickBooksFacade
                 $qbItem = $this->createQBLineFromItem(
                     $dataService,
                     $item,
-                    (int) $qbIncomeAccountNumber,
+                    (int)$qbIncomeAccountId,
                     $pluginData->itemNameFormat
                 );
                 if ($qbItem) {
