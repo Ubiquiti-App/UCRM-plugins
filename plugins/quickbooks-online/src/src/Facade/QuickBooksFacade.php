@@ -469,7 +469,7 @@ class QuickBooksFacade
                             ],
                             'TotalAmt' => $ucrmPayment['creditAmount'],
                             'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
-                            'PrivateNote' => sprintf('UCRMID-%s', $ucrmPayment['id']),
+                            'PaymentRefNum' => $ucrmPayment['note'],
                         ]
                     );
 	                $this->pauseIfNeeded();
@@ -544,7 +544,7 @@ class QuickBooksFacade
                                 'TotalAmt' => $ucrmPayment['amount'],
                                 'Line' => $lineArray,
                                 'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
-                                'PrivateNote' => sprintf('UCRMID-%s covers invoiceId %d', $ucrmPayment['id'], $paymentCovers['invoiceId']),
+                                'PaymentRefNum' => $ucrmPayment['note'],
                             ]
                         );
 
