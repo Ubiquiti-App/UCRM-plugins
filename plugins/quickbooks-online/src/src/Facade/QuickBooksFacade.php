@@ -44,6 +44,11 @@ class QuickBooksFacade
      */
     private $ucrmApi;
 
+    /**
+     * @var float|int
+     */
+    private $qbApiDelay = 70 * 1000;
+
     public function __construct(
         DataServiceFactory $dataServiceFactory,
         Logger $logger,
@@ -54,7 +59,6 @@ class QuickBooksFacade
         $this->logger = $logger;
         $this->optionsManager = $optionsManager;
         $this->ucrmApi = $ucrmApi;
-        $this->qbApiDelay = 150*1000;
         $this->qbTaxesUS = 1;
         $this->qbTaxesCanadaQuebec = 0;
     }
@@ -133,7 +137,7 @@ class QuickBooksFacade
                 continue;
             }
 
-	    usleep($this->qbApiDelay);
+            $this->pauseIfNeeded();
             $entities = $dataService->Query(
                 sprintf('SELECT * FROM Customer WHERE DisplayName LIKE \'%% (UCRMID-%d)\'', $ucrmClient['id'])
             );
@@ -176,7 +180,7 @@ class QuickBooksFacade
                 ];
 
                 try {
-                    usleep($this->qbApiDelay);
+                    $this->pauseIfNeeded();
                     $response = $dataService->Add(Customer::create($customerData));
                     if ($response instanceof IPPIntuitEntity) {
                         $this->logger->info(
@@ -242,12 +246,12 @@ class QuickBooksFacade
         $pluginData = $this->optionsManager->load();
         $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
 
-		if ($pluginData->qbIncomeAccountNumber == 0)
+        if ($pluginData->qbIncomeAccountNumber == 0)
             $query = sprintf('SELECT * FROM Account WHERE AccountType = \'Income\' AND Name = \'%s\'', $pluginData->qbIncomeAccountName);
         else
             $query = sprintf('SELECT * FROM Account WHERE AccountType = \'Income\' AND Id = \'%s\'', $pluginData->qbIncomeAccountNumber);
-            
-	usleep($this->qbApiDelay);
+
+        $this->pauseIfNeeded();
         $account = $dataService->Query($query);
         if ($account) {
             $ACCOUNT = json_decode(json_encode($account),true);
@@ -296,7 +300,7 @@ class QuickBooksFacade
 
             $this->logger->info(sprintf('Export of invoice ID %s started.', $ucrmInvoice['id']));
 
-	    usleep($this->qbApiDelay);
+	    	$this->pauseIfNeeded();
             $invoice = $dataService->Query(
                     sprintf('SELECT * FROM INVOICE WHERE DOCNUMBER = \'%s/%s\'', $ucrmInvoice['number'], $ucrmInvoice['id'])
                 );
@@ -307,7 +311,6 @@ class QuickBooksFacade
                 continue;
             }
 
-	    usleep($this->qbApiDelay);
             $qbClient = $this->getQBClient($dataService, $ucrmInvoice['clientId']);
 
             if (! $qbClient) {
@@ -320,7 +323,6 @@ class QuickBooksFacade
             $lines = [];
             $TaxCode = 'NON';
             foreach ($ucrmInvoice['items'] as $item) {
-	    	usleep($this->qbApiDelay);
                 $qbItem = $this->createQBLineFromItem(
                     $dataService,
                     $item,
@@ -390,7 +392,7 @@ class QuickBooksFacade
 			sprintf('%s/%s', $ucrmInvoice['number'], $ucrmInvoice['id']), $ucrmInvoice['dueDate'], $ucrmInvoice['total'], $TaxCode));
 	        //$this->logger->info(print_r($ucrmInvoice, true));
 	        //$this->logger->info(print_r($lines, true));
-	        usleep($this->qbApiDelay);
+	        	$this->pauseIfNeeded();
                 if($this->qbTaxesUS) {
                 $response = $dataService->Add(
                     Invoice::create(
@@ -483,7 +485,6 @@ class QuickBooksFacade
 
             $this->logger->info(sprintf('Payment ID: %s needs to be exported, creditAmount=%s amount=%s createdDate=%s', $ucrmPayment['id'], $ucrmPayment['creditAmount'], $ucrmPayment['amount'], $ucrmPayment['createdDate']));
 
-	    usleep($this->qbApiDelay);
             $qbClient = $this->getQBClient($dataService, $ucrmPayment['clientId']);
 
             if (! $qbClient) {
@@ -513,7 +514,7 @@ class QuickBooksFacade
                             'PrivateNote' => sprintf('UCRMID-%s creditAmount', $ucrmPayment['id']),
                         ]
                     );
-	            usleep($this->qbApiDelay);
+	            	$this->pauseIfNeeded();
                     $response = $dataService->Add($theResourceObj);
                     if ($response instanceof IPPIntuitEntity) {
                         $this->logger->info(
@@ -560,7 +561,7 @@ class QuickBooksFacade
                     $this->logger->info(print_r($ucrmPayment, true));
                     continue;
                 }
-	        usleep($this->qbApiDelay);
+	        	$this->pauseIfNeeded();
                 $invoices = $dataService->Query(
                     sprintf('SELECT * FROM INVOICE WHERE DOCNUMBER LIKE \'%%/%d\'', $paymentCovers['invoiceId'])
                 );
@@ -595,7 +596,7 @@ class QuickBooksFacade
 
                         $this->logger->info(sprintf('applying payment to Invoice %s TxnId %s TotalAmt=%s', $INVOICES[0]['DocNumber'], $INVOICES[0]['Id'], $ucrmPayment['amount']));
 
-	                usleep($this->qbApiDelay);
+	                	$this->pauseIfNeeded();
                         $response = $dataService->Add($theResourceObj);
                         if ($response instanceof IPPIntuitEntity) {
                             $this->logger->info(
@@ -633,6 +634,34 @@ class QuickBooksFacade
             $pluginData->lastExportedPaymentID = $ucrmPayment['id'];
             $this->optionsManager->update();
         }
+    }
+
+    /**
+     * @var DateTime
+     */
+    private $lastCall;
+
+    /**
+     * This function is called before most QB api queries because QB has some limits in how many calls can be
+     * made per minute. See <a href="https://developer.intuit.com/app/developer/qbo/docs/learn/rest-api-features#limits-and-throttles">this link</a>.
+     */
+    private function pauseIfNeeded() {
+        if ($this->lastCall === NULL)
+            $this->lastCall = date_create();
+
+        $callsBeforeWait = 450;
+        if ($this->lastCall->getTimestamp() < (date_create()->getTimestamp() - 60))
+            // reset query run count because qb limit is per minute and there has been no call for more than a minute
+            $this->queryRunCount = 0;
+        elseif ($this->queryRunCount >= $callsBeforeWait) {
+            $this->queryRunCount = 0;
+            $waitSeconds = $this->qbApiDelay / 1000;
+            $this->logger->notice("Now waiting $waitSeconds to run next QB api call because there were at least $callsBeforeWait calls in the last minute");
+            usleep($this->qbApiDelay);
+        }
+
+        $this->queryRunCount++;
+        $this->lastCall = date_create();
     }
 
     private function getQBClient(DataService $dataService, int $ucrmClientId)
