@@ -396,6 +396,7 @@ class QuickBooksFacade
                     }
 
                     $this->handleErrorResponse($dataService);
+                    break;
                 } catch (\Exception $exception) {
                     $this->logger->error(
                         sprintf(
@@ -627,7 +628,9 @@ class QuickBooksFacade
                 $customers = $dataService->Query(
                     sprintf('SELECT * FROM Customer WHERE DisplayName LIKE \'%%(UCRMID-%d)\'', $ucrmClientId)
                 );
+                break;
             } catch (\Exception $e) {
+                $this->logger->error("Could not get customer from QBO; id $ucrmClientId; error {$e->getMessage()}");
                 $tryCount++;
                 if ($tryCount < $tryNumber)
                     usleep(10 * 1000); // wait before trying again
@@ -660,9 +663,11 @@ class QuickBooksFacade
         do {
             try {
                 $this->pauseIfNeeded();
+                $this->logger->info("Get item \"$itemName\" from QBO");
                 $response = $dataService->Query("SELECT * FROM Item WHERE Name = '$itemName'");
                 break;
             } catch (\Exception $e) {
+                $this->logger->error("Trying to get item $itemName from QBO: {$e->getMessage()}");
                 $tryCount++;
                 if ($tryCount < $tryNumber)
                     usleep(10 * 1000); // wait before retry
@@ -678,6 +683,7 @@ class QuickBooksFacade
         do {
             try {
                 $this->pauseIfNeeded();
+                $this->logger->info("Adding new item into QBO: \"$itemName\"");
                 $response = $dataService->Add(
                     Item::create(
                         [
