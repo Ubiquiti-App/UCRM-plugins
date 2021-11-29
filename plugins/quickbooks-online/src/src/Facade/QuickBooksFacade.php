@@ -243,8 +243,6 @@ class QuickBooksFacade
             $ACCOUNT = json_decode(json_encode($account),true);
             $qbIncomeAccountId = $ACCOUNT[0]['Id'];
             $qbIncomeAccountName = $ACCOUNT[0]['Name'];
-
-            $this->logger->info("Found Income account \"$qbIncomeAccountName\" (ID $qbIncomeAccountId) set in the plugin config");
         } else {
             $this->logger->error("Unable to find Income account (ID {$pluginData->qbIncomeAccountNumber}, Name {$pluginData->qbIncomeAccountName}) set in the plugin config");
             return;
@@ -298,7 +296,6 @@ class QuickBooksFacade
             foreach ($ucrmInvoice['items'] as $item) {
                 $qbItem = $itemCache[$item['label']];
                 if (! $qbItem) {
-                    $this->logger->debug("Item \"{$item['label']}\" not cached, getting from QBO");
                     $qbItem = $this->createQBLineFromItem(
                         $dataService,
                         $item,
@@ -517,9 +514,12 @@ class QuickBooksFacade
                 }
 
                 $this->pauseIfNeeded();
-                $invoices = $dataService->Query(
-                    sprintf('SELECT * FROM INVOICE WHERE DOCNUMBER LIKE \'%%/%d\'', $paymentCovers['invoiceId'])
-                );
+                $invId = $paymentCovers['invoiceId'];
+                $invoices = $dataService->Query("SELECT * FROM INVOICE WHERE DOCNUMBER LIKE '%/$invId'");
+                if (! $invoices) {
+                    $this->pauseIfNeeded();
+                    $invoices = $dataService->Query("SELECT * FROM INVOICE WHERE DOCNUMBER = '$invId'");
+                }
 
                 if ($invoices) {
                     $INVOICES = json_decode(json_encode($invoices), true);
