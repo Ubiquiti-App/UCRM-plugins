@@ -429,6 +429,8 @@ class QuickBooksFacade
                 return $a['id'] <=> $b['id'];
             }
         );
+
+        $paymentIdComplete = null;
         foreach ($ucrmPayments as $ucrmPayment) {
 
             if (file_exists("data/stoppayments") || file_exists("data/stop")) {
@@ -436,152 +438,119 @@ class QuickBooksFacade
                 break;
             }
 
-            if ($ucrmPayment['id'] <= $pluginData->lastExportedPaymentID || ! $ucrmPayment['clientId']) {
+            $paymentId = $ucrmPayment['id'];
+            if ($paymentId <= $pluginData->lastExportedPaymentID || ! $ucrmPayment['clientId']) {
                 continue;
             }
-
-            $this->logger->info(sprintf('Payment ID: %s needs to be exported, creditAmount=%s amount=%s createdDate=%s', $ucrmPayment['id'], $ucrmPayment['creditAmount'], $ucrmPayment['amount'], $ucrmPayment['createdDate']));
 
             $qbClient = $this->getQBClient($dataService, $ucrmPayment['clientId']);
 
             if (! $qbClient) {
                 $this->logger->error(
-                    sprintf('Client with Display name containing: UCRMID-%s is not found', $ucrmPayment['clientId'])
+                    sprintf("Payment ID $paymentId export failed. Client with Display name containing: UCRMID-{$ucrmPayment['clientId']} is not found")
                 );
                 continue;
             }
 
-            $this->logger->info(sprintf('Payment for Client Id=%s DisplayName=%s', $qbClient->Id, $qbClient->DisplayName));
+            $this->logger->info("Exporting payment ID $paymentId created {$ucrmPayment['createdDate']},creditAmount={$ucrmPayment['creditAmount']}," .
+                "total={$ucrmPayment['amount']} for Client Id={$qbClient->Id} DisplayName={$qbClient->DisplayName}");
 
-            /* if there is a credit on the payment deal with it first */
-            if ($ucrmPayment['creditAmount'] > 0) {
-            	$this->logger->info(sprintf('Invoice credit amount is : %s', $ucrmPayment['creditAmount']));
-
-                try {
-                    $theResourceObj = Payment::create(
-                        [
-                            'CustomerRef' => [
-                                'value' => $qbClient->Id,
-                                'name' => $qbClient->DisplayName,
-                            ],
-                            'TotalAmt' => $ucrmPayment['creditAmount'],
-                            'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
-                            'PaymentRefNum' => $ucrmPayment['id'],
-                            'PrivateNote' => $ucrmPayment['note'],
-                        ]
-                    );
-	                $this->pauseIfNeeded();
-                    $response = $dataService->Add($theResourceObj);
-                    if ($response instanceof IPPIntuitEntity) {
-                        $this->logger->info(
-                            sprintf('Payment ID: %s credit exported successfully.', $ucrmPayment['id'])
-                        );
-                    } else {
-                        if ($response instanceof \Exception)
-                            throw $response;
-                        else
-                            throw new \RuntimeException("Unknown QBO error");
-                    }
-
-                    $this->handleErrorResponse($dataService);
-
-                } catch (\Exception $exception) {
-                    $this->logger->error(
-                        sprintf(
-                            'Payment ID: %s export failed with error %s.',
-                            $ucrmPayment['id'],
-                            $exception->getMessage()
-                        )
-                    );
-                    break;
-                }
-            }
-
-            /* now look and see if part of the payment is applied to existing invoices */
+            $lineArray = null;
+            $additionalUnapplied = 0;
             foreach ($ucrmPayment['paymentCovers'] as $paymentCovers) {
-
-                $LineObj = null;
-                $lineArray = null;
-
+                if ($paymentCovers['amount'] == 0) continue;
                 $this->logger->info(sprintf('Payment covers invoiceId %d amount=%s', $paymentCovers['invoiceId'], $paymentCovers['amount']));
 
                 if ($paymentCovers['refundId']) {
-                    $this->logger->notice('Payment has refundId, not yet supported!');
+                    $this->logger->notice('Payment has refundId, not yet supported! Will set as unapplied');
+                    $additionalUnapplied += $paymentCovers['amount'];
                     continue;
                 }
                 if ($paymentCovers['invoiceId'] == '') {
-                    $this->logger->notice('Payment has empty invoiceId!');
+                    $this->logger->notice('Payment has empty invoiceId! Will set as unapplied');
+                    $additionalUnapplied += $paymentCovers['amount'];
                     continue;
                 }
 
                 $this->pauseIfNeeded();
                 $invId = $paymentCovers['invoiceId'];
                 $invoices = $dataService->Query("SELECT * FROM INVOICE WHERE DOCNUMBER LIKE '%/$invId'");
-                if (! $invoices) {
+                if (!$invoices) {
                     $this->pauseIfNeeded();
                     $invoices = $dataService->Query("SELECT * FROM INVOICE WHERE DOCNUMBER = '$invId'");
                 }
 
-                if ($invoices) {
-                    $INVOICES = json_decode(json_encode($invoices), true);
-                    $LineObj = Line::create(
-                        [
-                            'Amount' => $ucrmPayment['amount'],
-                            'LinkedTxn' => [
-                                'TxnId' => $INVOICES[0]['Id'],
-                                'TxnType' => 'Invoice',
-                            ],
-                        ]
-                    );
-                    $lineArray[] = $LineObj;
-
-                    try {
-                        $theResourceObj = Payment::create(
-                            [
-                                'CustomerRef' => [
-                                    'value' => $qbClient->Id,
-                                    'name' => $qbClient->DisplayName,
-                                ],
-                                'TotalAmt' => $ucrmPayment['amount'],
-                                'Line' => $lineArray,
-                                'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
-                                'PaymentRefNum' => $ucrmPayment['id'],
-                                'PrivateNote' => $ucrmPayment['note'],
-                            ]
-                        );
-
-                        $this->logger->info(sprintf('applying payment to Invoice %s TxnId %s TotalAmt=%s', $INVOICES[0]['DocNumber'], $INVOICES[0]['Id'], $ucrmPayment['amount']));
-
-                        $this->pauseIfNeeded();
-                        $response = $dataService->Add($theResourceObj);
-                        if ($response instanceof IPPIntuitEntity) {
-                            $this->logger->info(
-                                sprintf('Payment ID: %s exported successfully.', $ucrmPayment['id'])
-                            );
-                        } else {
-                            if ($response instanceof \Exception)
-                                throw $response;
-                            else
-                                throw new \RuntimeException("Unknown QBO error");
-                        }
-
-                        $this->handleErrorResponse($dataService);
-                    } catch (\Exception $exception) {
-                        $this->logger->error(
-                            sprintf(
-                                'Payment ID: %s export failed with error %s.',
-                                $ucrmPayment['id'],
-                                $exception->getMessage()
-                            )
-                        );
-                    }
-		        } else {
-                    $this->logger->error(sprintf('Unable to find invoiceId %s covered by paymentID %s', $paymentCovers['invoiceId'], $ucrmPayment['id']));
+                if (!$invoices) {
+                    $this->logger->warning(sprintf('Unable to find invoiceId %s covered by paymentID %s, will set as unapplied', $paymentCovers['invoiceId'], $paymentId));
+                    $additionalUnapplied += $paymentCovers['amount'];
+                    continue;
                 }
+
+                $INVOICES = json_decode(json_encode($invoices), true);
+                $lineArray[] = Line::create(
+                    [
+                        'Amount' => $paymentCovers['amount'],
+                        'LinkedTxn' => [
+                            'TxnId' => $INVOICES[0]['Id'],
+                            'TxnType' => 'Invoice',
+                        ],
+                    ]
+                );
+
+                $this->logger->info("Payment $paymentId; applying \${$paymentCovers['amount']} to Invoice {$INVOICES[0]['DocNumber']}");
             }
 
+            try {
+                if ($ucrmPayment['creditAmount'] > 0)
+                    $this->logger->info(sprintf('Non-applied credit amount was: %s, total set as unapplied will be: %s', $ucrmPayment['creditAmount'], $additionalUnapplied));
+
+                $theResourceObj = Payment::create(
+                    [
+                        'CustomerRef' => [
+                            'value' => $qbClient->Id,
+                            'name' => $qbClient->DisplayName,
+                        ],
+                        'TotalAmt' => $ucrmPayment['amount'],
+                        'UnappliedAmt' => $ucrmPayment['creditAmount'] + $additionalUnapplied,
+                        'Line' => $lineArray,
+                        'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
+                        'PaymentRefNum' => $paymentId,
+                        'PrivateNote' => $ucrmPayment['note'],
+                    ]
+                );
+
+                $this->pauseIfNeeded();
+                $response = $dataService->Add($theResourceObj);
+                if ($response instanceof IPPIntuitEntity) {
+                    $this->logger->info(
+                        sprintf('Payment ID: %s exported successfully.', $paymentId)
+                    );
+                } else {
+                    if ($response instanceof \Exception)
+                        throw $response;
+                    else
+                        throw new \RuntimeException("Unknown QBO error");
+                }
+
+                $this->handleErrorResponse($dataService);
+            } catch (\Exception $exception) {
+                $this->logger->error(
+                    sprintf(
+                        'Payment ID: %s export failed with error %s.',
+                        $paymentId,
+                        $exception->getMessage()
+                    )
+                );
+
+                continue;
+            }
+
+            $paymentIdComplete = $paymentId;
+        }
+
+        if ($paymentIdComplete) {
             // update last processed payment in the end
-            $pluginData->lastExportedPaymentID = $ucrmPayment['id'];
+            $pluginData->lastExportedPaymentID = $paymentIdComplete;
             $this->optionsManager->update();
         }
     }
