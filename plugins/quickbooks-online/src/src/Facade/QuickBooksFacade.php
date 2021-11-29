@@ -648,7 +648,7 @@ class QuickBooksFacade
         DataService $dataService,
         array $item,
         int $qbIncomeAccountNumber,
-        string $itemNameFormat
+        ?string $itemNameFormat
     ): ?IPPIntuitEntity {
 
         if($itemNameFormat) {
