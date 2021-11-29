@@ -224,7 +224,7 @@ class QuickBooksFacade
             $this->logger->notice('Refresh of Token succeeded.');
         }
 
-        $this->logger->notice(sprintf('qbBaseUrl: %s qbApiDelay=%d', $pluginData->qbBaseUrl, $this->qbApiDelay));
+        $this->logger->notice(sprintf('qbBaseUrl: %s', $pluginData->qbBaseUrl));
     }
 
     public function exportInvoices(): void
@@ -466,7 +466,8 @@ class QuickBooksFacade
                             ],
                             'TotalAmt' => $ucrmPayment['creditAmount'],
                             'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
-                            'PaymentRefNum' => $ucrmPayment['note'],
+                            'PaymentRefNum' => $ucrmPayment['id'],
+                            'PrivateNote' => $ucrmPayment['note'],
                         ]
                     );
 	                $this->pauseIfNeeded();
@@ -544,7 +545,8 @@ class QuickBooksFacade
                                 'TotalAmt' => $ucrmPayment['amount'],
                                 'Line' => $lineArray,
                                 'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
-                                'PaymentRefNum' => $ucrmPayment['note'],
+                                'PaymentRefNum' => $ucrmPayment['id'],
+                                'PrivateNote' => $ucrmPayment['note'],
                             ]
                         );
 
