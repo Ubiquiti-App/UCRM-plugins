@@ -459,7 +459,6 @@ class QuickBooksFacade
             $additionalUnapplied = 0;
             foreach ($ucrmPayment['paymentCovers'] as $paymentCovers) {
                 if ($paymentCovers['amount'] == 0) continue;
-                $this->logger->info(sprintf('Payment covers invoiceId %d amount=%s', $paymentCovers['invoiceId'], $paymentCovers['amount']));
 
                 if ($paymentCovers['refundId']) {
                     $this->logger->notice('Payment has refundId, not yet supported! Will set as unapplied');
@@ -501,8 +500,9 @@ class QuickBooksFacade
             }
 
             try {
+                $totalUnapplied = $ucrmPayment['creditAmount'] + $additionalUnapplied;
                 if ($ucrmPayment['creditAmount'] > 0)
-                    $this->logger->info(sprintf('Non-applied credit amount was: %s, total set as unapplied will be: %s', $ucrmPayment['creditAmount'], $additionalUnapplied));
+                    $this->logger->info(sprintf('Non-applied credit amount was: %s, total set as unapplied will be: %s', $ucrmPayment['creditAmount'], $totalUnapplied));
 
                 $theResourceObj = Payment::create(
                     [
@@ -511,7 +511,7 @@ class QuickBooksFacade
                             'name' => $qbClient->DisplayName,
                         ],
                         'TotalAmt' => $ucrmPayment['amount'],
-                        'UnappliedAmt' => $ucrmPayment['creditAmount'] + $additionalUnapplied,
+                        'UnappliedAmt' => $totalUnapplied,
                         'Line' => $lineArray,
                         'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
                         'PaymentRefNum' => $paymentId,
