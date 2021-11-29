@@ -147,6 +147,11 @@ class QuickBooksFacade
                     $nameForView = $ucrmClient['companyName'];
                 }
 
+                $email = null;
+                $emailCheck = $ucrmClient['contacts'][0]['email'];
+                if (filter_var($emailCheck, FILTER_VALIDATE_EMAIL))
+                    $email = $emailCheck;
+
                 $customerData = [
                     'DisplayName' => sprintf(
                         '%s (UCRMID-%d)',
@@ -156,6 +161,12 @@ class QuickBooksFacade
                     'PrintOnCheckName' => $nameForView,
                     'GivenName' => $ucrmClient['firstName'],
                     'FamilyName' => $ucrmClient['lastName'],
+                    'PrimaryEmailAddr' => [
+                        'Address' => $email
+                    ],
+                    'Mobile' => [
+                        'FreeFormNumber' => $ucrmClient['contacts'][0]['phone']
+                    ],
                     'ShipAddr' => [
                         'Line1' => $ucrmClient['street1'],
                         'Line2' => $ucrmClient['street2'],
