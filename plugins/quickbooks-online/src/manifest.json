@@ -64,6 +64,18 @@
       "label": "Date to start for Payment export",
       "description": "Date in yyyy-mm-dd format ",
       "required": 0
+    },
+    {
+      "key": "lastExportedInvoiceID",
+      "label": "Last exported invoice ID. CAUTION, this should only be changed by advanced uses IF NEEDED",
+      "description": "Last Invoice ID that is done exporting",
+      "required": 0
+    },
+    {
+      "key": "lastExportedPaymentID",
+      "label": "Last exported payment ID. CAUTION, this should only be changed by advanced uses IF NEEDED",
+      "description": "Last Payment ID that is done exporting",
+      "required": 0
     }
   ]
 }
