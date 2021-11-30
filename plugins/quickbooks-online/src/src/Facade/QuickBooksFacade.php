@@ -442,6 +442,8 @@ class QuickBooksFacade
         );
 
         $paymentIdComplete = null;
+        $paymentMethodUcrmCache = null;
+        $paymentMethodQbCache = null;
         foreach ($ucrmPayments as $ucrmPayment) {
 
             if (file_exists("data/stoppayments") || file_exists("data/stop")) {
@@ -465,6 +467,23 @@ class QuickBooksFacade
 
             $this->logger->info("Exporting payment ID $paymentId created {$ucrmPayment['createdDate']},creditAmount={$ucrmPayment['creditAmount']}," .
                 "total={$ucrmPayment['amount']} for Client Id={$qbClient->Id} DisplayName={$qbClient->DisplayName}");
+
+            $paymentMethod = $paymentMethodUcrmCache[$ucrmPayment['methodId']];
+            if (!$paymentMethod) {
+                $paymentMethod = $this->ucrmApi->query("payment-methods/{$ucrmPayment['methodId']}");
+                $paymentMethodUcrmCache[$ucrmPayment['methodId']] = $paymentMethod;
+            }
+
+            $qbPaymentMethod = null;
+            $qbPaymentMethodResponse = $paymentMethodQbCache[$ucrmPayment['methodId']];
+            if (!$qbPaymentMethodResponse) {
+                $this->pauseIfNeeded();
+                $qbPaymentMethodResponse = $dataService->Query("SELECT * FROM PaymentMethod WHERE Name = '{$paymentMethod['name']}'");
+                if ($qbPaymentMethodResponse) {
+                    $qbPaymentMethod = json_decode(json_encode($qbPaymentMethodResponse), true)[0];
+                    $paymentMethodQbCache[$ucrmPayment['methodId']] = $qbPaymentMethod;
+                }
+            }
 
             $lineArray = null;
             $additionalUnapplied = 0;
@@ -515,23 +534,31 @@ class QuickBooksFacade
                 if ($ucrmPayment['creditAmount'] > 0)
                     $this->logger->info(sprintf('Non-applied credit amount was: %s, total set as unapplied will be: %s', $ucrmPayment['creditAmount'], $totalUnapplied));
 
-                $theResourceObj = Payment::create(
-                    [
-                        'CustomerRef' => [
-                            'value' => $qbClient->Id,
-                            'name' => $qbClient->DisplayName,
-                        ],
-                        'TotalAmt' => $ucrmPayment['amount'],
-                        'UnappliedAmt' => $totalUnapplied,
-                        'Line' => $lineArray,
-                        'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
-                        'PaymentRefNum' => $paymentId,
-                        'PrivateNote' => $ucrmPayment['note'],
-                    ]
-                );
+                $paymentArray = [
+                    'CustomerRef' => [
+                        'value' => $qbClient->Id,
+                        'name' => $qbClient->DisplayName,
+                    ],
+                    'TotalAmt' => $ucrmPayment['amount'],
+                    'UnappliedAmt' => $totalUnapplied,
+                    'Line' => $lineArray,
+                    'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
+                    'PaymentRefNum' => $paymentId,
+                    'PrivateNote' => $ucrmPayment['note'],
+                ];
+
+                if ($qbPaymentMethod) {
+                    $this->logger->debug("Adding payment method; Id {$qbPaymentMethod['Id']}, name {$qbPaymentMethod['Name']}");
+                    $paymentArray['PaymentMethodRef'] = [
+                        'value' => $qbPaymentMethod['Id'],
+                        'name' => $qbPaymentMethod['Name']
+                    ];
+                }
+
+                $paymentObject = Payment::create($paymentArray);
 
                 $this->pauseIfNeeded();
-                $response = $dataService->Add($theResourceObj);
+                $response = $dataService->Add($paymentObject);
                 if ($response instanceof IPPIntuitEntity) {
                     $this->logger->info(
                         sprintf('Payment ID: %s exported successfully.', $paymentId)
@@ -539,8 +566,6 @@ class QuickBooksFacade
                 } else {
                     if ($response instanceof \Exception)
                         throw $response;
-                    else
-                        throw new \RuntimeException("Unknown QBO error");
                 }
 
                 $this->handleErrorResponse($dataService);
