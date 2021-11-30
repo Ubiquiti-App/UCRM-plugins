@@ -97,7 +97,7 @@ class QuickBooksFacade
             $this->optionsManager->update();
             $this->logger->notice('Exchange Authorization Code for Access Token succeeded.');
 
-            $activeAccounts = $this->getAccounts();
+            $activeAccounts = $this->getAccounts($dataService);
 
             $accountsString = '';
             foreach ($activeAccounts as $account) {
@@ -128,8 +128,7 @@ class QuickBooksFacade
                 continue;
             }
 
-            $this->pauseIfNeeded();
-            $entities = $dataService->Query(
+            $entities = $this->dataServiceQuery($dataService,
                 sprintf('SELECT * FROM Customer WHERE DisplayName LIKE \'%%(UCRMID-%d)\'', $ucrmClient['id'])
             );
 
@@ -182,8 +181,7 @@ class QuickBooksFacade
                 ];
 
                 try {
-                    $this->pauseIfNeeded();
-                    $response = $dataService->Add(Customer::create($customerData));
+                    $response = $this->dataServiceAdd($dataService, Customer::create($customerData));
                     if ($response instanceof IPPIntuitEntity) {
                         $this->logger->info(
                             sprintf('Client %s (ID: %s) exported successfully.', $nameForView, $ucrmClient['id'])
@@ -194,10 +192,6 @@ class QuickBooksFacade
                             sprintf('Client %s (ID: %s) export failed.', $nameForView, $ucrmClient['id'])
                         );
                     }
-                    if ($response instanceof \Exception) {
-                        throw $response;
-                    }
-                    $this->handleErrorResponse($dataService);
                 } catch (\Exception $exception) {
                     $this->logger->error(
                         sprintf(
@@ -248,12 +242,9 @@ class QuickBooksFacade
         else
             $query = sprintf('SELECT * FROM Account WHERE AccountType = \'Income\' AND Id = \'%s\'', $pluginData->qbIncomeAccountNumber);
 
-        $this->pauseIfNeeded();
-        $account = $dataService->Query($query);
+        $account = $this->dataServiceQuery($dataService, $query, true);
         if ($account) {
-            $ACCOUNT = json_decode(json_encode($account),true);
-            $qbIncomeAccountId = $ACCOUNT[0]['Id'];
-            $qbIncomeAccountName = $ACCOUNT[0]['Name'];
+            $qbIncomeAccountId = $account[0]['Id'];
         } else {
             $this->logger->error("Unable to find Income account (ID {$pluginData->qbIncomeAccountNumber}, Name {$pluginData->qbIncomeAccountName}) set in the plugin config");
             return;
@@ -285,9 +276,8 @@ class QuickBooksFacade
 
             $this->logger->info(sprintf('Export of invoice ID %s started.', $ucrmInvoice['id']));
 
-	        $this->pauseIfNeeded();
             $docNumber = "{$ucrmInvoice['number']}/{$ucrmInvoice['id']}";
-            $invoice = $dataService->Query("SELECT * FROM INVOICE WHERE DOCNUMBER = '$docNumber'");
+            $invoice = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER = '$docNumber'");
             if ($invoice) {
                 $this->logger->error(sprintf('Invoice %d already in QBO', $ucrmInvoice['id']));
                 continue;
@@ -369,56 +359,46 @@ class QuickBooksFacade
 //                ];
 //            }
 
-            $tryCount = 0;
-            $tryNumber = 3;
-            do {
-                try {
-                    $this->logger->info(sprintf('Invoice::create DocNumber=%s DueDate=%s Total=%s TaxCode=%s',
-                        sprintf('%s/%s', $ucrmInvoice['number'], $ucrmInvoice['id']), $ucrmInvoice['dueDate'], $ucrmInvoice['total'], $TaxCode));
+            try {
+                $this->logger->info(sprintf('Invoice::create DocNumber=%s DueDate=%s Total=%s TaxCode=%s',
+                    sprintf('%s/%s', $ucrmInvoice['number'], $ucrmInvoice['id']), $ucrmInvoice['dueDate'], $ucrmInvoice['total'], $TaxCode));
 
-                    $this->pauseIfNeeded();
-                    $response = $dataService->Add(
-                        Invoice::create(
-                            [
-                                'DocNumber' => sprintf('%s/%s', $ucrmInvoice['number'], $ucrmInvoice['id']),
-                                'DueDate' => $ucrmInvoice['dueDate'],
-                                'TxnDate' => $ucrmInvoice['createdDate'],
-                                'Line' => $lines,
-                                'TxnTaxDetail' => [
-                                    'TotalTax' => $ucrmInvoice['taxes']['totalValue'],
-                                    'TxnTaxCodeRef' => $TaxCode,
-                                ],
-                                'CustomerRef' => [
-                                    'value' => $qbClient->Id,
-                                ],
-                            ]
-                        )
+                $response = $this->dataServiceAdd($dataService,
+                    Invoice::create(
+                        [
+                            'DocNumber' => sprintf('%s/%s', $ucrmInvoice['number'], $ucrmInvoice['id']),
+                            'DueDate' => $ucrmInvoice['dueDate'],
+                            'TxnDate' => $ucrmInvoice['createdDate'],
+                            'Line' => $lines,
+                            'TxnTaxDetail' => [
+                                'TotalTax' => $ucrmInvoice['taxes']['totalValue'],
+                                'TxnTaxCodeRef' => $TaxCode,
+                            ],
+                            'CustomerRef' => [
+                                'value' => $qbClient->Id,
+                            ],
+                        ]
+                    )
+                );
+
+                if ($response instanceof IPPIntuitEntity) {
+                    $this->logger->info(
+                        sprintf('Invoice ID: %s exported successfully.', $ucrmInvoice['id'])
                     );
-
-                    if ($response instanceof IPPIntuitEntity) {
-                        $this->logger->info(
-                            sprintf('Invoice ID: %s exported successfully.', $ucrmInvoice['id'])
-                        );
-                    } else {
-                        throw $response;
-                    }
-
-                    $this->handleErrorResponse($dataService);
-                    break;
-                } catch (\Exception $exception) {
-                    $this->logger->error(
-                        sprintf(
-                            'Invoice ID: %s export failed with error %s.',
-                            $ucrmInvoice['id'],
-                            $exception->getMessage()
-                        )
-                    );
-
-                    $tryCount++;
-                    if ($tryCount < $tryNumber)
-                        usleep(10 * 1000); // wait before retry
                 }
-            } while ($tryCount < $tryNumber);
+            } catch (\Exception $exception) {
+                $this->logger->error(
+                    sprintf(
+                        'Invoice ID: %s export failed with error %s.',
+                        $ucrmInvoice['id'],
+                        $exception->getMessage()
+                    )
+                );
+
+                // don't mark as done yet if there was error. If there's more successful exports after this
+                //  then the final saved exportedInvoiceId will still be higher than this one which had error
+                continue;
+            }
 
             $pluginData->lastExportedInvoiceID = $ucrmInvoice['id'];
             $this->optionsManager->update();
@@ -477,12 +457,9 @@ class QuickBooksFacade
             $qbPaymentMethod = null;
             $qbPaymentMethodResponse = $paymentMethodQbCache[$ucrmPayment['methodId']];
             if (!$qbPaymentMethodResponse) {
-                $this->pauseIfNeeded();
-                $qbPaymentMethodResponse = $dataService->Query("SELECT * FROM PaymentMethod WHERE Name = '{$paymentMethod['name']}'");
-                if ($qbPaymentMethodResponse) {
-                    $qbPaymentMethod = json_decode(json_encode($qbPaymentMethodResponse), true)[0];
+                $qbPaymentMethodResponse = $this->dataServiceQuery($dataService, "SELECT * FROM PaymentMethod WHERE Name = '{$paymentMethod['name']}'", true,);
+                if ($qbPaymentMethodResponse)
                     $paymentMethodQbCache[$ucrmPayment['methodId']] = $qbPaymentMethod;
-                }
             }
 
             $lineArray = null;
@@ -501,13 +478,10 @@ class QuickBooksFacade
                     continue;
                 }
 
-                $this->pauseIfNeeded();
                 $invId = $paymentCovers['invoiceId'];
-                $invoices = $dataService->Query("SELECT * FROM INVOICE WHERE DOCNUMBER LIKE '%/$invId'");
-                if (!$invoices) {
-                    $this->pauseIfNeeded();
-                    $invoices = $dataService->Query("SELECT * FROM INVOICE WHERE DOCNUMBER = '$invId'");
-                }
+                $invoices = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER LIKE '%/$invId'", true);
+                if (!$invoices)
+                    $invoices = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER = '$invId'", true);
 
                 if (!$invoices) {
                     $this->logger->warning(sprintf('Unable to find invoiceId %s covered by paymentID %s, will set as unapplied', $paymentCovers['invoiceId'], $paymentId));
@@ -515,18 +489,17 @@ class QuickBooksFacade
                     continue;
                 }
 
-                $INVOICES = json_decode(json_encode($invoices), true);
                 $lineArray[] = Line::create(
                     [
                         'Amount' => $paymentCovers['amount'],
                         'LinkedTxn' => [
-                            'TxnId' => $INVOICES[0]['Id'],
+                            'TxnId' => $invoices[0]['Id'],
                             'TxnType' => 'Invoice',
                         ],
                     ]
                 );
 
-                $this->logger->info("Payment $paymentId; applying \${$paymentCovers['amount']} to Invoice {$INVOICES[0]['DocNumber']}");
+                $this->logger->info("Payment $paymentId; applying \${$paymentCovers['amount']} to Invoice {$invoices[0]['DocNumber']}");
             }
 
             try {
@@ -557,18 +530,12 @@ class QuickBooksFacade
 
                 $paymentObject = Payment::create($paymentArray);
 
-                $this->pauseIfNeeded();
-                $response = $dataService->Add($paymentObject);
+                $response = $this->dataServiceAdd($dataService, $paymentObject);
                 if ($response instanceof IPPIntuitEntity) {
                     $this->logger->info(
                         sprintf('Payment ID: %s exported successfully.', $paymentId)
                     );
-                } else {
-                    if ($response instanceof \Exception)
-                        throw $response;
                 }
-
-                $this->handleErrorResponse($dataService);
             } catch (\Exception $exception) {
                 $this->logger->error(
                     sprintf(
@@ -589,6 +556,78 @@ class QuickBooksFacade
             $pluginData->lastExportedPaymentID = $paymentIdComplete;
             $this->optionsManager->update();
         }
+    }
+
+    /**
+     * @throws QBAuthorizationException
+     * @throws \Exception
+     */
+    private function dataServiceQuery(DataService $dataService, string $query, bool $jsonReDecode = false, bool $throwForErrors = false): ?array {
+        $tryCount = 0;
+        $tryNumber = 3;
+        $output = null;
+        do {
+            try {
+                $this->pauseIfNeeded();
+                $output = $dataService->Query($query);
+                break;
+            } catch (\Exception $e) {
+                $tryCount++;
+                if ($tryCount < $tryNumber) {
+                    $wait = 10;
+                    $this->logger->info("Waiting $wait seconds to retry after issue getting data from QBO");
+                    usleep($wait * 1000);
+                }
+                elseif ($throwForErrors)
+                    throw $e;
+            }
+        } while ($tryCount < $tryNumber);
+
+        if ($throwForErrors) {
+            if ($output instanceof \Exception)
+                throw $output;
+            $this->handleErrorResponse($dataService);
+        }
+
+        if ($jsonReDecode && $output)
+            return json_decode(json_encode($output), true);
+        else
+            return $output;
+    }
+
+    /**
+     * @throws QBAuthorizationException
+     * @throws \QuickBooksOnline\API\Exception\IdsException
+     * @throws \Exception
+     */
+    private function dataServiceAdd(DataService $dataService, IPPIntuitEntity $entity, bool $throwForErrors = true) {
+        $tryCount = 0;
+        $tryNumber = 3;
+        $output = null;
+        do {
+            try {
+                $this->pauseIfNeeded();
+                $output = $dataService->Add($entity);
+                break;
+            } catch (\Exception $e) {
+                $tryCount++;
+                if ($tryCount < $tryNumber) {
+                    $wait = 10;
+                    $this->logger->info("Waiting $wait seconds to retry after issue getting data from QBO");
+                    usleep($wait * 1000);
+                }
+                elseif ($throwForErrors)
+                    throw $e;
+            }
+        } while ($tryCount < $tryNumber);
+
+        if ($throwForErrors) {
+            if ($output instanceof \Exception)
+                throw $output;
+            $this->handleErrorResponse($dataService);
+        }
+
+        return $output;
     }
 
     /**
@@ -626,25 +665,17 @@ class QuickBooksFacade
 
     private function getQBClient(DataService $dataService, int $ucrmClientId)
     {
-        $tryCount = 0;
-        $tryNumber = 3;
         $customers = null;
-        do {
-            try {
-                $this->pauseIfNeeded();
-                $customers = $dataService->Query(
-                    sprintf('SELECT * FROM Customer WHERE DisplayName LIKE \'%%(UCRMID-%d)\'', $ucrmClientId)
-                );
-                break;
-            } catch (\Exception $e) {
-                $this->logger->error("Could not get customer from QBO; id $ucrmClientId; error {$e->getMessage()}");
-                $tryCount++;
-                if ($tryCount < $tryNumber)
-                    usleep(10 * 1000); // wait before trying again
-            }
-        } while ($tryCount < $tryNumber);
+        try {
+            $customers = $this->dataServiceQuery($dataService,
+                sprintf('SELECT * FROM Customer WHERE DisplayName LIKE \'%%(UCRMID-%d)\'', $ucrmClientId),
+                false, true
+            );
+        } catch (\Exception $e) {
+            $this->logger->error("Could not get customer from QBO; id $ucrmClientId; error {$e->getMessage()}");
+        }
 
-        if (! $customers) {
+        if (!$customers) {
             return null;
         }
 
@@ -664,58 +695,36 @@ class QuickBooksFacade
            $itemName=$item['type'];
         }
 
-        $tryCount = 0;
-        $tryNumber = 3;
         $response = null;
-        do {
-            try {
-                $this->pauseIfNeeded();
-                $this->logger->info("Get item \"$itemName\" from QBO");
-                $response = $dataService->Query("SELECT * FROM Item WHERE Name = '$itemName'");
-                break;
-            } catch (\Exception $e) {
-                $this->logger->error("Trying to get item $itemName from QBO: {$e->getMessage()}");
-                $tryCount++;
-                if ($tryCount < $tryNumber)
-                    usleep(10 * 1000); // wait before retry
-            }
-        } while ($tryCount < $tryNumber);
+        try {
+            $this->logger->info("Get item \"$itemName\" from QBO");
+            $response = $this->dataServiceQuery($dataService,"SELECT * FROM Item WHERE Name = '$itemName'", false, true);
+        } catch (\Exception $e) {
+            $this->logger->error("Trying to get item $itemName from QBO: {$e->getMessage()}");
+        }
 
-        if ($tryCount == $tryNumber) return null;
         if($response) {
             return reset($response);
         }
 
-        $tryCount = 1;
-        do {
-            try {
-                $this->pauseIfNeeded();
-                $this->logger->info("Adding new item into QBO: \"$itemName\"");
-                $response = $dataService->Add(
-                    Item::create(
-                        [
-                            'Name' => $itemName,
-                            'Type' => 'Service',
-                            'IncomeAccountRef' => [
-                                'value' => $qbIncomeAccountNumber,
-                            ],
-                        ]
-                    )
-                );
-
-                $this->handleErrorResponse($dataService);
-
-                return $response;
-            } catch (\Exception $exception) {
-                $this->logger->error(
-                    sprintf('Item: %s create failed with error %s.', $itemName, $exception->getMessage())
-                );
-
-                $tryCount++;
-                if ($tryCount < $tryNumber)
-                    usleep(10 * 1000); // wait before retry
-            }
-        } while ($tryCount < $tryNumber);
+        try {
+            $this->logger->info("Adding new item into QBO: \"$itemName\"");
+            return $this->dataServiceAdd($dataService,
+                Item::create(
+                    [
+                        'Name' => $itemName,
+                        'Type' => 'Service',
+                        'IncomeAccountRef' => [
+                            'value' => $qbIncomeAccountNumber,
+                        ],
+                    ]
+                )
+            );
+        } catch (\Exception $exception) {
+            $this->logger->error(
+                sprintf('Item: %s create failed with error %s.', $itemName, $exception->getMessage())
+            );
+        }
 
         return null;
     }
@@ -758,25 +767,15 @@ class QuickBooksFacade
         }
     }
 
-    private function getAccounts(): array
+    private function getAccounts(DataService $dataService): array
     {
         $activeAccounts = [];
 
         try {
-            $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
+            $response = $this->dataServiceQuery($dataService,"SELECT * FROM Account WHERE Active = true", true, true);
 
-            $this->pauseIfNeeded();
-            $response = $dataService->FindAll('Account');
-
-            $this->handleErrorResponse($dataService);
-
-            foreach ($response as $account) {
-                if (! $account->Active) {
-                    continue;
-                }
-
+            foreach ($response as $account)
                 $activeAccounts[$account->Id] = $account;
-            }
 
         } catch (\Exception $exception) {
             $this->logger->error(
