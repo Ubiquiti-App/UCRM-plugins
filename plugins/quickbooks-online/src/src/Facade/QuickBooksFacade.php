@@ -275,7 +275,7 @@ class QuickBooksFacade
                 continue;
             }
 
-            $this->logger->info(sprintf('Export of invoice ID %s started.', $ucrmInvoice['id']));
+            $this->logger->debug(sprintf('Export of invoice ID %s started.', $ucrmInvoice['id']));
 
             $docNumber = "{$ucrmInvoice['number']}/{$ucrmInvoice['id']}";
             $invoice = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER = '$docNumber'");
@@ -318,7 +318,7 @@ class QuickBooksFacade
                     $TaxCode = 'NON';
                 }
 
-                $this->logger->info(sprintf('Description=%s TaxCode=%s', $item['label'], $TaxCode));
+                $this->logger->debug(sprintf('Description=%s TaxCode=%s', $item['label'], $TaxCode));
 
                 $lines[] = [
                     'Amount' => $item['total'],
@@ -446,8 +446,9 @@ class QuickBooksFacade
                 continue;
             }
 
-            $this->logger->info("Exporting payment ID $paymentId created {$ucrmPayment['createdDate']},creditAmount={$ucrmPayment['creditAmount']}," .
-                "total={$ucrmPayment['amount']} for Client Id={$qbClient->Id} DisplayName={$qbClient->DisplayName}");
+            $paymentInfoText = "Payment ID $paymentId created {$ucrmPayment['createdDate']},creditAmount={$ucrmPayment['creditAmount']}," .
+                "total={$ucrmPayment['amount']} for Client Id={$qbClient->Id} DisplayName={$qbClient->DisplayName}";
+            $this->logger->debug("Exporting $paymentInfoText");
 
             $paymentMethod = $paymentMethodUcrmCache[$ucrmPayment['methodId']];
             if (!$paymentMethod) {
@@ -500,13 +501,13 @@ class QuickBooksFacade
                     ]
                 );
 
-                $this->logger->info("Payment $paymentId; applying \${$paymentCovers['amount']} to Invoice {$invoices[0]['DocNumber']}");
+                $this->logger->debug("Payment $paymentId; applying \${$paymentCovers['amount']} to Invoice {$invoices[0]['DocNumber']}");
             }
 
             try {
                 $totalUnapplied = $ucrmPayment['creditAmount'] + $additionalUnapplied;
                 if ($ucrmPayment['creditAmount'] > 0)
-                    $this->logger->info(sprintf('Non-applied credit amount was: %s, total set as unapplied will be: %s', $ucrmPayment['creditAmount'], $totalUnapplied));
+                    $this->logger->debug(sprintf('Non-applied credit amount was: %s, total set as unapplied will be: %s', $ucrmPayment['creditAmount'], $totalUnapplied));
 
                 $paymentArray = [
                     'CustomerRef' => [
@@ -538,15 +539,16 @@ class QuickBooksFacade
                 $response = $this->dataServiceAdd($dataService, $paymentObject);
                 if ($response instanceof IPPIntuitEntity) {
                     $this->logger->info(
-                        sprintf('Payment ID: %s exported successfully.', $paymentId)
+                        sprintf('Payment exported successfully. %s', $paymentInfoText)
                     );
                 }
             } catch (\Exception $exception) {
                 $this->logger->error(
                     sprintf(
-                        'Payment ID: %s export failed with error %s.',
+                        'Payment ID: %s export failed with error %s. Info: %s',
                         $paymentId,
-                        $exception->getMessage()
+                        $exception->getMessage(),
+                        $paymentInfoText
                     )
                 );
 
@@ -702,7 +704,7 @@ class QuickBooksFacade
 
         $response = null;
         try {
-            $this->logger->info("Get item \"$itemName\" from QBO");
+            $this->logger->debug("Get item \"$itemName\" from QBO");
             $response = $this->dataServiceQuery($dataService,"SELECT * FROM Item WHERE Name = '$itemName'", false, true);
         } catch (\Exception $e) {
             $this->logger->error("Trying to get item $itemName from QBO: {$e->getMessage()}");
