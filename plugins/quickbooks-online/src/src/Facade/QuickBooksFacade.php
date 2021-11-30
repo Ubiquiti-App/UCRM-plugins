@@ -791,6 +791,7 @@ class QuickBooksFacade
         return $activeAccounts;
     }
 
+    private $depositToCache = [];
     private function getDepositToIdForPayment(string $paymentMethodName, DataService $dataService, PluginData $pluginData): ?string
     {
         $links = $pluginData->paymentTypeWithAccountLink;
@@ -802,11 +803,16 @@ class QuickBooksFacade
             $payType = trim($methodAcct[0]);
             if ($payType != $paymentMethodName) continue;
 
+            $cachedId = $this->depositToCache[$payType];
+            if ($cachedId)
+                return $cachedId;
+
             $depositAcct = trim($methodAcct[1]);
             $accounts = $this->dataServiceQuery($dataService, "SELECT * FROM Account WHERE Name = '$depositAcct' AND (AccountType = 'Bank' OR AccountType = 'Other Current Asset')",
                 true);
             if ($accounts) {
                 $id = $accounts[0]['Id'];
+                $this->depositToCache[$payType] = $id;
                 $this->logger->debug("Found account for payment \"deposit to\" with Id $id");
                 return $id;
             } else {
