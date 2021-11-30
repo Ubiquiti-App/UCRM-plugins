@@ -76,6 +76,12 @@
       "label": "Last exported payment ID. CAUTION, this should only be changed by advanced uses IF NEEDED",
       "description": "Last Payment ID that is done exporting",
       "required": 0
+    },
+    {
+      "key": "logLevel",
+      "label": "Logging Level",
+      "description": "Leave empty for default (i.e. regular logging level). To get more details in log, enter \"debug\" (without the double quotes)",
+      "required": 0
     }
   ]
 }

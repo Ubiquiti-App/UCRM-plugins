@@ -12,7 +12,7 @@ require 'vendor/autoload.php';
     try {
         $plugin->run();
     } catch (Exception $exception) {
-        $logger = new \QBExport\Service\Logger();
+        $logger = new \QBExport\Service\Logger(null);
         $logger->error($exception->getMessage());
     }
 })();
