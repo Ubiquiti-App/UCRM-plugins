@@ -66,6 +66,13 @@
       "required": 0
     },
     {
+      "key": "paymentTypeWithAccountLink",
+      "label": "Link payment method to QB account",
+      "description": "If you'd like to set the \"Deposit to\" field in QB based on payment type, you can set that here. Enter 1 payment type per line like this (without the double quotes): \"Cash=The Cash account\". If you want to enter more than 1 payment type, put the next payment type on the next line",
+      "type": "textarea",
+      "required": 0
+    },
+    {
       "key": "lastExportedInvoiceID",
       "label": "Last exported invoice ID. CAUTION, this should only be changed by advanced uses IF NEEDED",
       "description": "Last Invoice ID that is done exporting",

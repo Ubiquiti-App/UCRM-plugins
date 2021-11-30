@@ -111,5 +111,10 @@ class PluginData extends UcrmData
     /**
      * @var string|null
      */
+    public $paymentTypeWithAccountLink;
+
+    /**
+     * @var string|null
+     */
     public $logLevel;
 }

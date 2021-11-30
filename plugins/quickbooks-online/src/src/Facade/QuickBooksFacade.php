@@ -8,6 +8,7 @@ namespace QBExport\Facade;
 
 use DateTime;
 use QBExport\Data\InvoiceStatus;
+use QBExport\Data\PluginData;
 use QBExport\Exception\QBAuthorizationException;
 use QBExport\Factory\DataServiceFactory;
 use QBExport\Service\Logger;
@@ -509,8 +510,7 @@ class QuickBooksFacade
 
                 $paymentArray = [
                     'CustomerRef' => [
-                        'value' => $qbClient->Id,
-                        'name' => $qbClient->DisplayName,
+                        'value' => $qbClient->Id
                     ],
                     'TotalAmt' => $ucrmPayment['amount'],
                     'UnappliedAmt' => $totalUnapplied,
@@ -523,9 +523,14 @@ class QuickBooksFacade
                 if ($qbPaymentMethod) {
                     $this->logger->debug("Adding payment method; Id {$qbPaymentMethod['Id']}, name {$qbPaymentMethod['Name']}");
                     $paymentArray['PaymentMethodRef'] = [
-                        'value' => $qbPaymentMethod['Id'],
-                        'name' => $qbPaymentMethod['Name']
+                        'value' => $qbPaymentMethod['Id']
                     ];
+
+                    $depositToId = $this->getDepositToIdForPayment($qbPaymentMethod['Name'], $dataService, $pluginData);
+                    if ($depositToId)
+                        $paymentArray['DepositToAccountRef'] = [
+                            'value' => $depositToId
+                        ];
                 }
 
                 $paymentObject = Payment::create($paymentArray);
@@ -784,6 +789,34 @@ class QuickBooksFacade
         }
 
         return $activeAccounts;
+    }
+
+    private function getDepositToIdForPayment(string $paymentMethodName, DataService $dataService, PluginData $pluginData): ?string
+    {
+        $links = $pluginData->paymentTypeWithAccountLink;
+        if (!$links) return null;
+
+        $lines = preg_split("/(\r\n|\n|\r)/", $links);
+        foreach ($lines as $line) {
+            $methodAcct = preg_split("=", $line, 2);
+            $payType = trim($methodAcct[0]);
+            if ($payType != $paymentMethodName) continue;
+
+            $depositAcct = trim($methodAcct[1]);
+            $accounts = $this->dataServiceQuery($dataService, "SELECT * FROM Account WHERE Name = '$depositAcct' AND (AccountType = 'Bank' OR AccountType = 'Other Current Asset')",
+                true);
+            if ($accounts) {
+                $id = $accounts[0]['Id'];
+                $this->logger->debug("Found account for payment \"deposit to\" with Id $id");
+                return $id;
+            } else {
+                $this->logger->debug("Payment \"deposit to\" account not found for \"$depositAcct\"");
+            }
+
+            break;
+        }
+
+        return null;
     }
 
     /**
