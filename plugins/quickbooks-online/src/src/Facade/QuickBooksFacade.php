@@ -459,9 +459,11 @@ class QuickBooksFacade
             $qbPaymentMethod = null;
             $qbPaymentMethodResponse = $paymentMethodQbCache[$ucrmPayment['methodId']];
             if (!$qbPaymentMethodResponse) {
-                $qbPaymentMethodResponse = $this->dataServiceQuery($dataService, "SELECT * FROM PaymentMethod WHERE Name = '{$paymentMethod['name']}'", true,);
-                if ($qbPaymentMethodResponse)
+                $qbPaymentMethodResponse = $this->dataServiceQuery($dataService, "SELECT * FROM PaymentMethod WHERE Name = '{$paymentMethod['name']}'", true);
+                if ($qbPaymentMethodResponse) {
+                    $qbPaymentMethod = $qbPaymentMethodResponse[0];
                     $paymentMethodQbCache[$ucrmPayment['methodId']] = $qbPaymentMethod;
+                }
             }
 
             $lineArray = null;
