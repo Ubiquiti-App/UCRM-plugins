@@ -1,10 +1,10 @@
 # QuickBooks Online import
-This plugin handles import of your [UCRM](https://ucrm.ubnt.com/) customers, payments and invoices to 
+This plugin handles import of your [UCRM](https://ucrm.ubnt.com/) customers, payments, credit memos, and invoices to 
 [QuickBooks Online](https://quickbooks.intuit.com/online/).
 
 ## About UCRM data integration
 - The UCRM data are the single source of truth, the plugin only pushes data from UCRM to QuickBooks. 
-- On first run, all clients, payments and invoices are pushed to QuickBooks.
+- On first run, all clients, payments, credit memos and invoices are pushed to QuickBooks.
 - All following runs only pushes the newly created entities (i.e. new clients, new payments and new invoices with higher ID than the last).
 
 ## How to configure the plugin
@@ -45,10 +45,23 @@ This plugin handles import of your [UCRM](https://ucrm.ubnt.com/) customers, pay
 
 ## To be done in future version
 (Feel free to push your upgrades in this repo.)
-- Configurable date of the first payment or invoice to be imported. 
 - Remove entity from QB when the related entity is deleted in UCRM.
 
 ## Changelog
+### 1.1.5 (2021-12-01)
+- Export Credit Memos. Set the `Date to start for Credit Memo export` value in the
+plugin config so that older credits that you have already entered will not export.
+- Don't generate new items all the time. Re-use the same items.
+- Make it possible to use `Income account name` instead of `Income account ID`
+in plugin config
+- Export phone # and email address for new clients.
+- Cleaner payment exports. Only export 1 transaction per payment.
+- Export payment method, and optionally "Deposit to" account, to QBO along with the payment
+- Logs get cleaned out so that only 10,000 rows are kept after file grows to over 1 Mb.
+  This improves plugin interaction speed.
+- Add better error handling so that network hiccups don't cause
+individual transactions to fail that easily.
+- Make it possible to set logging level dynamically from plugin config
 ### 1.1.3 (2019-01-04)
 - draft, void and proforma invoices are no longer exported ([#100](https://github.com/Ubiquiti-App/UCRM-plugins/pull/100))
 - added options to limit exported invoices and payments by start date ([#94](https://github.com/Ubiquiti-App/UCRM-plugins/pull/94), [#95](https://github.com/Ubiquiti-App/UCRM-plugins/pull/95), [#96](https://github.com/Ubiquiti-App/UCRM-plugins/pull/96))
