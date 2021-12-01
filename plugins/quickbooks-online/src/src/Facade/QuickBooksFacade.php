@@ -47,9 +47,14 @@ class QuickBooksFacade
     private $ucrmApi;
 
     /**
-     * @var float|int
+     * @var int
      */
-    private $qbApiDelay = 70 * 1000;
+    private $qbApiTimeoutDelay = 70;
+
+    /**
+     * @var int
+     */
+    private $qbApiErrorDelay = 5;
 
     public function __construct(
         DataServiceFactory $dataServiceFactory,
@@ -583,9 +588,8 @@ class QuickBooksFacade
             } catch (\Exception $e) {
                 $tryCount++;
                 if ($tryCount < $tryNumber) {
-                    $wait = 10;
-                    $this->logger->info("Waiting $wait seconds to retry after issue getting data from QBO");
-                    usleep($wait * 1000);
+                    $this->logger->info("Waiting {$this->qbApiErrorDelay} seconds to retry after issue getting data from QBO");
+                    sleep($this->qbApiErrorDelay);
                 }
                 elseif ($throwForErrors)
                     throw $e;
@@ -621,9 +625,8 @@ class QuickBooksFacade
             } catch (\Exception $e) {
                 $tryCount++;
                 if ($tryCount < $tryNumber) {
-                    $wait = 10;
-                    $this->logger->info("Waiting $wait seconds to retry after issue getting data from QBO");
-                    usleep($wait * 1000);
+                    $this->logger->info("Waiting {$this->qbApiErrorDelay} seconds to retry after issue getting data from QBO");
+                    sleep($this->qbApiErrorDelay);
                 }
                 elseif ($throwForErrors)
                     throw $e;
@@ -663,9 +666,8 @@ class QuickBooksFacade
             $this->queryRunCount = 0;
         elseif ($this->queryRunCount >= $callsBeforeWait) {
             $this->queryRunCount = 0;
-            $waitSeconds = $this->qbApiDelay / 1000;
-            $this->logger->notice("Now waiting $waitSeconds to run next QB api call because there were at least $callsBeforeWait calls in the last minute");
-            usleep($this->qbApiDelay);
+            $this->logger->notice("Now waiting {$this->qbApiTimeoutDelay} to run next QB api call because there were at least $callsBeforeWait calls in the last minute");
+            sleep($this->qbApiTimeoutDelay);
         }
 
         $this->queryRunCount++;
