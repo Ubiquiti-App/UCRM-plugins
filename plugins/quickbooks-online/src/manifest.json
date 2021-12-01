@@ -74,14 +74,14 @@
     },
     {
       "key": "lastExportedInvoiceID",
-      "label": "Last exported invoice ID. CAUTION, this should only be changed by advanced uses IF NEEDED",
-      "description": "Last Invoice ID that is done exporting",
+      "label": "Last exported invoice ID",
+      "description": "Last Invoice ID that is done exporting. CAUTION, this should only be changed by advanced users IF NEEDED",
       "required": 0
     },
     {
       "key": "lastExportedPaymentID",
-      "label": "Last exported payment ID. CAUTION, this should only be changed by advanced uses IF NEEDED",
-      "description": "Last Payment ID that is done exporting",
+      "label": "Last exported payment ID",
+      "description": "Last Payment ID that is done exporting. CAUTION, this should only be changed by advanced users IF NEEDED",
       "required": 0
     },
     {
