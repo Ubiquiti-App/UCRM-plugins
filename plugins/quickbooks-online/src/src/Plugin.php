@@ -70,6 +70,7 @@ class Plugin
                     $this->quickBooksFacade->exportClients();
                     $this->quickBooksFacade->exportInvoices();
                     $this->quickBooksFacade->exportPayments();
+                    $this->quickBooksFacade->exportCreditNotes();
                     $this->cleanLog();
                 }
                 $this->logger->info('CLI process ended');

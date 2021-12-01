@@ -18,6 +18,7 @@ use QuickBooksOnline\API\Core\HttpClients\FaultHandler;
 use QuickBooksOnline\API\Data\IPPIntuitEntity;
 use QuickBooksOnline\API\DataService\DataService;
 use QuickBooksOnline\API\Exception\ServiceException;
+use QuickBooksOnline\API\Facades\CreditMemo;
 use QuickBooksOnline\API\Facades\Customer;
 use QuickBooksOnline\API\Facades\Invoice;
 use QuickBooksOnline\API\Facades\Item;
@@ -291,76 +292,11 @@ class QuickBooksFacade
                 continue;
             }
 
-            $lines = [];
-            $TaxCode = 'NON';
-            foreach ($ucrmInvoice['items'] as $item) {
-                $qbItem = $itemCache[$item['label']];
-                if (! $qbItem) {
-                    $qbItem = $this->createQBLineFromItem(
-                        $dataService,
-                        $item,
-                        (int)$qbIncomeAccountId,
-                        $pluginData->itemNameFormat
-                    );
-                    if (! $qbItem) {
-                        $this->logger->error("Could not get item \"{$item['label']}\" from QBO");
-                        continue;
-                    }
-
-                    $itemCache[$item['label']] = $qbItem;
-                }
-
-                if ($item['tax1Id']) {
-                    $TaxCode = 'TAX';
-                } else {
-                    $TaxCode = 'NON';
-                }
-
-                $this->logger->debug(sprintf('Description=%s TaxCode=%s', $item['label'], $TaxCode));
-
-                $lines[] = [
-                    'Amount' => $item['total'],
-                    'Description' => $item['label'],
-                    'DetailType' => 'SalesItemLineDetail',
-                    'SalesItemLineDetail' => [
-                        'ItemRef' => [
-                            'value' => $qbItem->Id,
-                        ],
-                        'UnitPrice' => $item['price'],
-                        'Qty' => $item['quantity'],
-                        'TaxCodeRef' => [
-                            'value' => $TaxCode,
-                        ],
-                    ],
-                ];
-                if ($item['discountTotal'] < 0) {
-                    $lines[] = [
-                        'Amount' => $item['discountTotal'] * -1,
-                        'DiscountLineDetail' => [
-                            'PercentBased' => 'false',
-                        ],
-                        'DetailType' => 'DiscountLineDetail',
-                        'Description' => 'Discount given',
-                    ];
-                }
-            }
-
-            // TODO for percent based, not sure if it works (first implemented by Marcbou) -timbze 2021-11-26
-//            if ($ucrmInvoice['discount'] > 0) {
-//                $lines[] = [
-//                    'Amount' => $ucrmInvoice['subtotal'] * $ucrmInvoice['discount'] / 100,
-//                    'DiscountLineDetail' => [
-//                        'PercentBased' => 'true',
-//                        'DiscountPercent' => $ucrmInvoice['discount'],
-//                    ],
-//                    'DetailType' => 'DiscountLineDetail',
-//                    'Description' => $ucrmInvoice['discountLabel'],
-//                ];
-//            }
+            $lines = $this->getItems($ucrmInvoice['items'], (int)$qbIncomeAccountId, false, $dataService, $pluginData);
 
             try {
-                $this->logger->info(sprintf('Invoice::create DocNumber=%s DueDate=%s Total=%s TaxCode=%s',
-                    sprintf('%s/%s', $ucrmInvoice['number'], $ucrmInvoice['id']), $ucrmInvoice['dueDate'], $ucrmInvoice['total'], $TaxCode));
+                $this->logger->info(sprintf('Invoice::create DocNumber=%s DueDate=%s Total=%s',
+                    sprintf('%s/%s', $ucrmInvoice['number'], $ucrmInvoice['id']), $ucrmInvoice['dueDate'], $ucrmInvoice['total']));
 
                 $response = $this->dataServiceAdd($dataService,
                     Invoice::create(
@@ -371,7 +307,7 @@ class QuickBooksFacade
                             'Line' => $lines,
                             'TxnTaxDetail' => [
                                 'TotalTax' => $ucrmInvoice['taxes']['totalValue'],
-                                'TxnTaxCodeRef' => $TaxCode,
+                                'TxnTaxCodeRef' => 'TAX',
                             ],
                             'CustomerRef' => [
                                 'value' => $qbClient->Id,
@@ -464,45 +400,7 @@ class QuickBooksFacade
                 }
             }
 
-            $lineArray = null;
-            $additionalUnapplied = 0;
-            foreach ($ucrmPayment['paymentCovers'] as $paymentCovers) {
-                if ($paymentCovers['amount'] == 0) continue;
-
-                if ($paymentCovers['refundId']) {
-                    $this->logger->notice('Payment has refundId, not yet supported! Will set as unapplied');
-                    $additionalUnapplied += $paymentCovers['amount'];
-                    continue;
-                }
-                if ($paymentCovers['invoiceId'] == '') {
-                    $this->logger->notice('Payment has empty invoiceId! Will set as unapplied');
-                    $additionalUnapplied += $paymentCovers['amount'];
-                    continue;
-                }
-
-                $invId = $paymentCovers['invoiceId'];
-                $invoices = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER LIKE '%/$invId'", true);
-                if (!$invoices)
-                    $invoices = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER = '$invId'", true);
-
-                if (!$invoices) {
-                    $this->logger->warning(sprintf('Unable to find invoiceId %s covered by paymentID %s, will set as unapplied', $paymentCovers['invoiceId'], $paymentId));
-                    $additionalUnapplied += $paymentCovers['amount'];
-                    continue;
-                }
-
-                $lineArray[] = Line::create(
-                    [
-                        'Amount' => $paymentCovers['amount'],
-                        'LinkedTxn' => [
-                            'TxnId' => $invoices[0]['Id'],
-                            'TxnType' => 'Invoice',
-                        ],
-                    ]
-                );
-
-                $this->logger->debug("Payment $paymentId; applying \${$paymentCovers['amount']} to Invoice {$invoices[0]['DocNumber']}");
-            }
+            [$lineArray, $additionalUnapplied, $totalApplied] = $this->getPaymentCovers($ucrmPayment['paymentCovers'], $dataService);
 
             try {
                 $totalUnapplied = $ucrmPayment['creditAmount'] + $additionalUnapplied;
@@ -526,8 +424,8 @@ class QuickBooksFacade
                     'UnappliedAmt' => $totalUnapplied,
                     'Line' => $lineArray,
                     'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
-                    'PaymentRefNum' => $paymentId,
-                    'PrivateNote' => $memo,
+                    'PaymentRefNum' => $refNumber,
+                    'PrivateNote' => "UCRM Payment ID " . $paymentId,
                 ];
 
                 if ($qbPaymentMethod) {
@@ -572,6 +470,257 @@ class QuickBooksFacade
             $pluginData->lastExportedPaymentID = $paymentIdComplete;
             $this->optionsManager->update();
         }
+    }
+
+    public function exportCreditNotes(): void
+    {
+        $pluginData = $this->optionsManager->load();
+        $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
+
+        if ($pluginData->qbIncomeAccountNumber == 0)
+            $query = sprintf('SELECT * FROM Account WHERE AccountType = \'Income\' AND Name = \'%s\'', $pluginData->qbIncomeAccountName);
+        else
+            $query = sprintf('SELECT * FROM Account WHERE AccountType = \'Income\' AND Id = \'%s\'', $pluginData->qbIncomeAccountNumber);
+
+        $account = $this->dataServiceQuery($dataService, $query, true);
+        if ($account) {
+            $qbIncomeAccountId = $account[0]['Id'];
+        } else {
+            $this->logger->error("Unable to find Income account (ID {$pluginData->qbIncomeAccountNumber}, Name {$pluginData->qbIncomeAccountName}) set in the plugin config");
+            return;
+        }
+
+        $query = 'credit-notes?direction=ASC';
+        if ($pluginData->creditsFromDate) {
+            $query = sprintf('%s&createdDateFrom=%s', $query, $pluginData->creditsFromDate);
+        }
+
+        foreach ($this->ucrmApi->query($query) as $ucrmCredit) {
+            if (file_exists("data/stopcredits") || file_exists("data/stop")) {
+                $this->logger->info(sprintf('exportCredits: stop file detected'));
+                break;
+            }
+
+            if ($ucrmCredit['id'] <= $pluginData->lastExportedCreditID)
+                continue;
+
+            $this->logger->debug(sprintf('Export of credit memo ID %s started.', $ucrmCredit['id']));
+
+            $qbClient = $this->getQBClient($dataService, $ucrmCredit['clientId']);
+
+            if (!$qbClient) {
+                $this->logger->error(
+                    sprintf('Client with Display name containing: UCRMID-%s is not found.', $ucrmCredit['clientId'])
+                );
+                continue;
+            }
+
+            $lines = $this->getItems($ucrmCredit['items'], (int)$qbIncomeAccountId, true, $dataService, $pluginData);
+
+            try {
+                $docNumber = sprintf('C%s/%s', $ucrmCredit['number'], $ucrmCredit['id']);
+                $this->logger->info(sprintf('CreditMemo::create DocNumber=%s DueDate=%s Total=%s',
+                    $docNumber, $ucrmCredit['dueDate'], $ucrmCredit['total']));
+
+                $response = $this->dataServiceAdd($dataService,
+                    CreditMemo::create(
+                        [
+                            'DocNumber' => $docNumber,
+                            'TxnDate' => $ucrmCredit['createdDate'],
+                            'Line' => $lines,
+                            'TxnTaxDetail' => [
+                                'TotalTax' => 0-$ucrmCredit['taxes']['totalValue'],
+                                'TxnTaxCodeRef' => 'TAX',
+                            ],
+                            'CustomerRef' => [
+                                'value' => $qbClient->Id,
+                            ],
+                        ]
+                    )
+                );
+
+                if ($response instanceof IPPIntuitEntity) {
+                    $this->logger->info(
+                        sprintf('Credit Memo ID: %s exported successfully.', $ucrmCredit['id'])
+                    );
+                }
+            } catch (\Exception $exception) {
+                $this->logger->error(
+                    sprintf(
+                        'Credit ID: %s export failed with error %s.',
+                        $ucrmCredit['id'],
+                        $exception->getMessage()
+                    )
+                );
+
+                // don't mark as done yet if there was error. If there's more successful exports after this
+                //  then the final saved exportedCreditId will still be higher than this one which had error
+                continue;
+            }
+
+            if ($response instanceof IPPIntuitEntity) {
+                $txnId = $response->Id;
+                [$lineArray, $additionalUnapplied, $totalApplied] = $this->getPaymentCovers($ucrmCredit['paymentCovers'], $dataService);
+
+                if (!$lineArray || $totalApplied == 0 || $additionalUnapplied <> 0) {
+                    if ($lineArray && $totalApplied <> 0) // issue is with additionalUnapplied not being 0. Credit can only be applied if all invoice(s) are found to link to
+                        $this->logger->warning("Will not apply credit to invoices because not all invoices could be found");
+                } else {
+                    try {
+                        $lineArray[] = Line::create(
+                            [
+                                'Amount' => $totalApplied,
+                                'LinkedTxn' => [
+                                    'TxnId' => $txnId,
+                                    'TxnType' => 'CreditMemo',
+                                ],
+                            ]
+                        );
+
+                        $paymentArray = [
+                            'CustomerRef' => [
+                                'value' => $qbClient->Id
+                            ],
+                            'TotalAmt' => 0.0,
+                            'Line' => $lineArray,
+                            'TxnDate' => substr($ucrmCredit['createdDate'], 0, 10),
+                            'PaymentRefNum' => 'Auto-apply credit',
+                            'PrivateNote' => 'Created by UCRM to link credits to charges',
+                        ];
+
+                        $paymentObject = Payment::create($paymentArray);
+
+                        $response = $this->dataServiceAdd($dataService, $paymentObject);
+                        if ($response instanceof IPPIntuitEntity) {
+                            $this->logger->info(
+                                sprintf('Payment to apply credit exported successfully. Total credit was: %s, Credit applied: %s', $ucrmCredit['total'], $totalApplied)
+                            );
+                        }
+                    } catch (\Exception $exception) {
+                        $this->logger->error(
+                            sprintf(
+                                'Payment to apply credit export failed with error %s',
+                                $exception->getMessage()
+                            )
+                        );
+                    }
+                }
+            }
+
+            $pluginData->lastExportedCreditID = $ucrmCredit['id'];
+            $this->optionsManager->update();
+        } // end foreach $ucrmCredit
+    }
+
+    private function getPaymentCovers($payments, DataService $dataService): array {
+        $lineArray = null;
+        $additionalUnapplied = 0.0;
+        $totalApplied = 0.0;
+        foreach ($payments as $paymentCovers) {
+            if ($paymentCovers['amount'] == 0) continue;
+
+            if ($paymentCovers['refundId']) {
+                $this->logger->notice('Payment has refundId, not yet supported! Will set as unapplied');
+                $additionalUnapplied += $paymentCovers['amount'];
+                continue;
+            }
+            if ($paymentCovers['invoiceId'] == '') {
+                $this->logger->notice('Payment has empty invoiceId! Will set as unapplied');
+                $additionalUnapplied += $paymentCovers['amount'];
+                continue;
+            }
+
+            $invId = $paymentCovers['invoiceId'];
+            $invoices = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER LIKE '%/$invId'", true);
+            if (!$invoices)
+                $invoices = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER = '$invId'", true);
+
+            if (!$invoices) {
+                $this->logger->warning(sprintf('Unable to find invoiceId %s covered by payment, will set as unapplied', $paymentCovers['invoiceId']));
+                $additionalUnapplied += $paymentCovers['amount'];
+                continue;
+            }
+
+            $lineArray[] = Line::create(
+                [
+                    'Amount' => $paymentCovers['amount'],
+                    'LinkedTxn' => [
+                        'TxnId' => $invoices[0]['Id'],
+                        'TxnType' => 'Invoice',
+                    ],
+                ]
+            );
+
+            $totalApplied += $paymentCovers['amount'];
+            $this->logger->debug("Payment applying \${$paymentCovers['amount']} to Invoice {$invoices[0]['DocNumber']}");
+        }
+
+        return [$lineArray, $additionalUnapplied, $totalApplied];
+    }
+
+    private $itemCache = [];
+    private function getItems($items, int $qbIncomeAccountId, bool $negateQty, DataService $dataService, PluginData $pluginData): array {
+        $lines = [];
+        foreach ($items as $item) {
+            $qbItem = $this->itemCache[$item['label']];
+            if (! $qbItem) {
+                $qbItem = $this->createQBLineFromItem(
+                    $dataService,
+                    $item,
+                    $qbIncomeAccountId,
+                    $pluginData->itemNameFormat
+                );
+                if (! $qbItem) {
+                    $this->logger->error("Could not get item \"{$item['label']}\" from QBO");
+                    continue;
+                }
+
+                $this->itemCache[$item['label']] = $qbItem;
+            }
+
+            if ($item['tax1Id']) {
+                $TaxCode = 'TAX';
+            } else {
+                $TaxCode = 'NON';
+            }
+
+            $this->logger->debug(sprintf('Description=%s TaxCode=%s', $item['label'], $TaxCode));
+
+            $lines[] = [
+                'Amount' => $this->negateAmount($item['total'], $negateQty),
+                'Description' => $item['label'],
+                'DetailType' => 'SalesItemLineDetail',
+                'SalesItemLineDetail' => [
+                    'ItemRef' => [
+                        'value' => $qbItem->Id,
+                    ],
+                    'UnitPrice' => $this->negateAmount($item['price'], $negateQty),
+                    'Qty' => $this->negateAmount($item['quantity'], $negateQty),
+                    'TaxCodeRef' => [
+                        'value' => $TaxCode,
+                    ],
+                ],
+            ];
+            if ($item['discountTotal'] < 0) {
+                $lines[] = [
+                    'Amount' => 0-$item['discountTotal'],
+                    'DiscountLineDetail' => [
+                        'PercentBased' => 'false',
+                    ],
+                    'DetailType' => 'DiscountLineDetail',
+                    'Description' => 'Discount given',
+                ];
+            }
+        }
+
+        return $lines;
+    }
+
+    private function negateAmount($amount, $doNegate) {
+        if ($doNegate)
+            return 0-$amount;
+        else
+            return $amount;
     }
 
     /**

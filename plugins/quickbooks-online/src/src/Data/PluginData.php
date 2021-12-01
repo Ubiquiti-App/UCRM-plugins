@@ -91,6 +91,11 @@ class PluginData extends UcrmData
     /**
      * @var string
      */
+    public $lastExportedCreditID;
+
+    /**
+     * @var string
+     */
     public $displayedErrors;
 
     /**
@@ -107,6 +112,11 @@ class PluginData extends UcrmData
      * @var string|null
      */
     public $paymentsFromDate;
+
+    /**
+     * @var string|null
+     */
+    public $creditsFromDate;
 
     /**
      * @var string|null

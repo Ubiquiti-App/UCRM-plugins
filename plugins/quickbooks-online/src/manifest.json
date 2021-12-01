@@ -60,6 +60,12 @@
       "required": 0
     },
     {
+      "key": "creditsFromDate",
+      "label": "Date to start for Credit Memo export",
+      "description": "Date in yyyy-mm-dd format ",
+      "required": 0
+    },
+    {
       "key": "paymentsFromDate",
       "label": "Date to start for Payment export",
       "description": "Date in yyyy-mm-dd format ",
