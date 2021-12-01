@@ -104,14 +104,8 @@ class QuickBooksFacade
             $this->optionsManager->update();
             $this->logger->notice('Exchange Authorization Code for Access Token succeeded.');
 
-            $activeAccounts = $this->getAccounts($dataService);
-
-            $accountsString = '';
-            foreach ($activeAccounts as $account) {
-                $accountsString .= 'Account:' . $account->Name . ' ID: ' . $account->Id . PHP_EOL;
-            }
-
-            $this->logger->info("Income account numbers in QBO Active accounts:\n$accountsString");
+            $dataService = $this->dataServiceFactory->create(DataServiceFactory::TYPE_QUERY);
+            $this->getAndLogAccounts($dataService);
         } catch (ServiceException $exception) {
             $this->invalidateTokens();
         }
@@ -929,23 +923,21 @@ class QuickBooksFacade
         }
     }
 
-    private function getAccounts(DataService $dataService): array
+    private function getAndLogAccounts(DataService $dataService): void
     {
-        $activeAccounts = [];
-
         try {
-            $response = $this->dataServiceQuery($dataService,"SELECT * FROM Account WHERE Active = true", true, true);
+            $response = $this->dataServiceQuery($dataService,"SELECT * FROM Account WHERE Active = true", false, true);
 
+            $accountsString = '';
             foreach ($response as $account)
-                $activeAccounts[$account->Id] = $account;
+                $accountsString .= 'Account:' . $account->Name . ' ID: ' . $account->Id . PHP_EOL;
 
+            $this->logger->info("Income account numbers in QBO Active accounts:\n$accountsString");
         } catch (\Exception $exception) {
             $this->logger->error(
                 sprintf('Account: Getting all Accounts failed with error %s.', $exception->getMessage())
             );
         }
-
-        return $activeAccounts;
     }
 
     private $depositToCache = [];
