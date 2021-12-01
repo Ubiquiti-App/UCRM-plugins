@@ -509,6 +509,15 @@ class QuickBooksFacade
                 if ($ucrmPayment['creditAmount'] > 0)
                     $this->logger->debug(sprintf('Non-applied credit amount was: %s, total set as unapplied will be: %s', $ucrmPayment['creditAmount'], $totalUnapplied));
 
+                $refNumber = $ucrmPayment['checkNumber'];
+                $note = $ucrmPayment['note'];
+                if ($refNumber && trim($refNumber) != '') {
+                    $refNumber = "Chk $refNumber";
+                    if ($note && trim($note) != '')
+                        $refNumber = $refNumber . ", $note";
+                } else {
+                    $refNumber = $note;
+                }
                 $paymentArray = [
                     'CustomerRef' => [
                         'value' => $qbClient->Id
@@ -518,7 +527,7 @@ class QuickBooksFacade
                     'Line' => $lineArray,
                     'TxnDate' => substr($ucrmPayment['createdDate'], 0, 10),
                     'PaymentRefNum' => $paymentId,
-                    'PrivateNote' => $ucrmPayment['note'],
+                    'PrivateNote' => $memo,
                 ];
 
                 if ($qbPaymentMethod) {
