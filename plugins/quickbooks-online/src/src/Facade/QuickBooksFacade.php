@@ -800,10 +800,22 @@ class QuickBooksFacade
     {
         $links = $pluginData->paymentTypeWithAccountLink;
         if (!$links) return null;
+        $this->logger->debug("Checking DepositTo user saved info: $links");
+        $lines = preg_split("(\r\n|\n|\r)", $links);
+        if (!$lines) return null;
 
-        $lines = preg_split("/(\r\n|\n|\r)/", $links);
         foreach ($lines as $line) {
-            $methodAcct = preg_split("=", $line, 2);
+            if (trim($line) == '') continue;
+            $this->logger->debug("Checking DepositTo line: $line");
+            $methodAcct = explode("=", $line, 2);
+            if (!$methodAcct) continue;
+
+            if (count($methodAcct) != 2) {
+                $this->logger->warning("Line for link payment method does not have 2 parts (separated by = sign): $line");
+                continue;
+            }
+            $this->logger->debug("Checking DepositTo line: [0]={$methodAcct[0]} [1]={$methodAcct[1]}");
+
             $payType = trim($methodAcct[0]);
             if ($payType != $paymentMethodName) continue;
 
@@ -812,16 +824,26 @@ class QuickBooksFacade
                 return $cachedId;
 
             $depositAcct = trim($methodAcct[1]);
-            $accounts = $this->dataServiceQuery($dataService, "SELECT * FROM Account WHERE Name = '$depositAcct' AND (AccountType = 'Bank' OR AccountType = 'Other Current Asset')",
+            $accounts = $this->dataServiceQuery($dataService, "SELECT * FROM Account WHERE Name = '$depositAcct'",
                 true);
             if ($accounts) {
-                $id = $accounts[0]['Id'];
-                $this->depositToCache[$payType] = $id;
-                $this->logger->debug("Found account for payment \"deposit to\" with Id $id");
-                return $id;
-            } else {
-                $this->logger->debug("Payment \"deposit to\" account not found for \"$depositAcct\"");
+                $useAccount = null;
+                foreach ($accounts as $account) {
+                    if ($account['AccountType'] == 'Bank' || $account['AccountType'] == 'Other Current Asset') {
+                        $useAccount = $account;
+                        break;
+                    }
+                }
+
+                if ($useAccount) {
+                    $id = $useAccount['Id'];
+                    $this->depositToCache[$payType] = $id;
+                    $this->logger->debug("Found account for payment \"deposit to\" with Id $id");
+                    return $id;
+                }
             }
+
+            $this->logger->warning("Payment \"deposit to\" account not found for \"$depositAcct\"");
 
             break;
         }
