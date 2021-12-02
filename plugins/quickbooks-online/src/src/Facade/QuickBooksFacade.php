@@ -280,7 +280,7 @@ class QuickBooksFacade
             $docNumber = "{$ucrmInvoice['number']}/{$ucrmInvoice['id']}";
             $invoice = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER = '$docNumber'");
             if ($invoice) {
-                $this->logger->error(sprintf('Invoice %d already in QBO', $ucrmInvoice['id']));
+                $this->logger->error(sprintf('Invoice %s already in QBO', $docNumber));
                 continue;
             }
 
@@ -516,13 +516,19 @@ class QuickBooksFacade
                 continue;
             }
 
+            $docNumber = sprintf('C%s/%s', $ucrmCredit['number'], $ucrmCredit['id']);
+            $credit = $this->dataServiceQuery($dataService,"SELECT * FROM CreditMemo WHERE DocNumber = '$docNumber'");
+            if ($credit) {
+                $this->logger->error(sprintf('Credit Memo %s already in QBO', $docNumber));
+                continue;
+            }
+
             $lines = $this->getItems($ucrmCredit['items'], (int)$qbIncomeAccountId, true, $dataService, $pluginData);
 
-            try {
-                $docNumber = sprintf('C%s/%s', $ucrmCredit['number'], $ucrmCredit['id']);
-                $this->logger->info(sprintf('CreditMemo::create DocNumber=%s DueDate=%s Total=%s',
-                    $docNumber, $ucrmCredit['dueDate'], $ucrmCredit['total']));
+            $this->logger->info(sprintf('CreditMemo::create DocNumber=%s DueDate=%s Total=%s',
+                $docNumber, $ucrmCredit['dueDate'], $ucrmCredit['total']));
 
+            try {
                 $response = $this->dataServiceAdd($dataService,
                     CreditMemo::create(
                         [
