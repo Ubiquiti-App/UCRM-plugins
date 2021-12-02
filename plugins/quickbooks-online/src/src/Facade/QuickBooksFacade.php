@@ -277,6 +277,13 @@ class QuickBooksFacade
 
             $this->logger->debug(sprintf('Export of invoice ID %s started.', $ucrmInvoice['id']));
 
+            $docNumber = "{$ucrmInvoice['number']}/{$ucrmInvoice['id']}";
+            $invoice = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER = '$docNumber'");
+            if ($invoice) {
+                $this->logger->error(sprintf('Invoice %d already in QBO', $ucrmInvoice['id']));
+                continue;
+            }
+
             $qbClient = $this->getQBClient($dataService, $ucrmInvoice['clientId']);
 
             if (! $qbClient) {
