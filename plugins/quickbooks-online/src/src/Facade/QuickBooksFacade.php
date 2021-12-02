@@ -243,9 +243,10 @@ class QuickBooksFacade
         else
             $query = sprintf('SELECT * FROM Account WHERE AccountType = \'Income\' AND Id = \'%s\'', $pluginData->qbIncomeAccountNumber);
 
-        $account = $this->dataServiceQuery($dataService, $query, true);
+        $account = $this->dataServiceQuery($dataService, $query);
         if ($account) {
-            $qbIncomeAccountId = $account[0]['Id'];
+            $qbIncomeAccountId = $account[0]->Id;
+            $this->logger->debug("Found income account id $qbIncomeAccountId");
         } else {
             $this->logger->error("Unable to find Income account (ID {$pluginData->qbIncomeAccountNumber}, Name {$pluginData->qbIncomeAccountName}) set in the plugin config");
             return;
@@ -394,7 +395,7 @@ class QuickBooksFacade
             $qbPaymentMethod = null;
             $qbPaymentMethodResponse = $paymentMethodQbCache[$ucrmPayment['methodId']];
             if (!$qbPaymentMethodResponse) {
-                $qbPaymentMethodResponse = $this->dataServiceQuery($dataService, "SELECT * FROM PaymentMethod WHERE Name = '{$paymentMethod['name']}'", true);
+                $qbPaymentMethodResponse = $this->dataServiceQuery($dataService, "SELECT * FROM PaymentMethod WHERE Name = '{$paymentMethod['name']}'");
                 if ($qbPaymentMethodResponse) {
                     $qbPaymentMethod = $qbPaymentMethodResponse[0];
                     $paymentMethodQbCache[$ucrmPayment['methodId']] = $qbPaymentMethod;
@@ -430,12 +431,12 @@ class QuickBooksFacade
                 ];
 
                 if ($qbPaymentMethod) {
-                    $this->logger->debug("Adding payment method; Id {$qbPaymentMethod['Id']}, name {$qbPaymentMethod['Name']}");
+                    $this->logger->debug("Adding payment method; Id {$qbPaymentMethod->Id}, name {$qbPaymentMethod->Name}");
                     $paymentArray['PaymentMethodRef'] = [
-                        'value' => $qbPaymentMethod['Id']
+                        'value' => $qbPaymentMethod->Id
                     ];
 
-                    $depositToId = $this->getDepositToIdForPayment($qbPaymentMethod['Name'], $dataService, $pluginData);
+                    $depositToId = $this->getDepositToIdForPayment($qbPaymentMethod->Name, $dataService, $pluginData);
                     if ($depositToId)
                         $paymentArray['DepositToAccountRef'] = [
                             'value' => $depositToId
@@ -483,9 +484,10 @@ class QuickBooksFacade
         else
             $query = sprintf('SELECT * FROM Account WHERE AccountType = \'Income\' AND Id = \'%s\'', $pluginData->qbIncomeAccountNumber);
 
-        $account = $this->dataServiceQuery($dataService, $query, true);
+        $account = $this->dataServiceQuery($dataService, $query);
         if ($account) {
-            $qbIncomeAccountId = $account[0]['Id'];
+            $qbIncomeAccountId = $account[0]->Id;
+            $this->logger->debug("Found income account id $qbIncomeAccountId");
         } else {
             $this->logger->error("Unable to find Income account (ID {$pluginData->qbIncomeAccountNumber}, Name {$pluginData->qbIncomeAccountName}) set in the plugin config");
             return;
@@ -638,9 +640,9 @@ class QuickBooksFacade
             }
 
             $invId = $paymentCovers['invoiceId'];
-            $invoices = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER LIKE '%/$invId'", true);
+            $invoices = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER LIKE '%/$invId'");
             if (!$invoices)
-                $invoices = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER = '$invId'", true);
+                $invoices = $this->dataServiceQuery($dataService,"SELECT * FROM INVOICE WHERE DOCNUMBER = '$invId'");
 
             if (!$invoices) {
                 $this->logger->warning(sprintf('Unable to find invoiceId %s covered by payment, will set as unapplied', $paymentCovers['invoiceId']));
@@ -652,14 +654,14 @@ class QuickBooksFacade
                 [
                     'Amount' => $paymentCovers['amount'],
                     'LinkedTxn' => [
-                        'TxnId' => $invoices[0]['Id'],
+                        'TxnId' => $invoices[0]->Id,
                         'TxnType' => 'Invoice',
                     ],
                 ]
             );
 
             $totalApplied += $paymentCovers['amount'];
-            $this->logger->debug("Payment applying \${$paymentCovers['amount']} to Invoice {$invoices[0]['DocNumber']}");
+            $this->logger->debug("Payment applying \${$paymentCovers['amount']} to Invoice {$invoices[0]->DocNumber}");
         }
 
         return [$lineArray, $additionalUnapplied, $totalApplied];
@@ -734,7 +736,7 @@ class QuickBooksFacade
      * @throws QBAuthorizationException
      * @throws \Exception
      */
-    private function dataServiceQuery(DataService $dataService, string $query, bool $jsonReDecode = false, bool $throwForErrors = false): ?array {
+    private function dataServiceQuery(DataService $dataService, string $query, bool $throwForErrors = false): ?array {
         $tryCount = 0;
         $tryNumber = 3;
         $output = null;
@@ -760,10 +762,7 @@ class QuickBooksFacade
             $this->handleErrorResponse($dataService);
         }
 
-        if ($jsonReDecode && $output)
-            return json_decode(json_encode($output), true);
-        else
-            return $output;
+        return $output;
     }
 
     /**
@@ -982,19 +981,18 @@ class QuickBooksFacade
                 return $cachedId;
 
             $depositAcct = trim($methodAcct[1]);
-            $accounts = $this->dataServiceQuery($dataService, "SELECT * FROM Account WHERE Name = '$depositAcct'",
-                true);
+            $accounts = $this->dataServiceQuery($dataService, "SELECT * FROM Account WHERE Name = '$depositAcct'");
             if ($accounts) {
                 $useAccount = null;
                 foreach ($accounts as $account) {
-                    if ($account['AccountType'] == 'Bank' || $account['AccountType'] == 'Other Current Asset') {
+                    if ($account->AccountType == 'Bank' || $account->AccountType == 'Other Current Asset') {
                         $useAccount = $account;
                         break;
                     }
                 }
 
                 if ($useAccount) {
-                    $id = $useAccount['Id'];
+                    $id = $useAccount->Id;
                     $this->depositToCache[$payType] = $id;
                     $this->logger->debug("Found account for payment \"deposit to\" with Id $id");
                     return $id;
