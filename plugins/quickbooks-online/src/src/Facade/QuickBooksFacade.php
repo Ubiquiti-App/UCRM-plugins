@@ -359,7 +359,6 @@ class QuickBooksFacade
         );
 
         $paymentIdComplete = null;
-        $paymentMethodUcrmCache = null;
         $paymentMethodQbCache = null;
         foreach ($ucrmPayments as $ucrmPayment) {
 
@@ -386,15 +385,9 @@ class QuickBooksFacade
                 "total={$ucrmPayment['amount']} for Client Id={$qbClient->Id} DisplayName={$qbClient->DisplayName}";
             $this->logger->debug("Exporting $paymentInfoText");
 
-            $paymentMethod = $paymentMethodUcrmCache[$ucrmPayment['methodId']];
-            if (!$paymentMethod) {
+            $qbPaymentMethod = $paymentMethodQbCache[$ucrmPayment['methodId']];
+            if (!$qbPaymentMethod) {
                 $paymentMethod = $this->ucrmApi->query("payment-methods/{$ucrmPayment['methodId']}");
-                $paymentMethodUcrmCache[$ucrmPayment['methodId']] = $paymentMethod;
-            }
-
-            $qbPaymentMethod = null;
-            $qbPaymentMethodResponse = $paymentMethodQbCache[$ucrmPayment['methodId']];
-            if (!$qbPaymentMethodResponse) {
                 $qbPaymentMethodResponse = $this->dataServiceQuery($dataService, "SELECT * FROM PaymentMethod WHERE Name = '{$paymentMethod['name']}'");
                 if ($qbPaymentMethodResponse) {
                     $qbPaymentMethod = $qbPaymentMethodResponse[0];
