@@ -25,7 +25,7 @@ class TelegramNotifierFacade extends AbstractMessageNotifierFacade {
     {
         $this->logger->debug("starting...");
         $bot_token = $this->getBotToken();
-        $url = "https://api.telegram.org/" . $bot_token . "/sendMessage?chat_id=" . $clientSmsNumber . "&text=" . $messageBody;
+        $url = "https://api.telegram.org/bot" . $bot_token . "/sendMessage?chat_id=" . $clientSmsNumber . "&text=" . $messageBody;
         $this->logger->debug($url);
         $resp = file_get_contents($url);
         $this->logger->debug(sprintf('Sending: %s to %s', $messageBody, $clientSmsNumber));
