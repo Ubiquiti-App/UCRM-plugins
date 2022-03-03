@@ -1,0 +1,18 @@
+{
+  "description": "UCRM plugin for SMS notifications, powered by Viber",
+  "version": "1.0.1",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "ViberNotifier\\": [
+        "src/"
+      ]
+    }
+  },
+  "require": {
+    "ubnt/ucrm-plugin-sdk": "~0.4",
+    "php-di/php-di": "^5.4",
+    "doctrine/cache": "^1.7",
+    "katzgrau/klogger": "^1.2"
+  }
+}

@@ -1,9 +1,9 @@
-# Message - Telegram
-* This plugin based on sms-twiliio as a template for integrating with Telegram Bot API:
-* This plugin sends Telegram messages to clients.
+# Message - Viber
+* This plugin based on sms-twiliio as a template for integrating with Viber Bot API:
+* This plugin sends Viber messages to clients.
 * Messages triggered by an event which happened in UCRM, e.g. new invoice has been issued, or client's sevice became suspended.
-* It only sends Messages to clients having a 'telegramId' custom atrribute set.
-* [Telegram](https://www.telegram.org/) Bot Token is required to access its API.
+* It only sends Messages to clients having a 'viberId' custom atrribute set.
+* [Viber](https://www.viber.com/) Bot Token is required to access its API.
 
 ## Variables replaced
 
