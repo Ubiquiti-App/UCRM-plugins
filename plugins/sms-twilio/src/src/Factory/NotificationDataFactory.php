@@ -35,6 +35,10 @@ class NotificationDataFactory
         $notificationData->entity = $jsonData['entity'];
         $notificationData->entityId = $jsonData['entityId'] ? (int) $jsonData['entityId'] : null;
         $notificationData->eventName = $jsonData['eventName'];
+
+        // Check if the given webhook exists.
+        $this->ucrmApi->query('webhook-events/' . $notificationData->uuid);
+
         $this->resolveUcrmData($notificationData);
 
         return $notificationData;
