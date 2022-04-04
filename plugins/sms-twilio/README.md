@@ -198,6 +198,7 @@ Client variables are replaced always; payment invoice and service only with the 
 * `%%service.downloadSpeed%%` => 10
 * `%%service.uploadSpeed%%` => 10
 * `%%service.hasOutage%%` => true
+* `%%service.stopReason%%` => 'Payments overdue'
 
 
 ## Developers
