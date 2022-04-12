@@ -34,17 +34,16 @@ class ViberNotifierFacade extends AbstractMessageNotifierFacade {
         );
         $options = array(
             'http' => array(
-                'header'  => "X-Viber-Auth-Token: " . $this->getBotToken() . "\r\n",
+                'header'  =>  "Content-Type: application/json\r\n". "X-Viber-Auth-Token: " . $this->getBotToken() . "\r\n",
                 'method'  => 'POST',
-                'content' => http_build_query($data)
+                'content' => json_encode($data)
             )
         );
         $context  = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
-        if ($result === FALSE) { 
 
-        }
         $this->logger->debug(sprintf('Sending: %s to %s', $messageBody, $clientSmsNumber));
+        $result = file_get_contents($url, false, $context);       
+        $this->logger->debug(sprintf('Result: %s', $result));
     }
     
     private function getBotToken(): string

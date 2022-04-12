@@ -18,12 +18,14 @@ $config = $pluginConfigManager->loadConfig();
 $optionsManager = UcrmOptionsManager::create();
 $options = $optionsManager->loadOPtions();
 $url = 'https://chatapi.viber.com/pa/set_webhook';
+
 $data = array( 
     'url' => $options->pluginPublicUrl,
     'send_name' => True,
     'send_photo'=> True,
     'event_types' => array( 'delivered', 'seen', 'failed', 'subscribed', 'unsubscribed', 'conversation_started' )
 );
+
 $options = array(
     'http' => array(
         'header'  => "X-Viber-Auth-Token: " . $config['viberBotToken'] . "\r\n",
@@ -31,6 +33,7 @@ $options = array(
         'content' => http_build_query($data)
     )
 );
+
 $context  = stream_context_create($options);
 $result = file_get_contents($url, false, $context);
 if ($result === FALSE) { 
