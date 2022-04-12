@@ -5,7 +5,7 @@
     "displayName": "Message notifications via Telegram Bots",
     "description": "This plugin sends messages via Telegram Bot API.",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/message-telegram",
-    "version": "1.1.7",
+    "version": "1.1.11",
     "ucrmVersionCompliancy": {
       "min": "2.14.0-beta",
       "max": null
