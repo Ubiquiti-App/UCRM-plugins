@@ -8,6 +8,7 @@ use Ubnt\UcrmPluginSdk\Service\UcrmApi;
 use Ubnt\UcrmPluginSdk\Service\UcrmOptionsManager;
 use Ubnt\UcrmPluginSdk\Service\PluginConfigManager;
 use Ubnt\UcrmPluginSdk\Service\UcrmSecurity;
+use TelegramNotifier\Service\Logger;
 
 chdir(__DIR__);
 
@@ -17,16 +18,19 @@ $attrKey = 'telegramId';
 $attrName = 'Telegram ID';
 
 
+$logger = new \TelegramNotifier\Service\Logger();
+$logger->setLogLevelThreshold(LogLevel::DEBUG);
+
 $api = UcrmApi::create();
 $customattributes = $api->get('custom-attributes');
 if (array_search($attrKey, array_column($customattributes, 'key')) === false)
 {
-    echo '<br> ' . $attrKey . ' custom attribute not found <br>';
+    $logger->debug($attrKey . ' custom attribute not found');
     $api->post('custom-attributes', [ 'name' => $attrName, 'attributeType' => 'client', 'clientZoneVisible' => false, ]);
-    echo $attrKey . ' custom attribute created <br>'; 
+    $logger->debug($attrKey . ' custom attribute created');
 } 
 else 
 {
-    echo $attrKey . ' custom attribute found <br>';
+    $logger->debug($attrKey . ' custom attribute found');
 }
 

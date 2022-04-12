@@ -68,6 +68,7 @@ class Plugin
 
         $jsonData = @json_decode($userInput, true, 10);
         if (! isset($jsonData['uuid'])) {
+            $this->logger->debug($userInput);
             $this->logger->error('JSON error: ' . json_last_error_msg());
 
             return;
