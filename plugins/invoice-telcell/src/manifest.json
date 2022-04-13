@@ -1,0 +1,46 @@
+{
+  "version": "1",
+  "information": {
+    "name": "invoice-telcell",
+    "displayName": "Automatic invoicing and payments via TelCell Wallet",
+    "description": "This plugin is greate",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-telcell",
+    "version": "1.0.35",
+    "ucrmVersionCompliancy": {
+      "min": "2.14.0-beta",
+      "max": null
+    },
+    "unmsVersionCompliancy": {
+      "min": "1.0.0-dev.1",
+      "max": null
+    },
+    "author": "Karapet Khachoyan"
+  },
+  "configuration": [
+    {
+      "key": "shop_id",
+      "label": "TelCell SHOP_ID",
+      "description": "Obtained from telcell.am",
+      "required": 1
+    },
+    {
+      "key": "shop_key",
+      "label": "TelCell SHOP_KEY",
+      "description": "Obtained from telcell.am",
+      "required": 1
+    },
+    {
+      "key": "webhook_url",
+      "label": "UCRM Webhook public URL",
+      "description": "URL, on which TelCell responses",
+      "required": 1
+    },
+    {
+      "key": "logging_level",
+      "label": "enable debug logs",
+      "description": "Make the plugin more verbose.",
+      "type": "checkbox",
+      "required": 0
+    }
+  ]
+}

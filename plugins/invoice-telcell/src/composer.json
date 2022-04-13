@@ -1,0 +1,16 @@
+{
+  "description": "Automatic invoicing and payments via TelCell Wallet",
+  "version": "1.0.0",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Telcell\\": [
+        "src/"
+      ]
+    }
+  },
+  "require": {
+    "ubnt/ucrm-plugin-sdk": "~0.4",
+    "katzgrau/klogger": "^1.2"
+  }
+}
