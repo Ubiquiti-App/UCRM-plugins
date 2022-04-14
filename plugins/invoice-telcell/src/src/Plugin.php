@@ -4,19 +4,8 @@ declare(strict_types=1);
 
 namespace Telcell;
 
-
-use Psr\Log\LogLevel;
-use Telcell\Service\Logger;
-
 class Plugin
 {
-
-    private $api;
-    private $logger;
-
-    private $pluginConfigManager;
-    private $config;
-
     private $buyer;
     private $currency;
     private $sum;
@@ -27,24 +16,17 @@ class Plugin
 
     public function __construct( )
     {
-
-        $this->api = \Ubnt\UcrmPluginSdk\Service\UcrmApi::create();
-        $this->logger = new \Telcell\Service\Logger();
-        $this->logger->setLogLevelThreshold(LogLevel::DEBUG);
-
-        $this->pluginConfigManager = \Ubnt\UcrmPluginSdk\Service\PluginConfigManager::create();
-        $this->config = $this->pluginConfigManager->loadConfig();
-        $this->logger->debug($this->config);
+        $this->api = new \Telcell\Service\API();
     }
 
     public function run(): void
     {
 
-        $this->logger->debug('Started...');
+        $this->api->debug('Started...');
         $userInput = file_get_contents('php://input');
         if (! $userInput) 
         {
-            $this->logger->warning('no input');
+            $this->api->warning('no input');
             return;
         }
 
@@ -55,21 +37,21 @@ class Plugin
             $entity = $jsonData['entity'];
             if($entity != 'invoice')
             {
-                $this->logger->debug('entity is not invoice');
+                $this->api->debug('entity is not invoice');
                 return;
             }
 
             $eventName = $jsonData['eventName'];           
             if($eventName != 'invoice.add')
             {
-                $this->logger->debug('eventName is not invoice.add');
+                $this->api->debug('eventName is not invoice.add');
                 return;
             }
 
             $changeType = $jsonData['changeType'];
             if($changeType != 'insert')
             {
-                $this->logger->debug('changeType is not insert');
+                $this->api->debug('changeType is not insert');
                 return;
             }
 
@@ -79,88 +61,60 @@ class Plugin
             $this->buyer = $this->getClientTelcellId($jsonData['clientId']);
             if(!$this->buyer)
             {
-                $this->logger->debug('Client have not telcell wallet, skiping....');
+                $this->api->debug('Client have not telcell wallet, skiping....');
                 return;
             }
 
-            $this->logger->debug('Stage 1: buyer id detected ' . $this->buyer);
+            $this->api->debug('Stage 1: buyer id detected ' . $this->buyer);
 
 
 
             $this->currency = '51';
-            $this->sum = strval($jsonData['amountToPay']) . '.00' ;
+            $this->sum = strval($jsonData['amountToPay']);
             $this->description = 'Invoice';
             $this->invoiceNumber = md5(random_bytes(10));
-            $this->validDays = '1'; //$jsonData['maturityDays'];
+            $this->validDays = $jsonData['maturityDays'];
 
             $url = 'https://telcellmoney.am/invoices';
             $data = array(
-                'bill:issuer' => $this->config['shop_id'], 
+                'bill:issuer' => $this->api->getPluginConfig('shop_id'), 
                 'buyer' => $this->buyer,
-                'checksum' => $this->generateChecksum(),
                 'currency' => $this->currency,
                 'description' => $this->description,
                 'issuer_id' => $this->invoiceNumber,
                 'sum' => $this->sum,
-                'valid_days' => $this->validDays
+                'valid_days' => $this->validDays,
+                'checksum' => $this->generateChecksum()
             );
 
-            $this->logger->debug($data);
+            $this->api->debug($data);
 
-            $urlEncoded = http_build_query($data);
-            $urlEncoded = str_replace("bill%3Aissuer","bill:issuer", $urlEncoded);
-            $this->logger->debug($urlEncoded);
             $options = array(
                 'http' => array(
                     'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
                     'method'  => 'POST',
-                    'content' => $urlEncoded
-                )
-            );
-
-
-            $this->logger->debug($options);
-            $context  = stream_context_create($options);
-            $result = file_get_contents($url, false, $context);
-
-            $this->logger->debug('Stage 2 invoice created :' . $result);
-
-
-            $url = 'https://telcellmoney.am/payments/invoice';
-            $data = array(
-                'invoice' => $result, 
-                'return_url' => $this->config['webhook_url']
-            );
-
-            $this->logger->debug('registering callback');
-            $this->logger->debug($data);
-
-            $options = array(
-                'http' => array(
-                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                    'method'  => 'GET',
                     'content' => http_build_query($data)
                 )
             );
-            $this->logger->debug('registering callback : options: ');
-            $this->logger->debug($options);
 
+            $this->api->debug($options);
             $context  = stream_context_create($options);
             $result = file_get_contents($url, false, $context);
-            $this->logger->debug('Stage 3 callback registered :');
-            $this->logger->debug($result);
+
+            $result = $this->api->addCustomAttributeToInvoice($jsonData['id'], 'telcellInvoiceNumber', $result);
+            $this->api->debug($result);
             
         }
         else if (isset($jsonData['a']) && isset($jsonData['b']) && isset($jsonData['c']) && isset($jsonData['d']) && isset($jsonData['e'])) 
         {
 
         }
-        $this->logger->debug('Ended!');
+        $this->api->debug('Ended!');
     }
 
     public function getClientTelcellId($clientId) 
     {
-        $client = $this->api->get('clients/' . $clientId );
+        $client = $this->api->getClientById($clientId);
         foreach ($client['attributes'] as &$attr) 
         {
             if($attr['key'] == 'telcellWalletId')
@@ -168,7 +122,7 @@ class Plugin
                 return $attr['value'];
             }
         }
-        return '60616692';
+        return '';
     }
 
     public function getInvoiceByTelcellId($telcellId) 
@@ -182,8 +136,8 @@ class Plugin
 
     public function generateChecksum() : string
     {
-        $temp = $this->config['shop_key'] . $this->config['shop_id'] . $this->buyer . $this->currency . $this->sum . $this->description . $this->validDays . $this->invoiceNumber;
-        $this->logger->debug('Checksum MD5(' . $temp . ')');
+        $temp = $this->api->getPluginConfig('shop_key') . $this->api->getPluginConfig('shop_id') . $this->buyer . $this->currency . $this->sum . $this->description . $this->validDays . $this->invoiceNumber;
+        $this->api->debug('Checksum MD5(' . $temp . ')');
         return md5($temp);  
     }
 }

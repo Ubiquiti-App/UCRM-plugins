@@ -5,7 +5,7 @@
     "displayName": "Automatic invoicing and payments via TelCell Wallet",
     "description": "This plugin is greate",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-telcell",
-    "version": "1.0.35",
+    "version": "1.0.50",
     "ucrmVersionCompliancy": {
       "min": "2.14.0-beta",
       "max": null

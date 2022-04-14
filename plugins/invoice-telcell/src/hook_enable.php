@@ -1,34 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
+use Telcell\Service\API;
+
 chdir(__DIR__);
+
 require_once __DIR__ . '/vendor/autoload.php';
 
+$api = new API();
+$api->createCustomAttribute('Telcell Wallet ID', 'client', 'string');
+$api->createCustomAttribute('Telcell Invoice Number', 'invoice', 'integer');
+$api->createCustomAttribute('Telcell Payment Number', 'payment', 'integer');
 
-$logger = new \Telcell\Service\Logger();
-$logger->setLogLevelThreshold(LogLevel::DEBUG);
-$logger->debug('Executing hook_enable');
-
-$pluginConfigManager = Ubnt\UcrmPluginSdk\Service\PluginConfigManager::create();
-$config = $pluginConfigManager->loadConfig();
-
-$optionsManager = Ubnt\UcrmPluginSdk\Service\UcrmOptionsManager::create();
-$options = $optionsManager->loadOPtions();
-
-$api = UcrmApi::create();
-
-
-$attrKey = 'telcellId';
-$attrName = 'Telcell ID';
-
-$customattributes = $api->get('custom-attributes');
-if (array_search($attrKey, array_column($customattributes, 'key')) === false)
-{
-    $logger->debug($attrKey . ' custom attribute not found');
-    $api->post('custom-attributes', [ 'name' => $attrName, 'attributeType' => 'client', 'clientZoneVisible' => false, ]);
-    $logger->debug($attrKey . ' custom attribute created');
-} 
-else 
-{
-    $logger->debug($attrKey . ' custom attribute found');
-}
