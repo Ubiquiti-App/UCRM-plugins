@@ -16,7 +16,7 @@ If you use a UBNT device you can generate a KMZ file using the airLink simulatio
 - *Maps JavaScript API Key:* Get this from the Google Api Console, make sure to add your domain as an HTTP Referrer.
 - *KMZ File URL:* URL to your KMZ file
 - *Logo URL:* Displayed next to map on larger screens, above on smaller.
-- *Form Description:* Displayed below logo. (Can contain HTML)
+- *Form Description:* Displayed below logo.
 - *Link 1:* Display a button on the left. Syntax is Link|Title And you can use | in the Title after the first
 - *Link 2:* Display a button on the right. Syntax is Link|Title And you can use | in the Title after the first
 
