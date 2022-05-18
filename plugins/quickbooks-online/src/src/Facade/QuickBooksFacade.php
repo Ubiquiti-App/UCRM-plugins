@@ -397,7 +397,7 @@ class QuickBooksFacade
                 "total={$ucrmPayment['amount']} for Client Id={$qbClient->Id} DisplayName={$qbClient->DisplayName}";
             $this->logger->debug("Exporting $paymentInfoText");
 
-            $qbPaymentMethod = $paymentMethodQbCache[$ucrmPayment['methodId']];
+            $qbPaymentMethod = $paymentMethodQbCache[$ucrmPayment['methodId']] ?? false;
             if (!$qbPaymentMethod) {
                 $paymentMethod = $this->ucrmApi->query("payment-methods/{$ucrmPayment['methodId']}");
                 $qbPaymentMethodResponse = $this->dataServiceQuery($dataService, "SELECT * FROM PaymentMethod WHERE Name = '{$paymentMethod['name']}'");
@@ -675,7 +675,7 @@ class QuickBooksFacade
     private function getItems($items, int $qbIncomeAccountId, bool $negateQty, DataService $dataService, PluginData $pluginData): array {
         $lines = [];
         foreach ($items as $item) {
-            $qbItem = $this->itemCache[$item['label']];
+            $qbItem = $this->itemCache[$item['label']] ?? false;
             if (! $qbItem) {
                 $qbItem = $this->createQBLineFromItem(
                     $dataService,
@@ -969,7 +969,7 @@ class QuickBooksFacade
             $payType = trim($methodAcct[0]);
             if ($payType != $paymentMethodName) continue;
 
-            $cachedId = $this->depositToCache[$payType];
+            $cachedId = $this->depositToCache[$payType] ?? false;
             if ($cachedId)
                 return $cachedId;
 
