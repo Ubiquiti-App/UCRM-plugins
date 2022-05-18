@@ -57,6 +57,19 @@ class QuickBooksFacade
      */
     private $qbApiErrorDelay = 5;
 
+    private $itemCache = [];
+    private $depositToCache = [];
+
+    /**
+     * @var int
+     */
+    private $queryRunCount = 0;
+
+    /**
+     * @var DateTime
+     */
+    private $lastCall;
+
     public function __construct(
         DataServiceFactory $dataServiceFactory,
         Logger $logger,
@@ -252,7 +265,6 @@ class QuickBooksFacade
             return;
 	    }
 
-        $itemCache = null;
         $query = 'invoices?direction=ASC';
         if ($pluginData->invoicesFromDate) {
             $query = sprintf('%s&createdDateFrom=%s', $query, $pluginData->invoicesFromDate);
@@ -660,7 +672,6 @@ class QuickBooksFacade
         return [$lineArray, $additionalUnapplied, $totalApplied];
     }
 
-    private $itemCache = [];
     private function getItems($items, int $qbIncomeAccountId, bool $negateQty, DataService $dataService, PluginData $pluginData): array {
         $lines = [];
         foreach ($items as $item) {
@@ -791,16 +802,6 @@ class QuickBooksFacade
 
         return $output;
     }
-
-    /**
-     * @var int
-     */
-    private $queryRunCount = 0;
-
-    /**
-     * @var DateTime
-     */
-    private $lastCall;
 
     /**
      * This function is called before most QB api queries because QB has some limits in how many calls can be
@@ -945,7 +946,6 @@ class QuickBooksFacade
         }
     }
 
-    private $depositToCache = [];
     private function getDepositToIdForPayment(string $paymentMethodName, DataService $dataService, PluginData $pluginData): ?string
     {
         $links = $pluginData->paymentTypeWithAccountLink;
