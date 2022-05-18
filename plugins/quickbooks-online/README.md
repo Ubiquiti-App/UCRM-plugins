@@ -48,7 +48,7 @@ This plugin handles import of your [UCRM](https://ucrm.ubnt.com/) customers, pay
 - Remove entity from QB when the related entity is deleted in UCRM.
 
 ## Changelog
-### 1.1.5 (2021-12-01)
+### 2.0.0 (2021-12-01)
 - Export Credit Memos. Set the `Date to start for Credit Memo export` value in the
 plugin config so that older credits that you have already entered will not export.
 - Don't generate new items all the time. Re-use the same items.
