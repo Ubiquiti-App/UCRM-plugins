@@ -10,8 +10,7 @@ class Config {
   public static $LINK_TWO = null;
 
   private static function parseLink($link_string) {
-    $link_array = explode('|', $link_string, 2);
-    return $link_array;
+      return explode('|', $link_string, 2);
   }
 
   public static function initializeStaticProperties($config_path) {

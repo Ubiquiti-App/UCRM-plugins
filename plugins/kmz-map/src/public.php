@@ -12,7 +12,7 @@ require_once(PROJECT_PATH.'/includes/initialize.php');
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><?php echo UCRM_PUBLIC_URL; ?> - Map</title>
+    <title><?php echo htmlspecialchars(UCRM_PUBLIC_URL, ENT_QUOTES); ?> - Map</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Lato:300,400,400i,700' rel="stylesheet"> 
@@ -21,25 +21,25 @@ require_once(PROJECT_PATH.'/includes/initialize.php');
   <body>
     <div id="aside">
       <?php if (!empty(\KMZMap\Config::$LOGO_URL)) { ?>
-        <img src="<?php echo \KMZMap\Config::$LOGO_URL; ?>" class="logo">
+        <img src="<?php echo htmlspecialchars(\KMZMap\Config::$LOGO_URL, ENT_QUOTES); ?>" class="logo">
       <?php } ?>
       <div id="description">
         <?php if (!empty(\KMZMap\Config::$FORM_DESCRIPTION)) { ?>
           <div class="form-description">
-            <?php echo \KMZMap\Config::$FORM_DESCRIPTION; ?>
+            <?php echo nl2br(htmlspecialchars(\KMZMap\Config::$FORM_DESCRIPTION, ENT_QUOTES)); ?>
           </div>
         <?php } ?>
         <div class="buttons">
           <?php if (!empty(\KMZMap\Config::$LINK_ONE[0])) { ?>
-            <a href="<?php echo \KMZMap\Config::$LINK_ONE[0]; ?>" class="btn" style="background-color: #28a745;"><?php echo \KMZMap\Config::$LINK_ONE[1]; ?></a>
+            <a href="<?php echo htmlspecialchars(\KMZMap\Config::$LINK_ONE[0], ENT_QUOTES); ?>" class="btn" style="background-color: #28a745;"><?php echo htmlspecialchars(\KMZMap\Config::$LINK_ONE[1], ENT_QUOTES); ?></a>
           <?php } ?>
           <?php if (!empty(\KMZMap\Config::$LINK_TWO[0])) { ?>
-            <a href="<?php echo \KMZMap\Config::$LINK_TWO[0]; ?>" class="btn" style="background-color: #007bff;"><?php echo \KMZMap\Config::$LINK_TWO[1]; ?></a>
+            <a href="<?php echo htmlspecialchars(\KMZMap\Config::$LINK_TWO[0], ENT_QUOTES); ?>" class="btn" style="background-color: #007bff;"><?php echo htmlspecialchars(\KMZMap\Config::$LINK_TWO[1], ENT_QUOTES); ?></a>
           <?php } ?>
         </div>
       </div>
     </div>
-    <input id="kmzFile" value="<?php echo \KMZMap\Config::$KMZ_FILE; ?>" type="hidden"></input>
+    <input id="kmzFile" value="<?php echo htmlspecialchars(\KMZMap\Config::$KMZ_FILE, ENT_QUOTES); ?>" type="hidden"></input>
     <div id="map"></div>
     <script type="text/javascript">
       
@@ -55,7 +55,7 @@ require_once(PROJECT_PATH.'/includes/initialize.php');
       }
     </script>
 
-    <script type="text/javascript" async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo \KMZMap\Config::$GOOGLE_API_KEY; ?>"></script>
+    <script type="text/javascript" async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo htmlspecialchars(\KMZMap\Config::$GOOGLE_API_KEY, ENT_QUOTES); ?>"></script>
 
     <style type="text/css">
       html, body, div {

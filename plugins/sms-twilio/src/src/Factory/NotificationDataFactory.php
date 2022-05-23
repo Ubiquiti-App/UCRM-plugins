@@ -35,6 +35,10 @@ class NotificationDataFactory
         $notificationData->entity = $jsonData['entity'];
         $notificationData->entityId = $jsonData['entityId'] ? (int) $jsonData['entityId'] : null;
         $notificationData->eventName = $jsonData['eventName'];
+
+        // Check if the given webhook exists.
+        $this->ucrmApi->query('webhook-events/' . $notificationData->uuid);
+
         $this->resolveUcrmData($notificationData);
 
         return $notificationData;
@@ -86,6 +90,13 @@ class NotificationDataFactory
         if (empty($notificationData->serviceData) && $notificationData->entityId) {
             $notificationData->serviceData = $this->ucrmApi->query('clients/services/' . $notificationData->entityId);
         }
+
+        if (($notificationData->serviceData['suspensionReasonId'] ?? null) !== null) {
+            $notificationData->serviceData['stopReason'] = $this->ucrmApi->query(
+                'service-suspension-reasons/' . $notificationData->serviceData['suspensionReasonId']
+            )['name'] ?? null;
+        }
+
         return $notificationData->serviceData;
     }
 }
