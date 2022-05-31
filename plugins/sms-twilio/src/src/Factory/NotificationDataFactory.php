@@ -35,6 +35,7 @@ class NotificationDataFactory
         $notificationData->entity = $jsonData['entity'];
         $notificationData->entityId = $jsonData['entityId'] ? (int) $jsonData['entityId'] : null;
         $notificationData->eventName = $jsonData['eventName'];
+        $notificationData->message = $jsonData['extraData']['message'] ?? null;
 
         // Check if the given webhook exists.
         $this->ucrmApi->query('webhook-events/' . $notificationData->uuid);
@@ -68,6 +69,10 @@ class NotificationDataFactory
     private function getClientData(NotificationData $notificationData) {
         if (empty($notificationData->clientData) && $notificationData->clientId) {
             $notificationData->clientData = $this->ucrmApi->query('clients/' . $notificationData->clientId);
+        }
+
+        if ($notificationData->message) {
+            $notificationData->clientData['message'] = $notificationData->message;
         }
         return $notificationData->clientData;
     }

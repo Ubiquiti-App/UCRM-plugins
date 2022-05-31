@@ -143,6 +143,11 @@ class PluginData extends UcrmData
     /**
      * @var string
      */
+    public $event_client_message;
+
+    /**
+     * @var string
+     */
     public $logging_level;
 
 }

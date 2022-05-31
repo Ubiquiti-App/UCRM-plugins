@@ -5,7 +5,7 @@
     "displayName": "SMS notifications via Twilio",
     "description": "This plugin sends SMS notifications via Twilio. NOTE: only phone numbers in the international format can be used, e.g. +155 555 1234",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/sms-twilio",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "ucrmVersionCompliancy": {
       "min": "2.14.0-beta",
       "max": null
@@ -165,6 +165,12 @@
       "key": "event_service_suspend",
       "label": "service.suspend",
       "description": "Example: Suspended service %%service.name%% for client %%client.companyName%%%%client.firstName%% %%client.lastName%%.",
+      "required": 0
+    },
+    {
+      "key": "event_client_message",
+      "label": "client.message",
+      "description": "Example: Message for client %%client.companyName%%%%client.firstName%% %%client.lastName%%: %%client.message%%.",
       "required": 0
     },
     {
