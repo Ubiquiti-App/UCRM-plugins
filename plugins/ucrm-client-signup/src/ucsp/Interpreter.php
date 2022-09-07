@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Ucsp;
 
 class Interpreter {
-  private static $whiteListedGet = ['countries' => ['second_level_ids' => ['states']]];
+  private static $whiteListedGet = ['countries' => ['states']];
   private static $whiteListedPost = ['clients' => []];
   private static $dataUrl = null;
 
