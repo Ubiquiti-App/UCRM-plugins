@@ -42,10 +42,10 @@ class Logger extends \Katzgrau\KLogger\Logger
      * @param array $context
      * @return null
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
         if (!is_string($message)) {
-            $message = var_export($message,true);
+            $message = var_export($message, true);
         }
         return parent::log($level, $message, $context);
     }
