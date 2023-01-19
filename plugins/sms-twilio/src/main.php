@@ -6,7 +6,6 @@ require 'vendor/autoload.php';
 
 (static function () {
     $builder = new \DI\ContainerBuilder();
-    $builder->setDefinitionCache(new \Doctrine\Common\Cache\ApcuCache());
     $container = $builder->build();
     $plugin = $container->get(\SmsNotifier\Plugin::class);
     try {
