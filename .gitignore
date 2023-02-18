@@ -1,2 +1,4 @@
 .php_cs.cache
 vendor
+.idea
+composer.phar

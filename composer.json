@@ -4,6 +4,7 @@
   },
   "require": {
     "ext-zip": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "ubnt/ucrm-plugin-sdk": "^0.8.1"
   }
 }

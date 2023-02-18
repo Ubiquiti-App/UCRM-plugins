@@ -31,6 +31,11 @@ class PluginData extends UcrmData
     /**
      * @var string
      */
+    public $qbIncomeAccountName;
+
+    /**
+     * @var string
+     */
     public $oauthRealmID;
 
     /**
@@ -86,7 +91,17 @@ class PluginData extends UcrmData
     /**
      * @var string
      */
+    public $lastExportedCreditID;
+
+    /**
+     * @var string
+     */
     public $displayedErrors;
+
+    /**
+     * @var string|null
+     */
+    public $itemNameFormat;
 
     /**
      * @var string|null
@@ -97,4 +112,19 @@ class PluginData extends UcrmData
      * @var string|null
      */
     public $paymentsFromDate;
+
+    /**
+     * @var string|null
+     */
+    public $creditsFromDate;
+
+    /**
+     * @var string|null
+     */
+    public $paymentTypeWithAccountLink;
+
+    /**
+     * @var string|null
+     */
+    public $logLevel;
 }

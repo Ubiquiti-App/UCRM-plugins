@@ -70,6 +70,8 @@ class Plugin
                     $this->quickBooksFacade->exportClients();
                     $this->quickBooksFacade->exportInvoices();
                     $this->quickBooksFacade->exportPayments();
+                    $this->quickBooksFacade->exportCreditNotes();
+                    $this->cleanLog();
                 }
                 $this->logger->info('CLI process ended');
             } catch (QBAuthorizationException $exception) {
@@ -91,6 +93,38 @@ class Plugin
             $this->logger->notice('Authorization Code obtained.');
             $this->optionsManager->update();
             echo 'Authorization Code obtained.';
+        }
+    }
+
+    private function cleanLog(): void {
+        $dir = Logger::logFileDirectory;
+        $file = Logger::logFileName;
+        $ext = Logger::logFileExtension;
+        $logPath = "$dir/$file.$ext";
+
+        $mb = 1000000;
+        $size = filesize($logPath);
+        // never trim file if it's less than 1Mb
+        if ($size < $mb) return;
+
+        $mbSize = $size / $mb;
+        $this->logger->info("Cleaning up log, size is $mbSize MB");
+        $this->trimLogToLength($logPath, 10000);
+    }
+
+    /**
+     * Idea from [here](https://stackoverflow.com/a/45090213), but modified
+     */
+    function trimLogToLength($path, $numRowsToKeep) {
+        $file = file($path);
+        if (!$file) return;
+
+        // if this file is long enough that we should be truncating it
+        $countFile = count($file);
+        if ($countFile > $numRowsToKeep) {
+            // figure out the rows we want to keep
+            $dataRowsToKeep = array_slice($file,$countFile-$numRowsToKeep, $numRowsToKeep);
+            file_put_contents($path, implode($dataRowsToKeep));
         }
     }
 }

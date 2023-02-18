@@ -5,7 +5,7 @@
     "displayName": "QuickBooks Online export",
     "description": "This plugin exports payments and invoices to QuickBooks Online",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/quickbooks-online",
-    "version": "1.1.3",
+    "version": "2.0.0",
     "ucrmVersionCompliancy": {
       "min": "2.10.0-beta1",
       "max": null
@@ -37,9 +37,21 @@
     },
     {
       "key": "qbIncomeAccountNumber",
-      "label": "Income account number",
-      "description": "Income Account number from QuickBooks",
+      "label": "Income account ID",
+      "description": "Income Account ID from QuickBooks. Enter 0 here if you are using \"Income account name\" below",
       "required": 1
+    },
+    {
+      "key": "qbIncomeAccountName",
+      "label": "Income account name",
+      "description": "Income Account name from QuickBooks. This will only be used if \"Income account number\" above is 0",
+      "required": 0
+    },
+    {
+      "key": "itemNameFormat",
+      "label": "Item Name Format String",
+      "description": "Optional format string to generate QB item names derived from UCRM item type. Can be typically set to something like \"YourWisp %s\" or \"UCRM %s\" to end up with items named \"UCRM service\", \"UCRM product\" etc..",
+      "required": 0
     },
     {
       "key": "invoicesFromDate",
@@ -48,9 +60,28 @@
       "required": 0
     },
     {
+      "key": "creditsFromDate",
+      "label": "Date to start for Credit Memo export",
+      "description": "Date in yyyy-mm-dd format ",
+      "required": 0
+    },
+    {
       "key": "paymentsFromDate",
       "label": "Date to start for Payment export",
       "description": "Date in yyyy-mm-dd format ",
+      "required": 0
+    },
+    {
+      "key": "paymentTypeWithAccountLink",
+      "label": "Link payment method to QB account",
+      "description": "If you'd like to set the \"Deposit to\" field in QB based on payment type, you can set that here. Enter 1 payment type per line like this (without the double quotes): \"Cash=The Cash account\". If you want to enter more than 1 payment type, put the next payment type on the next line",
+      "type": "textarea",
+      "required": 0
+    },
+    {
+      "key": "logLevel",
+      "label": "Logging Level",
+      "description": "Leave empty for default (i.e. regular logging level). To get more details in log, enter \"debug\" (without the double quotes)",
       "required": 0
     }
   ]
