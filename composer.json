@@ -1,9 +1,9 @@
 {
-  "require-dev": {
-    "friendsofphp/php-cs-fixer": "^2.15"
-  },
   "require": {
     "ext-zip": "*",
     "ext-json": "*"
+  },
+  "require-dev": {
+    "symplify/easy-coding-standard": "^10.2"
   }
 }
