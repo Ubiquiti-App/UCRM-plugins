@@ -44,7 +44,8 @@ if (
         'organizationId' => $trimNonEmpty((string) $_GET['organization']),
         'createdDateFrom' => $trimNonEmpty((string) $_GET['since']),
         'createdDateTo' => $trimNonEmpty((string) $_GET['until']),
-        'status' => [1, 2, 3], // 1 = Unpaid, 2 = Partially paid, 3 = Paid
+        'status' => [1, 2, 3],
+        // 1 = Unpaid, 2 = Partially paid, 3 = Paid
     ];
     $parameters = array_filter($parameters);
 
@@ -61,7 +62,9 @@ if (
     $organization = $api->get('organizations/' . $_GET['organization']);
     $currency = $api->get('currencies/' . $organization['currencyId']);
     $invoices = $api->get('invoices', $parameters);
-    $services = $api->get('clients/services', ['organizationId' => $_GET['organization']]);
+    $services = $api->get('clients/services', [
+        'organizationId' => $_GET['organization'],
+    ]);
     $servicePlans = $api->get('service-plans');
 
     $servicesMap = [];
