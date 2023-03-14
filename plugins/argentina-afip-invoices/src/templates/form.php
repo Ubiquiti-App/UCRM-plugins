@@ -24,14 +24,14 @@
                                         <label class="mb-0" for="frm-organization"><small>Organizacion:</small></label>
                                         <select name="organization" id="frm-organization" class="form-control form-control-sm" >
                                             <?php
-												$orgNumber = 1;
+                                                $orgNumber = 1;
                                                 foreach ($organizaciones as $organizacion) {
                                                     printf(
                                                         '<option value="%s">%s</option>',
-                                                        ($organizacion['id'].','. $organizacion['salesPoint'] .','. $organizacion['activitiesStartDate'] .','. $orgNumber),
-                                                        htmlspecialchars($organizacion['name'] . ' - Punto de Venta: ' . $organizacion['salesPoint'] , ENT_QUOTES)
+                                                        ($organizacion['id'] . ',' . $organizacion['salesPoint'] . ',' . $organizacion['activitiesStartDate'] . ',' . $orgNumber),
+                                                        htmlspecialchars($organizacion['name'] . ' - Punto de Venta: ' . $organizacion['salesPoint'], ENT_QUOTES)
                                                     );
-													$orgNumber ++;
+                                                    $orgNumber++;
                                                 }
                                             ?>
                                         </select>
