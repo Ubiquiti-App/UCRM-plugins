@@ -9,6 +9,7 @@ return static function (ECSConfig $ecsConfig): void {
     $ecsConfig->paths(
         [
             __DIR__ . '/examples',
+            __DIR__ . '/plugins/backup-sync-dropbox',
         ]
     );
 
