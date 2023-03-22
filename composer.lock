@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5244a2322296ef995cb05d9d7cd7fee2",
+    "content-hash": "9dfe388a7bbf6701e3d263b418e0a9d3",
     "packages": [],
     "packages-dev": [
         {
@@ -1748,27 +1748,28 @@
                     "Symfony\\Polyfill\\Php72\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony polyfill backporting some PHP 7.2+ features to lower PHP versions",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "compatibility",
-                "polyfill",
-                "portable",
-                "shim"
+            "name": "symplify/easy-coding-standard",
+            "version": "10.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symplify/easy-coding-standard.git",
+                "reference": "c93878b3c052321231519b6540e227380f90be17"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/c93878b3c052321231519b6540e227380f90be17",
+                "reference": "c93878b3c052321231519b6540e227380f90be17",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "conflict": {
+                "friendsofphp/php-cs-fixer": "<3.0",
+                "squizlabs/php_codesniffer": "<3.6"
+            },
+            "bin": [
+                "bin/ecs"
             ],
             "support": {
                 "source": "https://github.com/symfony/polyfill-php72/tree/v1.27.0"
@@ -1814,6 +1815,12 @@
                 "thanks": {
                     "name": "symfony/polyfill",
                     "url": "https://github.com/symfony/polyfill"
+                },
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "10.3-dev"
                 }
             },
             "autoload": {
@@ -2129,14 +2136,19 @@
             "license": [
                 "MIT"
             ],
-            "authors": [
+            "authors": [],
+            "description": "Prefixed scoped version of ECS package",
+            "support": {
+                "source": "https://github.com/symplify/easy-coding-standard/tree/10.3.3"
+            },
+            "funding": [
                 {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "url": "https://www.paypal.me/rectorphp",
+                    "type": "custom"
                 },
                 {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
                 }
             ],
             "description": "Provides a way to profile code",
@@ -2245,6 +2257,7 @@
                 }
             ],
             "time": "2023-02-24T10:42:00+00:00"
+            "time": "2022-06-13T14:03:37+00:00"
         }
     ],
     "aliases": [],
