@@ -10,6 +10,7 @@
     }
   },
   "require": {
+    "ubnt/ucrm-plugin-sdk": "^0.8",
     "twilio/sdk": "^5.21",
     "php-di/php-di": "^6.4",
     "doctrine/cache": "^1.7",
