@@ -73,7 +73,6 @@ class UnmsApi
         return Json::decode((string) $response->getBody());
     }
 
-
     private function request(string $method, string $endpoint, array $options = []): Response
     {
         return $this->client->request(
