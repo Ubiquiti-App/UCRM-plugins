@@ -5,12 +5,11 @@ declare(strict_types=1);
 
 namespace QBExport;
 
-
 use QBExport\Exception\QBAuthorizationException;
 use QBExport\Facade\QuickBooksFacade;
-use QBExport\Service\PluginDataValidator;
 use QBExport\Service\Logger;
 use QBExport\Service\OptionsManager;
+use QBExport\Service\PluginDataValidator;
 
 class Plugin
 {

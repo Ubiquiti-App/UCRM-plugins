@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace QBExport\Service;
 
-
 use QBExport\Data\PluginData;
 use QBExport\Exception\CurlException;
 
@@ -34,7 +33,8 @@ class UcrmApi
         $urlData = parse_url(
             $this->getApiUrl($this->optionsManager->load())
         );
-        $this->verifyUcrmApiConnection = ! ($urlData
+        $this->verifyUcrmApiConnection = ! (
+            $urlData
             && strtolower($urlData['host']) === 'localhost'
             && strtolower($urlData['scheme']) === 'https'
         );

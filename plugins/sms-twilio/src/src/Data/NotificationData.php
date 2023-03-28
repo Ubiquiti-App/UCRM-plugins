@@ -15,36 +15,58 @@ namespace SmsNotifier\Data;
  */
 class NotificationData
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     public $uuid;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $changeType;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $entity;
 
-    /** @var int|null */
+    /**
+     * @var int|null
+     */
     public $entityId;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     public $message;
 
-    /** @var int|null */
+    /**
+     * @var int|null
+     */
     public $clientId;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $eventName;
 
-    /** @var array|null */
+    /**
+     * @var array|null
+     */
     public $clientData;
 
-    /** @var array|null */
+    /**
+     * @var array|null
+     */
     public $serviceData;
 
-    /** @var array|null */
+    /**
+     * @var array|null
+     */
     public $invoiceData;
 
-    /** @var array|null */
+    /**
+     * @var array|null
+     */
     public $paymentData;
 }
