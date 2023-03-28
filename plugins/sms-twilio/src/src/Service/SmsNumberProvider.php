@@ -10,12 +10,10 @@ declare(strict_types=1);
 
 namespace SmsNotifier\Service;
 
-
 use SmsNotifier\Data\NotificationData;
 
 class SmsNumberProvider
 {
-
     /*
      * go through client's contacts and find an applicable one, if any
      */
@@ -35,7 +33,7 @@ class SmsNumberProvider
      */
     protected function isContactApplicable(string $entity, array $contact = null): bool
     {
-        if (!$contact || empty($contact['phone'])) {
+        if (! $contact || empty($contact['phone'])) {
             return false;
         }
         switch ($entity) {
@@ -48,5 +46,4 @@ class SmsNumberProvider
                 return $contact['isContact'] ?? false;
         }
     }
-
 }

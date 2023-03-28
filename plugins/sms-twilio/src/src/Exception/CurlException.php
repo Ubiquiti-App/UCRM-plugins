@@ -6,5 +6,4 @@ namespace SmsNotifier\Exception;
 
 class CurlException extends \Exception
 {
-
 }

@@ -10,7 +10,9 @@ use QuickBooksOnline\API\DataService\DataService;
 class DataServiceFactory
 {
     public const TYPE_URL_GENERATOR = 'UrlGenerator';
+
     public const TYPE_EXCHANGE_CODE_FOR_TOKEN = 'ExchangeCodeForToken';
+
     public const TYPE_QUERY = 'Query';
 
     /**

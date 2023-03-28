@@ -6,7 +6,7 @@ namespace SmsNotifier\Service;
 
 class PluginDataValidator
 {
-     /**
+    /**
      * @var Logger
      */
     private $logger;

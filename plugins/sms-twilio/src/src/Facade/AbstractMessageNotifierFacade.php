@@ -20,10 +20,14 @@ abstract class AbstractMessageNotifierFacade
      */
     protected $logger;
 
-    /** @var MessageTextFactory */
+    /**
+     * @var MessageTextFactory
+     */
     protected $messageTextFactory;
 
-    /** @var SmsNumberProvider */
+    /**
+     * @var SmsNumberProvider
+     */
     protected $smsNumberProvider;
 
     public function __construct(
@@ -36,21 +40,6 @@ abstract class AbstractMessageNotifierFacade
         $this->smsNumberProvider = $smsNumberProvider;
     }
 
-    /**
-     * implement in subclass with the specific messaging provider
-     * @see TwilioNotifierFacade::sendMessage()
-     *
-     * @param NotificationData $notificationData
-     * @param string $clientSmsNumber
-     * @param string $messageBody
-     */
-    abstract protected function sendMessage(
-        NotificationData $notificationData,
-        string $clientSmsNumber,
-        string $messageBody
-    ): void;
-
-
     /*
      * sets up the body and uses the implementation's sendMessage() to send
      */
@@ -62,7 +51,7 @@ abstract class AbstractMessageNotifierFacade
             return;
         }
         $messageBody = $this->messageTextFactory->createBody($notificationData);
-        if (!$messageBody) {
+        if (! $messageBody) {
             $this->logger->info('No text configured for event: ' . $notificationData->eventName);
             return;
         }
@@ -70,8 +59,17 @@ abstract class AbstractMessageNotifierFacade
         try {
             $this->sendMessage($notificationData, $clientSmsNumber, $messageBody);
         } catch (HttpException $httpException) {
-            $this->logger->error($httpException->getCode().' '.$httpException->getMessage());
+            $this->logger->error($httpException->getCode() . ' ' . $httpException->getMessage());
         }
     }
 
+    /**
+     * implement in subclass with the specific messaging provider
+     * @see TwilioNotifierFacade::sendMessage()
+     */
+    abstract protected function sendMessage(
+        NotificationData $notificationData,
+        string $clientSmsNumber,
+        string $messageBody
+    ): void;
 }
