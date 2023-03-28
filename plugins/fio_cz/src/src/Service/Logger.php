@@ -12,7 +12,7 @@ class Logger extends \Katzgrau\KLogger\Logger
 
     public function __construct($debug = false)
     {
-        $this->debugLogger = (bool)$debug;
+        $this->debugLogger = (bool) $debug;
         parent::__construct(
             'data',
             $this->debugLogger ? LogLevel::DEBUG : LogLevel::INFO,
