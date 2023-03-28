@@ -13,6 +13,7 @@ return static function (ECSConfig $ecsConfig): void {
             __DIR__ . '/plugins/routeros-suspension',
             __DIR__ . '/plugins/invoice-csv-export',
             __DIR__ . '/plugins/mkt-queue-sync',
+            __DIR__ . '/plugins/revenue-report',
         ]
     );
 
