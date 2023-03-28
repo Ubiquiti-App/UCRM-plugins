@@ -5,13 +5,13 @@
         "displayName": "Facturas Argentina AFIP",
         "description": "Plugin para obtener CAE (Facturacion electronica) en Argentina",
         "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/argentina-afip-invoices",
-        "version": "1.1.0",
+        "version": "1.2.0",
         "ucrmVersionCompliancy": {
             "min": "2.16.12",
             "max": null
         },
 		"unmsVersionCompliancy": {
-		"min": "1.1.6",
+		"min": "2.1.0",
 		"max": null
 		},
         "author": "Franco Johan Gampel - franco@gampel.com.ar"
