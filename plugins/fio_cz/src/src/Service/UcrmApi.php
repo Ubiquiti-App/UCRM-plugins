@@ -32,7 +32,8 @@ class UcrmApi
         $urlData = parse_url(
             $this->getApiUrl($this->optionsManager->loadOptions())
         );
-        $this->verifyUcrmApiConnection = ! ($urlData
+        $this->verifyUcrmApiConnection = ! (
+            $urlData
             && strtolower($urlData['host']) === 'localhost'
             && strtolower($urlData['scheme']) === 'https'
         );

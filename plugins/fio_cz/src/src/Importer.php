@@ -81,7 +81,6 @@ class Importer
             'endDate' => $endDate->format($this->dateFormat),
         ]);
 
-
         if ($optionsData->lastProcessedPayment !== null && ! is_numeric($optionsData->lastProcessedPayment)) {
             $this->logger->error(
                 'Last processed payment must be empty or a number',
