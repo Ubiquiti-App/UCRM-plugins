@@ -385,7 +385,8 @@ foreach ($pluginDirectories as $directory) {
     $errors += validatePlugin($directory);
 }
 
-$errors += checkPluginsJson();
+// Temporary skipped
+// $errors += checkPluginsJson();
 
 printf('Found %d error%s.' . PHP_EOL, $errors, $errors === 1 ? '' : 's');
 

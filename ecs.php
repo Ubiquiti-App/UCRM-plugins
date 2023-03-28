@@ -10,6 +10,7 @@ return static function (ECSConfig $ecsConfig): void {
         [
             __DIR__ . '/examples',
             __DIR__ . '/plugins/routeros-suspension',
+            __DIR__ . '/plugins/invoice-csv-export',
         ]
     );
 
