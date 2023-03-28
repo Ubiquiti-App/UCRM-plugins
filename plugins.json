@@ -104,17 +104,13 @@
             "displayName": "Revenue report",
             "description": "Grids and charts showing organization's revenue grouped by products or services. Shown in the Reporting main menu section.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/revenue-report",
-            "version": "1.2.0",
-            "ucrmVersionCompliancy": {
-                "min": "2.14.0-beta4",
-                "max": null
-            },
+            "version": "1.1.4",
             "unmsVersionCompliancy": {
-                "min": "`2.1.0`",
+                "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Ubiquiti Networks, Inc.",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/revenue-report\/revenue-report.zip"
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/87854e6507d65f19eef1ebc8e5a07c84b5210541\/plugins\/revenue-report\/revenue-report.zip"
         },
         {
             "name": "sms-twilio",
