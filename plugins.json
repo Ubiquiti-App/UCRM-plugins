@@ -54,7 +54,7 @@
                 "max": null
             },
             "author": "Ubiquiti Networks, Inc.",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/c57aa66e8dc0d9a55cf7629d7fcdf288e01aa760\/plugins\/invoice-csv-export\/invoice-csv-export.zip",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/c57aa66e8dc0d9a55cf7629d7fcdf288e01aa760\/plugins\/invoice-csv-export\/invoice-csv-export.zip"
         },
         {
             "name": "kmz-map",
@@ -135,16 +135,12 @@
             "description": "A UCRM plugin that provides a frontend form for clients to signup.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/ucrm-client-signup",
             "version": "1.2.1",
-            "ucrmVersionCompliancy": {
-                "min": "2.14.0",
-                "max": null
-            },
             "unmsVersionCompliancy": {
                 "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Charuwts, LLC",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/ucrm-client-signup\/ucrm-client-signup.zip"
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/88fe798826dd0fed95ba6624e9e84e7087b28abf\/plugins\/ucrm-client-signup\/ucrm-client-signup.zip"
         }
     ]
 }

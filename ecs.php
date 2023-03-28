@@ -15,6 +15,7 @@ return static function (ECSConfig $ecsConfig): void {
             __DIR__ . '/plugins/mkt-queue-sync',
             __DIR__ . '/plugins/revenue-report',
             __DIR__ . '/plugins/backup-sync-dropbox',
+            __DIR__ . '/plugins/ucrm-client-signup',
         ]
     );
 
