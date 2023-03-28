@@ -12,6 +12,7 @@ use Ubnt\UcrmPluginSdk\Service\UcrmApi;
 class Suspender
 {
     private const BLOCKED_USERS_LIST = 'BLOCKED_USERS';
+
     private const COMMENT_SIGNATURE = 'ucrm_';
 
     private const SERVICE_STATUS_ACTIVE = 3;
@@ -42,7 +43,6 @@ class Suspender
         $this->ucrmApi = UcrmApi::create();
         $this->unmsApi = UnmsApi::create($config);
         $this->routerOsApi = RouterOsApi::create($config);
-
     }
 
     public function suspend(): void
@@ -232,7 +232,6 @@ class Suspender
         $this->routerOsApi->add($section, $toAdd);
     }
 
-
     private function setFilterRules(array $content): void
     {
         $section = '/ip/firewall/filter';
@@ -376,7 +375,9 @@ class Suspender
     {
         $result = $this->routerOsApi->print(
             $section,
-            empty($attributes) ? [] : ['.proplist' => sprintf('.id,%s', implode(',', $attributes))]
+            empty($attributes) ? [] : [
+                '.proplist' => sprintf('.id,%s', implode(',', $attributes)),
+            ]
         );
 
         return is_array($result) ? $result : [];

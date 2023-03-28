@@ -5,13 +5,13 @@
     "displayName": "Revenue report",
     "description": "Grids and charts showing organization's revenue grouped by products or services. Shown in the Reporting main menu section.",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/revenue-report",
-    "version": "1.1.4",
+    "version": "1.2.0",
     "ucrmVersionCompliancy": {
       "min": "2.14.0-beta4",
       "max": null
     },
     "unmsVersionCompliancy": {
-      "min": "1.0.0-dev.1",
+      "min": "`2.1.0`",
       "max": null
     },
     "author": "Ubiquiti Networks, Inc."
