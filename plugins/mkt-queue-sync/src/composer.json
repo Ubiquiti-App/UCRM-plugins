@@ -15,8 +15,8 @@
     }
   ],
   "require": {
-	"ubnt/ucrm-plugin-sdk": "~0.5.2",
-	"evilfreelancer/routeros-api-php": "^0.9.0",
-	"nette/utils": "^3.0"
+    "ubnt/ucrm-plugin-sdk": "^0.9",
+    "nette/utils": "^4.0",
+    "evilfreelancer/routeros-api-php": "^1.5"
   }
 }

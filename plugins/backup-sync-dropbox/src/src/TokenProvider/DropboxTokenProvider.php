@@ -61,7 +61,9 @@ class DropboxTokenProvider implements TokenProvider
             $authorizationUrl = str_replace(
                 'https://api.dropbox.com/oauth2/authorize',
                 'https://www.dropbox.com/oauth2/authorize',
-                $oAuthClient->getAuthorizationUrl(['token_access_type' => 'offline'])
+                $oAuthClient->getAuthorizationUrl([
+                    'token_access_type' => 'offline',
+                ])
             );
 
             $this->pluginLogManager->appendLog(
@@ -71,7 +73,7 @@ class DropboxTokenProvider implements TokenProvider
                 To finish setup, go to the following URL, allow access to the application
                 and enter the generated Access Code into plugin settings:
                 
-                $authorizationUrl
+                ${authorizationUrl}
                 
                 =========================================================================
                 
@@ -84,7 +86,9 @@ class DropboxTokenProvider implements TokenProvider
         if ($dropboxRefreshToken === null && $dropboxAccessCode !== null) {
             $dropboxAccessToken = $oAuthClient->getAccessToken(
                 'authorization_code',
-                ['code' => $config['dropboxAccessCode']]
+                [
+                    'code' => $config['dropboxAccessCode'],
+                ]
             );
 
             $config['dropboxRefreshToken'] = $dropboxAccessToken->getRefreshToken();

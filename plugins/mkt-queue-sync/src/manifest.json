@@ -5,13 +5,13 @@
     "displayName": "Mikrotik Queue Sync Plugin",
     "description": "Plugin para sincronizar simple queues con los limites de velocidad establecidos en Ucrm - Very basic plugin based on a Ubiquiti plugin, to synchronize Ucrm Services with Miktotik Simple Queue https://wiki.mikrotik.com/wiki/Manual:Queue",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/mkt-queue-sync",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "ucrmVersionCompliancy": {
       "min": "2.15.0-beta3",
       "max": null
     },
 	"unmsVersionCompliancy": {
-      "min": "1.0.0-beta2",
+      "min": "2.1.0",
       "max": null
     },
     "author": "Franco Johan Gampel - franco@gampel.com.ar"

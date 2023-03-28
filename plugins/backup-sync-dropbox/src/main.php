@@ -34,7 +34,9 @@ try {
     $client = new Client(new DropboxTokenProvider($pluginLogManager, $configManager));
 
     $adapter = new DropboxAdapter($client);
-    $filesystem = new Filesystem($adapter, ['case_sensitive' => false]);
+    $filesystem = new Filesystem($adapter, [
+        'case_sensitive' => false,
+    ]);
 
     $builder = new ContainerBuilder();
     $builder->addDefinitions(
