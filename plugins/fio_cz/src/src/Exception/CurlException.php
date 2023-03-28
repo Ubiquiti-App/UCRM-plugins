@@ -6,5 +6,4 @@ namespace FioCz\Exception;
 
 class CurlException extends \Exception
 {
-
 }
