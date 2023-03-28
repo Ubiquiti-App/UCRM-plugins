@@ -14,6 +14,19 @@
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/argentina-afip-invoices\/argentina-afip-invoices.zip"
         },
         {
+            "name": "backup-sync-dropbox",
+            "displayName": "Backup synchronization - Dropbox",
+            "description": "This plugin handles synchronization of your UNMS backups to a Dropbox folder.",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/backup-sync-dropbox",
+            "version": "1.2.0",
+            "unmsVersionCompliancy": {
+                "min": "2.1.0",
+                "max": null
+            },
+            "author": "Ubiquiti Inc.",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/backup-sync-dropbox\/backup-sync-dropbox.zip"
+        },
+        {
             "name": "invoice-csv-export",
             "displayName": "Invoice CSV export",
             "description": "Configurable export of invoices into CSV.",

@@ -24,7 +24,7 @@
                 "max": null
             },
             "author": "Ubiquiti Inc.",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/backup-sync-dropbox\/backup-sync-dropbox.zip"
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/0255295bef9739080f67af3745129bb9d396b7ca\/plugins\/backup-sync-dropbox\/backup-sync-dropbox.zip"
         },
         {
             "name": "fio_cz",
