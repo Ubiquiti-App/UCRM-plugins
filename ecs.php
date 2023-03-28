@@ -9,6 +9,10 @@ return static function (ECSConfig $ecsConfig): void {
     $ecsConfig->paths(
         [
             __DIR__ . '/examples',
+            __DIR__ . '/plugins/argentina-afip-invoices',
+            __DIR__ . '/plugins/routeros-suspension',
+            __DIR__ . '/plugins/invoice-csv-export',
+            __DIR__ . '/plugins/mkt-queue-sync',
             __DIR__ . '/plugins/revenue-report',
         ]
     );

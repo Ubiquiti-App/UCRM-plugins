@@ -4,7 +4,7 @@ This is a step by step guide for creating your first simple UCRM plugin.
 
 ## 1) Get your environment ready
 First step is to prepare your development environment. You should have the following software installed:
-- PHP 7.3 - https://secure.php.net/downloads.php
+- PHP 8.1 - https://secure.php.net/downloads.php
 - Git - https://git-scm.com/
 - Composer - https://getcomposer.org/
 
@@ -43,12 +43,8 @@ The manifest should look like this, after your change:
         "description": "Description of your plugin.",
         "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
         "version": "1.0.0",
-        "ucrmVersionCompliancy": {
-            "min": "2.14.0",
-            "max": null
-        },
         "unmsVersionCompliancy": {
-            "min": "1.0.0-alpha.1",
+            "min": "2.1.0",
             "max": null
         },
         "author": "Your Name"
@@ -180,8 +176,8 @@ To do that, we will extend the plugin's manifest file with menu information:
         "description": "Description of your plugin.",
         "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
         "version": "1.0.0",
-        "ucrmVersionCompliancy": {
-            "min": "2.14.0",
+        "unmsVersionCompliancy": {
+            "min": "2.1.0",
             "max": null
         },
         "author": "Your Name"

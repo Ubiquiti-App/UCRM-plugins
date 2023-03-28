@@ -6,16 +6,12 @@
             "description": "Plugin para obtener CAE (Facturacion electronica) en Argentina",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/argentina-afip-invoices",
             "version": "1.1.0",
-            "ucrmVersionCompliancy": {
-                "min": "2.16.12",
-                "max": null
-            },
             "unmsVersionCompliancy": {
                 "min": "1.1.6",
                 "max": null
             },
             "author": "Franco Johan Gampel - franco@gampel.com.ar",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/argentina-afip-invoices\/argentina-afip-invoices.zip"
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/f0d71a2590ead815f5cda72fd5cb627419b8e17c\/plugins\/argentina-afip-invoices\/argentina-afip-invoices.zip"
         },
         {
             "name": "backup-sync-dropbox",
@@ -53,16 +49,12 @@
             "description": "Configurable export of invoices into CSV.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/invoice-csv-export",
             "version": "1.1.3",
-            "ucrmVersionCompliancy": {
-                "min": "2.14.0-beta4",
-                "max": null
-            },
             "unmsVersionCompliancy": {
                 "min": "1.0.0-dev.1",
                 "max": null
             },
             "author": "Ubiquiti Networks, Inc.",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/invoice-csv-export\/invoice-csv-export.zip"
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/c57aa66e8dc0d9a55cf7629d7fcdf288e01aa760\/plugins\/invoice-csv-export\/invoice-csv-export.zip",
         },
         {
             "name": "kmz-map",
