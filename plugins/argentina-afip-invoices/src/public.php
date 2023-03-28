@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use App\Service\TemplateRenderer;
 use Ubnt\UcrmPluginSdk\Security\PermissionNames;
+use Ubnt\UcrmPluginSdk\Service\PluginConfigManager;
 use Ubnt\UcrmPluginSdk\Service\UcrmApi;
 use Ubnt\UcrmPluginSdk\Service\UcrmOptionsManager;
-use Ubnt\UcrmPluginSdk\Service\PluginConfigManager;
 use Ubnt\UcrmPluginSdk\Service\UcrmSecurity;
 
 chdir(__DIR__);
@@ -35,27 +35,46 @@ $organizations = $api->get('organizations');
 
 $count = 0; //Counter to use in foreach
 
-foreach (explode(";",$config['salesPoint']) as $organizacion){
-	$organizacionesSinKey[$count] = explode(",",$organizacion);
-	//Search for key where organization name is
-	$organizationKey = array_search($organizacionesSinKey[$count][0], array_column($organizations, 'name'));
-	if (DEBUG){ echo '<pre>'; print_r($organizationKey); echo '</pre>';}
-	if (DEBUG) var_dump($organizationKey);
-	if (!(is_bool($organizationKey) && $organizationKey === false )){
-		$organizaciones[$count] = array ('name' => $organizacionesSinKey[$count][0], 'salesPoint' => $organizacionesSinKey[$count][1],'activitiesStartDate' => $organizacionesSinKey[$count][2], 'id' => $organizations[$organizationKey]['id']);
-	}
-	$count++;
+foreach (explode(';', $config['salesPoint']) as $organizacion) {
+    $organizacionesSinKey[$count] = explode(',', $organizacion);
+    //Search for key where organization name is
+    $organizationKey = array_search($organizacionesSinKey[$count][0], array_column($organizations, 'name'));
+    if (DEBUG) {
+        echo '<pre>';
+        print_r($organizationKey);
+        echo '</pre>';
+    }
+    if (DEBUG) {
+        var_dump($organizationKey);
+    }
+    if (! (is_bool($organizationKey) && $organizationKey === false)) {
+        $organizaciones[$count] = [
+            'name' => $organizacionesSinKey[$count][0],
+            'salesPoint' => $organizacionesSinKey[$count][1],
+            'activitiesStartDate' => $organizacionesSinKey[$count][2],
+            'id' => $organizations[$organizationKey]['id'],
+        ];
+    }
+    $count++;
 }
-if (DEBUG) {echo '<pre>'; print_r($organizaciones); echo '</pre>';}
-if (DEBUG) {echo '<pre>'; print_r($organizations); echo '</pre>';}
+if (DEBUG) {
+    echo '<pre>';
+    print_r($organizaciones);
+    echo '</pre>';
+}
+if (DEBUG) {
+    echo '<pre>';
+    print_r($organizations);
+    echo '</pre>';
+}
 
 // Process submitted form.
   if (array_key_exists('organization', $_GET)) {
-    $parameters = $_GET['organization'];
-    $parameters = explode(",",$parameters);
-	echo '<br> Organizacion seleccionada: ' . $parameters[0] . ' Punto de Venta: ' . $parameters[1] . ' Fecha de inicio actividades: ' . $parameters[2] . '<br>';
-	formatInvoice($parameters[0],$parameters[1],$parameters[2],$parameters[3]);
-}
+      $parameters = $_GET['organization'];
+      $parameters = explode(',', $parameters);
+      echo '<br> Organizacion seleccionada: ' . $parameters[0] . ' Punto de Venta: ' . $parameters[1] . ' Fecha de inicio actividades: ' . $parameters[2] . '<br>';
+      formatInvoice($parameters[0], $parameters[1], $parameters[2], $parameters[3]);
+  }
 
 // Render form.
 $optionsManager = UcrmOptionsManager::create();
