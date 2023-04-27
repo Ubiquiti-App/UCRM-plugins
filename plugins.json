@@ -41,7 +41,7 @@
                 "max": null
             },
             "author": "Ubiquiti Networks, Inc.",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/fio_cz\/fio_cz.zip"
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/9e9ad21d454b0606a7cc385206f7441d66b009af\/plugins\/fio_cz\/fio_cz.zip",
         },
         {
             "name": "invoice-csv-export",
