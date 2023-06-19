@@ -310,6 +310,14 @@ class QuickBooksFacade
                 }
             }
 
+            $txnTaxDetail = [];
+            if (array_key_exists('totalValue', $ucrmInvoice['taxes'])) {
+                $txnTaxDetail = [
+                    'TotalTax' => $ucrmInvoice['taxes']['totalValue'],
+                    'TxnTaxCodeRef' => $TaxCode,
+                ];
+            }
+
             try {
                 $response = $dataService->Add(
                     Invoice::create(
@@ -318,10 +326,7 @@ class QuickBooksFacade
                             'DueDate' => $ucrmInvoice['dueDate'],
                             'TxnDate' => $ucrmInvoice['createdDate'],
                             'Line' => $lines,
-                            'TxnTaxDetail' => [
-                                'TotalTax' => $ucrmInvoice['taxes']['totalValue'],
-                                'TxnTaxCodeRef' => $TaxCode,
-                            ],
+                            'TxnTaxDetail' => $txnTaxDetail,
                             'CustomerRef' => [
                                 'value' => $qbClient->Id,
                             ],
