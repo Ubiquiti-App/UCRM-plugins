@@ -66,6 +66,19 @@
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/kmz-map\/kmz-map.zip"
         },
         {
+            "name": "quickbooks-online",
+            "displayName": "QuickBooks Online export",
+            "description": "This plugin exports payments and invoices to QuickBooks Online",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/quickbooks-online",
+            "version": "1.2.0",
+            "unmsVersionCompliancy": {
+                "min": "2.1.0",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc.",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/quickbooks-online\/quickbooks-online.zip"
+        },
+        {
             "name": "revenue-report",
             "displayName": "Revenue report",
             "description": "Grids and charts showing organization's revenue grouped by products or services. Shown in the Reporting main menu section.",
