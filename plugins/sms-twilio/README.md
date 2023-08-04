@@ -24,8 +24,7 @@ Note: there are two sets of credentials available, the default ("LIVE credential
 * Save the configuration
 * Enable the plugin
 * Add webhook (button next to Public URL)
-* Save webhook using defaults
-  * Optionally select events about which to notify clients
+* Select events about which to notify clients and save the webhook endpoint
 
 ## Usage
 * In UCRM admin, go to System / Webhooks / Endpoints
