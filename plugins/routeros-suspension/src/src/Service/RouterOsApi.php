@@ -35,7 +35,7 @@ class RouterOsApi
 
     public function print(string $endpoint): array
     {
-        return $this->getClient()->write(new Query(sprintf('%s/print', $endpoint)))->read();
+        return $this->getClient()->query(new Query(sprintf('%s/print', $endpoint)))->read();
     }
 
     public function remove(string $endpoint, array $ids): array
@@ -47,7 +47,7 @@ class RouterOsApi
         $query = (new Query(sprintf('%s/remove', $endpoint)))
             ->add(sprintf('=.id=%s', implode(',', $ids)));
 
-        return $this->getClient()->write($query)->read();
+        return $this->getClient()->query($query)->read();
     }
 
     public function add(string $endpoint, array $sentences, string $commentPrefix = 'ucrm_'): void
@@ -68,7 +68,7 @@ class RouterOsApi
                 $query->add(sprintf('=%s=%s', $key, $item));
             }
 
-            $this->getClient()->write($query)->read();
+            $this->getClient()->query($query)->read();
         }
     }
 
