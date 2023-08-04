@@ -15,7 +15,7 @@ class Suspender
 
     private const COMMENT_SIGNATURE = 'ucrm_';
 
-    private const SERVICE_STATUS_ACTIVE = 3;
+    private const SERVICE_STATUS_ACTIVE = [2, 3, 4, 5, 6, 7, 8];
 
     /**
      * @var UcrmApi
@@ -261,7 +261,7 @@ class Suspender
         return $this->ucrmApi->get(
             'clients/services',
             [
-                'statuses' => [self::SERVICE_STATUS_ACTIVE],
+                'statuses' => self::SERVICE_STATUS_ACTIVE,
             ]
         );
     }
