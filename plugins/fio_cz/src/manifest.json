@@ -5,7 +5,7 @@
     "displayName": "Fio bank payment import",
     "description": "This plugin enables you to import payments from Fio bank to UCRM. See https://www.fio.cz/bankovni-sluzby/api-bankovnictvi",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/fio_cz",
-    "version": "1.2.0",
+    "version": "1.2.8",
     "unmsVersionCompliancy": {
       "min": "2.1.0",
       "max": null
@@ -17,37 +17,43 @@
       "key": "token",
       "label": "Fio token",
       "description": "Token obtained from Fio bank internet banking. NOTE: the bank can issue the token with an expiration date, or without one (expired tokens will result in error 500, brand new tokens will return error 500 for a few minutes). Please do not reuse one token for multiple apps - generate one token for each, Fio bank's API usage limits are per token (exceeding limits will result in error 409).",
-      "required": 1
+      "required": 1,
+      "type": "text"
     },
     {
       "key": "startDate",
       "label": "Payments start date",
-      "description": "Payments older than this date will be ignored. Use d.m.Y format.",
-      "required": 1
+      "description": "Payments older than this date will be ignored. Import of payments older than 90 days must be enabled in the Fio bank interface.",
+      "required": 1,
+      "type": "datetime"
     },
     {
       "key": "paymentMatchAttribute",
       "label": "Match attribute from payment variable symbol to UCRM",
       "description": "Can be 'invoiceNumber', 'clientId', 'clientUserIdent' or a custom attribute key.",
-      "required": 1
+      "required": 1,
+      "type": "text"
     },
     {
       "key": "importUnattached",
-      "label": "Import all payments. (0|1)",
+      "label": "Import all payments.",
       "description": "Import all payments. Payments without match will be imported as \"Unattached payments\". Fill 1 to enable or 0 to disable this feature (when disabled, the unmatched payment will only be logged and skipped).",
-      "required": 1
+      "required": 1,
+      "type": "checkbox"
     },
     {
       "key": "lastProcessedPayment",
       "label": "Last processed payment",
       "description": "Internal payment tracking to avoid duplicate processing of the same payment",
-      "required": 0
+      "required": 0,
+      "type": "text"
     },
     {
       "key": "lastProcessedTimestamp",
       "label": "Last time the payment list was requested",
       "description": "Internal timestamp tracking to politely avoid API request rate limits",
-      "required": 0
+      "required": 0,
+      "type": "text"
     }
   ]
 }
