@@ -105,7 +105,8 @@ The `manifest.json` file contains all needed information about the plugin and is
         "urlParameters": {
             "foo": "bar"
         }
-    }
+    },
+    "supportsWebhookEvents": false
 }
 ```
 
@@ -196,3 +197,6 @@ Add payment button to one-time online payment page.
 
 <sup>1. Visible only if there are multiple payment gateways and prefixed with "Pay with". For example for label `My Gateway`, the final label would be `Pay with My Gateway`. In case of single payment gateway, the label will be `Pay online`.</sup>  
 <sup>2. See `parameters` in the [`menu section`](manifest.md#menu)</sup>
+
+### supportsWebhookEvents _(optional, default: `false`)_
+When set to `true`, the "Add webhook" button will be visible on plugin detail in CRM.
