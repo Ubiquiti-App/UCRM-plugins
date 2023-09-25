@@ -92,6 +92,19 @@
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/revenue-report\/revenue-report.zip"
         },
         {
+            "name": "revenue-report",
+            "displayName": "Revenue report",
+            "description": "Grids and charts showing organization's revenue grouped by products or services. Shown in the Reporting main menu section.",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/revenue-report",
+            "version": "1.2.3",
+            "unmsVersionCompliancy": {
+                "min": "2.1.0",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc.",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/revenue-report\/revenue-report.zip"
+        },
+        {
             "name": "ucrm-client-signup",
             "displayName": "UCRM Client Signup",
             "description": "A UCRM plugin that provides a frontend form for clients to signup.",
