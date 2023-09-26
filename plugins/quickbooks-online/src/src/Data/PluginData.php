@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace QBExport\Data;
 
-
 class PluginData extends UcrmData
 {
     /**

@@ -149,5 +149,4 @@ class PluginData extends UcrmData
      * @var string
      */
     public $logging_level;
-
 }

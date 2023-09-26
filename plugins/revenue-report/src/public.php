@@ -44,7 +44,8 @@ if (
         'organizationId' => $trimNonEmpty((string) $_GET['organization']),
         'createdDateFrom' => $trimNonEmpty((string) $_GET['since']),
         'createdDateTo' => $trimNonEmpty((string) $_GET['until']),
-        'status' => [1, 2, 3], // 1 = Unpaid, 2 = Partially paid, 3 = Paid
+        // 1 = Unpaid, 2 = Partially paid, 3 = Paid
+        'status' => [1, 2, 3],
     ];
     $parameters = array_filter($parameters);
 
@@ -61,31 +62,37 @@ if (
     $organization = $api->get('organizations/' . $_GET['organization']);
     $currency = $api->get('currencies/' . $organization['currencyId']);
     $invoices = $api->get('invoices', $parameters);
-    $services = $api->get('clients/services', ['organizationId' => $_GET['organization']]);
-    $servicePlans = $api->get('service-plans');
 
-    $servicesMap = [];
-    foreach ($services as $service) {
-        $servicesMap[$service['id']] = $service['servicePlanId'];
-    }
+    $services = $api->get('clients/services', [
+        'organizationId' => $_GET['organization'],
+    ]);
 
     $servicePlansMap = [];
-    foreach ($servicePlans as $servicePlan) {
-        $servicePlansMap[$servicePlan['id']] = [
-            'name' => $servicePlan['name'],
-            'totalIssued' => 0,
-            'totalPaid' => 0,
-        ];
+    foreach ($services as $service) {
+        if (! array_key_exists($service['servicePlanId'], $servicePlansMap)) {
+            $servicePlansMap[$service['servicePlanId']] = [
+                'name' => $service['servicePlanName'],
+                'totalIssued' => 0,
+                'totalPaid' => 0,
+                'servicesIds' => [$service['id']],
+            ];
+        } else {
+            $servicePlansMap[$service['servicePlanId']]['servicesIds'][] = $service['id'];
+        }
     }
 
     foreach ($invoices as $invoice) {
         foreach ($invoice['items'] as $invoiceItem) {
-            if ($invoiceItem['type'] === 'service' && isset($invoiceItem['serviceId']) && isset($servicesMap[$invoiceItem['serviceId']])) {
-                $servicePlanId = $servicesMap[$invoiceItem['serviceId']];
-                $price = $invoiceItem['total'] + $invoiceItem['discountTotal'];
-                if ($price <= 0) {
+            $price = $invoiceItem['total'] + $invoiceItem['discountTotal'];
+            if ($invoiceItem['type'] !== 'service' || $price <= 0) {
+                continue;
+            }
+
+            foreach ($servicePlansMap as $servicePlanId => $servicePlan) {
+                if (! in_array($invoiceItem['serviceId'], $servicePlan['servicesIds'], true)) {
                     continue;
                 }
+
                 $servicePlansMap[$servicePlanId]['totalIssued'] += $price;
                 if ($invoice['status'] === 3) {
                     $servicePlansMap[$servicePlanId]['totalPaid'] += $price;

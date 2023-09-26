@@ -10,7 +10,9 @@ use SmsNotifier\Data\PluginData;
 class OptionsManager
 {
     private const UCRM_JSON = 'ucrm.json';
+
     private const CONFIG_JSON = 'data/config.json';
+
     private const PLUGIN_JSON = 'data/plugin.json';
 
     /**
@@ -64,6 +66,6 @@ class OptionsManager
             return [];
         }
 
-        return  json_decode(file_get_contents($filename), true);
+        return json_decode(file_get_contents($filename), true);
     }
 }

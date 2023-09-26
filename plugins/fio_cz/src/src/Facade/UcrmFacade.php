@@ -73,6 +73,15 @@ class UcrmFacade
         return false;
     }
 
+    public function getPaymentMethod(): string
+    {
+        if ($this->getVersion() > 2) {
+            return '4145b5f5-3bbc-45e3-8fc5-9cda970c62fb'; // no need to query methods, as this UUID is built-in
+        }
+
+        return '3'; // hard-coded backwards compatibility for 'bank transfer'
+    }
+
     /**
      * @throws \FioCz\Exception\CurlException
      * @throws \ReflectionException
@@ -176,15 +185,6 @@ class UcrmFacade
         );
 
         $this->logger->info('Payment created');
-    }
-
-    public function getPaymentMethod(): string
-    {
-        if ($this->getVersion() > 2) {
-            return '4145b5f5-3bbc-45e3-8fc5-9cda970c62fb'; // no need to query methods, as this UUID is built-in
-        }
-
-        return '3'; // hard-coded backwards compatibility for 'bank transfer'
     }
 
     private function getVersion(): int
