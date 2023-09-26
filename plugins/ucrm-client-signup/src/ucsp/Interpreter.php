@@ -6,9 +6,7 @@ namespace Ucsp;
 class Interpreter
 {
     private static $whiteListedGet = [
-        'countries' => [
-            'second_level_ids' => ['states'],
-        ],
+        'countries' => ['states'],
     ];
 
     private static $whiteListedPost = [
