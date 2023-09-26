@@ -41,15 +41,19 @@ class FioCurlExecutor extends CurlExecutor
         if ($lastProcessedTimestamp + 30 > time()) {
             throw new CurlException('Execution skipped, because last request was less than 30 seconds ago: ' . $date);
         }
-        $this->logger->debug('Last processed at: ',
+        $this->logger->debug(
+            'Last processed at: ',
             [
-                $lastProcessedTimestamp => $lastProcessedTimestamp ? $date : 'never'
+                $lastProcessedTimestamp => $lastProcessedTimestamp ? $date : 'never',
             ]
         );
 
         $url_redacted = str_replace($options->token, '[*******]', $url);
         $this->logger->debug('Requesting from FIO API:', compact(
-            'url_redacted', 'headers', 'parameters', 'verifySsl'
+            'url_redacted',
+            'headers',
+            'parameters',
+            'verifySsl'
         ));
 
         $startTime = microtime(true);

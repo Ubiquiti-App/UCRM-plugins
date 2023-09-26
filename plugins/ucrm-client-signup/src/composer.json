@@ -1,12 +1,7 @@
 {
-    "require": {
-      "php": ">=7.1",
-      "ubnt/ucrm-plugin-sdk": "~0.5",
-      "guzzlehttp/guzzle": "~6.0"
-    },
     "name": "charuwts/ucs",
     "description": "UCRM Client Signup Plugin",
-    "version": "1.2.0",
+    "version": "1.3.1",
     "authors": [
         {
             "name": "Brandon White",
@@ -17,5 +12,12 @@
         "classmap": [
             "ucsp/"
         ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "phpunit/php-invoker": "^4.0"
+    },
+    "require": {
+        "ubnt/ucrm-plugin-sdk": "^0.10.0"
     }
 }

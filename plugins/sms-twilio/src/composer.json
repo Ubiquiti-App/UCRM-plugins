@@ -1,6 +1,6 @@
 {
+  "name": "ucrm-plugins/sms-twilio",
   "description": "UCRM plugin for SMS notifications, powered by Twilio",
-  "version": "1.0.9",
   "license": "MIT",
   "autoload": {
     "psr-4": {
@@ -10,9 +10,8 @@
     }
   },
   "require": {
-    "twilio/sdk": "^5.21",
-    "php-di/php-di": "^5.4",
-    "doctrine/cache": "^1.7",
+    "twilio/sdk": "^7.9",
+    "php-di/php-di": "^7.0",
     "katzgrau/klogger": "^1.2"
   }
 }

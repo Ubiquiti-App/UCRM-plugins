@@ -6,5 +6,4 @@ namespace QBExport\Exception;
 
 class CurlException extends \Exception
 {
-
 }

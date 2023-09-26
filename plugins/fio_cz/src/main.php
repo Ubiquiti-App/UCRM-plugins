@@ -11,7 +11,6 @@ require __DIR__ . '/vendor/autoload.php';
     $logger->info('CLI process started');
     $startTime = microtime(true);
     $builder = new \DI\ContainerBuilder();
-    $builder->setDefinitionCache(new \Doctrine\Common\Cache\ApcuCache());
 
     $container = $builder->build();
     // use the logger with same logging settings everywhere

@@ -10,7 +10,7 @@ This plugin handles import of your [UCRM](https://ucrm.ubnt.com/) customers, pay
 ## How to configure the plugin
 #### 1) QuickBooks - Create App
 - Create developer account at [Intuit Developer](https://developer.intuit.com/) site.
-- After you go through the registration process, [create new app](https://developer.intuit.com/v2/ui#/app/startcreate).
+- After you go through the registration process, [create new app](https://developer.intuit.com/app/developer/app-create).
 - Choose __Select APIs__ and check __Accounting__ and __Payments__ options.
 
 #### 2) QuickBooks - App settings

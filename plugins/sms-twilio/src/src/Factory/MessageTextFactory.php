@@ -12,18 +12,24 @@ use SmsNotifier\Service\OptionsManager;
 class MessageTextFactory
 {
     private const DELIMITER = '%%';
+
     private const DATA_TYPES = [
         'client' => 'clientData',
         'invoice' => 'invoiceData',
         'payment' => 'paymentData',
         'service' => 'serviceData',
     ];
+
     private const DATETIME_FORMAT = 'Y-m-d H:i';
 
-    /** @var Logger */
+    /**
+     * @var Logger
+     */
     private $logger;
 
-    /** @var PluginData */
+    /**
+     * @var PluginData
+     */
     private $pluginData;
 
     public function __construct(
@@ -43,7 +49,7 @@ class MessageTextFactory
             throw new \InvalidArgumentException('Unconfigured event name: ' . $notificationData->eventName);
         }
 
-        $eventText = trim((string) $this->pluginData->$eventName);
+        $eventText = trim((string) $this->pluginData->{$eventName});
         $this->logger->debug($eventText);
         if (! $eventText) {
             return '';
@@ -61,10 +67,10 @@ class MessageTextFactory
     {
         $tokens = [];
         foreach (self::DATA_TYPES as $typeName => $typeVariable) {
-            if (empty($notificationData->$typeVariable)) {
+            if (empty($notificationData->{$typeVariable})) {
                 continue;
             }
-            foreach ($notificationData->$typeVariable as $dataKey => $dataValue) {
+            foreach ($notificationData->{$typeVariable} as $dataKey => $dataValue) {
                 if (! is_array($dataValue)) {
                     if ($dataValue && strpos($dataKey, 'Date') > 0) {
                         $dateTimeValue = \DateTime::createFromFormat('Y-m-d\TH:i:sO', $dataValue);

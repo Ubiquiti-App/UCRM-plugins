@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace SmsNotifier;
 
-
 use Psr\Log\LogLevel;
 use SmsNotifier\Facade\TwilioNotifierFacade;
 use SmsNotifier\Factory\NotificationDataFactory;
+use SmsNotifier\Service\Logger;
 use SmsNotifier\Service\OptionsManager;
 use SmsNotifier\Service\PluginDataValidator;
-use SmsNotifier\Service\Logger;
+use Twilio\Exceptions\TwilioException;
 
 class Plugin
 {
@@ -46,8 +46,7 @@ class Plugin
         PluginDataValidator $pluginDataValidator,
         TwilioNotifierFacade $notifierFacade,
         NotificationDataFactory $notificationDataFactory
-    )
-    {
+    ) {
         $this->logger = $logger;
         $this->optionsManager = $optionsManager;
         $this->pluginDataValidator = $pluginDataValidator;
@@ -113,10 +112,11 @@ class Plugin
 
         try {
             $this->notifierFacade->notify($notification);
+        } catch (TwilioException $exception) {
+            $this->logger->error($exception->getMessage());
         } catch (\Exception $ex) {
             $this->logger->error($ex->getMessage());
-            $this->logger->warning($ex->getTraceAsString());
+            $this->logger->info($ex->getTraceAsString());
         }
-
     }
 }

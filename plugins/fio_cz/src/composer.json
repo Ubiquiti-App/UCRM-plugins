@@ -10,8 +10,8 @@
     }
   },
   "require": {
-    "php-di/php-di": "^5.4",
+    "php-di/php-di": "^7.0",
     "katzgrau/klogger": "^1.2",
-    "doctrine/cache": "^1.7"
+    "doctrine/cache": "^2.2"
   }
 }

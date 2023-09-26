@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace QBExport\Service;
 
-
 use QBExport\Exception\CurlException;
 
 class CurlExecutor
@@ -40,13 +39,13 @@ class CurlExecutor
         $errno = curl_errno($c);
 
         if ($errno || $error) {
-            throw new CurlException("Error for request $url. Curl error $errno: $error");
+            throw new CurlException("Error for request ${url}. Curl error ${errno}: ${error}");
         }
 
         $httpCode = curl_getinfo($c, CURLINFO_HTTP_CODE);
 
         if ($httpCode < 200 || $httpCode >= 300) {
-            throw new CurlException("Error for request $url. HTTP error ($httpCode): $result", $httpCode);
+            throw new CurlException("Error for request ${url}. HTTP error (${httpCode}): ${result}", $httpCode);
         }
 
         curl_close($c);
@@ -80,19 +79,19 @@ class CurlExecutor
         $errno = curl_errno($c);
 
         if ($errno || $error) {
-            throw new CurlException("Error for request $url. Curl error $errno: $error");
+            throw new CurlException("Error for request ${url}. Curl error ${errno}: ${error}");
         }
 
         $httpCode = curl_getinfo($c, CURLINFO_HTTP_CODE);
 
         if ($httpCode < 200 || $httpCode >= 300) {
-            throw new CurlException("Error for request $url. HTTP error ($httpCode): $result", $httpCode);
+            throw new CurlException("Error for request ${url}. HTTP error (${httpCode}): ${result}", $httpCode);
         }
 
         curl_close($c);
 
         if (! $result) {
-            throw new CurlException("Error for request $url. Empty result.");
+            throw new CurlException("Error for request ${url}. Empty result.");
         }
 
         return json_decode($result, true);
