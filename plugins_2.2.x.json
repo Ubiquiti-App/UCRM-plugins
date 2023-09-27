@@ -83,7 +83,7 @@
             "displayName": "Revenue report",
             "description": "Grids and charts showing organization's revenue grouped by products or services. Shown in the Reporting main menu section.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/revenue-report",
-            "version": "1.2.0",
+            "version": "1.2.3",
             "unmsVersionCompliancy": {
                 "min": "2.1.0",
                 "max": null
@@ -92,17 +92,17 @@
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/revenue-report\/revenue-report.zip"
         },
         {
-            "name": "revenue-report",
-            "displayName": "Revenue report",
-            "description": "Grids and charts showing organization's revenue grouped by products or services. Shown in the Reporting main menu section.",
-            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/revenue-report",
-            "version": "1.2.3",
+            "name": "sms-twilio",
+            "displayName": "SMS notifications via Twilio",
+            "description": "This plugin sends SMS notifications via Twilio. NOTE: only phone numbers in the international format can be used, e.g. +155 555 1234",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/sms-twilio",
+            "version": "1.2.4",
             "unmsVersionCompliancy": {
                 "min": "2.1.0",
                 "max": null
             },
             "author": "Ubiquiti Networks, Inc.",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/revenue-report\/revenue-report.zip"
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/sms-twilio\/sms-twilio.zip"
         },
         {
             "name": "ucrm-client-signup",
