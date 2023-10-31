@@ -76,6 +76,10 @@ class Importer
             return;
         }
 
+        if ($optionsData->lastProcessedPaymentDateTime !== null) {
+            $startDate = new \DateTimeImmutable($optionsData->lastProcessedPaymentDateTime);
+        }
+
         $this->logger->debug('Processing range: ', [
             'startDate' => $startDate->format($this->dateFormat),
             'endDate' => $endDate->format($this->dateFormat),

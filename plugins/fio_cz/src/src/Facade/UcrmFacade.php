@@ -62,6 +62,7 @@ class UcrmFacade
             );
 
             $optionsData->lastProcessedPayment = $transaction['id'];
+            $optionsData->lastProcessedPaymentDateTime = $transaction['date'];
             $this->optionsManager->updateOptions();
             $this->logger->debug(sprintf('lastProcessedPayment set to %s', $optionsData->lastProcessedPayment));
 

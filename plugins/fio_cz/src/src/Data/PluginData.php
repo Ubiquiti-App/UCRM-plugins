@@ -35,4 +35,9 @@ class PluginData extends UcrmData
      * @var string
      */
     public $importUnattached;
+
+    /**
+     * @var string
+     */
+    public $lastProcessedPaymentDateTime;
 }
