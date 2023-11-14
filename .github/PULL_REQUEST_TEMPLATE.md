@@ -2,7 +2,7 @@ To release a new version of a plugin, we suggest the following checklist. Checki
 
 
 - [ ] update the information.version in manifest.json; please use [semantic versioning](https://semver.org/#faq) ("major.minor.patch", e.g. "1.4.2" - major can break compatibility, minor can introduce compatible new features, patch is for bug fixes)
-- [ ] in the project root directory, run `bash php-cs-check.sh` to check for valid PHP code
+- [ ] in the project root directory, run `./vendor/bin/ecs check` to check for valid PHP code
   - normally, this should report no errors
   - if any found, please fix - these could prevent your plugin from working
 - [ ] in the `plugins/` directory, run `php ../pack-plugin.php $YOUR_PLUGIN`, where $YOUR_PLUGIN is the directory name of your plugin; this creates the installable package
