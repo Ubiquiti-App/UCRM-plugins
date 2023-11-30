@@ -119,7 +119,7 @@
                 "max": "2.1.0"
             },
             "author": "Ubiquiti Networks, Inc.",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/fc39e33a8b1928618e7e4e3e1a05e7d8dde266c5\/plugins\/sms-twilio\/sms-twilio.zip",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/fc39e33a8b1928618e7e4e3e1a05e7d8dde266c5\/plugins\/sms-twilio\/sms-twilio.zip"
         },
         {
             "name": "ucrm-client-signup",
