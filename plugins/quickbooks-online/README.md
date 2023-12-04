@@ -48,6 +48,8 @@ This plugin handles import of your [UCRM](https://ucrm.ubnt.com/) customers, pay
 - Remove entity from QB when the related entity is deleted in UCRM.
 
 ## Changelog
+### 2.1.0 (2023-12-04)
+- Update dependencies and make it work for UISP 2.3.57
 ### 2.0.0 (2021-12-01)
 - Export Credit Memos. Set the `Date to start for Credit Memo export` value in the
 plugin config so that older credits that you have already entered will not export.
