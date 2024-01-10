@@ -120,12 +120,12 @@ class Importer
         } catch (Exception\CurlException $exception) {
             switch ($exception->getCode()) {
                 case 409:
-                    $optionsData->lastProcessedTimestamp = time();
+                    $optionsData->lastProcessedTimestamp = (string) time();
                     $this->optionsManager->updateOptions();
                     $this->logger->warning('HTTP Error 409 returned - usage limit exhausted, wait for 30s');
                     break;
                 case 500:
-                    $optionsData->lastProcessedTimestamp = time();
+                    $optionsData->lastProcessedTimestamp = (string) time();
                     $this->optionsManager->updateOptions();
                     $this->logger->error('HTTP Error 500 returned - is token valid and not expired?');
                     break;
