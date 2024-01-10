@@ -6,17 +6,38 @@ namespace FioCz\Data;
 
 class PluginData extends UcrmData
 {
-    public string $lastProcessedPayment;
+    /**
+     * @var string
+     */
+    public $lastProcessedPayment;
 
-    public string $paymentMatchAttribute;
+    /**
+     * @var string
+     */
+    public $paymentMatchAttribute;
 
-    public string $startDate;
+    /**
+     * @var string
+     */
+    public $startDate;
 
-    public string $token;
+    /**
+     * @var string
+     */
+    public $token;
 
-    public string $lastProcessedTimestamp;
+    /**
+     * @var string
+     */
+    public $lastProcessedTimestamp;
 
-    public string $importUnattached;
+    /**
+     * @var string
+     */
+    public $importUnattached;
 
-    public string $lastProcessedPaymentDateTime;
+    /**
+     * @var string
+     */
+    public $lastProcessedPaymentDateTime;
 }
