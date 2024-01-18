@@ -89,7 +89,7 @@ class FioCz
                     'amount' => $transaction['column1']['value'],
                     'currency' => $transaction['column14']['value'],
                     'date' => $transaction['column0']['value'],
-                    'reference' => $transaction['column5']['value'],
+                    'reference' => $transaction['column5']['value'] ?? '',
                     'id' => $transaction['column22']['value'],
                     'data' => $data,
                 ];
