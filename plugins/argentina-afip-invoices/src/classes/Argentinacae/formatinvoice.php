@@ -190,10 +190,10 @@ function formatInvoice($orgId, $salesPoint, $activitiesStartDate, $orgSelected)
                     $actualCaeNum = getCustomAttributeValue($invoice['attributes'], 'caeNumero');
                     if (is_null($actualCaeNum)) {			//Verify that invoice has not CAE number already
                         $startOk = true;
-                        if ($regfac['tipodocumento'] === 96 && $invoice['total'] < 7689.99 && $regfac['numerodocumento'] == 0) {
+                        if ($regfac['tipodocumento'] === 96 && $invoice['total'] < 92719.99 && $regfac['numerodocumento'] == 0) {
                             $regfac['tipodocumento'] = 99;
-                        } elseif ($regfac['tipodocumento'] === 96 && $invoice['total'] > 7689.99 && $regfac['numerodocumento'] == 0) {//Final customers with no DNI associated can not have any invoice with ammount over $7690
-                            echo '<br> Factura consumidor final no debe exceder los $7690.00 sin tener DNI <br>';
+                        } elseif ($regfac['tipodocumento'] === 96 && $invoice['total'] > 92719.99 && $regfac['numerodocumento'] == 0) {//Final customers with no DNI associated can not have any invoice with ammount over $92720
+                            echo '<br> Factura consumidor final no debe exceder los $92720.00 sin tener DNI <br>';
                             $startOk = false; //Don't Start the invoice if it not has Document number
                         }
                         if ($startOk) {//Process Start
