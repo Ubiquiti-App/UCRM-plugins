@@ -3,13 +3,21 @@ This plugin generates SVG image of one or two dimensional barcode which can be i
 
 ## Templates implementation
 You can add barcode image into template code e.g.:
-``<img src="https://www.example.com/crm/_plugins/barcode-generator/public.php?token=USECONFIGURATIONTOKEN&code=DI{{ invoice.number }}{{ totals.total * 100 }}&type=QRCODE&width=200&height=200&color=black">``
-Server must be secured with valid certificate for https request.
+``<img src="https://www.example.com/crm/_plugins/barcode-generator/public.php?token=USECONFIGURATIONTOKEN&code=DI{{ invoice.number }}{{ totals.totalRaw }}&type=QRCODE&width=200&height=200&color=black">``
+> Server must be secured with valid certificate for https request. 
 
-## Token
+## Required parameters
+- `token` - Security token from the plugin configuration in the CRM
+- `code` - Content of the barcode
+- `type` - Type of barcode
+- `with` - With of barcode in pixels
+- `height` - Height of barcode in pixels
+- `color` - Color of barcode
+
+## Parameter `token`
 Due to security reasons fill some random string as a token and use it as a part of request.
 
-## Type Parameter
+## Parameter `type`
 Types of barcode:
 
 * C39        : CODE 39 - ANSI MH10.8M-1983 - USD-3 - 3 of 9
@@ -51,4 +59,4 @@ Types of barcode:
 
 ## Example of code parameter
 ### QRCODE - "QR Platba" in the Czechia
-``<img src="https://www.example.com/crm/_plugins/barcode-generator/public.php?token=RANDOMtokenFROMconfiguration&code=SPD*1.0*ACC:CZ2806000000000168540115*AM:{{ totals.total }}*CC:CZK*MSG:{{ client.name }}*X-VS:{{ invoice.number }}&type=QRCODE&width=75&height=75&color=black">``
+``<img src="https://www.example.com/crm/_plugins/barcode-generator/public.php?token=RANDOMtokenFROMconfiguration&code=SPD*1.0*ACC:CZ2806000000000168540115*AM:{{ totals.totalRaw }}*CC:CZK*MSG:{{ client.name }}*X-VS:{{ invoice.number }}&type=QRCODE&width=75&height=75&color=black">``
