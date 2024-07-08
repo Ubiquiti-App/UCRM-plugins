@@ -1,0 +1,27 @@
+{
+  "version": "1",
+  "information": {
+    "name": "barcode-generator",
+    "displayName": "Barcode generator",
+    "description": "This plugin generates barcodes and QR codes. It is usable for including into templates as image.",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/barcode-generator",
+    "version": "1.0.0",
+    "ucrmVersionCompliancy": {
+      "min": "3.4.4",
+      "max": null
+    },
+    "unmsVersionCompliancy": {
+      "min": "1.0.0-dev.1",
+      "max": null
+    },
+    "author": "Ubiquiti Networks, Inc."
+  },
+  "configuration": [
+    {
+      "key": "token",
+      "label": "Security token (token)",
+      "description": "This is a generated random string for use as a part of the request.",
+      "required": 1
+    }
+  ]
+}
