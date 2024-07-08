@@ -19,8 +19,8 @@
   "configuration": [
     {
       "key": "token",
-      "label": "Security token",
-      "description": "Fill it with random string and use it as a part of request.",
+      "label": "Security token (token)",
+      "description": "This is a generated random string for use as a part of the request.",
       "required": 1
     }
   ]
