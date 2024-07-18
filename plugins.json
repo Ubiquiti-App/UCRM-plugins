@@ -66,19 +66,6 @@
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/kmz-map\/kmz-map.zip"
         },
         {
-            "name": "packetlogic-packet-manager",
-            "displayName": "PacketLogic Packet Manager",
-            "description": "UCRM Plugin that synchronizes customers with Procera Networks PacketLogic system.",
-            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/packetlogic-packet-manager",
-            "version": "1.0.3",
-            "ucrmVersionCompliancy": {
-                "min": "2.10.0-beta1",
-                "max": "2.1.0"
-            },
-            "author": "Shaun Wilkinson",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/packetlogic-packet-manager\/packetlogic-packet-manager.zip"
-        },
-        {
             "name": "quickbooks-online",
             "displayName": "QuickBooks Online export",
             "description": "This plugin exports payments and invoices to QuickBooks Online",
