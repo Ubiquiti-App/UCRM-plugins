@@ -5,7 +5,7 @@
     "displayName": "Fio bank payment import",
     "description": "This plugin enables you to import payments from Fio bank to UCRM. See https://www.fio.cz/bankovni-sluzby/api-bankovnictvi",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/fio_cz",
-    "version": "1.2.9",
+    "version": "1.2.12",
     "unmsVersionCompliancy": {
       "min": "2.1.0",
       "max": null
@@ -37,26 +37,20 @@
     {
       "key": "importUnattached",
       "label": "Import all payments.",
-      "description": "Import all payments. Payments without match will be imported as \"Unattached payments\". When disabled, the unmatched payment will only be logged and skipped.",
+      "description": "Import all payments. Payments without match will be imported as \"Unattached payments\".",
       "required": 0,
       "type": "checkbox"
     },
     {
       "key": "lastProcessedPayment",
-      "label": "Last processed payment ID (readonly)",
+      "label": "Last processed payment",
       "description": "Internal payment tracking to avoid duplicate processing of the same payment",
       "required": 0,
       "type": "text"
     },
     {
-      "key": "lastProcessedPaymentDateTime",
-      "label": "Last processed payment date and time (readonly)",
-      "required": 0,
-      "type": "datetime"
-    },
-    {
       "key": "lastProcessedTimestamp",
-      "label": "Last time the payment list was requested (readonly)",
+      "label": "Last time the payment list was requested",
       "description": "Internal timestamp tracking to politely avoid API request rate limits",
       "required": 0,
       "type": "text"

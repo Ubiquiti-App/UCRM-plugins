@@ -57,26 +57,13 @@
             "displayName": "KMZ Map",
             "description": "A UISP CRM plugin that provides a frontend Google Map for clients to view tower coverage.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/kmz-map",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "unmsVersionCompliancy": {
                 "min": "1.0.0",
                 "max": "2.1.0"
             },
             "author": "Charuwts, LLC",
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/kmz-map\/kmz-map.zip"
-        },
-        {
-            "name": "packetlogic-packet-manager",
-            "displayName": "PacketLogic Packet Manager",
-            "description": "UCRM Plugin that synchronizes customers with Procera Networks PacketLogic system.",
-            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/packetlogic-packet-manager",
-            "version": "1.0.3",
-            "ucrmVersionCompliancy": {
-                "min": "2.10.0-beta1",
-                "max": "2.1.0"
-            },
-            "author": "Shaun Wilkinson",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/packetlogic-packet-manager\/packetlogic-packet-manager.zip"
         },
         {
             "name": "quickbooks-online",
@@ -126,13 +113,13 @@
             "displayName": "UCRM Client Signup",
             "description": "A UCRM plugin that provides a frontend form for clients to signup.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/ucrm-client-signup",
-            "version": "1.2.1",
+            "version": "1.3.3",
             "unmsVersionCompliancy": {
-                "min": "1.0.0-dev.1",
-                "max": "2.1.0"
+                "min": "2.1.0",
+                "max": null
             },
             "author": "Charuwts, LLC",
-            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/88fe798826dd0fed95ba6624e9e84e7087b28abf\/plugins\/ucrm-client-signup\/ucrm-client-signup.zip"
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/ucrm-client-signup\/ucrm-client-signup.zip"
         }
     ]
 }

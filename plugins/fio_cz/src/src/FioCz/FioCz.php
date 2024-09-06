@@ -57,7 +57,7 @@ class FioCz
     private function downloadTransactionsFromFio(string $token, \DateTimeImmutable $since, \DateTimeImmutable $until): array
     {
         $url = sprintf(
-            'https://www.fio.cz/ib_api/rest/periods/%s/%s/%s/transactions.json',
+            'https://fioapi.fio.cz/v1/rest/periods/%s/%s/%s/transactions.json',
             $token,
             $since->format('Y-m-d'),
             $until->format('Y-m-d')
@@ -89,7 +89,7 @@ class FioCz
                     'amount' => $transaction['column1']['value'],
                     'currency' => $transaction['column14']['value'],
                     'date' => $transaction['column0']['value'],
-                    'reference' => $transaction['column5']['value'],
+                    'reference' => $transaction['column5']['value'] ?? '',
                     'id' => $transaction['column22']['value'],
                     'data' => $data,
                 ];
