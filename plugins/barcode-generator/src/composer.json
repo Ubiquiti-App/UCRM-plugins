@@ -1,0 +1,23 @@
+{
+  "name": "ucrm-plugins/barcode-generator",
+  "description": "UCRM plugin for generating barcodes",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "UBarcode\\": [
+        "src/"
+      ]
+    }
+  },
+  "require": {
+    "monolog/monolog": "^2.7",
+    "symfony/http-foundation": "^6.0",
+    "ubnt/ucrm-plugin-sdk": "^0.10.0",
+    "symfony/filesystem": "^6.4",
+    "tecnickcom/tc-lib-barcode": "^2.2",
+    "nette/utils": "^4.0"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest"
+  }
+}
