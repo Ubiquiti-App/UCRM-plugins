@@ -4,7 +4,8 @@ This plugin generates SVG image of one or two dimensional barcode which can be i
 ## Templates implementation
 You can add barcode image into template code e.g.:
 ``<img src="https://www.example.com/crm/_plugins/barcode-generator/public.php?token=USECONFIGURATIONTOKEN&code=DI{{ invoice.number }}{{ totals.totalRaw }}&type=QRCODE&width=200&height=200&color=black">``
-> Server must be secured with valid certificate for https request. 
+> Make sure you have valid SSL certificate, otherwise the barcode won't load when used in PDF or email templates.  
+> In PDF templates only, you can use `http://localhost/crm/...` as an alternative.
 
 ## Required parameters
 - `token` - Security token from the plugin configuration in the CRM
