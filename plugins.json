@@ -27,6 +27,19 @@
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/0255295bef9739080f67af3745129bb9d396b7ca\/plugins\/backup-sync-dropbox\/backup-sync-dropbox.zip"
         },
         {
+            "name": "barcode-generator",
+            "displayName": "Barcode generator",
+            "description": "This plugin generates barcodes and QR codes. It is usable for including into templates as image.",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/barcode-generator",
+            "version": "1.0.0",
+            "unmsVersionCompliancy": {
+                "min": "2.1.0",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc.",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/barcode-generator\/barcode-generator.zip"
+        },
+        {
             "name": "fio_cz",
             "displayName": "Fio bank payment import",
             "description": "This plugin enables you to import payments from Fio bank to UCRM. See https:\/\/www.fio.cz\/bankovni-sluzby\/api-bankovnictvi",
