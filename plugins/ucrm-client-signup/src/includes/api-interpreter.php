@@ -13,6 +13,6 @@ try {
     }
 } catch (\UnexpectedValueException $e) {
     http_response_code($e->getCode());
-    echo $e->getMessage();
+    echo htmlspecialchars($e->getMessage(), ENT_QUOTES);
     exit();
 }
