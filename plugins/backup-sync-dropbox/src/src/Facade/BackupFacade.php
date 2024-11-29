@@ -11,26 +11,11 @@ use Ubnt\UcrmPluginSdk\Service\UnmsApi;
 
 final class BackupFacade
 {
-    /**
-     * @var UnmsApi
-     */
-    private $unmsApi;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    public function __construct(UnmsApi $unmsApi, Filesystem $filesystem, LoggerInterface $logger)
-    {
-        $this->unmsApi = $unmsApi;
-        $this->filesystem = $filesystem;
-        $this->logger = $logger;
+    public function __construct(
+        private UnmsApi $unmsApi,
+        private Filesystem $filesystem,
+        private LoggerInterface $logger
+    ) {
     }
 
     public function upload(UnmsBackup $unmsBackup): void
@@ -41,7 +26,10 @@ final class BackupFacade
             return;
         }
 
-        $this->filesystem->write($unmsBackup->filename, $this->unmsApi->get(sprintf('nms/backups/%s', $unmsBackup->id)));
+        $temp = tmpfile();
+        fwrite($temp, $this->unmsApi->get(sprintf('nms/backups/%s', $unmsBackup->id)));
+
+        $this->filesystem->writeStream($unmsBackup->filename, $temp);
 
         $this->logger->info(sprintf('Uploaded file "%s".', $unmsBackup->filename));
     }
