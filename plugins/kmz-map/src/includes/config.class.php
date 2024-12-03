@@ -16,7 +16,7 @@ class Config
 
     public static $LINK_TWO = null;
 
-    public static function initializeStaticProperties($config_path)
+    public static function initializeStaticProperties($config_path): void
     {
 
     // ## Setup user configuration settings, if they exist
@@ -26,16 +26,13 @@ class Config
             $config_json = json_decode($config_string);
 
             foreach ($config_json as $key => $value) {
-
-        // ## Expect specific key naming convention
                 $name = false;
-                $count = false;
                 if (strpos($key, 'REQUIRED_') !== false) {
                     $name = str_replace('REQUIRED_', '', $key);
                     $new_value = $value;
                 } elseif (strpos($key, 'HYPER_LINK_') !== false) {
                     $name = str_replace('HYPER_LINK_', '', $key);
-                    $new_value = self::parseLink($value);
+                    $new_value = self::parseLink((string) $value);
                 } elseif (strpos($key, 'OPTIONAL_') !== false) {
                     $name = str_replace('OPTIONAL_', '', $key);
                     $new_value = $value;
@@ -54,7 +51,7 @@ class Config
         }
     }
 
-    private static function parseLink($link_string)
+    private static function parseLink(string $link_string): array
     {
         return explode('|', $link_string, 2);
     }
