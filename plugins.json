@@ -70,7 +70,7 @@
             "displayName": "KMZ Map",
             "description": "A UISP CRM plugin that provides a frontend Google Map for clients to view tower coverage.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/kmz-map",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "unmsVersionCompliancy": {
                 "min": "1.0.0",
                 "max": "2.1.0"
