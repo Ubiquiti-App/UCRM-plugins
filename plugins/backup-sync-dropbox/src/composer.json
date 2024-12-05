@@ -8,11 +8,11 @@
     },
     "require": {
         "ext-mbstring": "*",
-        "ubnt/ucrm-plugin-sdk": "^0.9",
         "php-di/php-di": "^7.0",
         "psr/log": "^3.0",
         "league/flysystem": "^3.12",
         "spatie/flysystem-dropbox": "^3.0",
-        "stevenmaguire/oauth2-dropbox": "^3.1"
+        "stevenmaguire/oauth2-dropbox": "^3.1",
+        "ubnt/ucrm-plugin-sdk": "^0.12.0"
     }
 }

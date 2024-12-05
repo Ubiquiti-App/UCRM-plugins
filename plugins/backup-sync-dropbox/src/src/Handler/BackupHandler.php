@@ -10,29 +10,11 @@ use Psr\Log\LoggerInterface;
 
 final class BackupHandler
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var BackupFacade
-     */
-    private $backupFacade;
-
-    /**
-     * @var BackupDataProvider
-     */
-    private $backupDataProvider;
-
     public function __construct(
-        LoggerInterface $logger,
-        BackupFacade $backupFacade,
-        BackupDataProvider $backupDataProvider
+        private LoggerInterface $logger,
+        private BackupFacade $backupFacade,
+        private BackupDataProvider $backupDataProvider
     ) {
-        $this->logger = $logger;
-        $this->backupFacade = $backupFacade;
-        $this->backupDataProvider = $backupDataProvider;
     }
 
     public function sync(): void
