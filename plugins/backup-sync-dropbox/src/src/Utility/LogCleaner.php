@@ -10,14 +10,8 @@ final class LogCleaner
 {
     private const MAX_LINES = 256;
 
-    /**
-     * @var PluginLogManager
-     */
-    private $pluginLogManager;
-
-    public function __construct(PluginLogManager $pluginLogManager)
+    public function __construct(private PluginLogManager $pluginLogManager)
     {
-        $this->pluginLogManager = $pluginLogManager;
     }
 
     public function clean(): void

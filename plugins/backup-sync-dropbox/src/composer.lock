@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "17131d29174bf5b396292477ba9a415a",
+    "content-hash": "00d0d9c4448cbcb7cd0c84f185574bf4",
     "packages": [
         {
             "name": "graham-campbell/guzzle-factory",
@@ -1695,30 +1695,30 @@
         },
         {
             "name": "ubnt/ucrm-plugin-sdk",
-            "version": "0.9.0",
+            "version": "0.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ubiquiti-App/UCRM-Plugin-SDK.git",
-                "reference": "02ca1d4ce7fca1bc7f49ef0259a03d0bfedec19f"
+                "reference": "4c69c1e8e6105d53bfed2a3c30da7dda144ede07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ubiquiti-App/UCRM-Plugin-SDK/zipball/02ca1d4ce7fca1bc7f49ef0259a03d0bfedec19f",
-                "reference": "02ca1d4ce7fca1bc7f49ef0259a03d0bfedec19f",
+                "url": "https://api.github.com/repos/Ubiquiti-App/UCRM-Plugin-SDK/zipball/4c69c1e8e6105d53bfed2a3c30da7dda144ede07",
+                "reference": "4c69c1e8e6105d53bfed2a3c30da7dda144ede07",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
-                "guzzlehttp/guzzle": "^7.5",
+                "guzzlehttp/guzzle": "^7.8",
                 "php": ">=8.1",
-                "symfony/filesystem": "^6.2"
+                "symfony/filesystem": "^6.3"
             },
             "require-dev": {
                 "eloquent/phony-phpunit": "^7.1",
                 "eloquent/phpstan-phony": "^0.8.0",
                 "ocramius/package-versions": "^2.7",
-                "php-coveralls/php-coveralls": "^2.5",
+                "php-coveralls/php-coveralls": "^2.6",
                 "phpstan/phpstan": "^1.10",
                 "phpstan/phpstan-strict-rules": "^1.2",
                 "phpunit/phpunit": "^9.5",
@@ -1748,9 +1748,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Ubiquiti-App/UCRM-Plugin-SDK/issues",
-                "source": "https://github.com/Ubiquiti-App/UCRM-Plugin-SDK/tree/0.9.0"
+                "source": "https://github.com/Ubiquiti-App/UCRM-Plugin-SDK/tree/0.12.0"
             },
-            "time": "2023-03-10T13:26:40+00:00"
+            "time": "2024-12-09T09:46:53+00:00"
         }
     ],
     "packages-dev": [],
