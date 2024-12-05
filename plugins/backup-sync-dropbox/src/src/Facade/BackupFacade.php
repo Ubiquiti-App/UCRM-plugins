@@ -26,10 +26,12 @@ final class BackupFacade
             return;
         }
 
-        $temp = tmpfile();
-        fwrite($temp, $this->unmsApi->get(sprintf('nms/backups/%s', $unmsBackup->id)));
-
-        $this->filesystem->writeStream($unmsBackup->filename, $temp);
+        $temporaryFile = $this->getTemporaryFile();
+        $resource = fopen($temporaryFile, 'wb+');
+        fwrite($resource, $this->unmsApi->get(sprintf('nms/backups/%s', $unmsBackup->id)));
+        rewind($resource);
+        $this->filesystem->writeStream($unmsBackup->filename, $resource);
+        unlink($temporaryFile);
 
         $this->logger->info(sprintf('Uploaded file "%s".', $unmsBackup->filename));
     }
@@ -50,5 +52,15 @@ final class BackupFacade
 
             $this->logger->info(sprintf('Deleted file "%s".', $item['path']));
         }
+    }
+
+    private function getTemporaryFile(): string
+    {
+        $tempDir = realpath(sys_get_temp_dir());
+        assert(is_string($tempDir));
+        $tmpFile = tempnam($tempDir, 'ucrmTmpFile');
+        assert(is_string($tmpFile));
+
+        return $tmpFile;
     }
 }
