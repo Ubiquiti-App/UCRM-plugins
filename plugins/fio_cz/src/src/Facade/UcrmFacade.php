@@ -10,26 +10,11 @@ use FioCz\Service\UcrmApi;
 
 class UcrmFacade
 {
-    /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
-     * @var OptionsManager
-     */
-    private $optionsManager;
-
-    /**
-     * @var UcrmApi
-     */
-    private $ucrmApi;
-
-    public function __construct(Logger $logger, OptionsManager $optionsManager, UcrmApi $ucrmApi)
-    {
-        $this->logger = $logger;
-        $this->optionsManager = $optionsManager;
-        $this->ucrmApi = $ucrmApi;
+    public function __construct(
+        private Logger $logger,
+        private OptionsManager $optionsManager,
+        private UcrmApi $ucrmApi
+    ) {
     }
 
     /**
@@ -44,9 +29,18 @@ class UcrmFacade
 
         $this->logger->info(sprintf('Processing transaction %s.', $transaction['id']));
 
-        $matched = $this->matchClientFromUcrm($transaction, $optionsData->paymentMatchAttribute);
-        if ($matched || $optionsData->importUnattached) {
-            if ($matched) {
+        $matchAttributes = explode(';', $optionsData->paymentMatchAttribute);
+
+        $matched = null;
+        foreach ($matchAttributes as $matchAttribute) {
+            $matched = $this->matchClientFromUcrm($transaction, $matchAttribute);
+            if ($matched !== null) {
+                break;
+            }
+        }
+
+        if ($matched !== null || $optionsData->importUnattached) {
+            if ($matched !== null) {
                 [$clientId, $invoiceId] = $matched;
                 $this->logger->info(sprintf('Matched transaction %s to client %s, invoice %s', $transaction['id'], $clientId, $invoiceId));
             } else {
@@ -87,8 +81,13 @@ class UcrmFacade
      * @throws \FioCz\Exception\CurlException
      * @throws \ReflectionException
      */
-    private function matchClientFromUcrm(array $transaction, $matchBy): ?array
+    private function matchClientFromUcrm(array $transaction, string $matchBy): ?array
     {
+        $matchBy = trim($matchBy);
+        if ($matchBy === '') {
+            return null;
+        }
+
         $endpoint = 'clients';
 
         if ($matchBy === 'invoiceNumber') {
