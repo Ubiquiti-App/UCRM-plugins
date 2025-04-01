@@ -1,0 +1,262 @@
+:root {
+    --bs-primary: #3b7ddd;
+    --bs-card-border-radius: 0.25rem;
+}
+
+body {
+    background-color: #f5f7fb;
+    color: #495057;
+    font-family: "Inter", "Helvetica Neue", Arial, -apple-system, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+/* Hero Section */
+.simple-hero {
+    background: var(--bs-primary);
+    color: white;
+    padding: 70px 0 20px;
+    position: relative;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.simple-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    padding: 0 20px;
+}
+
+.hero-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: -50px;
+    left: 20px;
+}
+
+.hero-logo img {
+    height: 40px;
+    width: auto;
+    max-width: 100%;
+}
+
+.hero-content {
+    max-width: 700px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.hero-content h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+/* Stepper Styles */
+.stepper-container {
+    background-color: white;
+    padding: 15px 0;
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.simplified-stepper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.step.active {
+    opacity: 1;
+}
+
+.step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.active .step-circle {
+    background-color: var(--bs-primary);
+}
+
+.step-label {
+    font-size: 13px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Card Styles */
+.card {
+    border: 0;
+    border-radius: var(--bs-card-border-radius);
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1rem 1.25rem;
+}
+
+.card-title {
+    margin-bottom: 0;
+    color: #939ba2;
+    font-weight: 500;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+/* Form Styles */
+.form-control {
+    border: 1px solid #dee2e6;
+    border-radius: 0.2rem;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.875rem;
+    height: calc(1.9125rem + 2px);
+}
+
+.form-control:focus {
+    border-color: #9dbeee;
+    box-shadow: 0 0 0 0.25rem rgba(59, 125, 221, 0.25);
+}
+
+label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #495057;
+}
+
+/* Button Styles */
+.btn {
+    font-size: 0.875rem;
+    padding: 0.3rem 0.85rem;
+    border-radius: 0.2rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.btn-primary:hover {
+    background-color: #326abc;
+    border-color: #2f64b1;
+}
+
+.btn-success {
+    background-color: #1cbb8c;
+    border-color: #1cbb8c;
+}
+
+.btn-success:hover {
+    background-color: #3ec59d;
+    border-color: #33c298;
+}
+
+/* Alert Styles */
+.alert {
+    border: 0;
+    border-radius: var(--bs-card-border-radius);
+    padding: 0.95rem;
+}
+
+.alert-success {
+    color: #0b4b38;
+    background-color: #d2f1e8;
+}
+
+.alert-warning {
+    color: #654a12;
+    background-color: #fef1d5;
+}
+
+.alert-danger {
+    color: #58151c;
+    background-color: #f8d7da;
+}
+
+/* Responsive */
+@media(max-width: 768px) {
+    .simple-hero {
+        padding: 50px 0;
+    }
+    
+    .hero-content h1 {
+        font-size: 1.6rem;
+    }
+    
+    .hero-content p {
+        font-size: 0.95rem;
+    }
+    
+    .simplified-stepper {
+        justify-content: center;
+    }
+    
+    .step {
+        margin: 0 8px;
+    }
+}
+
+/* Status messages */
+.loading-matches, .unknown-address {
+    font-size: 0.8rem;
+    transition: visibility 0.2s, opacity 0.2s;
+}
+
+.loading-matches.visible, .unknown-address.visible {
+    visibility: visible !important;
+    opacity: 1;
+}
+
+.logo-img {
+    max-height: 50px;
+    width: auto;
+}

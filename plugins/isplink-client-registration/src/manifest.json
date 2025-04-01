@@ -1,0 +1,63 @@
+{
+    "version": "1",
+    "information": {
+        "name": "isplink-client-registration",
+        "displayName": "Customer Signup with ISPLink",
+        "description": "Full self-service signup system. Supports address check, account creation, installation scheduling, initial payment, lead capture.",
+        "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/isplink-client-registration",
+        "version": "1.0.0",
+        "ucrmVersionCompliancy": {
+            "min": "2.14.0",
+            "max": null
+        },
+        "unmsVersionCompliancy": {
+            "min": "1.0.0-alpha.1",
+            "max": null
+        },
+        "author": "Max Cramer"
+    },
+    "configuration": [
+        {
+            "key": "COMPANY_NAME",
+            "label": "Company Name",
+            "description": "Your Company Name will be displayed on the Customer Signup Forms",
+            "required": 1
+        },
+        {
+            "key": "API_KEY",
+            "label": "ISPLink API Key",
+            "description": "Your ISPLink API key. To obtain an API key, please visit https://isplink.app",
+            "required": 0
+        },
+        {
+            "key": "PAGE_TITLE",
+            "label": "Page Title",
+            "description": "Your title tag for your sign-up page",
+            "required": 0
+        },
+        {
+            "key": "HOMEPAGE_URL",
+            "label": "Company Website Url",
+            "description": "The URL of your company website",
+            "required": 0
+        },
+        {
+            "key": "HEADING",
+            "label": "Signup Form Heading",
+            "description": "This heading will be displayed at the top of customer signup forms",
+            "required": 0
+        },
+        {
+            "key": "SUBHEADING",
+            "label": "Signup Form Subheading",
+            "description": "This subheading will be displayed at the top of customer signup forms",
+            "required": 0
+        },
+        {
+            "key": "LOGO_URL",
+            "label": "Logo Url",
+            "description": "URL of your company logo to display on the customer signup form",
+            "required": 0
+        }
+    ]
+}

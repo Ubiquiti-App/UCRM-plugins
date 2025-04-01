@@ -1,0 +1,9 @@
+{
+    "name": "ucrm-plugins/isplink-client-registration",
+    "description": "Full self-service signup system. Supports address check, account creation, installation scheduling, initial payment, lead capture.",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1",
+        "ubnt/ucrm-plugin-sdk": "^0.12.0"
+    }
+}
