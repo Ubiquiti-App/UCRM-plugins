@@ -1,19 +1,19 @@
-# ISPLink Plugin for UCRM
+# ISPLink Plugin for UISP
 
-A UCRM plugin that integrates with [ISPLink](https://isplink.app) to provide a full self-service signup system for clients.
+A UISP plugin that integrates with [ISPLink](https://isplink.app) to provide a full self-service signup system for clients.
 
 *Developed by [Fullstack](https://gofullstack.com)*
 
 ## Overview
 
-When installed onto UCRM, the plugin public URL will display an intuitive multi-step interface for potential customers to check service availability at their address and sign up as a client in UISP.
+When installed onto UISP, the plugin public URL will display an intuitive multi-step interface for potential customers to check service availability at their address and sign up as a client in UISP.
 
 **Note:** This plugin requires an active ISPLink account.  To create an ISPLink account, please visit [ISPLink](https://isplink.app).
 
 **Version:** 1.0.0  
 **Compatible with:**
-- UCRM 2.14.0 and beyond
-- UNMS 1.0.0-alpha.1 and beyond
+- UISP 1.4.2 and greater
+- Supports both self-hosted UISP and UISP Cloud
 
 ## Features
 
@@ -24,7 +24,7 @@ When installed onto UCRM, the plugin public URL will display an intuitive multi-
 - Account creation and lead capture.
 - Installation scheduling.
 - Initial payment processing via Authorize.net, Stripe, or Ubiquiti Payment Gateway.
-- Adds intial payment method to UCRM for ongoing payments
+- Adds intial payment method to UISP CRM for ongoing payments
 
 ## Installation
 
