@@ -21,7 +21,7 @@
             "key": "COMPANY_NAME",
             "label": "Company Name",
             "description": "Your Company Name will be displayed on the Customer Signup Forms",
-            "required": 1
+            "required": 0
         },
         {
             "key": "API_KEY",
