@@ -9,11 +9,13 @@ $config = $configManager->loadConfig();
 $optionsManager = \Ubnt\UcrmPluginSdk\Service\UcrmOptionsManager::create();
 $options = $optionsManager->loadOptions();
 
+// Get UCRM log manager.
+$log = \Ubnt\UcrmPluginSdk\Service\PluginLogManager::create();
+
 $apiError = null;
 $apiSuccess = false;
 
 $publicUrl = str_replace('.php', '/', $options->pluginPublicUrl);
-
 
 try {
     $client = new Client([
@@ -47,17 +49,11 @@ try {
     } else {
         $apiError = 'Client error: ' . $response->getStatusCode() . ' - ' . ($jsonData['error'] ?? 'Unknown error');
     }
-    error_log('API error: ' . $apiError);
+    $log->appendLog('API error: ' . $apiError);
     
 } catch (GuzzleException $e) {
     // Handle other Guzzle exceptions (connection issues, timeouts, etc.)
-    $apiError = 'Connection error: ' . $e->getMessage();
-    error_log('API connection error: ' . $e->getMessage());
-}
-
-// Function to safely output text
-function safeEcho($text, $default = '') {
-    echo htmlspecialchars($text ?? $default);
+    $log->appendLog('API error: ' . $e->getMessage());
 }
 
 // If API validation successful, show iframe
@@ -66,11 +62,11 @@ if ($apiSuccess && $clientDomain != false) {
     <!DOCTYPE html>
     <html>
     <head>
-        <title><?php safeEcho($config['PAGE_TITLE'], 'ISPLink Client Signup'); ?></title>
+        <title><?php echo htmlspecialchars($config['PAGE_TITLE'] ?? 'ISPLink Client Signup'); ?></title>
     </head>
     <body>
         <iframe 
-            src="https://<?php safeEcho($clientDomain); ?>" 
+            src="https://<?php echo htmlspecialchars($clientDomain); ?>" 
             style="width: 100%; height: 100vh; border: none;">
         </iframe>
     </body>
@@ -84,7 +80,7 @@ if ($apiSuccess && $clientDomain != false) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title><?php safeEcho($config['PAGE_TITLE'], 'Sign Up for Service'); ?></title>
+    <title><?php echo htmlspecialchars($config['PAGE_TITLE'] ?? 'Sign Up for Service'); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo $publicUrl . 'styles.css'?>" rel="stylesheet">
@@ -96,17 +92,17 @@ if ($apiSuccess && $clientDomain != false) {
         <!-- Logo positioned in top left -->
         <div class="hero-logo mb-5">
             <?php if (!empty($config['LOGO_URL'])): ?>
-                <img src="<?php safeEcho($config['LOGO_URL']); ?>" alt="<?php safeEcho($config['COMPANY_NAME'], 'Company Logo'); ?>">
+                <img src="<?php echo htmlspecialchars($config['LOGO_URL']); ?>" alt="<?php echo htmlspecialchars($config['COMPANY_NAME'] ?? 'Company Logo'); ?>">
             <?php elseif (!empty($config['COMPANY_NAME'])): ?>
-                <h1><?php safeEcho($config['COMPANY_NAME']); ?></h1>
+                <h1><?php echo htmlspecialchars($config['COMPANY_NAME']); ?></h1>
             <?php else: ?>
                 <img src="https://isplink.app/img/isplink_logo.png" alt="Default Logo">
             <?php endif; ?>
         </div>
         
         <div class="hero-content">
-            <h1><?php safeEcho($config['HEADING']); ?></h1>
-            <p><?php safeEcho($config['SUBHEADING']); ?></p>
+            <h1><?php echo htmlspecialchars($config['HEADING'] ?? ''); ?></h1>
+            <p><?php echo htmlspecialchars($config['SUBHEADING'] ?? ''); ?></p>
         </div>
     </div>
 </div>
@@ -207,7 +203,7 @@ if ($apiSuccess && $clientDomain != false) {
                         Need help? <a href="https://isplink.app/" class="text-decoration-none">Contact our support team</a>
                     </p>
                     <p>
-                        <a href="<?php safeEcho($config['HOMEPAGE_URL'] ?? '#'); ?>" class="text-decoration-none">Back to main site</a>
+                        <a href="<?php echo htmlspecialchars($config['HOMEPAGE_URL'] ?? '#'); ?>" class="text-decoration-none">Back to main site</a>
                     </p>
                 </div>
 
