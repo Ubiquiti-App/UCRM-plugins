@@ -31,7 +31,7 @@
             "displayName": "Barcode generator",
             "description": "This plugin generates barcodes and QR codes. It is usable for including into templates as image.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/barcode-generator",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "unmsVersionCompliancy": {
                 "min": "2.1.0",
                 "max": null

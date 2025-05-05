@@ -44,7 +44,7 @@
             "displayName": "Barcode generator",
             "description": "This plugin generates barcodes and QR codes. It is usable for including into templates as image.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/barcode-generator",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "unmsVersionCompliancy": {
                 "min": "2.1.0",
                 "max": null
@@ -57,7 +57,7 @@
             "displayName": "Invoice CSV export",
             "description": "Configurable export of invoices into CSV.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/invoice-csv-export",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "unmsVersionCompliancy": {
                 "min": "2.1.0",
                 "max": null
@@ -96,7 +96,7 @@
             "displayName": "Revenue report",
             "description": "Grids and charts showing organization's revenue grouped by products or services. Shown in the Reporting main menu section.",
             "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/revenue-report",
-            "version": "1.2.3",
+            "version": "1.2.1",
             "unmsVersionCompliancy": {
                 "min": "2.1.0",
                 "max": null
