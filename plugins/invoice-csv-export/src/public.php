@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use App\Service\CsvGenerator;
 use App\Service\TemplateRenderer;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Ubnt\UcrmPluginSdk\Security\PermissionNames;
 use Ubnt\UcrmPluginSdk\Service\UcrmApi;
 use Ubnt\UcrmPluginSdk\Service\UcrmOptionsManager;
@@ -22,24 +24,37 @@ $user = $security->getUser();
 if (! $user || $user->isClient || ! $user->hasViewPermission(PermissionNames::BILLING_INVOICES)) {
     \App\Http::forbidden();
 }
+$optionsManager = UcrmOptionsManager::create();
+$ucrmOptions = $optionsManager->loadOptions();
+$request = Request::createFromGlobals();
+
 
 // Process submitted form.
-if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) && array_key_exists('until', $_GET)) {
+if ($request->isMethod('POST')) {
+    $organizationId = $request->request->get('organization');
+    if ($organizationId === null) {
+        (new RedirectResponse($ucrmOptions->ucrmPublicUrl))->send();
+    }
+
     $parameters = [
-        'organizationId' => $_GET['organization'],
-        'createdDateFrom' => $_GET['since'],
-        'createdDateTo' => $_GET['until'],
+        'organizationId' => $organizationId,
+        'createdDateFrom' => null,
+        'createdDateTo' => null,
     ];
 
-    // make sure the dates are in YYYY-MM-DD format
-    if ($parameters['createdDateFrom']) {
-        $parameters['createdDateFrom'] = new \DateTimeImmutable($parameters['createdDateFrom']);
-        $parameters['createdDateFrom'] = $parameters['createdDateFrom']->format('Y-m-d');
+    try {
+        $since = $request->request->get('since');
+        if ($since) {
+            $parameters['createdDateFrom'] = (new \DateTimeImmutable($since))->format('Y-m-d');
+        }
+        $until = $request->request->get('until');
+        if ($until) {
+            $parameters['createdDateTo'] = (new \DateTimeImmutable($until))->format('Y-m-d');
+        }
+    } catch (Exception $e) {
+        (new RedirectResponse($ucrmOptions->ucrmPublicUrl))->send();
     }
-    if ($parameters['createdDateTo']) {
-        $parameters['createdDateTo'] = new \DateTimeImmutable($parameters['createdDateTo']);
-        $parameters['createdDateTo'] = $parameters['createdDateTo']->format('Y-m-d');
-    }
+
 
     $countries = $api->get('countries');
     $states = array_merge(
@@ -59,15 +74,11 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
 }
 
 // Render form.
-$organizations = $api->get('organizations');
-
-$optionsManager = UcrmOptionsManager::create();
-
 $renderer = new TemplateRenderer();
 $renderer->render(
     __DIR__ . '/templates/form.php',
     [
-        'organizations' => $organizations,
-        'ucrmPublicUrl' => $optionsManager->loadOptions()->ucrmPublicUrl,
+        'organizations' => $api->get('organizations'),
+        'ucrmPublicUrl' => $ucrmOptions->ucrmPublicUrl,
     ]
 );

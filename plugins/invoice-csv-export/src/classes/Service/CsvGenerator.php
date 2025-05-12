@@ -35,7 +35,7 @@ class CsvGenerator
             $csv->insertOne($this->getInvoiceLine($invoice));
         }
 
-        $csv->output($filename);
+        $csv->download($filename);
     }
 
     private function getHeaderLine(): array
