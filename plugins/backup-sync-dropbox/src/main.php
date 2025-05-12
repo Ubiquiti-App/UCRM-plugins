@@ -1,6 +1,7 @@
 <?php
 
 use BackupSyncDropbox\Handler\BackupHandler;
+use BackupSyncDropbox\Service\UnmsApiDropbox;
 use BackupSyncDropbox\TokenProvider\DropboxTokenProvider;
 use BackupSyncDropbox\Utility\LogCleaner;
 use BackupSyncDropbox\Utility\Logger;
@@ -14,7 +15,6 @@ use Spatie\FlysystemDropbox\DropboxAdapter;
 use Ubnt\UcrmPluginSdk\Service\PluginConfigManager;
 use Ubnt\UcrmPluginSdk\Service\PluginLogManager;
 use Ubnt\UcrmPluginSdk\Service\UcrmApi;
-use Ubnt\UcrmPluginSdk\Service\UnmsApi;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -42,7 +42,7 @@ try {
     $builder->addDefinitions(
         [
             Filesystem::class => $filesystem,
-            UnmsApi::class => UnmsApi::create($unmsApiToken),
+            UnmsApiDropbox::class => UnmsApiDropbox::create($unmsApiToken),
             UcrmApi::class => UcrmApi::create(),
             PluginLogManager::class => $pluginLogManager,
             LoggerInterface::class => $logger,
