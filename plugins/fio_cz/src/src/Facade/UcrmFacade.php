@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace FioCz\Facade;
 
+use FioCz\Exception\CurlException;
 use FioCz\Service\Logger;
 use FioCz\Service\OptionsManager;
 use FioCz\Service\UcrmApi;
@@ -43,17 +44,11 @@ class UcrmFacade
             if ($matched !== null) {
                 [$clientId, $invoiceId] = $matched;
                 $this->logger->info(sprintf('Matched transaction %s to client %s, invoice %s', $transaction['id'], $clientId, $invoiceId));
+                $this->sendMatched($transaction, $methodId, $clientId, $invoiceId);
             } else {
                 $this->logger->info(sprintf('Not matched transaction %s, importing as unattached', $transaction['id']));
+                $this->sendUnmatched($transaction, $methodId);
             }
-            $this->sendPaymentToUcrm(
-                $this->transformTransactionToUcrmPayment(
-                    $transaction,
-                    $methodId,
-                    $clientId ?? null,
-                    $invoiceId ?? null
-                )
-            );
 
             $optionsData->lastProcessedPayment = $transaction['id'];
             $optionsData->lastProcessedPaymentDateTime = $transaction['date'];
@@ -192,5 +187,42 @@ class UcrmFacade
         return ($this->optionsManager->loadOptions()->unmsLocalUrl ?? null)
             ? 3
             : 2;
+    }
+
+    /**
+     * @throws CurlException
+     * @throws \ReflectionException
+     */
+    private function sendMatched(array $transaction, string $methodId, int $clientId, int $invoiceId): void
+    {
+        try {
+            $this->sendPaymentToUcrm(
+                $this->transformTransactionToUcrmPayment($transaction, $methodId, $clientId, $invoiceId)
+            );
+        } catch (CurlException $exception) {
+            if ($exception->getCode() !== 422) {
+                throw $exception;
+            }
+
+            $this->logger->info(
+                sprintf(
+                    'Invoice ID %s is either already paid, voided or a draft. Importing without invoice ID.',
+                    $invoiceId
+                )
+            );
+
+            $this->sendPaymentToUcrm($this->transformTransactionToUcrmPayment($transaction, $methodId, $clientId));
+        }
+    }
+
+    /**
+     * @throws CurlException
+     * @throws \ReflectionException
+     */
+    private function sendUnmatched(array $transaction, string $methodId): void
+    {
+        $this->sendPaymentToUcrm(
+            $this->transformTransactionToUcrmPayment($transaction, $methodId)
+        );
     }
 }
