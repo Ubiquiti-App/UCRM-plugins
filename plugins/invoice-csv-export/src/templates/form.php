@@ -18,7 +18,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form id="export-form">
+                            <form id="export-form" method="post">
                                 <div class="form-row align-items-end">
                                     <div class="col-3">
                                         <label class="mb-0" for="frm-organization"><small>Organization:</small></label>

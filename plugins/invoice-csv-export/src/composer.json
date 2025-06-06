@@ -8,6 +8,7 @@
   },
   "require": {
     "league/csv": "^9.9",
-    "ubnt/ucrm-plugin-sdk": "^0.9"
+    "ubnt/ucrm-plugin-sdk": "^0.9",
+    "symfony/http-foundation": "^6.4"
   }
 }
