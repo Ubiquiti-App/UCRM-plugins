@@ -66,6 +66,19 @@
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/invoice-csv-export\/invoice-csv-export.zip"
         },
         {
+            "name": "isplink-client-registration",
+            "displayName": "Customer Signup with ISPLink",
+            "description": "Full self-service signup system. Supports address check, account creation, installation scheduling, initial payment, lead capture.",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/isplink-client-registration",
+            "version": "1.0.0",
+            "unmsVersionCompliancy": {
+                "min": "1.0.0",
+                "max": null
+            },
+            "author": "Fullstack Inc.",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/isplink-client-registration\/isplink-client-registration.zip"
+        },
+        {
             "name": "kmz-map",
             "displayName": "KMZ Map",
             "description": "A UISP CRM plugin that provides a frontend Google Map for clients to view tower coverage.",

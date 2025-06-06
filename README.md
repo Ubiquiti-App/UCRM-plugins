@@ -23,6 +23,7 @@ UCRM plugins are compatible with UCRM 2.10.0+
 | [Revenue Report](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/revenue-report)                             | Revenue report grouped by products or services, shown under the Reporting main menu section.                                                    |
 | [Facturas Argentina AFIP](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/argentina-afip-invoices)           | Plugin para obtener CAE (Facturacion electronica) en Argentina                                                                                  |
 | [Barcode generator](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/barcode-generator)                       | Barcode generator                                                                                                                               |
+| [ISPLink Client Registration](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/isplink-client-registration)                       | Full self-service signup system. Supports address check, account creation, installation scheduling, initial payment, lead capture.                                                                                                                               |
 
 ## Plugins / API scripts from other sources
 * [Client&nbsp;Signup Extended](https://www.charuwts.com/plugins/ucrm-signup) - Extended version of Client Signup Plugin
