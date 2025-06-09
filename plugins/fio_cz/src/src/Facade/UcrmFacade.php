@@ -40,27 +40,33 @@ class UcrmFacade
             }
         }
 
-        if ($matched !== null || $optionsData->importUnattached) {
-            if ($matched !== null) {
-                [$clientId, $invoiceId] = $matched;
-                $this->logger->info(sprintf('Matched transaction %s to client %s, invoice %s', $transaction['id'], $clientId, $invoiceId));
-                $this->sendMatched($transaction, $methodId, $clientId, $invoiceId);
+        if ($matched === null && ! $optionsData->importUnattached) {
+            $this->logger->warning(sprintf('Not matched, skipping transaction %s', $transaction['id']));
+            $this->logger->info('To import unmatched payments, enable "Import all payments" in plugin\'s settings.)');
+
+            return false;
+        }
+
+        if ($matched !== null) {
+            [$clientId, $invoiceId] = $matched;
+            if ($invoiceId === null) {
+                $this->logger->info(sprintf('Matched transaction %s to client %s', $transaction['id'], $clientId));
             } else {
-                $this->logger->info(sprintf('Not matched transaction %s, importing as unattached', $transaction['id']));
-                $this->sendUnmatched($transaction, $methodId);
+                $this->logger->info(sprintf('Matched transaction %s to client %s, invoice %s', $transaction['id'], $clientId, $invoiceId));
             }
 
-            $optionsData->lastProcessedPayment = $transaction['id'];
-            $optionsData->lastProcessedPaymentDateTime = $transaction['date'];
-            $this->optionsManager->updateOptions();
-            $this->logger->debug(sprintf('lastProcessedPayment set to %s', $optionsData->lastProcessedPayment));
-
-            return true;
+            $this->sendMatched($transaction, $methodId, $clientId, $invoiceId);
+        } else {
+            $this->logger->info(sprintf('Not matched transaction %s, importing as unattached', $transaction['id']));
+            $this->sendUnmatched($transaction, $methodId);
         }
-        $this->logger->warning(sprintf('Not matched, skipping transaction %s', $transaction['id']));
-        $this->logger->info('To import unmatched payments, enable "Import all payments" in plugin\'s settings.)');
 
-        return false;
+        $optionsData->lastProcessedPayment = $transaction['id'];
+        $optionsData->lastProcessedPaymentDateTime = $transaction['date'];
+        $this->optionsManager->updateOptions();
+        $this->logger->debug(sprintf('lastProcessedPayment set to %s', $optionsData->lastProcessedPayment));
+
+        return true;
     }
 
     public function getPaymentMethod(): string
@@ -73,6 +79,7 @@ class UcrmFacade
     }
 
     /**
+     * @return array<int, ?int>|null
      * @throws \FioCz\Exception\CurlException
      * @throws \ReflectionException
      */
@@ -193,7 +200,7 @@ class UcrmFacade
      * @throws CurlException
      * @throws \ReflectionException
      */
-    private function sendMatched(array $transaction, string $methodId, int $clientId, int $invoiceId): void
+    private function sendMatched(array $transaction, string $methodId, int $clientId, ?int $invoiceId = null): void
     {
         try {
             $this->sendPaymentToUcrm(
