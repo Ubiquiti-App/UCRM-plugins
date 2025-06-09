@@ -8,6 +8,7 @@ try {
     $interpreter->run($payload);
     if ($interpreter->isReady()) {
         http_response_code($interpreter->getCode());
+        header('Content-Type: application/json');
         echo $interpreter->getResponse();
         exit();
     }
