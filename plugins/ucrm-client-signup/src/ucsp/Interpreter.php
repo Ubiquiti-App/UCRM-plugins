@@ -91,8 +91,16 @@ class Interpreter
             $payloadDecoded = json_decode($payload);
 
             if (! empty($payloadDecoded->frontendKey)) {
-                if ($payloadDecoded->frontendKey != self::getFrontendKey()) {
+                $explode = explode('||', $payloadDecoded->frontendKey, 2);
+                $payloadFrontendKey = $explode[0] ?? null;
+                $payloadCsrfToken = $explode[1] ?? null;
+
+                if ($payloadFrontendKey != self::getFrontendKey()) {
                     throw new \UnexpectedValueException('frontendKey is invalid', 400);
+                }
+
+                if ($payloadCsrfToken === null || $payloadCsrfToken !== $_SESSION['csrf_token']) {
+                    throw new \UnexpectedValueException('csrf token is invalid', 400);
                 }
 
                 if (! empty($payloadDecoded->api)) {
