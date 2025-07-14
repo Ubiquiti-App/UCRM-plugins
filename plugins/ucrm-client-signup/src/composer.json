@@ -18,6 +18,6 @@
         "phpunit/php-invoker": "^4.0"
     },
     "require": {
-        "ubnt/ucrm-plugin-sdk": "^0.10.0"
+        "ubnt/ucrm-plugin-sdk": "^0.13.0"
     }
 }
