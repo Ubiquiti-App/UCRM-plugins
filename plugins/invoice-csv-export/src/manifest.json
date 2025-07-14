@@ -5,7 +5,7 @@
     "displayName": "Invoice CSV export",
     "description": "Configurable export of invoices into CSV.",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/invoice-csv-export",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "unmsVersionCompliancy": {
       "min": "2.1.0",
       "max": null
