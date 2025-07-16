@@ -9,6 +9,7 @@
     }
   },
   "require": {
-    "ubnt/ucrm-plugin-sdk": "^0.13"
+    "ubnt/ucrm-plugin-sdk": "^0.13",
+    "ext-ds": "*"
   }
 }
