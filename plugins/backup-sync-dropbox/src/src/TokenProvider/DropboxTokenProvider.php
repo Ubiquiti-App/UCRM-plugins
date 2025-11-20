@@ -18,20 +18,10 @@ use Ubnt\UcrmPluginSdk\Util\Json;
 
 class DropboxTokenProvider implements TokenProvider
 {
-    /**
-     * @var PluginLogManager
-     */
-    private $pluginLogManager;
-
-    /**
-     * @var PluginConfigManager
-     */
-    private $pluginConfigManager;
-
-    public function __construct(PluginLogManager $pluginLogManager, PluginConfigManager $pluginConfigManager)
-    {
-        $this->pluginLogManager = $pluginLogManager;
-        $this->pluginConfigManager = $pluginConfigManager;
+    public function __construct(
+        private PluginLogManager $pluginLogManager,
+        private PluginConfigManager $pluginConfigManager
+    ) {
     }
 
     public function getToken(): string

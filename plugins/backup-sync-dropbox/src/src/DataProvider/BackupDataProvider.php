@@ -5,27 +5,17 @@ declare(strict_types=1);
 namespace BackupSyncDropbox\DataProvider;
 
 use BackupSyncDropbox\Data\UnmsBackup;
+use BackupSyncDropbox\Service\UnmsApiDropbox;
 use BackupSyncDropbox\Utility\NmsSettings;
 use DateTimeImmutable;
 use DateTimeZone;
-use Ubnt\UcrmPluginSdk\Service\UnmsApi;
 
 final class BackupDataProvider
 {
-    /**
-     * @var UnmsApi
-     */
-    private $unmsApi;
-
-    /**
-     * @var NmsSettings
-     */
-    private $nmsSettings;
-
-    public function __construct(UnmsApi $unmsApi, NmsSettings $nmsSettings)
-    {
-        $this->unmsApi = $unmsApi;
-        $this->nmsSettings = $nmsSettings;
+    public function __construct(
+        private UnmsApiDropbox $unmsApiDropbox,
+        private NmsSettings $nmsSettings
+    ) {
     }
 
     /**
@@ -36,7 +26,7 @@ final class BackupDataProvider
         $list = [];
         $nmsTimeZone = $this->nmsSettings->getTimeZone();
 
-        $data = $this->unmsApi->get('nms/backups');
+        $data = $this->unmsApiDropbox->get('nms/backups');
         foreach ($data as $item) {
             if ($item['state'] !== 'success') {
                 continue;

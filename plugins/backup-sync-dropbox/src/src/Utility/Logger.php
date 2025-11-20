@@ -13,14 +13,8 @@ final class Logger implements LoggerInterface
 {
     use LoggerTrait;
 
-    /**
-     * @var PluginLogManager
-     */
-    private $pluginLogManager;
-
-    public function __construct(PluginLogManager $pluginLogManager)
+    public function __construct(private PluginLogManager $pluginLogManager)
     {
-        $this->pluginLogManager = $pluginLogManager;
     }
 
     public function log($level, $message, array $context = []): void
