@@ -72,8 +72,8 @@ if (DEBUG) {
   if (array_key_exists('organization', $_GET)) {
       $parameters = $_GET['organization'];
       $parameters = explode(',', $parameters);
-      echo '<br> Organizacion seleccionada: ' . $parameters[0] . ' Punto de Venta: ' . $parameters[1] . ' Fecha de inicio actividades: ' . $parameters[2] . '<br>';
-      formatInvoice($parameters[0], $parameters[1], $parameters[2], $parameters[3]);
+      echo '<br> Organizacion seleccionada: ' . htmlspecialchars($parameters[0] ?? '', ENT_QUOTES) . ' Punto de Venta: ' . htmlspecialchars($parameters[1] ?? '', ENT_QUOTES) . ' Fecha de inicio actividades: ' . htmlspecialchars($parameters[2] ?? '', ENT_QUOTES) . '<br>';
+      formatInvoice($parameters[0] ?? null, $parameters[1] ?? null, $parameters[2] ?? null, $parameters[3] ?? null);
   }
 
 // Render form.
@@ -83,7 +83,7 @@ $renderer = new TemplateRenderer();
 $renderer->render(
     __DIR__ . '/templates/form.php',
     [
-        'organizaciones' => $organizaciones,
+        'organizaciones' => $organizaciones ?? [],
         'ucrmPublicUrl' => $optionsManager->loadOptions()->ucrmPublicUrl,
     ]
 );

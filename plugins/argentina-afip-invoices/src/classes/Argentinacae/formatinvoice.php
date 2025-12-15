@@ -122,7 +122,7 @@ function formatInvoice($orgId, $salesPoint, $activitiesStartDate, $orgSelected)
             } elseif ($tipoFC === 'C' || $tipoFC === 'c') {
                 $tipocbte = '11';
             } else {
-                echo '<br> Cliente ' . $client['id'] . ' sin tipo de factura asignado / O mal asignado, recuerde los valores validos son A,B,C <br>';
+                echo '<br> Cliente ' . htmlspecialchars($client['id'] ?? '', ENT_QUOTES) . ' sin tipo de factura asignado / O mal asignado, recuerde los valores validos son A,B,C <br>';
                 $verifyClientOk = false;
             }
 
@@ -330,7 +330,7 @@ function formatInvoice($orgId, $salesPoint, $activitiesStartDate, $orgSelected)
                             }
                             if ($caeResultrunCae['resultado'] === 'A') {
                                 $numeroFacturaAfip = $salesPoint . '-' . sprintf("%'.08d", $caeResultrunCae['cbtenumero']);
-                                echo '<br> Solicitando CAE para factura id: ' . $invoice['id'] . ' numero: ' . $tipoFC . '-' . $numeroFacturaAfip . ' del cliente ' . $client['firstName'] . ' ' . $client['lastName'] . $client['companyName'] . ' => Resultado OK <br>';
+                                echo '<br> Solicitando CAE para factura id: ' . htmlspecialchars($invoice['id'] ?? '', ENT_QUOTES) . ' numero: ' . htmlspecialchars($tipoFC ?? '', ENT_QUOTES) . '-' . htmlspecialchars($numeroFacturaAfip ?? '', ENT_QUOTES) . ' del cliente ' . htmlspecialchars($client['firstName'] ?? '', ENT_QUOTES) . ' ' . htmlspecialchars($client['lastName'] ?? '', ENT_QUOTES) . htmlspecialchars($client['companyName'] ?? '', ENT_QUOTES) . ' => Resultado OK <br>';
                                 if ($conceptoMalEstablecido) {
                                     echo '<br> CONCEPTO DE FACTURA MAL ESTABLECIDO, SE CONSIDERA SERVICIOS POR DEFAULT <br>';
                                 }
@@ -464,17 +464,17 @@ function formatInvoice($orgId, $salesPoint, $activitiesStartDate, $orgSelected)
                                     }
                                 }
                             } elseif ($caeResultrunCae['resultado'] === 'R') {
-                                echo '<br> Solicitando CAE para factura id: ' . $invoice['id'] . ' del cliente ' . $client['firstName'] . ' ' . $client['lastName'] . $client['companyName'] . ' => Resultado ERROR, verifique detalles a continuacion: <br>';
+                                echo '<br> Solicitando CAE para factura id: ' . htmlspecialchars($invoice['id'] ?? '', ENT_QUOTES) . ' del cliente ' . htmlspecialchars($client['firstName'] ?? '', ENT_QUOTES) . ' ' . htmlspecialchars($client['lastName'] ?? '', ENT_QUOTES) . htmlspecialchars($client['companyName'] ?? '', ENT_QUOTES) . ' => Resultado ERROR, verifique detalles a continuacion: <br>';
                                 if ($conceptoMalEstablecido) {
                                     echo 'CONCEPTO DE FACTURA MAL ESTABLECIDO, SE CONSIDERA SERVICIOS POR DEFAULT <br>';
                                 }
                                 echo '<pre>';
-                                print_r($caeResultrunCae['obs']);
+                                print_r(htmlspecialchars($caeResultrunCae['obs'] ?? '', ENT_QUOTES));
                                 echo '</pre>';
                             } else {
                                 echo '<br> ERRORES ENCONTRADOS EN LA COMUNICACION CON LOS SERVIDORES DE AFIP!!!!!!!!!! <br> ';
                                 echo '<pre>';
-                                print_r($caeResultrunCae['Err']);
+                                print_r(htmlspecialchars($caeResultrunCae['Err'] ?? '', ENT_QUOTES));
                                 echo '</pre>';
                             }
                         }//end Verify CF else
