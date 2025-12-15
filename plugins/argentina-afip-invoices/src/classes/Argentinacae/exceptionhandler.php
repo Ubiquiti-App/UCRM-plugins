@@ -6,5 +6,5 @@ set_exception_handler('exception_handler');
 
 function exception_handler(Exception $e)
 {
-    echo $e->getFile() . ':' . $e->getLine() . '  ' . $e->getMessage();
+    echo htmlspecialchars($e->getFile() . ':' . $e->getLine() . '  ' . $e->getMessage(), ENT_QUOTES);
 }
