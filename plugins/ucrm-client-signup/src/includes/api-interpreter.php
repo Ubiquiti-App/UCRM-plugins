@@ -5,7 +5,7 @@ try {
 
     $interpreter = new \Ucsp\Interpreter();
 
-    $interpreter->run($payload);
+    $interpreter->run((string) $payload);
     if ($interpreter->isReady()) {
         http_response_code($interpreter->getCode());
         header('Content-Type: application/json');
