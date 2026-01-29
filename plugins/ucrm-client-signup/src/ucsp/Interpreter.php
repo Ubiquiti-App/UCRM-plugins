@@ -1,16 +1,40 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Ucsp;
 
 class Interpreter
 {
-    private static $whiteListedGet = [
-        'countries' => ['states'],
-    ];
-
-    private static $whiteListedPost = [
-        'clients' => [],
+    private static $whitelist = [
+        'GET' => [
+            'countries' => [],
+            'countries/states' => [
+                'countryId' => null,
+            ],
+        ],
+        'POST' => [
+            'clients' => [
+                'clientType' => null,
+                'isLead' => null,
+                'firstName' => null,
+                'lastName' => null,
+                'street1' => null,
+                'street2' => null,
+                'city' => null,
+                'countryId' => null,
+                'stateId' => null,
+                'zipCode' => null,
+                'username' => null,
+                'contacts' => [
+                    [
+                        'email' => null,
+                        'phone' => null,
+                        'name' => null,
+                    ],
+                ],
+            ],
+        ],
     ];
 
     private static $dataUrl = null;
@@ -31,12 +55,14 @@ class Interpreter
         self::$dataUrl = $dataUrl;
     }
 
-    public static function setFrontendKey($key)
+    public static function setFrontendKey($key): bool
     {
         if (! file_exists(self::$dataUrl . 'frontendKey')) {
             file_put_contents(self::$dataUrl . 'frontendKey', $key, LOCK_EX);
+
             return true;
         }
+
         return false;
     }
 
@@ -45,6 +71,7 @@ class Interpreter
         if (file_exists(self::$dataUrl . 'frontendKey')) {
             return file_get_contents(self::$dataUrl . 'frontendKey');
         }
+
         return false;
     }
 
@@ -65,123 +92,131 @@ class Interpreter
 
     public function get($endpoint, $data)
     {
-        if (self::validateGet($endpoint)) {
-            return $this->api->get(
-                $endpoint,
-                $data
-            );
-        }
-        throw new \UnexpectedValueException('{"code":404,"message":"No route GET: ' . $endpoint . '"}', 404);
+        return $this->api->get($endpoint, $data);
     }
 
     public function post($endpoint, $data)
     {
-        if (self::validatePost($endpoint)) {
-            return $this->api->post(
-                $endpoint,
-                $data
-            );
-        }
-        throw new \UnexpectedValueException('{"code":404,"message":"No route POST: ' . $endpoint . '"}', 404);
+        return $this->api->post($endpoint, $data);
     }
 
-    public function run($payload)
+    public function run(string $input): void
     {
-        if (! empty($payload)) {
-            $payloadDecoded = json_decode($payload);
+        // no input means nothing to run
+        if ($input === '') {
+            return;
+        }
 
-            if (! empty($payloadDecoded->frontendKey)) {
-                $explode = explode('||', $payloadDecoded->frontendKey, 2);
-                $payloadFrontendKey = $explode[0] ?? null;
-                $payloadCsrfToken = $explode[1] ?? null;
+        try {
+            $payload = json_decode($input, true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $exception) {
+            throw new \UnexpectedValueException('invalid request', 400);
+        }
 
-                if ($payloadFrontendKey != self::getFrontendKey()) {
-                    throw new \UnexpectedValueException('frontendKey is invalid', 400);
-                }
+        if (
+            ! array_key_exists('frontendKey', $payload)
+            || ! array_key_exists('api', $payload)
+        ) {
+            throw new \UnexpectedValueException('invalid request', 400);
+        }
 
-                if ($payloadCsrfToken === null || $payloadCsrfToken !== $_SESSION['csrf_token']) {
-                    throw new \UnexpectedValueException('csrf token is invalid', 400);
-                }
+        $explode = explode('||', (string) $payload['frontendKey'], 2);
+        $payloadFrontendKey = $explode[0] ?? null;
+        $payloadCsrfToken = $explode[1] ?? null;
 
-                if (! empty($payloadDecoded->api)) {
-                    if (empty($payloadDecoded->api->endpoint)) {
-                        throw new \UnexpectedValueException('endpoint is not set', 400);
-                    }
-                    if (empty($payloadDecoded->api->type)) {
-                        throw new \UnexpectedValueException('type is not set', 400);
-                    }
+        $data = $payload['api']['data'] ?? null;
 
-                    try {
-                        $data = empty($payloadDecoded->api->data) ? [] : (array) $payloadDecoded->api->data;
-                        if ($payloadDecoded->api->type == 'GET') {
-                            $response = $this->get($payloadDecoded->api->endpoint, $data);
-                        } elseif ($payloadDecoded->api->type == 'POST') {
-                            $response = $this->post($payloadDecoded->api->endpoint, $data);
-                        } else {
-                            throw new \UnexpectedValueException('type is invalid', 400);
-                        }
+        if (
+            $payloadFrontendKey !== self::getFrontendKey()
+            || $payloadCsrfToken === null
+            || $payloadCsrfToken !== $_SESSION['csrf_token']
+            || ! is_string(($payload['api']['endpoint'] ?? null))
+            || ! is_string(($payload['api']['type'] ?? null))
+            || ! self::validateRequest($payload['api']['type'], $payload['api']['endpoint'], $data)
+        ) {
+            throw new \UnexpectedValueException('invalid request', 400);
+        }
 
-                        $this->code = 200;
-                        $this->response = json_encode($response);
-                        $this->ready = true;
-                    } catch (\GuzzleHttp\Exception\ClientException $e) {
-                        $this->response = $e->getResponse()->getBody()->getContents();
-                        $this->code = $e->getCode();
-                        $this->ready = true;
-                    }
-                } else {
-                    throw new \UnexpectedValueException('data is invalid', 400);
-                }
+        try {
+            $method = strtoupper($payload['api']['type']);
+
+            if ($method === 'GET') {
+                $response = $this->get($payload['api']['endpoint'], $data);
+            } elseif ($method === 'POST') {
+                $response = $this->post($payload['api']['endpoint'], $data);
+            } else {
+                throw new \UnexpectedValueException('invalid request', 400);
             }
+
+            $this->code = 200;
+            $this->response = json_encode($response);
+            $this->ready = true;
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->response = $e->getResponse()->getBody()->getContents();
+            $this->code = $e->getCode();
+            $this->ready = true;
         }
     }
 
-    private static function parseAndValidateEndpoint($endpoint, $whitelist)
+    private static function validateRequest(string $method, string $endpoint, $data): bool
     {
-        // # Remove backslash if at start of string
-        $endpoint = ltrim($endpoint, '/');
+        $method = strtoupper($method);
+        $endpoint = trim($endpoint, '/');
 
-        // # create array from URL
-        $endpoint_array = explode('/', $endpoint);
-
-        // # if first item is not in top level white list return false, else continue validation
-        if (! array_key_exists($endpoint_array[0], $whitelist)) {
+        // check endpoint exists
+        if (
+            (self::$whitelist[$method] ?? null) === null
+            || (self::$whitelist[$method][$endpoint] ?? null) === null
+        ) {
             return false;
         }
 
-        // # if three levels deep continue validation
-        if (count($endpoint_array) == 3) {
-
-        // # If third level endpoint uses "second level ids" return true
-            if (! empty($whitelist[$endpoint_array[0]]['second_level_ids'])) {
-                return in_array($endpoint_array[2], $whitelist[$endpoint_array[0]]['second_level_ids']);
-
-            // # If second level endpoint uses "third level ids" return true
-            } elseif (! empty($whitelist[$endpoint_array[0]]['third_level_ids'])) {
-                return in_array($endpoint_array[1], $whitelist[$endpoint_array[0]]['third_level_ids']);
-            }
-            return false;
-
-        // # if two levels deep continue validation
-        } elseif (count($endpoint_array) == 2) {
-            if (in_array($endpoint_array[1], $whitelist[$endpoint_array[0]])) {
-                return true;
-            }
-            return false;
-        } elseif (count($endpoint_array) == 1) {
+        // endpoint exists and no data to validate, pass
+        if ($data === null) {
             return true;
         }
-        // # fail validations by default, must be whitelisted and a specific level deep
-        return false;
+
+        // data must be array at this point
+        if (! is_array($data)) {
+            return false;
+        }
+
+        return self::validateFields($data, self::$whitelist[$method][$endpoint]);
     }
 
-    private static function validateGet($endpoint)
+    private static function validateFields(array $data, array $schema): bool
     {
-        return self::parseAndValidateEndpoint($endpoint, self::$whiteListedGet);
-    }
+        foreach ($data as $key => $value) {
+            // key must be whitelisted
+            if (! array_key_exists($key, $schema)) {
+                return false;
+            }
 
-    private static function validatePost($endpoint)
-    {
-        return self::parseAndValidateEndpoint($endpoint, self::$whiteListedPost);
+            // null = anything other than array allowed
+            if ($schema[$key] === null) {
+                if (is_array($value)) {
+                    return false;
+                }
+
+                continue;
+            }
+
+            // must be array here, regular fields handled by null schema values above
+            if (! is_array($value)) {
+                return false;
+            }
+
+            foreach ($value as $item) {
+                if (
+                    ! is_array($item)
+                    // schema = $schema[$key][0] as we only have first item defined in schema, see client contacts
+                    || ! self::validateFields($item, $schema[$key][0] ?? $schema[$key])
+                ) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
