@@ -73,7 +73,7 @@ class DropboxTokenProvider implements TokenProvider
                 To finish setup, go to the following URL, allow access to the application
                 and enter the generated Access Code into plugin settings:
                 
-                ${authorizationUrl}
+                {$authorizationUrl}
                 
                 =========================================================================
                 

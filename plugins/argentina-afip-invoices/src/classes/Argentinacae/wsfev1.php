@@ -428,7 +428,7 @@ $params,
 
         $XXX = $method . 'Result';
         if ($results->{$XXX}->RError->percode != 0) {
-            $this->error = "Method=${method} errcode=" . $results->{$XXX}->RError->percode . ' errmsg=' . $results->{$XXX}->RError->perrmsg;
+            $this->error = "Method={$method} errcode=" . $results->{$XXX}->RError->percode . ' errmsg=' . $results->{$XXX}->RError->perrmsg;
         }
 
         return $results->{$XXX}->RError->percode != 0 ? true : false;
