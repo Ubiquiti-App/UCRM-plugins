@@ -45,6 +45,8 @@ class Interpreter
 
     private $ready = false;
 
+    private $api;
+
     public function __construct()
     {
         $this->api = \Ubnt\UcrmPluginSdk\Service\UcrmApi::create();
