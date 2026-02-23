@@ -1,0 +1,134 @@
+{
+    "plugins": [
+        {
+            "name": "argentina-afip-invoices",
+            "displayName": "Facturas Argentina AFIP",
+            "description": "Plugin para obtener CAE (Facturacion electronica) en Argentina",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/argentina-afip-invoices",
+            "version": "1.3.1",
+            "unmsVersionCompliancy": {
+                "min": "2.1.0",
+                "max": null
+            },
+            "author": "Franco Johan Gampel - franco@gampel.com.ar",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/argentina-afip-invoices\/argentina-afip-invoices.zip"
+        },
+        {
+            "name": "backup-sync-dropbox",
+            "displayName": "Backup synchronization - Dropbox",
+            "description": "This plugin handles synchronization of your UNMS backups to a Dropbox folder.",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/backup-sync-dropbox",
+            "version": "1.2.1",
+            "unmsVersionCompliancy": {
+                "min": "2.1.0",
+                "max": null
+            },
+            "author": "Ubiquiti Inc.",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/backup-sync-dropbox\/backup-sync-dropbox.zip"
+        },
+        {
+            "name": "barcode-generator",
+            "displayName": "Barcode generator",
+            "description": "This plugin generates barcodes and QR codes. It is usable for including into templates as image.",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/barcode-generator",
+            "version": "1.0.3",
+            "unmsVersionCompliancy": {
+                "min": "2.1.0",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc.",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/barcode-generator\/barcode-generator.zip"
+        },
+        {
+            "name": "fio_cz",
+            "displayName": "Fio bank payment import",
+            "description": "This plugin enables you to import payments from Fio bank to UCRM. See https:\/\/www.fio.cz\/bankovni-sluzby\/api-bankovnictvi",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/fio_cz",
+            "version": "1.2.15",
+            "unmsVersionCompliancy": {
+                "min": "2.1.0",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc.",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/fio_cz\/fio_cz.zip"
+        },
+        {
+            "name": "invoice-csv-export",
+            "displayName": "Invoice CSV export",
+            "description": "Configurable export of invoices into CSV.",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/invoice-csv-export",
+            "version": "1.2.4",
+            "unmsVersionCompliancy": {
+                "min": "2.1.0",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc.",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/invoice-csv-export\/invoice-csv-export.zip"
+        },
+        {
+            "name": "kmz-map",
+            "displayName": "KMZ Map",
+            "description": "A UISP CRM plugin that provides a frontend Google Map for clients to view tower coverage.",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/kmz-map",
+            "version": "1.2.1",
+            "unmsVersionCompliancy": {
+                "min": "1.0.0",
+                "max": null
+            },
+            "author": "Charuwts, LLC",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/kmz-map\/kmz-map.zip"
+        },
+        {
+            "name": "quickbooks-online",
+            "displayName": "QuickBooks Online export",
+            "description": "This plugin exports payments and invoices to QuickBooks Online",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/quickbooks-online",
+            "version": "1.2.1",
+            "unmsVersionCompliancy": {
+                "min": "2.1.0",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc.",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/quickbooks-online\/quickbooks-online.zip"
+        },
+        {
+            "name": "revenue-report",
+            "displayName": "Revenue report",
+            "description": "Grids and charts showing organization's revenue grouped by products or services. Shown in the Reporting main menu section.",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/revenue-report",
+            "version": "1.2.2",
+            "unmsVersionCompliancy": {
+                "min": "2.1.0",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc.",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/revenue-report\/revenue-report.zip"
+        },
+        {
+            "name": "sms-twilio",
+            "displayName": "SMS notifications via Twilio",
+            "description": "This plugin sends SMS notifications via Twilio. NOTE: only phone numbers in the international format can be used, e.g. +155 555 1234",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/sms-twilio",
+            "version": "1.2.5",
+            "unmsVersionCompliancy": {
+                "min": "2.1.0",
+                "max": null
+            },
+            "author": "Ubiquiti Networks, Inc.",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/sms-twilio\/sms-twilio.zip"
+        },
+        {
+            "name": "ucrm-client-signup",
+            "displayName": "UCRM Client Signup",
+            "description": "A UCRM plugin that provides a frontend form for clients to signup.",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/ucrm-client-signup",
+            "version": "1.3.9",
+            "unmsVersionCompliancy": {
+                "min": "2.1.0",
+                "max": null
+            },
+            "author": "Charuwts, LLC",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/ucrm-client-signup\/ucrm-client-signup.zip"
+        }
+    ]
+}
