@@ -10,7 +10,7 @@
     }
   },
   "require": {
-    "ubnt/ucrm-plugin-sdk": "^0.10.0",
+    "ubnt/ucrm-plugin-sdk": "^0.13.0",
     "twilio/sdk": "^7.9",
     "php-di/php-di": "^7.0",
     "katzgrau/klogger": "^1.2"
