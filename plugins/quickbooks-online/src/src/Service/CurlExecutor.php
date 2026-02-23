@@ -39,13 +39,17 @@ class CurlExecutor
         $errno = curl_errno($c);
 
         if ($errno || $error) {
-            throw new CurlException("Error for request ${url}. Curl error ${errno}: ${error}");
+            throw new CurlException(
+                sprintf('Error for request %s. Curl error %s: %s', $url, $errno, $error)
+            );
         }
 
         $httpCode = curl_getinfo($c, CURLINFO_HTTP_CODE);
 
         if ($httpCode < 200 || $httpCode >= 300) {
-            throw new CurlException("Error for request ${url}. HTTP error (${httpCode}): ${result}", $httpCode);
+            throw new CurlException(
+                sprintf('Error for request %s. HTTP error (%s): %s', $url, $httpCode, $result)
+            );
         }
 
         curl_close($c);
@@ -79,19 +83,25 @@ class CurlExecutor
         $errno = curl_errno($c);
 
         if ($errno || $error) {
-            throw new CurlException("Error for request ${url}. Curl error ${errno}: ${error}");
+            throw new CurlException(
+                sprintf('Error for request %s. Curl error %s: %s', $url, $errno, $error)
+            );
         }
 
         $httpCode = curl_getinfo($c, CURLINFO_HTTP_CODE);
 
         if ($httpCode < 200 || $httpCode >= 300) {
-            throw new CurlException("Error for request ${url}. HTTP error (${httpCode}): ${result}", $httpCode);
+            throw new CurlException(
+                sprintf('Error for request %s. HTTP error (%s): %s', $url, $httpCode, $result)
+            );
         }
 
         curl_close($c);
 
         if (! $result) {
-            throw new CurlException("Error for request ${url}. Empty result.");
+            throw new CurlException(
+                sprintf('Error for request %s. Empty result.', $url)
+            );
         }
 
         return json_decode($result, true);
