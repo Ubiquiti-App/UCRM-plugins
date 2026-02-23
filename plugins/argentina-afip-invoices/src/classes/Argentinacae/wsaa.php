@@ -18,6 +18,8 @@ class WSAA
      */
     public $error = '';
 
+    public $TA;
+
     # TESTING
     //  const CERT = "data/files/cwcert.crt";      # The X.509 certificate in PEM format
     //  const PRIVATEKEY = "data/files/cwkey.key"; # The private key correspoding to CERT (PEM)
