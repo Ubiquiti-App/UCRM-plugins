@@ -90,29 +90,17 @@ class UcrmFacade
             return null;
         }
 
-        $endpoint = 'clients';
+        $reference = $transaction['reference'];
+        $results = $this->getResultsFromApi($reference, $matchBy);
 
-        if ($matchBy === 'invoiceNumber') {
-            $endpoint = 'invoices';
-            $parameters = [
-                'number' => $transaction['reference'],
-            ];
-        } elseif ($matchBy === 'clientId') {
-            $parameters = [
-                'id' => $transaction['reference'],
-            ];
-        } elseif ($matchBy === 'clientUserIdent') {
-            $parameters = [
-                'userIdent' => $transaction['reference'],
-            ];
-        } else {
-            $parameters = [
-                'customAttributeKey' => $matchBy,
-                'customAttributeValue' => $transaction['reference'],
-            ];
+        if (count($results) === 0) {
+            $referenceTrimmed = ltrim($transaction['reference'], '0') ?: '0';
+            if ($referenceTrimmed !== $reference) {
+                $this->logger->warning(sprintf('No exact result found for transaction %s. Lets try it with trimmed reference number.', $transaction['id']));
+
+                $results = $this->getResultsFromApi($referenceTrimmed, $matchBy);
+            }
         }
-
-        $results = $this->ucrmApi->query($endpoint, $parameters);
 
         switch (\count($results)) {
             case 0:
@@ -231,5 +219,32 @@ class UcrmFacade
         $this->sendPaymentToUcrm(
             $this->transformTransactionToUcrmPayment($transaction, $methodId)
         );
+    }
+
+    private function getResultsFromApi(string $reference, string $matchBy): array
+    {
+        $endpoint = 'clients';
+
+        if ($matchBy === 'invoiceNumber') {
+            $endpoint = 'invoices';
+            $parameters = [
+                'number' => $reference,
+            ];
+        } elseif ($matchBy === 'clientId') {
+            $parameters = [
+                'id' => $reference,
+            ];
+        } elseif ($matchBy === 'clientUserIdent') {
+            $parameters = [
+                'userIdent' => $reference,
+            ];
+        } else {
+            $parameters = [
+                'customAttributeKey' => $matchBy,
+                'customAttributeValue' => $reference,
+            ];
+        }
+
+        return $this->ucrmApi->query($endpoint, $parameters);
     }
 }
