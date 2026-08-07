@@ -1,0 +1,27 @@
+{
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "BackupSyncGoogleDrive\\": [
+                "src/"
+            ]
+        }
+    },
+    "require": {
+        "ext-mbstring": "*",
+        "ubnt/ucrm-plugin-sdk": "^0.13.0",
+        "php-di/php-di": "^7.0",
+        "psr/log": "^3.0",
+        "league/flysystem": "^3.12",
+        "masbug/flysystem-google-drive-ext": "^2.5",
+        "google/apiclient": "^2.15"
+    },
+    "scripts": {
+        "pre-autoload-dump": "Google\\Task\\Composer::cleanup"
+    },
+    "extra": {
+        "google/apiclient-services": [
+            "Drive"
+        ]
+    }
+}
