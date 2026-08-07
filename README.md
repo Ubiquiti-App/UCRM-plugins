@@ -1,6 +1,6 @@
 # UCRM-plugins
 
-Plugins are open-source programs that extend the functionality of [UCRM](https://ucrm.ubnt.com/). 
+Plugins are open-source programs that extend the functionality of [UCRM](https://ucrm.ubnt.com/).
 These plugins will enable your UCRM to import payments, integrate with another accounting software, cooperate with 3rd party HW and tools, view or create custom reports, modify all the UCRM data in a batch, etc. [Read more](https://help.ubnt.com/hc/en-us/articles/360002433113-UCRM-Plugins).
 
 UCRM plugins are compatible with UCRM 2.10.0+
@@ -23,10 +23,11 @@ UCRM plugins are compatible with UCRM 2.10.0+
 | [Revenue Report](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/revenue-report)                             | Revenue report grouped by products or services, shown under the Reporting main menu section.                                                    |
 | [Facturas Argentina AFIP](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/argentina-afip-invoices)           | Plugin para obtener CAE (Facturacion electronica) en Argentina                                                                                  |
 | [Barcode generator](https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/barcode-generator)                       | Barcode generator                                                                                                                               |
+| [Backup synchronization - Google Drive](plugins/backup-sync-google-drive)                                 | Synchronizes UNMS backups to a Google Drive Shared Drive via a Workspace service account.                                                        |
 
 ## Plugins / API scripts from other sources
 * [Client&nbsp;Signup Extended](https://www.charuwts.com/plugins/ucrm-signup) - Extended version of Client Signup Plugin
-* [Notification Plugin](https://community.ubnt.com/t5/UCRM-Plugins/Notification-Plugin/td-p/2541572) - Extended UCRM's notification system. More event-triggered emails sent to UCRM administrators.  
+* [Notification Plugin](https://community.ubnt.com/t5/UCRM-Plugins/Notification-Plugin/td-p/2541572) - Extended UCRM's notification system. More event-triggered emails sent to UCRM administrators.
 * [UCRM FreeRadius](https://github.com/jhooper94/ucrm-freeradius-auth) - pulls the mac address and package from ucrm and push the information into free radius database
 
 ## How can I contribute?
@@ -37,5 +38,5 @@ UCRM plugins are compatible with UCRM 2.10.0+
 ## Developer documentation
 Developer documentation for creating UCRM plugins can be found in [`docs/index.md`](docs/index.md)
 
-## Disclaimer 
+## Disclaimer
 The software is provided "as is", without any warranty of any kind. Read more in the [licence](https://github.com/Ubiquiti-App/UCRM-plugins/blob/master/LICENSE)
