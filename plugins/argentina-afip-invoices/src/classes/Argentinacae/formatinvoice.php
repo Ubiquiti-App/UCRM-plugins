@@ -35,7 +35,12 @@ function formatInvoice($orgId, $salesPoint, $activitiesStartDate, $orgSelected)
     // Ensure that user is logged in and has permission to view invoices.
     $security = UcrmSecurity::create();
     $user = $security->getUser();
-    if (! $user || $user->isClient || ! $user->hasViewPermission(PermissionNames::BILLING_INVOICES)) {
+    if (
+        ! $user
+        || $user->isClient
+        || ($user->isOrganizationScopeUser && (int) $orgId !== $user->scopedOrganizationId)
+        || ! $user->hasEditPermission(PermissionNames::BILLING_INVOICES)
+    ) {
         \App\Http::forbidden();
     }
 
