@@ -30,15 +30,21 @@ class NotificationDataFactory
     public function getObject($jsonData): NotificationData
     {
         $notificationData = new NotificationData();
-        $notificationData->uuid = $jsonData['uuid'];
-        $notificationData->changeType = $jsonData['changeType'];
-        $notificationData->entity = $jsonData['entity'];
-        $notificationData->entityId = $jsonData['entityId'] ? (int) $jsonData['entityId'] : null;
-        $notificationData->eventName = $jsonData['eventName'];
-        $notificationData->message = $jsonData['extraData']['message'] ?? null;
+        $notificationData->uuid = (string) $jsonData['uuid'];
 
-        // Check if the given webhook exists.
-        $this->ucrmApi->query('webhook-events/' . $notificationData->uuid);
+        if (
+            ! preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $notificationData->uuid)
+        ) {
+            throw new \InvalidArgumentException('Invalid uuid.');
+        }
+
+        // load verified data from CRM API, disregard user input except the uuid
+        $webhookEvent = $this->ucrmApi->query('webhook-events/' . $notificationData->uuid);
+        $notificationData->changeType = $webhookEvent['changeType'];
+        $notificationData->entity = $webhookEvent['entity'];
+        $notificationData->entityId = $webhookEvent['entityId'] !== null ? (int) $webhookEvent['entityId'] : null;
+        $notificationData->eventName = $webhookEvent['eventName'];
+        $notificationData->message = $webhookEvent['extraData']['message'] ?? null;
 
         $this->resolveUcrmData($notificationData);
 

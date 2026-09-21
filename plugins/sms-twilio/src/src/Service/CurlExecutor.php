@@ -16,6 +16,7 @@ class CurlExecutor
     {
         $c = curl_init();
         curl_setopt($c, CURLOPT_URL, $url);
+        curl_setopt($c, CURLOPT_PATH_AS_IS, true);
         curl_setopt($c, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($c, CURLOPT_CUSTOMREQUEST, $method);
 
@@ -67,6 +68,7 @@ class CurlExecutor
 
         $c = curl_init();
         curl_setopt($c, CURLOPT_URL, $url);
+        curl_setopt($c, CURLOPT_PATH_AS_IS, true);
         curl_setopt($c, CURLOPT_HTTPHEADER, $headers);
 
         curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
