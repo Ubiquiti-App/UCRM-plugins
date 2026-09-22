@@ -41,7 +41,60 @@ final class BackupFacade
             return;
         }
 
-        $this->filesystem->write($unmsBackup->filename, $this->unmsApi->get(sprintf('nms/backups/%s', $unmsBackup->id)));
+        $this->logger->info(sprintf('Downloading "%s" from UISP API.', $unmsBackup->filename));
+
+        $source = $this->unmsApi->getStream(sprintf('nms/backups/%s', $unmsBackup->id));
+
+        $tempPath = __DIR__ . '/../../data/' . $unmsBackup->filename . '.tmp';
+        $temp = fopen($tempPath, 'w+b');
+
+        if ($temp === false) {
+            if (is_resource($source)) {
+                fclose($source);
+            }
+
+            throw new \RuntimeException(sprintf('Unable to create temporary file "%s".', $tempPath));
+        }
+
+        try {
+            $bytesCopied = stream_copy_to_stream($source, $temp);
+
+            if ($bytesCopied === false) {
+                throw new \RuntimeException(sprintf(
+                    'Unable to download "%s" from UISP API.',
+                    $unmsBackup->filename
+                ));
+            }
+
+            $this->logger->info(sprintf(
+                'Downloaded "%s" to temporary file (%d bytes).',
+                $unmsBackup->filename,
+                $bytesCopied
+            ));
+
+            if (is_resource($source)) {
+                fclose($source);
+                $source = null;
+            }
+
+            rewind($temp);
+
+            $this->logger->info(sprintf('Uploading "%s" to Dropbox.', $unmsBackup->filename));
+
+            $this->filesystem->writeStream($unmsBackup->filename, $temp);
+        } finally {
+            if (is_resource($source)) {
+                fclose($source);
+            }
+
+            if (is_resource($temp)) {
+                fclose($temp);
+            }
+
+            if (file_exists($tempPath)) {
+                unlink($tempPath);
+            }
+        }
 
         $this->logger->info(sprintf('Uploaded file "%s".', $unmsBackup->filename));
     }
