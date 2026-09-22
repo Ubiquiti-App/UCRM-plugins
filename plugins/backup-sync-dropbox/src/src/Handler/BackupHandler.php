@@ -49,7 +49,42 @@ final class BackupHandler
 
             $this->backupFacade->deleteExcept($filenames);
         } catch (\Throwable $throwable) {
-            $this->logger->error($throwable->getMessage());
+            $this->logger->error(sprintf(
+                '%s [code %s]: %s',
+                get_class($throwable),
+                $throwable->getCode(),
+                $throwable->getMessage()
+            ));
+
+            $exception = $throwable;
+
+            if (defined('BACKUP_SYNC_DROPBOX_DEBUG') && BACKUP_SYNC_DROPBOX_DEBUG) {
+                while ($exception !== null) {
+                    if ($exception instanceof \GuzzleHttp\Exception\RequestException
+                        && $exception->hasResponse()) {
+                        $response = $exception->getResponse();
+
+                        $this->logger->error(sprintf(
+                            'HTTP response: %d %s',
+                            $response->getStatusCode(),
+                            $response->getReasonPhrase()
+                        ));
+
+                        $body = (string) $response->getBody();
+
+                        if ($body !== '') {
+                            $this->logger->error(sprintf(
+                                'HTTP response body: %s',
+                                substr($body, 0, 4000)
+                            ));
+                        }
+
+                    break;
+                    }
+
+                    $exception = $exception->getPrevious();
+                }
+            }
         } finally {
             $this->logger->info('Finished backup synchronization.');
         }

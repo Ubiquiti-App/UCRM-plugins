@@ -1,6 +1,8 @@
 <?php
 
 use BackupSyncDropbox\Handler\BackupHandler;
+use BackupSyncDropbox\Service\DropboxClient;
+use BackupSyncDropbox\Service\StreamingUnmsApi;
 use BackupSyncDropbox\TokenProvider\DropboxTokenProvider;
 use BackupSyncDropbox\Utility\LogCleaner;
 use BackupSyncDropbox\Utility\Logger;
@@ -9,7 +11,6 @@ use BackupSyncDropbox\Utility\Strings;
 use DI\ContainerBuilder;
 use League\Flysystem\Filesystem;
 use Psr\Log\LoggerInterface;
-use Spatie\Dropbox\Client;
 use Spatie\FlysystemDropbox\DropboxAdapter;
 use Ubnt\UcrmPluginSdk\Service\PluginConfigManager;
 use Ubnt\UcrmPluginSdk\Service\PluginLogManager;
@@ -23,7 +24,13 @@ $logger = new Logger($pluginLogManager);
 
 $configManager = PluginConfigManager::create();
 
-$unmsApiToken = Strings::trimNonEmpty($configManager->loadConfig()['unmsApiToken'] ?? null);
+$config = $configManager->loadConfig();
+
+$unmsApiToken = Strings::trimNonEmpty($config['unmsApiToken'] ?? null);
+$debugMode = ! empty($config['debugMode']);
+
+define('BACKUP_SYNC_DROPBOX_DEBUG', $debugMode);
+
 if (! is_string($unmsApiToken)) {
     $logger->error('Provided UNMS API token is invalid.');
 
@@ -31,7 +38,11 @@ if (! is_string($unmsApiToken)) {
 }
 
 try {
-    $client = new Client(new DropboxTokenProvider($pluginLogManager, $configManager));
+    $client = new DropboxClient(
+        new DropboxTokenProvider($pluginLogManager, $configManager),
+        null,
+        64 * 1024 * 1024
+    );
 
     $adapter = new DropboxAdapter($client);
     $filesystem = new Filesystem($adapter, [
@@ -42,7 +53,7 @@ try {
     $builder->addDefinitions(
         [
             Filesystem::class => $filesystem,
-            UnmsApi::class => UnmsApi::create($unmsApiToken),
+            UnmsApi::class => StreamingUnmsApi::create($unmsApiToken),
             UcrmApi::class => UcrmApi::create(),
             PluginLogManager::class => $pluginLogManager,
             LoggerInterface::class => $logger,
@@ -55,6 +66,22 @@ try {
 
     // cleanup plugin log
     $container->get(LogCleaner::class)->clean();
+
+    // Remove staging files left behind by interrupted plugin runs.
+    // UISP kills plugin processes after 3600 seconds, so anything older
+    // than two hours cannot belong to a normally running synchronization.
+    foreach (glob(__DIR__ . '/data/*.tmp') ?: [] as $tempFile) {
+        if (is_file($tempFile) && filemtime($tempFile) < time() - 7200) {
+            unlink($tempFile);
+
+            if (defined('BACKUP_SYNC_DROPBOX_DEBUG') && BACKUP_SYNC_DROPBOX_DEBUG) {
+                $logger->info(sprintf(
+                    'Removed stale temporary file "%s".',
+                    basename($tempFile)
+                ));
+            }
+        }
+    }
 
     // initiate sync
     $container->get(BackupHandler::class)->sync();

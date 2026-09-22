@@ -34,3 +34,8 @@ The backups will then appear in the app folder, if you open you dropbox files, g
 
 ### Migrating from long-lived access tokens
 Dropbox is deprecating long-lived access tokens and the plugin might stop working at some point, unless you migrate to short-lived access tokens. To migrate, simply delete the value from the "Dropbox access token (legacy)" field in CRM plugin configuration and refer to Dropbox setup instructions above.
+
+### Debug logging
+Enable **Debug logging** in the plugin configuration to record detailed Dropbox chunk upload progress and HTTP error responses. This option is intended for troubleshooting and may generate significantly more log output.
+
+Large UISP backups are staged to a temporary file and uploaded to Dropbox in chunks to avoid loading the entire backup into PHP memory.
