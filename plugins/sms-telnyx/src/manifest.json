@@ -1,0 +1,276 @@
+{
+  "version": "1",
+  "information": {
+    "name": "sms-telnyx",
+    "displayName": "SMS notifications via Telnyx (with mass notices)",
+    "description": "Sends event-based SMS (overdue, suspension, payments…) and mass notices by POP, tag, overdue status or all active clients through Telnyx. Handles STOP/START/HELP and forwards replies.",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/sms-telnyx",
+    "version": "1.0.0",
+    "unmsVersionCompliancy": {
+      "min": "2.1.0",
+      "max": null
+    },
+    "author": "BitWind LLC"
+  },
+  "configuration": [
+    {
+      "key": "telnyxApiKey",
+      "label": "Telnyx API key (v2)",
+      "description": "Mission Control → Account → API Keys. Starts with KEY…",
+      "required": 1
+    },
+    {
+      "key": "telnyxFromNumber",
+      "label": "Telnyx sending number",
+      "description": "E.164, e.g. +17125551234. Must be on a messaging profile with an approved 10DLC campaign.",
+      "required": 1
+    },
+    {
+      "key": "telnyxMessagingProfileId",
+      "label": "Telnyx messaging profile ID (optional)",
+      "required": 0
+    },
+    {
+      "key": "telnyxPublicKey",
+      "label": "Telnyx webhook public key",
+      "description": "Mission Control → Account → Keys & Credentials → Public Key. Used to verify inbound messages (STOP/HELP/replies).",
+      "required": 0
+    },
+    {
+      "key": "forwardRepliesTo",
+      "label": "Forward customer replies to",
+      "description": "Your mobile, E.164. Replies other than STOP/START/HELP are texted here.",
+      "required": 0
+    },
+    {
+      "key": "messagePrefix",
+      "label": "Message prefix",
+      "description": "Prepended to every message so customers know who is texting, e.g. \"YourISP: \"",
+      "required": 0
+    },
+    {
+      "key": "optOutFooter",
+      "label": "Opt-out footer",
+      "description": "Appended to every message. Leave blank to omit (not recommended for mass notices).",
+      "required": 0
+    },
+    {
+      "key": "helpReply",
+      "label": "HELP auto-reply",
+      "description": "Sent when a customer texts HELP. Blank = no reply (Telnyx profile auto-response may handle it).",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "keywordConfirmations",
+      "label": "Send STOP/START confirmation texts",
+      "description": "Leave off if your Telnyx messaging profile already auto-responds to opt-out keywords (default for 10DLC).",
+      "required": 0,
+      "type": "checkbox"
+    },
+    {
+      "key": "uispApiToken",
+      "label": "UISP (NMS) API token — for POP targeting",
+      "description": "UISP → Settings → Users → App Tokens (read). Enables choosing recipients by POP/tower. Without it, use tag targeting.",
+      "required": 0
+    },
+    {
+      "key": "timezone",
+      "label": "Time zone",
+      "description": "Used for quiet hours, dates in messages and log times, e.g. America/Chicago.",
+      "required": 0
+    },
+    {
+      "key": "quietHours",
+      "label": "Block mass notices during quiet hours",
+      "description": "Mass notices can't be sent 9 PM–8 AM in the time zone above unless marked urgent.",
+      "required": 0,
+      "type": "checkbox"
+    },
+    {
+      "key": "costPerSegment",
+      "label": "Estimated cost per message segment (USD)",
+      "description": "Used for the cost estimate on the mass-notice page, e.g. 0.007 (Telnyx rate + carrier fee).",
+      "required": 0
+    },
+    {
+      "key": "event_client_add",
+      "label": "client.add",
+      "description": "Example: Added client %%client.name%%.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_client_archive",
+      "label": "client.archive",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_client_delete",
+      "label": "client.delete",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_client_edit",
+      "label": "client.edit",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_invoice_add",
+      "label": "invoice.add",
+      "description": "Example: New invoice %%invoice.number%% for $%%invoice.total%%, due %%invoice.dueDate%%.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_invoice_add_draft",
+      "label": "invoice.add_draft",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_invoice_draft_approved",
+      "label": "invoice.draft_approved",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_invoice_delete",
+      "label": "invoice.delete",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_invoice_edit",
+      "label": "invoice.edit",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_invoice_near_due",
+      "label": "invoice.near_due",
+      "description": "Example: Reminder: invoice %%invoice.number%% for $%%invoice.amountToPay%% is due %%invoice.dueDate%%.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_invoice_overdue",
+      "label": "invoice.overdue",
+      "description": "Example: Invoice %%invoice.number%% for $%%invoice.amountToPay%% is past due.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_payment_add",
+      "label": "payment.add",
+      "description": "Example: Thanks %%client.firstName%%! Payment of $%%payment.amount%% received.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_payment_delete",
+      "label": "payment.delete",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_payment_edit",
+      "label": "payment.edit",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_payment_unmatch",
+      "label": "payment.unmatch",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_service_activate",
+      "label": "service.activate",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_service_add",
+      "label": "service.add",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_service_archive",
+      "label": "service.archive",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_service_end",
+      "label": "service.end",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_service_postpone",
+      "label": "service.postpone",
+      "description": "Leave blank to send nothing for this event.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_service_suspend_cancel",
+      "label": "service.suspend_cancel",
+      "description": "Example: Your %%service.name%% service has been restored.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_service_suspend",
+      "label": "service.suspend",
+      "description": "Example: Your %%service.name%% service is suspended for non-payment. Balance: $%%client.accountOutstanding%%.",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "event_client_message",
+      "label": "client.message",
+      "description": "Example: %%client.message%%",
+      "required": 0,
+      "type": "textarea"
+    },
+    {
+      "key": "logging_level",
+      "label": "Enable debug logs",
+      "required": 0,
+      "type": "checkbox"
+    }
+  ],
+  "menu": [
+    {
+      "key": "Billing",
+      "label": "SMS notices",
+      "type": "admin",
+      "target": "iframe",
+      "parameters": {
+        "page": "notices"
+      }
+    }
+  ],
+  "supportsWebhookEvents": true
+}
