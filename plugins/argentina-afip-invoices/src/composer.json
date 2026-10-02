@@ -11,6 +11,6 @@
     }
   },
     "require": {
-        "ubnt/ucrm-plugin-sdk": "^0.13.0"
+        "ubnt/ucrm-plugin-sdk": "^0.14.0"
     }
 }

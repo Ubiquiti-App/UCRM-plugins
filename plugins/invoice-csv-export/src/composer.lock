@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "18542a7f795ee74b14c9eef080ea8865",
+    "content-hash": "dfffd2067a83d18a58ddcb0fed65d723",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -1094,16 +1094,16 @@
         },
         {
             "name": "ubnt/ucrm-plugin-sdk",
-            "version": "0.13.0",
+            "version": "0.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ubiquiti-App/UCRM-Plugin-SDK.git",
-                "reference": "8a981b3d4ba8478b17f4968bf0b3dbb31fec61ca"
+                "reference": "30b63842f36d591a306ee28eeef070dc02747b4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ubiquiti-App/UCRM-Plugin-SDK/zipball/8a981b3d4ba8478b17f4968bf0b3dbb31fec61ca",
-                "reference": "8a981b3d4ba8478b17f4968bf0b3dbb31fec61ca",
+                "url": "https://api.github.com/repos/Ubiquiti-App/UCRM-Plugin-SDK/zipball/30b63842f36d591a306ee28eeef070dc02747b4a",
+                "reference": "30b63842f36d591a306ee28eeef070dc02747b4a",
                 "shasum": ""
             },
             "require": {
@@ -1145,9 +1145,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Ubiquiti-App/UCRM-Plugin-SDK/issues",
-                "source": "https://github.com/Ubiquiti-App/UCRM-Plugin-SDK/tree/0.13.0"
+                "source": "https://github.com/Ubiquiti-App/UCRM-Plugin-SDK/tree/0.14.0"
             },
-            "time": "2025-07-10T07:44:57+00:00"
+            "time": "2026-09-21T11:57:48+00:00"
         }
     ],
     "packages-dev": [],

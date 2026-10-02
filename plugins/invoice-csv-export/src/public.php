@@ -21,7 +21,13 @@ $api = UcrmApi::create();
 // Ensure that user is logged in and has permission to view invoices.
 $security = UcrmSecurity::create();
 $user = $security->getUser();
-if (! $user || $user->isClient || ! $user->hasViewPermission(PermissionNames::BILLING_INVOICES)) {
+if (
+    ! $user
+    || $user->isClient
+    || $user->isOrganizationScopeUser
+    || $user->isClientScopeUser
+    || ! $user->hasViewPermission(PermissionNames::BILLING_INVOICES)
+) {
     \App\Http::forbidden();
 }
 $optionsManager = UcrmOptionsManager::create();

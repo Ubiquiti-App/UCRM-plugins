@@ -23,7 +23,12 @@ $api = UcrmApi::create();
 // Ensure that user is logged in and has permission to view invoices.
 $security = UcrmSecurity::create();
 $user = $security->getUser();
-if (! $user || $user->isClient || ! $user->hasViewPermission(PermissionNames::BILLING_INVOICES)) {
+if (
+    ! $user
+    || $user->isClient
+    || $user->isClientScopeUser
+    || ! $user->hasEditPermission(PermissionNames::BILLING_INVOICES)
+) {
     \App\Http::forbidden();
 }
 // Retrieve UCRM Config.
@@ -47,7 +52,13 @@ foreach (explode(';', $config['salesPoint']) as $organizacion) {
     if (DEBUG) {
         var_dump($organizationKey);
     }
-    if (! (is_bool($organizationKey) && $organizationKey === false)) {
+    if (
+        ! (is_bool($organizationKey) && $organizationKey === false)
+        && (
+            ! $user->isOrganizationScopeUser
+            || (int) $organizations[$organizationKey]['id'] === $user->scopedOrganizationId
+        )
+    ) {
         $organizaciones[$count] = [
             'name' => $organizacionesSinKey[$count][0],
             'salesPoint' => $organizacionesSinKey[$count][1],
@@ -72,6 +83,9 @@ if (DEBUG) {
   if (array_key_exists('organization', $_GET)) {
       $parameters = $_GET['organization'];
       $parameters = explode(',', $parameters);
+      if ($user->isOrganizationScopeUser && (int) ($parameters[0] ?? 0) !== $user->scopedOrganizationId) {
+          \App\Http::forbidden();
+      }
       echo '<br> Organizacion seleccionada: ' . htmlspecialchars($parameters[0] ?? '', ENT_QUOTES) . ' Punto de Venta: ' . htmlspecialchars($parameters[1] ?? '', ENT_QUOTES) . ' Fecha de inicio actividades: ' . htmlspecialchars($parameters[2] ?? '', ENT_QUOTES) . '<br>';
       formatInvoice($parameters[0] ?? null, $parameters[1] ?? null, $parameters[2] ?? null, $parameters[3] ?? null);
   }
