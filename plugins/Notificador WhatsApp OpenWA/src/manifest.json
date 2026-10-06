@@ -1,0 +1,41 @@
+{
+    "version": "1",
+    "information": {
+        "name": "notificador-whatsapp",
+        "displayName": "Notificador WhatsApp OpenWA",
+        "description": "Envío automático de facturas y notificaciones vía WhatsApp con OpenWA.",
+        "url": "https://github.com/tu-usuario/openwa-plugin",
+        "version": "1.0.0",
+        "unmsVersionCompliancy": {
+            "min": "3.0.0",
+            "max": null
+        },
+        "author": "Yulian Ernesto Castellanos Daza"
+    },
+    "configuration": [
+        {
+            "key": "openwa_url",
+            "label": "URL de la API de OpenWA",
+            "type": "text",
+            "required": true
+        },
+        {
+            "key": "openwa_api_key",
+            "label": "X-API-Key de OpenWA",
+            "type": "password",
+            "required": true
+        },
+        {
+            "key": "openwa_session_id",
+            "label": "ID de Sesión",
+            "type": "text",
+            "required": true
+        },
+        {
+            "key": "ucrm_public_url",
+            "label": "URL pública de UISP (ej: https://148.113.204.75)",
+            "type": "text",
+            "required": true
+        }
+    ]
+}
