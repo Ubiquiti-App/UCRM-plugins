@@ -1,0 +1,15 @@
+{
+  "messagePrefix": "",
+  "optOutFooter": "Reply STOP to opt out.",
+  "quietHours": true,
+  "costPerSegment": "0.007",
+  "helpReply": "Customer support: reply with your question and we'll get back to you. Msg & data rates may apply. Reply STOP to opt out.",
+  "keywordConfirmations": false,
+  "forwardRepliesTo": "",
+  "event_invoice_near_due": "Reminder: invoice %%invoice.number%% for $%%invoice.amountToPay%% is due %%invoice.dueDate%%.",
+  "event_invoice_overdue": "Invoice %%invoice.number%% for $%%invoice.amountToPay%% is past due.",
+  "event_service_suspend_cancel": "Your %%service.name%% service has been restored.",
+  "event_service_suspend": "Your %%service.name%% service is suspended for non-payment. Balance: $%%client.accountOutstanding%%.",
+  "event_client_message": "%%client.message%%",
+  "timezone": "America/Chicago"
+}
