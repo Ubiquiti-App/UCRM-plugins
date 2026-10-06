@@ -1,0 +1,41 @@
+{
+    "version": "1",
+    "information": {
+        "name": "backup-sync-google-drive",
+        "displayName": "Backup synchronization - Google Drive",
+        "description": "Synchronizes UNMS backups to a Google Drive Shared Drive via a Workspace service account.",
+        "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/backup-sync-google-drive",
+        "version": "1.0.0",
+        "unmsVersionCompliancy": {
+            "min": "2.1.0",
+            "max": null
+        },
+        "author": "KIZA Internet"
+    },
+    "configuration": [
+        {
+            "key": "unmsApiToken",
+            "label": "UNMS API token",
+            "description": "You can create a UNMS API token in Network -> Settings -> Users. Must belong to a Super Admin user - the backups endpoint this plugin reads from is restricted to Super Admins.",
+            "required": 1
+        },
+        {
+            "key": "googleServiceAccountKey",
+            "label": "Google service account JSON key",
+            "description": "Paste the full contents of the service account's JSON key file (Google Cloud Console -> IAM & Admin -> Service Accounts -> Keys). The service account must be added as a member of the target Shared Drive.",
+            "required": 1
+        },
+        {
+            "key": "googleSharedDriveId",
+            "label": "Google Shared Drive ID",
+            "description": "The target Shared Drive's ID (from its URL: drive.google.com/drive/folders/<id> when viewing the Shared Drive's root).",
+            "required": 1
+        },
+        {
+            "key": "googleRootFolderName",
+            "label": "Backup folder name",
+            "description": "Folder created/used at the root of the Shared Drive to hold backups. Defaults to \"UISP Backups\" if left blank.",
+            "required": 0
+        }
+    ]
+}
