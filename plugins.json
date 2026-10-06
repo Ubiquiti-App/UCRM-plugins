@@ -96,6 +96,19 @@
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/88bf9d0ebefe8f5e582b311217263fd463f239ca\/plugins\/quickbooks-online\/quickbooks-online.zip"
         },
         {
+            "name": "regenerate-pdf",
+            "displayName": "Regenerate invoices PDF",
+            "description": "This plugin calls the API and help us regenerate the PDF of invoices.",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/regenerate-pdf",
+            "version": "1.0.4",
+            "unmsVersionCompliancy": {
+                "min": "1.0.0-alpha.1",
+                "max": null
+            },
+            "author": "Matei Nicolae - Daniel",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/regenerate-pdf\/regenerate-pdf.zip"
+        },
+        {
             "name": "revenue-report",
             "displayName": "Revenue report",
             "description": "Grids and charts showing organization's revenue grouped by products or services. Shown in the Reporting main menu section.",
