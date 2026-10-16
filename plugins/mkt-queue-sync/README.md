@@ -70,6 +70,8 @@ El usuario del Mikrotik necesita acceso a la API (`/ip service` api habilitado, 
 | Remove queues of ended services / Borrar colas de servicios terminados | | ✔ |
 | Duplicated queues cleanup / Limpieza de colas duplicadas | | ✔ |
 
+More info and download / Más información y descarga: **https://github.com/Bonabrux/mkt-queue-sync-pro** (license required / requiere licencia)
+
 Contact / Contacto: **plugins@franco.ar**
 
 ***If this plugin helped you and you think I deserve a coffee / Si este plugin le sirvió y cree que merezco un café: https://www.paypal.me/fgampel***
