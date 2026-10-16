@@ -57,7 +57,15 @@ assert(count(Synchronizer::validateConfig([
 assert(count(Synchronizer::validateConfig([])) === 3);
 
 // Free version limit: first N services by ID, original order kept
-$services = [['id' => 30], ['id' => 10], ['id' => 20], ['id' => 40]];
+$services = [[
+    'id' => 30,
+], [
+    'id' => 10,
+], [
+    'id' => 20,
+], [
+    'id' => 40,
+]];
 assert(array_column(Synchronizer::limitServices($services, 2), 'id') === [10, 20]);
 assert(count(Synchronizer::limitServices($services, 100)) === 4);
 
@@ -68,8 +76,12 @@ assert(Synchronizer::ipInRange('10.0.0.200', '10.0.0.0/24') && ! Synchronizer::i
 assert(Synchronizer::ipInRange('192.168.1.1', '0.0.0.0/0'));
 assert(Synchronizer::ipInRange('10.0.0.50', '10.0.0.1-10.0.0.50') && ! Synchronizer::ipInRange('10.0.0.51', '10.0.0.1-10.0.0.50'));
 $filtered = Synchronizer::filterBySyncRanges([
-    ['target' => '10.0.0.1/32,10.0.1.1/32'],
-    ['target' => '10.0.2.1/32'],
+    [
+        'target' => '10.0.0.1/32,10.0.1.1/32',
+    ],
+    [
+        'target' => '10.0.2.1/32',
+    ],
 ], ['10.0.0.0/24', '10.0.0.0/23']); // overlapping ranges: 10.0.0.1 only once
 assert(array_column($filtered, 'target') === ['10.0.0.1/32,10.0.1.1/32']);
 

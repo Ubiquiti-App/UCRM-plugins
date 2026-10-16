@@ -150,10 +150,15 @@ class Synchronizer
             $serviceQueueIds = array_column(self::serviceQueues($allQueues), '.id', 'name');
             $toCreate = [];
             foreach ($toAdd as $service) {
-                $queue = ['name' => $service['queueName'], 'target' => $service['target']] + array_intersect_key($service, array_flip(self::QUEUE_ATTRIBUTES));
+                $queue = [
+                    'name' => $service['queueName'],
+                    'target' => $service['target'],
+                ] + array_intersect_key($service, array_flip(self::QUEUE_ATTRIBUTES));
                 if (isset($serviceQueueIds[$service['queueName']])) {
                     // The service queue exists with another target (service IP changed): update it
-                    $toSet[] = ['.id' => $serviceQueueIds[$service['queueName']]] + $queue;
+                    $toSet[] = [
+                        '.id' => $serviceQueueIds[$service['queueName']],
+                    ] + $queue;
                 } elseif (isset($usedNames[$service['queueName']])) {
                     $this->logger->appendLog(sprintf('Queue for %s not added: name "%s" already used by a parent or dynamic queue', $service['target'], $service['queueName']));
                 } else {
@@ -166,125 +171,6 @@ class Synchronizer
 
         $this->logErrors($this->routerOsApi->set('/queue/simple', $toSet));
         $this->logger->appendLog(sprintf('Queues updated / Colas actualizadas: %d', count($toSet)));
-    }
-
-    /**
-     * Services to sync indexed by target, with their queue name and queue attributes.
-     */
-    private function getServices(): array
-    {
-        $services = $this->ucrmApi->get('clients/services', ['statuses' => self::SYNCED_STATUSES]);
-        $services = $this->addAddresses($services);
-
-        $syncRanges = $this->getSyncRanges();
-        if ($syncRanges) {
-            $services = self::filterBySyncRanges($services, $syncRanges);
-        }
-
-        $services = $this->addQueueNames($services);
-        $limited = self::limitServices($services, self::SERVICES_LIMIT);
-        if (count($limited) < count($services)) {
-            $this->logger->appendLog(sprintf(
-                'Free version limit: %d of %d services synced / Límite de la versión gratuita: %d de %d servicios sincronizados',
-                count($limited),
-                count($services),
-                count($limited),
-                count($services)
-            ));
-            $this->logger->appendLog(self::PRO_NOTICE);
-        }
-
-        $plans = array_column($this->ucrmApi->get('service-plans'), null, 'id');
-        $result = [];
-        foreach ($limited as $service) {
-            $warnings = [];
-            $service += self::queueAttributes($service, $plans[$service['servicePlanId']] ?? null, $this->config, $warnings);
-            foreach ($warnings as $warning) {
-                $this->logger->appendLog('Service ID: ' . $service['id'] . ' ' . $warning);
-            }
-            $result[self::targetKey($service['target'])] = $service;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Adds 'target' (comma separated IPs) to each service, services without IP are skipped and logged.
-     */
-    private function addAddresses(array $services): array
-    {
-        $siteIps = $this->unmsApi ? $this->getSiteIps() : [];
-
-        $result = [];
-        foreach ($services as $service) {
-            if ($this->unmsApi) {
-                $ips = $siteIps[$service['unmsClientSiteId'] ?? ''] ?? [];
-            } else { // UCRM without UNMS
-                $range = $service['ipRanges'][0] ?? null;
-                $ips = $range ? [strpos($range, '/') ? $range : $range . '/32'] : [];
-            }
-
-            if ($ips) {
-                $service['target'] = implode(',', $ips);
-                $result[] = $service;
-            } else {
-                $this->logger->appendLog(sprintf('Service ID: %s has no IP address set, check on %sclient/service/%s', $service['id'], $this->ucrmUri, $service['id']));
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * UNMS site ID => device IPs (as /32), in UNMS devices order.
-     */
-    private function getSiteIps(): array
-    {
-        $siteIps = [];
-        foreach ($this->unmsApi->get('devices') as $device) {
-            $siteId = $device['identification']['site']['id'] ?? null;
-            if ($siteId === null) {
-                $this->logger->appendLog(sprintf('Device ID: %s with MAC address: %s has no SITE assigned', $device['identification']['id'], $device['identification']['mac']));
-            } elseif (isset($device['ipAddress'])) {
-                $siteIps[$siteId][] = strtok($device['ipAddress'], '/') . '/32';
-            }
-        }
-
-        return $siteIps;
-    }
-
-    private function addQueueNames(array $services): array
-    {
-        $servicesByClient = [];
-        foreach ($services as $service) {
-            $servicesByClient[$service['clientId']][] = $service;
-        }
-
-        $result = [];
-        foreach ($this->ucrmApi->get('clients', ['isLead' => 0, 'isArchived' => 0]) as $client) {
-            foreach ($servicesByClient[$client['id']] ?? [] as $service) {
-                if ($client['clientType'] == 1) {
-                    $service['queueName'] = $client['firstName'] . ' ' . $client['lastName'] . ' - Service ID:' . $service['id'];
-                } elseif ($client['clientType'] == 2) {
-                    $service['queueName'] = $client['companyName'] . ' - Service ID: ' . $service['id'];
-                } else {
-                    $service['queueName'] = 'Service ID: ' . $service['id'];
-                }
-                $result[] = $service;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Addresses of the sync_with_ucrm address-list: when present, only those IPs are synced.
-     */
-    private function getSyncRanges(): array
-    {
-        $ranges = $this->routerOsApi->printwhere('/ip/firewall/address-list/print', ['?list=sync_with_ucrm', '?disabled=no']);
-
-        return array_column($ranges, 'address');
     }
 
     public static function filterBySyncRanges(array $services, array $ranges): array
@@ -435,6 +321,130 @@ class Synchronizer
         return array_values(array_filter($queues, function (array $queue) use ($parents): bool {
             return ($queue['dynamic'] ?? 'false') !== 'true' && ! isset($parents[$queue['name'] ?? '']);
         }));
+    }
+
+    /**
+     * Services to sync indexed by target, with their queue name and queue attributes.
+     */
+    private function getServices(): array
+    {
+        $services = $this->ucrmApi->get('clients/services', [
+            'statuses' => self::SYNCED_STATUSES,
+        ]);
+        $services = $this->addAddresses($services);
+
+        $syncRanges = $this->getSyncRanges();
+        if ($syncRanges) {
+            $services = self::filterBySyncRanges($services, $syncRanges);
+        }
+
+        $services = $this->addQueueNames($services);
+        $limited = self::limitServices($services, self::SERVICES_LIMIT);
+        if (count($limited) < count($services)) {
+            $this->logger->appendLog(sprintf(
+                'Free version limit: %d of %d services synced / Límite de la versión gratuita: %d de %d servicios sincronizados',
+                count($limited),
+                count($services),
+                count($limited),
+                count($services)
+            ));
+            $this->logger->appendLog(self::PRO_NOTICE);
+        }
+
+        $plans = array_column($this->ucrmApi->get('service-plans'), null, 'id');
+        $result = [];
+        foreach ($limited as $service) {
+            $warnings = [];
+            $service += self::queueAttributes($service, $plans[$service['servicePlanId']] ?? null, $this->config, $warnings);
+            foreach ($warnings as $warning) {
+                $this->logger->appendLog('Service ID: ' . $service['id'] . ' ' . $warning);
+            }
+            $result[self::targetKey($service['target'])] = $service;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Adds 'target' (comma separated IPs) to each service, services without IP are skipped and logged.
+     */
+    private function addAddresses(array $services): array
+    {
+        $siteIps = $this->unmsApi ? $this->getSiteIps() : [];
+
+        $result = [];
+        foreach ($services as $service) {
+            if ($this->unmsApi) {
+                $ips = $siteIps[$service['unmsClientSiteId'] ?? ''] ?? [];
+            } else { // UCRM without UNMS
+                $range = $service['ipRanges'][0] ?? null;
+                $ips = $range ? [strpos($range, '/') ? $range : $range . '/32'] : [];
+            }
+
+            if ($ips) {
+                $service['target'] = implode(',', $ips);
+                $result[] = $service;
+            } else {
+                $this->logger->appendLog(sprintf('Service ID: %s has no IP address set, check on %sclient/service/%s', $service['id'], $this->ucrmUri, $service['id']));
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * UNMS site ID => device IPs (as /32), in UNMS devices order.
+     */
+    private function getSiteIps(): array
+    {
+        $siteIps = [];
+        foreach ($this->unmsApi->get('devices') as $device) {
+            $siteId = $device['identification']['site']['id'] ?? null;
+            if ($siteId === null) {
+                $this->logger->appendLog(sprintf('Device ID: %s with MAC address: %s has no SITE assigned', $device['identification']['id'], $device['identification']['mac']));
+            } elseif (isset($device['ipAddress'])) {
+                $siteIps[$siteId][] = strtok($device['ipAddress'], '/') . '/32';
+            }
+        }
+
+        return $siteIps;
+    }
+
+    private function addQueueNames(array $services): array
+    {
+        $servicesByClient = [];
+        foreach ($services as $service) {
+            $servicesByClient[$service['clientId']][] = $service;
+        }
+
+        $result = [];
+        foreach ($this->ucrmApi->get('clients', [
+            'isLead' => 0,
+            'isArchived' => 0,
+        ]) as $client) {
+            foreach ($servicesByClient[$client['id']] ?? [] as $service) {
+                if ($client['clientType'] == 1) {
+                    $service['queueName'] = $client['firstName'] . ' ' . $client['lastName'] . ' - Service ID:' . $service['id'];
+                } elseif ($client['clientType'] == 2) {
+                    $service['queueName'] = $client['companyName'] . ' - Service ID: ' . $service['id'];
+                } else {
+                    $service['queueName'] = 'Service ID: ' . $service['id'];
+                }
+                $result[] = $service;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Addresses of the sync_with_ucrm address-list: when present, only those IPs are synced.
+     */
+    private function getSyncRanges(): array
+    {
+        $ranges = $this->routerOsApi->printwhere('/ip/firewall/address-list/print', ['?list=sync_with_ucrm', '?disabled=no']);
+
+        return array_column($ranges, 'address');
     }
 
     private function logErrors(array $errors): void

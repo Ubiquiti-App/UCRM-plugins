@@ -44,8 +44,8 @@ class UnmsApi
 
         $config = (new PluginConfigManager())->loadConfig();
         if (! ($config['unmsApiToken'] ?? false)) {
-			$logger->appendLog('UNMS API token is missing in plugin configuration.');
-			throw new ConfigurationException('UNMS API token is missing in plugin configuration.');
+            $logger->appendLog('UNMS API token is missing in plugin configuration.');
+            throw new ConfigurationException('UNMS API token is missing in plugin configuration.');
         }
 
         $unmsApiUrl = sprintf('%s/api/v2.1/', rtrim(str_replace('crm/', 'nms/', $unmsUrl), '/'));
@@ -75,7 +75,6 @@ class UnmsApi
 
         return Json::decode((string) $response->getBody());
     }
-
 
     private function request(string $method, string $endpoint, array $options = []): Response
     {
