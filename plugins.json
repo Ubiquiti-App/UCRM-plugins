@@ -79,6 +79,23 @@
             "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/kmz-map\/kmz-map.zip"
         },
         {
+            "name": "mkt-queue-sync",
+            "displayName": "Mikrotik Queue Sync",
+            "description": "Synchronizes UISP service plan speeds with Mikrotik simple queues (one router, up to 100 services) \/ Sincroniza las velocidades de los planes de UISP con colas simples de Mikrotik (un router, hasta 100 servicios)",
+            "url": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/tree\/master\/plugins\/mkt-queue-sync",
+            "version": "6.0.0",
+            "ucrmVersionCompliancy": {
+                "min": "3.3.11",
+                "max": null
+            },
+            "unmsVersionCompliancy": {
+                "min": "2.2.0",
+                "max": null
+            },
+            "author": "Franco Gampel - plugins@franco.ar",
+            "zipUrl": "https:\/\/github.com\/Ubiquiti-App\/UCRM-plugins\/raw\/master\/plugins\/mkt-queue-sync\/mkt-queue-sync.zip"
+        },
+        {
             "name": "quickbooks-online",
             "displayName": "QuickBooks Online export",
             "description": "This plugin exports payments and invoices to QuickBooks Online",

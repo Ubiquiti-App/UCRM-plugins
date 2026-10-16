@@ -1,0 +1,20 @@
+{
+  "description": "UCRM plugin to synchronize UISP service speeds with Mikrotik simple queues",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "MikrotikQueueSync\\": [
+        "classes/"
+      ]
+    }
+  },
+  "require": {
+    "ubnt/ucrm-plugin-sdk": "~0.13.0",
+    "evilfreelancer/routeros-api-php": "^1.7"
+  },
+  "config": {
+    "platform": {
+      "php": "8.1.0"
+    }
+  }
+}

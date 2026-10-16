@@ -1,0 +1,111 @@
+{
+    "version": "1",
+    "information": {
+        "name": "mkt-queue-sync",
+        "displayName": "Mikrotik Queue Sync",
+        "description": "Synchronizes UISP service plan speeds with Mikrotik simple queues (one router, up to 100 services) / Sincroniza las velocidades de los planes de UISP con colas simples de Mikrotik (un router, hasta 100 servicios)",
+        "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/mkt-queue-sync",
+        "version": "6.0.0",
+        "ucrmVersionCompliancy": {
+            "min": "3.3.11",
+            "max": null
+        },
+        "unmsVersionCompliancy": {
+            "min": "2.2.0",
+            "max": null
+        },
+        "author": "Franco Gampel - plugins@franco.ar"
+    },
+    "configuration": [
+        {
+            "key": "mktip",
+            "label": "Mikrotik IP Address / Dirección IP del Mikrotik",
+            "description": "One router in the free version (PRO: multiple routers) / Un router en la versión gratuita (PRO: varios routers)",
+            "required": 1,
+            "type": "text"
+        },
+        {
+            "key": "apiport",
+            "label": "Mikrotik API port / Puerto API del Mikrotik",
+            "description": "Leave empty to use Mikrotik default 8728 / Dejar vacío para usar el puerto por defecto de Mikrotik 8728",
+            "required": 0,
+            "type": "text"
+        },
+        {
+            "key": "mktusr",
+            "label": "Mikrotik username / Usuario del Mikrotik",
+            "description": "User with API access / Usuario con acceso a la API",
+            "required": 1,
+            "type": "text"
+        },
+        {
+            "key": "mktpass",
+            "label": "Mikrotik password / Contraseña del Mikrotik",
+            "description": "Password of the Mikrotik user / Contraseña del usuario del Mikrotik",
+            "required": 0,
+            "type": "text"
+        },
+        {
+            "key": "burstLimitPercentage",
+            "label": "Burst limit % / % de límite de ráfaga",
+            "description": "Calculated over the service max-limit, format UU/DD (U = upload, D = download). If not used set 0/0 / Calculado sobre el max-limit del servicio, formato UU/DD (U = subida, D = bajada). Si no se usa, configurar 0/0",
+            "required": 1
+        },
+        {
+            "key": "burstTime",
+            "label": "Burst time / Tiempo de ráfaga",
+            "description": "Seconds, format UU/DD (U = upload, D = download), values 1-99. If not used set 1/1 / Segundos, formato UU/DD (U = subida, D = bajada), valores 1-99. Si no se usa, configurar 1/1",
+            "required": 1
+        },
+        {
+            "key": "limitAtPercentage",
+            "label": "Limit-at % / % de limit-at",
+            "description": "Calculated over the service max-limit, format UU/DD (U = upload, D = download), values 0-99 / Calculado sobre el max-limit del servicio, formato UU/DD (U = subida, D = bajada), valores 0-99",
+            "required": 1
+        },
+        {
+            "key": "addQueue",
+            "label": "Add queues? / ¿Agregar colas?",
+            "description": "Add a simple queue when a service has none (up to 100 services in the free version) / Agregar una cola simple cuando un servicio no tiene ninguna (hasta 100 servicios en la versión gratuita)",
+            "required": 0,
+            "type": "checkbox"
+        },
+        {
+            "key": "unmsApiToken",
+            "label": "UNMS API token / Token API de UNMS",
+            "description": "API token created for this plugin in UNMS (Settings -> Users), needed with UNMS v1 or later / Token API creado para este plugin en UNMS (Settings -> Users), necesario con UNMS v1 o superior",
+            "required": 0,
+            "type": "text"
+        },
+        {
+            "key": "outCharset",
+            "label": "Mikrotik charset / Codificación del Mikrotik",
+            "description": "Empty = UTF-8 / Vacío = UTF-8. Charset used for names and comments sent to Mikrotik, it must match the one Winbox shows (Windows regional charset, e.g. Cyrillic = Windows-1251). On Windows you can check it running [System.Text.Encoding]::Default in PowerShell / Codificación usada en los nombres y comentarios enviados al Mikrotik, debe coincidir con la que muestra Winbox (codificación regional de Windows, ej. cirílico = Windows-1251). En Windows puede verla ejecutando [System.Text.Encoding]::Default en PowerShell",
+            "required": 0,
+            "type": "choice",
+            "choices": {
+                "UTF-8": "UTF-8",
+                "Cyrillic / Cirílico Windows-1251": "CP1251",
+                "Cyrillic / Cirílico ISO-8859-5": "ISO-8859-5",
+                "Arabic / Árabe ISO-8859-6": "ISO-8859-6",
+                "Greek / Griego ISO-8859-7": "ISO-8859-7",
+                "Baltic / Báltico ISO-8859-4": "ISO-8859-4"
+            }
+        },
+        {
+            "key": "debugMode",
+            "label": "Debug mode? / ¿Modo depuración?",
+            "description": "More detailed log info / Información de log más detallada",
+            "required": 0,
+            "type": "checkbox"
+        }
+    ],
+    "menu": [
+        {
+            "key": "Mikrotik Queue Sync",
+            "label": "Sync / Sincronizar",
+            "type": "admin",
+            "target": "iframe"
+        }
+    ]
+}
