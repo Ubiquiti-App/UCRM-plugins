@@ -18,7 +18,8 @@
                 <div class="col-auto">
                     <div class="card">
                         <div class="card-body">
-                            <form id="export-form">
+                            <form id="export-form" method="post">
+                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrfToken, ENT_QUOTES); ?>">
                                 <div class="form-row align-items-end">
                                     <div class="col-auto">
                                         <label class="mb-0" for="frm-organization"><small>Organizacion:</small></label>
