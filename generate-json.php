@@ -24,7 +24,7 @@ foreach ($pluginDirectories as $directory) {
     }
     $plugin = $manifest['information'];
     $plugin['name'] = $plugin['name'] ?? sprintf('(name missing in %s manifest)', $directory->getBaseName());
-    if (in_array($plugin['name'], ['mkt-queue-sync', 'routeros-packet-manager', 'routeros-suspension'], true)) {
+    if (in_array($plugin['name'], ['routeros-packet-manager', 'routeros-suspension'], true)) {
         continue;
     }
     $plugin['zipUrl'] = sprintf(
