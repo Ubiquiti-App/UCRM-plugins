@@ -18,7 +18,12 @@ $api = UcrmApi::create();
 // Ensure that user is logged in and has permission to view invoices.
 $security = UcrmSecurity::create();
 $user = $security->getUser();
-if (! $user || $user->isClient || ! $user->hasViewPermission(PermissionNames::BILLING_INVOICES)) {
+if (
+    ! $user
+    || $user->isClient
+    || $user->isClientScopeUser
+    || ! $user->hasViewPermission(PermissionNames::BILLING_INVOICES)
+) {
     \App\Http::forbidden();
 }
 
@@ -34,6 +39,11 @@ if (
     && array_key_exists('until', $_GET)
     && is_string($_GET['until'])
 ) {
+    // Organization scoped users can only see their own organization.
+    if ($user->isOrganizationScopeUser && (int) $_GET['organization'] !== $user->scopedOrganizationId) {
+        \App\Http::forbidden();
+    }
+
     $trimNonEmpty = static function (string $value): ?string {
         $value = trim($value);
 
@@ -111,7 +121,12 @@ if (
 }
 
 // Render form.
-$organizations = $api->get('organizations');
+$organizations = array_values(array_filter(
+    $api->get('organizations'),
+    static function (array $organization) use ($user): bool {
+        return ! $user->isOrganizationScopeUser || (int) $organization['id'] === $user->scopedOrganizationId;
+    }
+));
 
 $optionsManager = UcrmOptionsManager::create();
 
